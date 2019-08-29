@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:titlebar="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_channel"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <com.wuhenzhizao.titlebar.widget.CommonTitleBar
+        android:id="@+id/mTitleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        titlebar:centerText="所有频道"
+        titlebar:centerTextColor="@color/white"
+        titlebar:centerTextSize="@dimen/sp_19"
+        titlebar:centerType="textView"
+        titlebar:fillStatusBar="false"
+        titlebar:leftImageResource="@mipmap/icon_titlebar_back"
+        titlebar:leftType="imageButton"
+        titlebar:showBottomLine="false"
+        titlebar:statusBarMode="light"
+        titlebar:titleBarHeight="@dimen/dp_40" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:scrollbars="none"
+            android:overScrollMode="never"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/dp_10"
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </FrameLayout>
+
+
+</LinearLayout>

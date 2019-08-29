@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SwitchView">
+        <attr name="bgColor" format="color|reference" />
+        <attr name="leftColor" format="color|reference" />
+        <attr name="rightColor" format="color|reference" />
+        <attr name="textLeftColor" format="color" />
+        <attr name="textRightColor" format="color" />
+        <attr name="textLeftClickColor" format="color" />
+        <attr name="textRightClickColor" format="color" />
+        <attr name="textLeft" format="string" />
+        <attr name="textRight" format="string" />
+        <attr name="setChecked" format="boolean" />
+        <attr name="padding" format="dimension" />
+        <attr name="time" format="integer" />
+    </declare-styleable>
+
+
+    <declare-styleable name="RoundImageView">
+        <attr name="type" format="enum">
+            <enum name="circle" value="1"/>
+            <enum name="round" value="2"/>
+        </attr>
+        <attr name="radius" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="FrameLayout4Loading">
+        <attr name="filterable" format="boolean" />
+        <attr name="loadingView" format="reference" />
+        <attr name="defaultExceptionView" format="reference" />
+        <attr name="defaultNetworkExceptionView" format="reference" />
+        <attr name="defaultDataExceptionnView" format="reference" />
+        <attr name="noNetworkView" format="reference" />
+        <attr name="timeoutView" format="reference" />
+        <attr name="noDataView" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="ExpandTextView">
+        <attr name="showLines" format="integer"/>
+    </declare-styleable>
+
+
+    <declare-styleable name="PraiseListView">
+        <attr name="item_color" format="color"/>
+        <attr name="item_selector_color" format="color"/>
+    </declare-styleable>
+
+    <declare-styleable name="DYLoadingView">
+        <attr name="radius1" format="dimension"/>
+        <attr name="radius2" format="dimension"/>
+        <attr name="rtlScale" format="float"/>
+        <attr name="ltrScale" format="float"/>
+        <attr name="color1" format="color"/>
+        <attr name="color2" format="color"/>
+        <attr name="mixColor" format="color"/>
+        <attr name="duration" format="integer"/>
+        <attr name="pauseDuration" format="integer"/>
+        <attr name="gap" format="dimension"/>
+        <attr name="scaleStartFraction" format="float"/>
+        <attr name="scaleEndFraction" format="float"/>
+    </declare-styleable>
+
+    <!--显示提示的View-->
+    <declare-styleable name="TipView">
+        <attr name="tipBackgroundColor" format="color"/>
+        <attr name="tipTextColor" format="color"/>
+        <attr name="tipText" format="string"/>
+        <attr name="tipTextSize" format="dimension"/>
+    </declare-styleable>
+
+</resources>

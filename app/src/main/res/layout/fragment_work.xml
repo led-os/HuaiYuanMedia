@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:titlebar="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.work.WorkFragment">
+
+
+    <com.wuhenzhizao.titlebar.widget.CommonTitleBar
+        android:id="@+id/mTitleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        titlebar:centerDrawable="@mipmap/home_title_logo"
+        titlebar:centerType="textView"
+        titlebar:rightType="textView"
+        titlebar:statusBarMode="light"
+        titlebar:titleBarHeight="@dimen/dp_40" />
+
+    <ProgressBar
+        android:id="@+id/mPageLoadingProgressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:max="100"
+        android:visibility="gone"
+        android:layout_height="3dp" />
+
+    <cn.tklvyou.huaiyuanmedia.widget.x5.X5WebView
+        android:id="@+id/mWebView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </cn.tklvyou.huaiyuanmedia.widget.x5.X5WebView>
+
+</LinearLayout>

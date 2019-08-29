@@ -1,0 +1,138 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    signingConfigs {
+        debug {
+            storeFile file('../media.jks')
+            storePassword 'tklvyou'
+            keyAlias = 'media'
+            keyPassword 'tklvyou'
+        }
+    }
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "cn.tklvyou.huaiyuanmedia"
+        minSdkVersion 19
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        multiDexEnabled true
+
+        externalNativeBuild {
+            cmake {
+                //生成.so库的目标平台
+                abiFilters 'x86_64', 'armeabi-v7a'
+            }
+        }
+
+    }
+
+    //配置 CMakeLists.txt 路径
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    buildToolsVersion = '28.0.3'
+
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
+
+    sourceSets.main {
+        jniLibs.srcDirs = ['libs']
+    }
+
+
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'com.google.android.material:material:1.1.0-alpha08'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-1'
+
+    api 'com.tencent.tbs.tbssdk:sdk:43697'
+
+    //点赞动画按钮
+    implementation 'com.github.varunest:sparkbutton:1.0.6'
+    //app状态管理
+    implementation 'com.billy.android:gloading:1.0.1'
+    //版本更新
+    implementation 'com.qianwen:update-app:3.5.2'
+    implementation 'com.qianwen:okhttp-utils:3.8.0'
+
+    //webView加载html依赖的库
+    implementation 'org.jsoup:jsoup:1.11.2'
+    //RxPermissions权限管理
+    implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
+    //Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+    //RxJava
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.6'
+    //Rxlife用于管理RxJava的订阅和解除
+    implementation 'com.trello.rxlifecycle3:rxlifecycle:3.0.0'
+    implementation 'com.trello.rxlifecycle3:rxlifecycle-components:3.0.0'
+    //RxAndroid
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'com.blankj:utilcodex:1.25.0'
+    //图片glide
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    //动画lottie
+    implementation 'com.airbnb.android:lottie:3.0.1'
+    implementation project(path: ':libtitlebar')
+    //上拉加载 下拉刷新
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-andx-14'
+    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-andx-14'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    //角标
+    implementation 'q.rorbin:badgeview:1.1.3'
+    implementation 'com.alibaba:fastjson:1.2.54'
+    //指示器
+    implementation 'com.github.hackware1993:MagicIndicator:1.5.0'
+    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:5.4.0'
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.47-androidx'
+    implementation 'com.youth.banner:banner:1.4.10'
+
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+    //图片选择器
+    implementation project(path: ':picture_library')
+    implementation project(path: ':libzhuanpan')
+    implementation 'de.hdodenhof:circleimageview:2.1.0'
+    //视频处理
+    implementation 'com.github.wseemann:FFmpegMediaMetadataRetriever-armeabi-v7a:1.0.14'
+    implementation project(path: ':lib-ios-dialog')
+    implementation project(path: ':wxcamera')
+    implementation files('libs/commons-lang-2.6.jar')
+    //音频处理
+    implementation 'com.google.android.exoplayer:exoplayer:2.9.0'
+    implementation files('libs/pldroid-player-2.1.8.jar')
+    implementation 'com.sina.weibo.sdk:core:2.0.3:openDefaultRelease@aar'
+    implementation files('libs/open_sdk_r6137_lite.jar')
+
+    //七牛云
+    implementation 'com.qiniu:qiniu-android-sdk:7.3.15'
+
+}

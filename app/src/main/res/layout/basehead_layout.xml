@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:titlebar="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!--头部-->
+    <com.wuhenzhizao.titlebar.widget.CommonTitleBar
+        android:id="@+id/baseTitleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        titlebar:bottomShadowHeight="0dp"
+        titlebar:centerText="标题栏"
+        titlebar:centerTextColor="#ffffff"
+        titlebar:centerTextSize="@dimen/sp_19"
+        titlebar:centerType="textView"
+        titlebar:leftDrawablePadding="@dimen/dp_5"
+        titlebar:leftTextColor="@color/white"
+        titlebar:leftTextSize="@dimen/sp_14"
+        titlebar:leftType="textView"
+        titlebar:rightTextColor="@color/white"
+        titlebar:rightTextSize="@dimen/sp_14"
+        titlebar:rightType="textView"
+        titlebar:showBottomLine="false"
+        titlebar:statusBarMode="light"
+        titlebar:titleBarHeight="@dimen/dp_40" />
+
+    <!--内容容器-->
+    <!--<FrameLayout-->
+        <!--android:id="@+id/base_content"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"></FrameLayout>-->
+
+
+    <cn.tklvyou.huaiyuanmedia.widget.FrameLayout4Loading
+    android:id="@+id/base_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    </cn.tklvyou.huaiyuanmedia.widget.FrameLayout4Loading>
+
+
+</LinearLayout>

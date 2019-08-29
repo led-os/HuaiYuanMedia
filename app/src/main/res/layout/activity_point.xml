@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:titlebar="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.service.PointActivity">
+
+    <LinearLayout
+        android:background="@mipmap/point_activity_bg"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_180"
+        android:orientation="vertical">
+
+        <com.wuhenzhizao.titlebar.widget.CommonTitleBar
+            android:id="@+id/pointTitleBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            titlebar:centerText="石榴籽商城"
+            app:centerTextColor="@color/white"
+            titlebar:centerType="textView"
+            titlebar:leftImageResource="@mipmap/icon_titlebar_back"
+            titlebar:leftType="imageButton"
+            titlebar:showBottomLine="false"
+            titlebar:statusBarMode="light"
+            titlebar:titleBarHeight="@dimen/dp_40" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/dp_15"
+            android:paddingRight="@dimen/dp_15">
+
+
+            <ImageView
+                android:id="@+id/ivAvatar"
+                android:layout_width="@dimen/dp_80"
+                android:layout_height="@dimen/dp_80"
+                android:src="@mipmap/default_avatar" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvNickName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp_14" />
+
+                    <TextView
+                        android:id="@+id/btnLuck"
+                        android:layout_width="@dimen/dp_70"
+                        android:layout_height="@dimen/dp_25"
+                        android:background="@drawable/shape_yellow_gradient_radius_5_bg"
+                        android:gravity="center"
+                        android:text="抽石榴籽"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp_11" />
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvPointScore"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:drawableLeft="@mipmap/icon_mine_point"
+                        android:drawablePadding="@dimen/dp_5"
+                        android:text="石榴籽 0"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp_12" />
+
+                    <TextView
+                        android:id="@+id/btnRule"
+                        android:layout_width="@dimen/dp_70"
+                        android:layout_height="@dimen/dp_25"
+                        android:background="@drawable/shape_blue_gradient_radius_5_bg"
+                        android:gravity="center"
+                        android:text="石榴籽规则"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp_11" />
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/pointRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/common_bg"
+        app:srlEnableLoadMore="false">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:paddingTop="@dimen/dp_15"
+                android:overScrollMode="never"
+                android:id="@+id/pointRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </RelativeLayout>
+
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+</LinearLayout>

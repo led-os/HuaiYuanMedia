@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <cn.tklvyou.huaiyuanmedia.widget.page_recycler.PageRecyclerView
+        android:id="@+id/customSwipeView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_15">
+
+    </cn.tklvyou.huaiyuanmedia.widget.page_recycler.PageRecyclerView>
+
+    <cn.tklvyou.huaiyuanmedia.widget.page_recycler.PageIndicatorView
+        android:id="@+id/indicator"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_30">
+
+    </cn.tklvyou.huaiyuanmedia.widget.page_recycler.PageIndicatorView>
+
+    <View
+        android:layout_width="match_parent"
+        android:background="@color/common_bg"
+        android:layout_height="@dimen/dp_15"/>
+
+</LinearLayout>

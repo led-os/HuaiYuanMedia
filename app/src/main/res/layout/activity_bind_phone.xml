@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dp_45"
+        android:layout_marginBottom="@dimen/dp_40"
+        android:src="@mipmap/logo" />
+
+    <LinearLayout
+        android:layout_marginLeft="@dimen/dp_35"
+        android:layout_marginRight="@dimen/dp_35"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_44"
+        android:background="@drawable/login_input_gray_radius_22_bg"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_20">
+
+        <EditText
+            android:id="@+id/etPhone"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:drawableLeft="@mipmap/login_phone"
+            android:drawablePadding="@dimen/dp_11"
+            android:hint="请输入11位手机号"
+            android:inputType="number"
+            android:maxLength="11"
+            android:textSize="@dimen/sp_14" />
+
+
+        <ImageView
+            android:id="@+id/ivRight"
+            android:layout_width="@dimen/dp_50"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:scaleType="centerInside"
+            android:src="@mipmap/login_yes"
+            android:visibility="invisible" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginLeft="@dimen/dp_35"
+        android:layout_marginRight="@dimen/dp_35"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_44"
+        android:layout_marginTop="@dimen/dp_19"
+        android:background="@drawable/login_input_gray_radius_22_bg"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_20">
+
+        <EditText
+            android:id="@+id/etVCode"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:drawableLeft="@mipmap/register_shield"
+            android:drawablePadding="@dimen/dp_11"
+            android:hint="请输入验证码"
+            android:inputType="number"
+            android:maxLength="6"
+            android:singleLine="true"
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:id="@+id/tvSendVCode"
+            android:layout_width="@dimen/dp_110"
+            android:layout_height="match_parent"
+            android:background="@drawable/default_color_gradient_radius_22_bg"
+            android:gravity="center"
+            android:text="发送验证码"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_12" />
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvConfirmBind"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:layout_height="@dimen/dp_43"
+        android:layout_marginTop="@dimen/dp_26"
+        android:layout_marginLeft="@dimen/dp_35"
+        android:layout_marginRight="@dimen/dp_35"
+        android:background="@drawable/default_color_gradient_radius_22_bg"
+        android:text="确认绑定"
+        android:textSize="@dimen/sp_15" />
+
+
+</LinearLayout>

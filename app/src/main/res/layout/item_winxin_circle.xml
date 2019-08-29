@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="horizontal"
+    android:padding="@dimen/dp_13">
+
+    <ImageView
+        android:id="@+id/headIv"
+        android:layout_width="@dimen/dp_42"
+        android:layout_height="@dimen/dp_42"
+        android:layout_marginRight="@dimen/dp_10"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/default_avatar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/nameTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="-"
+            android:textColor="@color/default_black_text_color"
+            android:textSize="@dimen/sp_16" />
+
+        <cn.tklvyou.huaiyuanmedia.widget.ExpandTextView
+            android:id="@+id/contentTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dip"
+            app:showLines="4" />
+
+        <!-- 图片 -->
+        <cn.tklvyou.huaiyuanmedia.widget.MultiImageView
+            android:id="@+id/multiImagView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:visibility="gone">
+
+        </cn.tklvyou.huaiyuanmedia.widget.MultiImageView>
+
+        <!-- 视频-->
+        <FrameLayout
+            android:id="@+id/llVideo"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_150">
+
+            <ImageView
+                android:id="@+id/ivVideo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/default_gray_text_color"
+                android:scaleType="centerCrop"
+                android:visibility="visible" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"
+                android:src="@mipmap/ic_start_play" />
+
+        </FrameLayout>
+
+
+        <!-- 地址、时间 、删除 、点赞、 评论 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/timeTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="-"
+                android:textColor="@color/default_gray_text_color"
+                android:textSize="@dimen/sp_13" />
+
+            <TextView
+                android:id="@+id/deleteBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/im_selector_social_dig_name_bg"
+                android:paddingLeft="13dp"
+                android:paddingRight="13dp"
+                android:text="删除"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/sp_13"
+                android:visibility="visible" />
+
+            <View
+                android:layout_width="0dip"
+                android:layout_height="1dip"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/tvCommentNum"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:drawableLeft="@mipmap/icon_msg"
+                android:drawablePadding="@dimen/dp_8"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="#ff999999"
+                android:textSize="@dimen/sp_13" />
+
+            <TextView
+                android:id="@+id/tvGoodNum"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp_25"
+                android:drawableLeft="@mipmap/icon_good"
+                android:drawablePadding="@dimen/dp_8"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="#ff999999"
+                android:textSize="@dimen/sp_13" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

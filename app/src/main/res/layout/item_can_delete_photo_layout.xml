@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cn.tklvyou.huaiyuanmedia.widget.DeleteImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/deleteIv"
+    android:layout_width="@dimen/dp_100"
+    android:layout_height="@dimen/dp_100">
+
+</cn.tklvyou.huaiyuanmedia.widget.DeleteImageView>

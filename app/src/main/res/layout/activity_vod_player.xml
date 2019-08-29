@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+
+    <com.pili.pldroid.player.widget.PLVideoView
+        android:id="@+id/mVideoView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center" />
+
+    <ImageView
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_15"
+        android:padding="@dimen/dp_15"
+        android:src="@mipmap/icon_titlebar_back" />
+
+    <cn.tklvyou.huaiyuanmedia.widget.DYLoadingView
+        android:id="@+id/mDYLoading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#55000000"
+        app:color1="#FF00EEEE"
+        app:color2="#FFFF4040" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical">
+
+        <SeekBar
+            android:id="@+id/mMediaProgress"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_marginLeft="-20dp"
+            android:layout_marginRight="-20dp"
+            android:indeterminate="false"
+            android:max="100"
+            android:progress="20"
+            android:progressDrawable="@drawable/seekbar_style2"
+            android:thumb="@null" />
+
+        <RelativeLayout
+            android:id="@+id/mediaControllerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_45"
+            android:background="#101010"
+            android:gravity="center_vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/mMediaActions"
+                    android:layout_width="@dimen/dp_30"
+                    android:layout_marginLeft="15dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/exo_icon_pause" />
+
+                <TextView
+                    android:id="@+id/mMediaTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:text="00:00:00"
+                    android:textColor="#fff"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="/"
+                    android:textColor="#fff"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/mMediaTotalTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="00:00:00"
+                    android:textColor="#fff"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:id="@+id/mMediaSounds"
+                    android:layout_width="20dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="100dp"
+                    android:src="@drawable/nemediacontroller_mute02"
+                    android:visibility="gone" />
+
+
+                <SeekBar
+                    android:id="@+id/mMediaSoundsProgress"
+                    android:layout_width="100dp"
+                    android:layout_height="5dp"
+                    android:layout_marginLeft="-10dp"
+                    android:indeterminate="false"
+                    android:max="100"
+                    android:progress="20"
+                    android:progressDrawable="@drawable/seekbar_style2"
+                    android:thumb="@null"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/mMediaFullScreen"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/nemediacontroller_scale01" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+</FrameLayout>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingLeft="@dimen/dp_13"
+    android:paddingTop="@dimen/dp_13"
+    android:paddingRight="@dimen/dp_13">
+
+    <ImageView
+        android:id="@+id/ivAvatar"
+        android:scaleType="centerCrop"
+        android:layout_width="@dimen/dp_42"
+        android:layout_height="@dimen/dp_42"
+        android:src="@mipmap/default_avatar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvNickName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:textColor="@color/default_black_text_color"
+                android:textSize="@dimen/sp_16" />
+
+            <TextView
+                android:id="@+id/tvTag"
+                android:visibility="invisible"
+                android:layout_width="@dimen/dp_55"
+                android:layout_height="@dimen/dp_17"
+                android:text="官方回复"
+                android:layout_marginLeft="@dimen/dp_5"
+                android:gravity="center"
+                android:background="@drawable/shape_yellow_radius_3_bg"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_10" />
+
+            <TextView
+                android:id="@+id/tvTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:text="-"
+                android:textColor="@color/default_gray_text_color"
+                android:textSize="@dimen/sp_12" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_14"
+            android:text="-"
+            android:textColor="@color/default_black_text_color"
+            android:textSize="@dimen/sp_14" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_1"
+            android:layout_marginTop="@dimen/dp_13"
+            android:background="@color/common_bg" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

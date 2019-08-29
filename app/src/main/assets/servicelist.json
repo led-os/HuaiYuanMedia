@@ -1,0 +1,202 @@
+[
+  {
+    "name": "party_build_header",
+    "data": [
+      {
+        "imagename": "learning_plarform",
+        "title": "学习平台",
+        "subTitle": "全国党员在线学习",
+        "url": "http://www.12371.cn/special/xxzd/"
+      },
+      {
+        "imagename": "learning_country",
+        "title": "学习强国",
+        "subTitle": "学习强国",
+        "url": "https://www.xuexi.cn/"
+      },
+      {
+        "imagename": "party_database",
+        "title": "党建数据库",
+        "subTitle": "党建数据库",
+        "url": "http://djsjk.people.cn/m/"
+      },
+      {
+        "imagename": "book_list_icon",
+        "title": "学习安徽",
+        "subTitle": "安徽学习平台",
+        "url": "https://ah.xuexi.cn"
+      },
+      {
+        "imagename": "cloud_class",
+        "title": "云课堂",
+        "subTitle": "党课在线学习",
+        "url": "http://dangjian.people.com.cn/GB/414208/415077/index.html"
+      },
+      {
+        "imagename": "leader_learning_line",
+        "title": "干部教育在线",
+        "subTitle": "安徽干部教育在线",
+        "url": "http://www.ahgbjy.gov.cn/"
+      }
+    ]
+  },
+  {
+    "name": "goverment_server_header",
+    "data": [
+      {
+        "imagename": "online_do_business",
+        "title": "网上办事",
+        "subTitle": "淮北政务服务",
+        "url": "http://hb.ahzwfw.gov.cn/bsdt-h5/bsdt-hall?districtCode=340600000000"
+      },
+      {
+        "imagename": "people_gov_together",
+        "title": "政民互动",
+        "subTitle": "政民互动",
+        "url": "http://wap.sxx.gov.cn/zmhd.html"
+      },
+      {
+        "imagename": "company_search",
+        "title": "企业查询",
+        "subTitle": "企业查询",
+        "url": "http://wx.qixin007.com/?from=singlemessage&isappinstalled=0"
+      },
+      {
+        "imagename": "peaceful_suixi",
+        "title": "平安濉溪",
+        "subTitle": "濉溪公安便民服务",
+        "url": "http://suixi.mshopyi.com/sxga/f/mp/s_10031/sxga/businesslink/officeHall?from=singlemessage&isappinst"
+      }
+    ]
+  },
+  {
+    "name": "people_life_header",
+    "data": [
+      {
+        "imagename": "mobile_charging",
+        "title": "手机充值",
+        "subTitle": "第三方缴费",
+        "url": "https://billcloud.unionpay.com/ccfront/entry/query?category=IA&insId=9800_000B"
+      },
+      {
+        "imagename": "fire_fee_payment",
+        "title": "燃气费缴纳",
+        "subTitle": "燃气费缴纳",
+        "url": "https://billcloud.unionpay.com/ccfront/entry/query?category=D3&insId=3600_00HB"
+      },
+      {
+        "imagename": "water_fee_payment",
+        "title": "水费缴纳",
+        "subTitle": "水费缴纳",
+        "url": "https://billcloud.unionpay.com/ccfront/entry/query?category=D4&insId=3600_00HB"
+      },
+      {
+        "imagename": "eletronic_fee_payment",
+        "title": "电费缴纳",
+        "subTitle": "电费缴纳",
+        "url": "https://billcloud.unionpay.com/ccfront/entry/query?category=D1&insId=3600_0301"
+      },
+      {
+        "imagename": "phone_net_fee",
+        "title": "宽带固话缴纳",
+        "subTitle": "第三方缴费",
+        "url": "https://billcloud.unionpay.com/ccfront/entry/query?category=I0&insId=3600_2561"
+      },
+      {
+        "imagename": "quick_send_pay",
+        "title": "快递查询",
+        "subTitle": "快递动态随时掌握",
+        "url": "http://m.kuaidi100.com/"
+      },
+      {
+        "imagename": "bus_search_icon",
+        "title": "汽车查询",
+        "subTitle": "在线购汽车票",
+        "url": "https://m.chebada.com/?refId=98669456"
+      },
+      {
+        "imagename": "railway_search",
+        "title": "火车查询",
+        "subTitle": "火车查询",
+        "url": "http://mobile.12306.cn/weixin/wxcore/init"
+      },
+      {
+        "imagename": "rain_pretend",
+        "title": "降水预测",
+        "subTitle": "降水预测",
+        "url": "http://wx.weather.com.cn/jsyb/"
+      },
+      {
+        "imagename": "cloud_desires",
+        "title": "灾害预警",
+        "subTitle": "灾害预警",
+        "url": "http://www.12379.cn/ais/wwwroot/ali/city/index.html?v=1&citycode=340600"
+      },
+      {
+        "imagename": "miss_cloud_map",
+        "title": "雾霾地图",
+        "subTitle": "雾霾地图",
+        "url": "http://f.amap.com/1xoP8_0EB27Hc"
+      },
+      {
+        "imagename": "online_weather",
+        "title": "实时天气",
+        "subTitle": "天气预报",
+        "url": "http://wx.weather.com.cn/mweather/101221202.shtml#1"
+      },
+      {
+        "imagename": "car_score_search",
+        "title": "驾照分查询",
+        "subTitle": "查询驾照分情况",
+        "url": "https://ah.122.gov.cn/views/inquiry.html"
+      }
+    ]
+  },
+  {
+    "name": "culture_server_header",
+    "data": [
+      {
+        "imagename": "beatiful_suixi",
+        "title": "美好濉溪",
+        "subTitle": "美好濉溪",
+        "url": "http://wap.sxx.gov.cn/list.html?id=11&from=singlemessage&isappinstalled=0"
+      },
+      {
+        "imagename": "travel_beatiful",
+        "title": "旅游风光",
+        "subTitle": "濉溪旅游",
+        "url": "http://www.sxx.gov.cn/SortHtml/1/List_31.html"
+      },
+      {
+        "imagename": "suixi_culture_mea",
+        "title": "濉溪文化馆",
+        "subTitle": "濉溪文化馆",
+        "url": "http://www.sxxwhg.cn/"
+      },
+      {
+        "imagename": "suixi_libaray",
+        "title": "濉溪图书馆",
+        "subTitle": "濉溪图书馆",
+        "url": "http://libsys.plan1000.com/booksearch.aspx?lid=43"
+      }
+    ]
+  },
+  {
+    "name": "business_server_header",
+    "data": [
+      {
+        "imagename": "suixi_education",
+        "title": "濉溪教育",
+        "subTitle": "濉溪教育资源",
+        "url": "http://zy.sxjy.net/"
+      },
+      {
+        "imagename": "suixi_online_learning",
+        "title": "在线学习",
+        "subTitle": "在线教育学习平台",
+        "url": "http://www.hbwedu.net/onlineteaching/onlineteaching/course/courseindex_courseIndex.action"
+      }
+    ]
+  }
+]
+

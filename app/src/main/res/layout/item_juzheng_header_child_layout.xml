@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="@dimen/dp_95"
+        android:layout_height="@dimen/dp_95"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingTop="@dimen/dp_5"
+        android:paddingRight="@dimen/dp_10"
+        android:paddingBottom="@dimen/dp_5">
+
+        <ImageView
+            android:id="@+id/ivAvatar"
+            android:layout_width="@dimen/dp_45"
+            android:layout_height="@dimen/dp_45"
+            android:src="@mipmap/default_avatar" />
+
+        <TextView
+            android:id="@+id/tvNickName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:text="矩阵号名称"
+            android:textColor="@color/default_black_text_color"
+            android:textSize="@dimen/sp_12" />
+
+    </LinearLayout>
+
+    <RadioButton
+        android:id="@+id/rbButton"
+        android:layout_width="@dimen/dp_85"
+        android:layout_height="@dimen/dp_85"
+        android:layout_gravity="center"
+        android:enabled="false"
+        android:focusable="false"
+        android:clickable="false"
+        android:background="@drawable/selector_gray_color_accent_radius_10_bg"
+        android:button="@null"
+        android:checked="false" />
+
+
+</FrameLayout>

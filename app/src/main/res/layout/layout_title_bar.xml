@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?><!--头部-->
+<com.wuhenzhizao.titlebar.widget.CommonTitleBar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:titlebar="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/baseTitleBar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    titlebar:bottomShadowHeight="0dp"
+    titlebar:centerText="标题栏"
+    titlebar:centerTextColor="#ffffff"
+    titlebar:centerTextSize="@dimen/sp_19"
+    titlebar:centerType="textView"
+    titlebar:leftDrawablePadding="@dimen/dp_5"
+    titlebar:leftTextColor="@color/white"
+    titlebar:leftTextSize="@dimen/sp_14"
+    titlebar:leftType="textView"
+    titlebar:rightTextColor="@color/white"
+    titlebar:rightTextSize="@dimen/sp_14"
+    titlebar:rightType="textView"
+    titlebar:showBottomLine="false"
+    titlebar:statusBarMode="light"
+    titlebar:titleBarHeight="@dimen/dp_40" />
+

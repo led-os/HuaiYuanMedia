@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:titlebar="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.wuhenzhizao.titlebar.widget.CommonTitleBar
+        android:id="@+id/homeTitleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        titlebar:centerDrawable="@mipmap/home_title_logo"
+        titlebar:centerType="textView"
+        titlebar:rightCustomView="@layout/custom_home_right_title_bar"
+        titlebar:rightType="customView"
+        titlebar:statusBarMode="light"
+        titlebar:titleBarHeight="@dimen/dp_40" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:orientation="horizontal">
+
+        <net.lucode.hackware.magicindicator.MagicIndicator
+            android:id="@+id/magicIndicator"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/ivAddChannel"
+            android:layout_width="@dimen/dp_45"
+            android:layout_height="match_parent"
+            android:scaleType="center"
+            android:src="@mipmap/add_channel" />
+
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:background="@color/common_bg" />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/mViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+    </androidx.viewpager.widget.ViewPager>
+
+
+</LinearLayout>

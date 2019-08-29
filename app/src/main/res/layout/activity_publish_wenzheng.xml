@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:titlebar="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/common_bg"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_15"
+            android:background="@drawable/shape_white_radius_10_bg"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/dp_15"
+            android:paddingRight="@dimen/dp_15"
+            android:paddingBottom="@dimen/dp_15">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="问政对象"
+                    android:textColor="@color/default_black_text_color"
+                    android:textSize="@dimen/sp_14" />
+
+                <TextView
+                    android:id="@+id/tvModuleSecond"
+                    android:layout_width="0dp"
+                    android:textColor="@color/default_black_text_color"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="right|center"
+                    android:hint="选择问政对象"
+                    android:textSize="@dimen/sp_14" />
+
+            </LinearLayout>
+
+            <include layout="@layout/line_horizontal_gray_0_5_dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="标题"
+                    android:textColor="@color/default_black_text_color"
+                    android:textSize="@dimen/sp_14" />
+
+                <EditText
+                    android:id="@+id/etName"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="right|center"
+                    android:hint="请输入标题"
+                    android:textSize="@dimen/sp_14" />
+
+            </LinearLayout>
+
+            <include layout="@layout/line_horizontal_gray_0_5_dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_50"
+                    android:gravity="center"
+                    android:text="问政内容"
+                    android:textColor="@color/default_black_text_color"
+                    android:textSize="@dimen/sp_14" />
+
+                <EditText
+                    android:id="@+id/etContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_125"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_gray_radius_8_bg"
+                    android:gravity="top"
+                    android:maxLength="50"
+                    android:hint="输入问政内容（限50字以内）"
+                    android:padding="@dimen/dp_10"
+                    android:textSize="@dimen/sp_14" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_50"
+                android:gravity="center"
+                android:text="添加照片"
+                android:textColor="@color/default_black_text_color"
+                android:textSize="@dimen/sp_14" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:scrollbars="none"
+                android:overScrollMode="never"
+                android:id="@+id/picRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
+    <TextView
+        android:id="@+id/btnSubmit"
+        style="@style/TextButtonColorPrimaryStyle"
+        android:text="发布" />
+
+</LinearLayout>

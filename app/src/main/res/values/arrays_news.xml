@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="channel">
+        <item>V视频</item>
+        <item>濉溪TV</item>
+        <item>新闻</item>
+        <item>视讯</item>
+        <item>问政</item>
+        <item>矩阵</item>
+        <item>原创</item>
+        <item>悦读</item>
+        <item>悦听</item>
+        <item>党建</item>
+        <item>专栏</item>
+    </string-array>
+    <string-array name="channel_code">
+        <item>video</item>
+        <item>video</item>
+        <item>news_society</item>
+        <item>news_entertainment</item>
+        <item>news_tech</item>
+        <item>news_car</item>
+        <item>news_sports</item>
+        <item>news_finance</item>
+        <item>news_military</item>
+        <item>news_world</item>
+        <item>news_fashion</item>
+    </string-array>
+</resources>
