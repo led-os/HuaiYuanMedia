@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.google.android.exoplayer2.ui.DefaultTimeBar;
+import com.varunest.sparkbutton.SparkButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,10 @@ import cn.tklvyou.huaiyuanmedia.widget.TagTextView;
  */
 public class NewsMultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<NewsMultipleItem, BaseViewHolder> implements AudioController.AudioControlListener {
 
+
+    private boolean showAnimal = false;
+    private int refreshPosition = -1;
+
     public NewsMultipleItemQuickAdapter(Context context, List data) {
         super(data);
         addItemType(NewsMultipleItem.VIDEO, R.layout.item_news_video);
@@ -58,6 +63,7 @@ public class NewsMultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<News
         addItemType(NewsMultipleItem.ZHUAN_LAN, R.layout.item_news_news_layout);
         addItemType(NewsMultipleItem.GONG_GAO, R.layout.item_news_news_layout);
         addItemType(NewsMultipleItem.ZHI_BO, R.layout.item_news_zhi_bo_layout);
+        addItemType(NewsMultipleItem.TUI_JIAN, R.layout.item_news_tui_jian_layout);
     }
 
     private AudioController mAudioControl;
@@ -65,6 +71,12 @@ public class NewsMultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<News
     public void setAudioController(AudioController audioController) {
         this.mAudioControl = audioController;
         mAudioControl.setOnAudioControlListener(this);
+    }
+
+    public void notifyItemChangedAnimal(int position) {
+        showAnimal = true;
+        refreshPosition = position;
+        notifyItemChanged(position);
     }
 
 
@@ -84,7 +96,7 @@ public class NewsMultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<News
                 Drawable[] drawables = tvGoodNum.getCompoundDrawables();
 
                 if (bean.getLike_status() == 1) {
-                    Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_red_good);
+                    Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_mini_good);
                     redGoodDrawable.setBounds(drawables[0].getBounds());
                     tvGoodNum.setCompoundDrawables(redGoodDrawable, drawables[1], drawables[2], drawables[3]);
                 } else {
@@ -145,7 +157,7 @@ public class NewsMultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<News
                 drawables = tvGoodNum.getCompoundDrawables();
 
                 if (bean.getLike_status() == 1) {
-                    Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_red_good);
+                    Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_mini_good);
                     redGoodDrawable.setBounds(drawables[0].getBounds());
                     tvGoodNum.setCompoundDrawables(redGoodDrawable, drawables[1], drawables[2], drawables[3]);
                 } else {
@@ -199,7 +211,7 @@ public class NewsMultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<News
                 drawables = tvGoodNum.getCompoundDrawables();
 
                 if (bean.getLike_status() == 1) {
-                    Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_red_good);
+                    Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_mini_good);
                     redGoodDrawable.setBounds(drawables[0].getBounds());
                     tvGoodNum.setCompoundDrawables(redGoodDrawable, drawables[1], drawables[2], drawables[3]);
                 } else {
@@ -262,7 +274,7 @@ public class NewsMultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<News
                 drawables = tvGoodNum.getCompoundDrawables();
 
                 if (bean.getLike_status() == 1) {
-                    Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_red_good);
+                    Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_mini_good);
                     redGoodDrawable.setBounds(drawables[0].getBounds());
                     tvGoodNum.setCompoundDrawables(redGoodDrawable, drawables[1], drawables[2], drawables[3]);
                 } else {
@@ -399,6 +411,9 @@ public class NewsMultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<News
                 break;
             case NewsMultipleItem.WECHAT_MOMENTS:
                 bean = (NewsBean) item.getDataBean();
+
+                helper.addOnClickListener(R.id.sparkButton,R.id.tvGoodNum);
+
                 helper.setVisible(R.id.deleteBtn, false);
                 helper.setText(R.id.nameTv, bean.getNickname());
                 helper.setText(R.id.timeTv, bean.getBegintime());
@@ -406,18 +421,16 @@ public class NewsMultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<News
                 helper.setText(R.id.tvCommentNum, "" + bean.getComment_num());
                 helper.setText(R.id.tvGoodNum, "" + bean.getLike_num());
 
-                tvGoodNum = helper.getView(R.id.tvGoodNum);
-
-                drawables = tvGoodNum.getCompoundDrawables();
-
+                SparkButton sparkButton = helper.getView(R.id.sparkButton);
                 if (bean.getLike_status() == 1) {
-                    Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_red_good);
-                    redGoodDrawable.setBounds(drawables[0].getBounds());
-                    tvGoodNum.setCompoundDrawables(redGoodDrawable, drawables[1], drawables[2], drawables[3]);
+                    sparkButton.setChecked(true);
+                    if (showAnimal && helper.getLayoutPosition() == refreshPosition) {
+                        refreshPosition = -1;
+                        showAnimal = false;
+                        sparkButton.playAnimation();
+                    }
                 } else {
-                    Drawable grayGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_good);
-                    grayGoodDrawable.setBounds(drawables[0].getBounds());
-                    tvGoodNum.setCompoundDrawables(grayGoodDrawable, drawables[1], drawables[2], drawables[3]);
+                    sparkButton.setChecked(false);
                 }
 
 
@@ -519,7 +532,7 @@ public class NewsMultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<News
                 drawables = tvGoodNum.getCompoundDrawables();
 
                 if (bean.getLike_status() == 1) {
-                    Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_red_good);
+                    Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_mini_good);
                     redGoodDrawable.setBounds(drawables[0].getBounds());
                     tvGoodNum.setCompoundDrawables(redGoodDrawable, drawables[1], drawables[2], drawables[3]);
                 } else {
@@ -579,7 +592,7 @@ public class NewsMultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<News
                 drawables = tvGoodNum.getCompoundDrawables();
 
                 if (bean.getLike_status() == 1) {
-                    Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_red_good);
+                    Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_mini_good);
                     redGoodDrawable.setBounds(drawables[0].getBounds());
                     tvGoodNum.setCompoundDrawables(redGoodDrawable, drawables[1], drawables[2], drawables[3]);
                 } else {
@@ -633,7 +646,7 @@ public class NewsMultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<News
                 drawables = tvGoodNum.getCompoundDrawables();
 
                 if (bean.getLike_status() == 1) {
-                    Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_red_good);
+                    Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_mini_good);
                     redGoodDrawable.setBounds(drawables[0].getBounds());
                     tvGoodNum.setCompoundDrawables(redGoodDrawable, drawables[1], drawables[2], drawables[3]);
                 } else {
@@ -686,7 +699,7 @@ public class NewsMultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<News
                 drawables = tvGoodNum.getCompoundDrawables();
 
                 if (bean.getLike_status() == 1) {
-                    Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_red_good);
+                    Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_mini_good);
                     redGoodDrawable.setBounds(drawables[0].getBounds());
                     tvGoodNum.setCompoundDrawables(redGoodDrawable, drawables[1], drawables[2], drawables[3]);
                 } else {
@@ -737,6 +750,76 @@ public class NewsMultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<News
 
                 helper.addOnClickListener(R.id.ivStartPlayer);
                 break;
+            case NewsMultipleItem.TUI_JIAN:
+                bean = (NewsBean) item.getDataBean();
+                helper.setText(R.id.tvTitle, bean.getName());
+                helper.setText(R.id.tvTime, bean.getBegintime());
+                helper.setText(R.id.tvSeeNum, "" + bean.getVisit_num());
+                helper.setText(R.id.tvGoodNum, "" + bean.getLike_num());
+
+                tvGoodNum = helper.getView(R.id.tvGoodNum);
+
+                drawables = tvGoodNum.getCompoundDrawables();
+
+                if (bean.getLike_status() == 1) {
+                    Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_mini_good);
+                    redGoodDrawable.setBounds(drawables[0].getBounds());
+                    tvGoodNum.setCompoundDrawables(redGoodDrawable, drawables[1], drawables[2], drawables[3]);
+                } else {
+                    Drawable grayGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_good);
+                    grayGoodDrawable.setBounds(drawables[0].getBounds());
+                    tvGoodNum.setCompoundDrawables(grayGoodDrawable, drawables[1], drawables[2], drawables[3]);
+                }
+
+                if(!StringUtils.isEmpty(bean.getVideo())){
+                    helper.setGone(R.id.videoLayout,true);
+                    helper.setGone(R.id.llMultiImage,false);
+                    helper.setGone(R.id.ivImageOne,false);
+                    helper.setText(R.id.tvVideoTime, formatTime(Double.valueOf(bean.getTime()).longValue()));
+
+                    // 加载网络图片
+                    Glide.with(mContext).load(bean.getImage()).into((ImageView) helper.getView(R.id.ivVideoBg));
+
+                    helper.addOnClickListener(R.id.ivStartPlayer);
+                }else {
+                    helper.setGone(R.id.videoLayout,false);
+
+                    if (!StringUtils.isEmpty(bean.getImage())) {
+                        //一张图片
+                        helper.setGone(R.id.llMultiImage,false);
+                        helper.setGone(R.id.ivImageOne,true);
+
+                        GlideManager.loadRoundImg(bean.getImage(), helper.getView(R.id.ivImageOne));
+
+                    } else {
+
+                        if (bean.getImages() == null || bean.getImages().size() == 0) {
+                            //没有图片
+                            helper.setGone(R.id.llMultiImage,false);
+                            helper.setGone(R.id.ivImageOne,false);
+
+                        } else {
+                            if (bean.getImages().size() < 3) {
+                                //一张图片
+                                helper.setGone(R.id.llMultiImage,false);
+                                helper.setGone(R.id.ivImageOne,true);
+
+                                GlideManager.loadRoundImg(bean.getImages().get(0), helper.getView(R.id.ivImageOne));
+                            } else {
+                                //多张图片
+                                helper.setGone(R.id.llMultiImage,true);
+                                helper.setGone(R.id.ivImageOne,false);
+
+                                GlideManager.loadRoundImg(bean.getImages().get(0), helper.getView(R.id.ivImageFirst));
+                                GlideManager.loadRoundImg(bean.getImages().get(1), helper.getView(R.id.ivImageSecond));
+                                GlideManager.loadRoundImg(bean.getImages().get(2), helper.getView(R.id.ivImageThree));
+                            }
+                        }
+                    }
+                }
+
+                break;
+
             default:
                 break;
         }

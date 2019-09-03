@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_80"
+    android:focusable="true"
+    android:descendantFocusability="blocksDescendants"
+    android:focusableInTouchMode="true"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingLeft="@dimen/dp_13"
+    android:paddingRight="@dimen/dp_13">
+
+
+    <ImageView
+        android:id="@+id/ivAvatar"
+        android:layout_width="@dimen/dp_50"
+        android:layout_height="@dimen/dp_50"
+        android:src="@mipmap/default_avatar" />
+
+    <TextView
+        android:id="@+id/tvNickName"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/dp_16"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:text="-"
+        android:textColor="@color/default_black_text_color"
+        android:textSize="@dimen/sp_15" />
+
+<!--shape_color_accent_radius_5_bg-->
+    <TextView
+        android:id="@+id/cbCheck"
+        android:layout_width="@dimen/dp_60"
+        android:layout_height="@dimen/dp_30"
+        android:background="@drawable/shape_gray_stroke_radius_5_bg"
+        android:gravity="center"
+        android:text="已关注"
+        android:textColor="@color/default_gray_text_color"
+        android:textSize="@dimen/sp_13" />
+
+
+</LinearLayout>

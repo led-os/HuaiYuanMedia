@@ -26,6 +26,7 @@ import java.io.Serializable
 import java.lang.StringBuilder
 
 class PublishNewsActivity : BaseActivity<PublishNewsPresenter>(), PublishNewsContract.View {
+
     override fun setQiniuToken(token: String) {
         qiniuToken = token
     }
@@ -132,6 +133,7 @@ class PublishNewsActivity : BaseActivity<PublishNewsPresenter>(), PublishNewsCon
         }
 
         btnSubmit.setOnClickListener {
+            btnSubmit.isEnabled = false
             hideSoftInput(etContent.windowToken)
 
             if (etContent.text.toString().trim().isEmpty()) {
@@ -215,9 +217,15 @@ class PublishNewsActivity : BaseActivity<PublishNewsPresenter>(), PublishNewsCon
 
 
     override fun publishSuccess() {
+        btnSubmit.isEnabled = true
         showSuccess("")
         finish()
     }
+
+    override fun publishError() {
+        btnSubmit.isEnabled = true
+    }
+
 
 
     private val onAddPicClickListener = object : GridImageAdapter.onAddPicClickListener {

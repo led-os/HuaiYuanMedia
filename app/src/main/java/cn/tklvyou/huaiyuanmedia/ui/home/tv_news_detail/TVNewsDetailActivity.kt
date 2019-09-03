@@ -1,5 +1,6 @@
 package cn.tklvyou.huaiyuanmedia.ui.home.tv_news_detail
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -13,13 +14,18 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import cn.tklvyou.huaiyuanmedia.R
+import cn.tklvyou.huaiyuanmedia.base.activity.BaseRecyclerActivity
 import cn.tklvyou.huaiyuanmedia.base.activity.BaseWebViewActivity
+import cn.tklvyou.huaiyuanmedia.base.interfaces.AdapterCallBack
 import cn.tklvyou.huaiyuanmedia.helper.GlideManager
 import cn.tklvyou.huaiyuanmedia.model.NewsBean
+import cn.tklvyou.huaiyuanmedia.model.TelModel
+import cn.tklvyou.huaiyuanmedia.ui.adapter.TVNewsDetailsRvAdapter
 import cn.tklvyou.huaiyuanmedia.ui.home.AudioController
 import cn.tklvyou.huaiyuanmedia.ui.home.comment.CommentListActivity
 import cn.tklvyou.huaiyuanmedia.ui.video_player.VodActivity
 import com.blankj.utilcode.util.*
+import com.chad.library.adapter.base.BaseViewHolder
 import com.pili.pldroid.player.PLOnErrorListener
 import kotlinx.android.synthetic.main.activity_tv_news_detail.*
 import java.util.*
@@ -27,11 +33,12 @@ import java.util.*
 /**
  * Created by yiw on 2016/1/6.
  */
-class TVNewsDetailActivity : BaseWebViewActivity<TVNewsDetailPresenter>(), TVNewsDetailContract.View {
+class TVNewsDetailActivity : BaseRecyclerActivity<TVNewsDetailPresenter, TelModel.ListBean, BaseViewHolder, TVNewsDetailsRvAdapter>(), TVNewsDetailContract.View {
 
     companion object {
-        private val INTENT_TYPE = "type"
-        private val INTENT_ID = "id"
+        public val INTENT_TYPE = "type"
+        public val INTENT_ID = "id"
+        public val POSITION = "position"
 
         fun startTVNewsDetailActivity(context: Context, type: String, id: Int) {
             val intent = Intent(context, TVNewsDetailActivity::class.java)
@@ -42,8 +49,9 @@ class TVNewsDetailActivity : BaseWebViewActivity<TVNewsDetailPresenter>(), TVNew
     }
 
     private var id: Int = 0
+    private var seeNum: Int = 0
+    private var itemPosition: Int = 0
     private var type: String = ""
-
 
     override fun initPresenter(): TVNewsDetailPresenter {
         return TVNewsDetailPresenter()
@@ -70,12 +78,11 @@ class TVNewsDetailActivity : BaseWebViewActivity<TVNewsDetailPresenter>(), TVNew
         setNavigationImage()
         setNavigationOnClickListener { v ->
             release()
+            addResult()
             finish()
         }
 
-        initWebView(tvWebView)
-
-//        setPositiveImage(R.mipmap.icon_collect_normal)
+        initRecyclerView(mRecyclerView)
 
         val drawables = tvSeeNum.compoundDrawables
 
@@ -141,6 +148,7 @@ class TVNewsDetailActivity : BaseWebViewActivity<TVNewsDetailPresenter>(), TVNew
 
     private fun getIntentData() {
         id = intent.getIntExtra(INTENT_ID, 0)
+        itemPosition = intent.getIntExtra(POSITION, 0)
         type = intent.getStringExtra(INTENT_TYPE)
     }
 
@@ -165,7 +173,7 @@ class TVNewsDetailActivity : BaseWebViewActivity<TVNewsDetailPresenter>(), TVNew
 
         tvTvName.text = item.name
         tvSeeNum.text = "" + item.visit_num
-
+        seeNum = item.visit_num
         var imageUrl: String
         if (item.images == null || item.images.size == 0) {
             imageUrl = item.image
@@ -194,20 +202,20 @@ class TVNewsDetailActivity : BaseWebViewActivity<TVNewsDetailPresenter>(), TVNew
                     rbToday.text = SpanUtils().appendLine("今天").append(item.tel_list[1].date).create()
                     rbTomorrow.text = SpanUtils().appendLine("明天").append(item.tel_list[2].date).create()
 
-                    loadHtml(item.tel_list[1].content)
+                    onLoadSucceed(1, item.tel_list[1].list)
 
                     rgTime.setOnCheckedChangeListener { group, checkedId ->
                         when (checkedId) {
                             R.id.rbYesterday -> {
-                                loadHtml(item.tel_list[0].content)
+                                onLoadSucceed(1, item.tel_list[0].list)
                             }
 
                             R.id.rbToday -> {
-                                loadHtml(item.tel_list[1].content)
+                                onLoadSucceed(1, item.tel_list[1].list)
                             }
 
                             R.id.rbTomorrow -> {
-                                loadHtml(item.tel_list[2].content)
+                                onLoadSucceed(1, item.tel_list[2].list)
                             }
                         }
 
@@ -237,7 +245,7 @@ class TVNewsDetailActivity : BaseWebViewActivity<TVNewsDetailPresenter>(), TVNew
 
                 mVideoView.setVideoPath(item.video)
                 mVideoView.setOnErrorListener { p0 ->
-//                    when (p0) {
+                    //                    when (p0) {
 //                        PLOnErrorListener.MEDIA_ERROR_UNKNOWN -> {
 //                            ToastUtils.showShort("未知错误")
 //                        }
@@ -333,6 +341,25 @@ class TVNewsDetailActivity : BaseWebViewActivity<TVNewsDetailPresenter>(), TVNew
 
     }
 
+
+    override fun setList(list: MutableList<TelModel.ListBean>) {
+        setList(object : AdapterCallBack<TVNewsDetailsRvAdapter> {
+
+            override fun createAdapter(): TVNewsDetailsRvAdapter {
+                return TVNewsDetailsRvAdapter(R.layout.item_tv_news_details_list_view, list)
+            }
+
+            override fun refreshAdapter() {
+                adapter.setNewData(list)
+            }
+        })
+
+    }
+
+    override fun getListAsync(page: Int) {
+    }
+
+
     override fun updateLikeStatus(isLike: Boolean) {
         this.isLike = isLike
 
@@ -377,9 +404,6 @@ class TVNewsDetailActivity : BaseWebViewActivity<TVNewsDetailPresenter>(), TVNew
         } else {
             commonTitleBar.rightImageButton.setImageDrawable(resources.getDrawable(R.mipmap.icon_collect_normal))
         }
-    }
-
-    override fun setTitleContent(title: String) {
     }
 
 
@@ -446,6 +470,7 @@ class TVNewsDetailActivity : BaseWebViewActivity<TVNewsDetailPresenter>(), TVNew
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             release()
+            addResult()
             finish()
             return true
         }
@@ -462,6 +487,13 @@ class TVNewsDetailActivity : BaseWebViewActivity<TVNewsDetailPresenter>(), TVNew
             mVideoView.stopPlayback()
         }
 
+    }
+
+    private fun addResult() {
+        val data = Intent()
+        data.putExtra("seeNum", seeNum)
+        data.putExtra(POSITION, itemPosition)
+        setResult(Activity.RESULT_OK, data)
     }
 
 

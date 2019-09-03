@@ -17,7 +17,7 @@ import java.util.List;
 
 import cn.tklvyou.huaiyuanmedia.R;
 import cn.tklvyou.huaiyuanmedia.model.ServiceModel;
-import cn.tklvyou.huaiyuanmedia.ui.service.ServiceWebviewActivity;
+import cn.tklvyou.huaiyuanmedia.ui.audio.ServiceWebviewActivity;
 import cn.tklvyou.huaiyuanmedia.utils.GridDividerItemDecoration;
 import cn.tklvyou.huaiyuanmedia.utils.YResourceUtils;
 

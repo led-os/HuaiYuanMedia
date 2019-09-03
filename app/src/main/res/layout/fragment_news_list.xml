@@ -26,30 +26,29 @@
 
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
-    <cn.tklvyou.huaiyuanmedia.widget.TipView
-        android:id="@+id/mTipView"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_35"
-        android:visibility="gone"
-        app:tipBackgroundColor="#D7EAF8"
-        app:tipText="取消成功"
-        app:tipTextColor="@color/colorAccent"
-        app:tipTextSize="@dimen/sp_15">
 
-    </cn.tklvyou.huaiyuanmedia.widget.TipView>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <ImageView
         android:id="@+id/floatButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         android:layout_margin="@dimen/dp_20"
-        android:scaleType="center"
         android:src="@mipmap/icon_float_add_button"
+        android:layout_width="@dimen/dp_56"
         android:visibility="gone"
-        app:borderWidth="0dp"
-        app:elevation="@dimen/dp_0"
-        app:fabSize="normal"
-        app:maxImageSize="@dimen/dp_56" />
+        android:layout_height="@dimen/dp_56" />
+
+
+    <!--<com.google.android.material.floatingactionbutton.FloatingActionButton-->
+        <!--android:id="@+id/floatButton"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="bottom|right"-->
+        <!--android:layout_margin="@dimen/dp_20"-->
+        <!--android:scaleType="fitXY"-->
+        <!--android:src="@mipmap/icon_float_add_button"-->
+        <!--android:visibility="gone"-->
+        <!--app:borderWidth="0dp"-->
+        <!--app:elevation="@dimen/dp_0"-->
+        <!--app:fabSize="normal"-->
+        <!--app:maxImageSize="@dimen/dp_56" />-->
 
 </FrameLayout>

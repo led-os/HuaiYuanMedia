@@ -231,8 +231,6 @@ public class GlideManager {
         RoundedCornersTransform transform = new RoundedCornersTransform(iv.getContext(), dp2px(10));
         transform.setNeedCorner(true, true, false, false);
 
-//        RequestOptions options = new RequestOptions().placeholder(R.color.color_eee).transform(transform);
-
         Glide.with(iv.getContext()).asBitmap().load(obj).apply(getRequestOptions()
                 .error(sRoundPlaceholderDrawable)
                 .placeholder(sRoundPlaceholderDrawable)

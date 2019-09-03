@@ -190,9 +190,9 @@ public class PageRecyclerView extends RecyclerView {
     /**
      * 数据适配器
      */
-    public class PageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    public class PageAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-        private List<NewsBean> dataList = null;
+        private List<T> dataList = null;
         private PageRecyclerView.CallBack mCallBack = null;
         private int itemWidth = 0;
         private int itemCount;
@@ -204,14 +204,14 @@ public class PageRecyclerView extends RecyclerView {
          * @param data
          * @param callBack
          */
-        public PageAdapter(List<NewsBean> data, PageRecyclerView.CallBack callBack) {
+        public PageAdapter(List<T> data, PageRecyclerView.CallBack callBack) {
             this.dataList = data;
             this.mCallBack = callBack;
             itemCount = dataList.size(); //+ spanRow * spanColumn;
         }
 
 
-        public List<NewsBean> getDataList() {
+        public List<T> getDataList() {
             return dataList == null ? new ArrayList<>() : dataList;
         }
 
@@ -244,7 +244,7 @@ public class PageRecyclerView extends RecyclerView {
 
             holder.itemView.measure(0, 0);
             holder.itemView.getLayoutParams().width = itemWidth;
-            LogUtils.e(itemWidth, holder.itemView.getMeasuredHeight());
+            LogUtils.i(itemWidth, holder.itemView.getMeasuredHeight());
             holder.itemView.getLayoutParams().height = holder.itemView.getMeasuredHeight();
 
             return holder;

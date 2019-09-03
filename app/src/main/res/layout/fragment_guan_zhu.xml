@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.home.new_list.GuanZhuFragment">
+
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/mSmartRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/mRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </RelativeLayout>
+
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/mAttentionRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <cn.tklvyou.huaiyuanmedia.widget.TipView
+        android:id="@+id/mTipView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_35"
+        android:visibility="gone"
+        app:tipBackgroundColor="#D7EAF8"
+        app:tipText="取消成功"
+        app:tipTextColor="@color/colorAccent"
+        app:tipTextSize="@dimen/sp_15">
+
+    </cn.tklvyou.huaiyuanmedia.widget.TipView>
+
+
+</FrameLayout>

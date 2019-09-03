@@ -31,8 +31,19 @@ class WorkFragment : BaseX5WebViewFragment<NullPresenter>() {
         initProgressBar(mPageLoadingProgressBar)
         initWebView(mWebView)
 
-        loadUrl("http://www.baidu.com")
+        loadUrl("http://bb.ahzwfw.gov.cn/bsdt-h5/bsdt-hall?districtCode=340321000000")
     }
+
+    override fun onResume() {
+        mWebView.onResume()
+        super.onResume()
+    }
+
+    override fun onPause() {
+        mWebView.onPause()
+        super.onPause()
+    }
+
 
     override fun lazyData() {
 
@@ -41,10 +52,8 @@ class WorkFragment : BaseX5WebViewFragment<NullPresenter>() {
     override fun onBackPressed(): Boolean {
         return if(mWebView.canGoBack()){
             mWebView.goBack()
-            LogUtils.v("webView.goBack()")
             true
         }else{
-            LogUtils.v("Conversatio退出")
             false
         }
     }

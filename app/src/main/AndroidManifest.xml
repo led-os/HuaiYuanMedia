@@ -48,15 +48,16 @@
         <activity android:name=".ui.main.SplashActivity" />
         <activity android:name=".ui.home.all_tv.AllTvActivity" />
         <activity android:name=".ui.home.all_juzheng.AllJuZhengActivity" />
-        <activity android:name=".ui.service.PointRuleActivity" />
-        <activity android:name=".ui.service.GoodsDetailsActivity" />
-        <activity android:name=".ui.service.PointActivity" />
-        <activity android:name=".ui.service.ZhuanPanActivity" />
-        <activity android:name=".ui.service.ServiceWebviewActivity" />
+        <activity android:name=".ui.audio.point_rule.PointRuleActivity" />
+        <activity android:name=".ui.audio.goods_detail.GoodsDetailsActivity" />
+        <activity android:name=".ui.audio.point.PointActivity" />
+        <activity android:name=".ui.audio.zhuan_pan.ZhuanPanActivity" />
+        <activity android:name=".ui.audio.ServiceWebviewActivity" />
         <activity android:name=".ui.home.publish_news.PublishNewsActivity" />
         <activity android:name=".ui.home.publish_wenzheng.PublishWenzhengActivity" />
         <activity android:name=".ui.home.BannerDetailsActivity" />
         <activity android:name=".ui.video_edit.VideoEditActivity" />
+        <activity android:name=".ui.camera.today_hot.TodayHotActivity" />
         <activity
             android:name=".ui.camera.TakePhotoActivity"
             android:screenOrientation="portrait" />

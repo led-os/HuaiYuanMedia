@@ -3,10 +3,12 @@ package cn.tklvyou.huaiyuanmedia.api;
 import java.util.List;
 
 import cn.tklvyou.huaiyuanmedia.base.BaseResult;
+import cn.tklvyou.huaiyuanmedia.model.AttentionModel;
 import cn.tklvyou.huaiyuanmedia.model.BannerModel;
 import cn.tklvyou.huaiyuanmedia.model.BasePageModel;
 import cn.tklvyou.huaiyuanmedia.model.ChannelModel;
 import cn.tklvyou.huaiyuanmedia.model.CommentModel;
+import cn.tklvyou.huaiyuanmedia.model.ConcernModel;
 import cn.tklvyou.huaiyuanmedia.model.ExchangeModel;
 import cn.tklvyou.huaiyuanmedia.model.HaveSecondModuleNewsModel;
 import cn.tklvyou.huaiyuanmedia.model.LotteryModel;
@@ -281,11 +283,11 @@ public interface ApiService {
 
 
     /**
-     * 发布随手拍
+     * 发布生活圈
      */
-    @POST("api/article/adds")
-    Observable<BaseResult<Object>> publishSuiShouPai(@Query("name") String name, @Query("images") String images,
-                                                     @Query("video") String video, @Query("image") String image, @Query("time") String time
+    @POST("api/life/add")
+    Observable<BaseResult<Object>> publishLifeMsg(@Query("name") String name, @Query("images") String images,
+                                                  @Query("video") String video, @Query("image") String image, @Query("time") String time
     );
 
 
@@ -395,5 +397,71 @@ public interface ApiService {
     @POST("api/article/my")
     Observable<BaseResult<BasePageModel<NewsBean>>> getMyArticleList(@Query("p") int p, @Query("module") String module);
 
+
+    /**
+     * 最新动态
+     *
+     * @param p
+     * @return
+     */
+    @POST("api/life/index")
+    Observable<BaseResult<BasePageModel<NewsBean>>> getLastLifeList(@Query("p") int p);
+
+
+    /**
+     * 好友动态
+     *
+     * @param p
+     * @return
+     */
+    @POST("api/life/friend")
+    Observable<BaseResult<BasePageModel<NewsBean>>> getFriendLifeList(@Query("p") int p);
+
+
+    /**
+     * 首页关注栏内容数据
+     */
+    @POST("api/attention/index")
+    Observable<BaseResult<BasePageModel<NewsBean>>> getGuanZhuNews(@Query("module_second") String module_second, @Query("p") int p);
+
+
+    /**
+     * 栏目账号数据
+     *
+     * @return
+     */
+    @POST("api/attention/all")
+    Observable<BaseResult<AttentionModel>> getAttentionList();
+
+
+    /**
+     * 我的关注列表
+     *
+     * @param p
+     * @return
+     */
+    @POST("api/attention/my")
+    Observable<BaseResult<BasePageModel<ConcernModel>>> getMyConcernList(@Query("p") int p, @Query("type") int type);
+
+
+    /**
+     * 添加关注
+     */
+    @POST("api/attention/add")
+    Observable<BaseResult<Object>> addConcern(@Query("id") int id, @Query("type") int type);
+
+
+    /**
+     * 取消关注
+     */
+    @POST("api/attention/cancel")
+    Observable<BaseResult<Object>> cancelConcern(@Query("id") int id, @Query("type") int type);
+
+
+    /**
+     * 今日热门
+     */
+    @POST("api/life/hot")
+    Observable<BaseResult<BasePageModel<NewsBean>>> getLifeHotList(@Query("p") int p);
 
 }

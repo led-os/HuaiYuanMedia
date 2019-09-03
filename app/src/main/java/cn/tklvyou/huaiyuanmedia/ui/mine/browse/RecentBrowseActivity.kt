@@ -12,7 +12,7 @@ import cn.tklvyou.huaiyuanmedia.model.NewsBean
 import cn.tklvyou.huaiyuanmedia.ui.adapter.MyCollectionAdapter
 import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.tv_news_detail.TVNewsDetailActivity
-import cn.tklvyou.huaiyuanmedia.ui.service.ServiceWebviewActivity
+import cn.tklvyou.huaiyuanmedia.ui.audio.ServiceWebviewActivity
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import kotlinx.android.synthetic.main.layout_recycler.*

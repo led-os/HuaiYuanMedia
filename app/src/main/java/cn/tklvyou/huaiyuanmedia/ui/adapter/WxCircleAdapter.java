@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.varunest.sparkbutton.SparkButton;
 
 import java.util.List;
 
@@ -35,9 +36,19 @@ import cn.tklvyou.huaiyuanmedia.widget.MultiImageView;
  */
 public class WxCircleAdapter extends BaseQuickAdapter<NewsBean, BaseViewHolder> {
 
+    private boolean showAnimal = false;
+    private int refreshPosition = -1;
     private boolean enableDelete = false;
+
+
     public WxCircleAdapter(int layoutResId, @Nullable List<NewsBean> data) {
         super(layoutResId, data);
+    }
+
+    public void notifyItemChangedAnimal(int position) {
+        showAnimal = true;
+        refreshPosition = position;
+        notifyItemChanged(position);
     }
 
     public void setEnableDelete(){
@@ -51,7 +62,7 @@ public class WxCircleAdapter extends BaseQuickAdapter<NewsBean, BaseViewHolder> 
         } else {
             helper.setVisible(R.id.deleteBtn, false);
         }
-        helper.addOnClickListener(R.id.deleteBtn);
+        helper.addOnClickListener(R.id.deleteBtn,R.id.sparkButton,R.id.tvGoodNum);
 
         helper.setText(R.id.nameTv, item.getNickname());
         helper.setText(R.id.timeTv, item.getBegintime());
@@ -59,19 +70,30 @@ public class WxCircleAdapter extends BaseQuickAdapter<NewsBean, BaseViewHolder> 
         helper.setText(R.id.tvCommentNum, "" + item.getComment_num());
         helper.setText(R.id.tvGoodNum, "" + item.getLike_num());
 
-        TextView tvGoodNum = helper.getView(R.id.tvGoodNum);
-
-        Drawable[] drawables = tvGoodNum.getCompoundDrawables();
-
+        SparkButton sparkButton = helper.getView(R.id.sparkButton);
         if (item.getLike_status() == 1) {
-            Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_red_good);
-            redGoodDrawable.setBounds(drawables[0].getBounds());
-            tvGoodNum.setCompoundDrawables(redGoodDrawable, drawables[1], drawables[2], drawables[3]);
+            sparkButton.setChecked(true);
+            if (showAnimal && helper.getLayoutPosition() == refreshPosition) {
+                refreshPosition = -1;
+                showAnimal = false;
+                sparkButton.playAnimation();
+            }
         } else {
-            Drawable grayGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_good);
-            grayGoodDrawable.setBounds(drawables[0].getBounds());
-            tvGoodNum.setCompoundDrawables(grayGoodDrawable, drawables[1], drawables[2], drawables[3]);
+            sparkButton.setChecked(false);
         }
+
+
+//        Drawable[] drawables = tvGoodNum.getCompoundDrawables();
+//
+//        if (item.getLike_status() == 1) {
+//            Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_mini_good);
+//            redGoodDrawable.setBounds(drawables[0].getBounds());
+//            tvGoodNum.setCompoundDrawables(redGoodDrawable, drawables[1], drawables[2], drawables[3]);
+//        } else {
+//            Drawable grayGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_good);
+//            grayGoodDrawable.setBounds(drawables[0].getBounds());
+//            tvGoodNum.setCompoundDrawables(grayGoodDrawable, drawables[1], drawables[2], drawables[3]);
+//        }
 
 
         if (!StringUtils.isEmpty(item.getAvatar().trim())) {

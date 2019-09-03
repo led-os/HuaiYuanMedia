@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.service.PointActivity">
+    tools:context=".ui.audio.point.PointActivity">
 
     <LinearLayout
         android:background="@mipmap/point_activity_bg"

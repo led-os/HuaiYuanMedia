@@ -11,7 +11,6 @@ import cn.tklvyou.huaiyuanmedia.BuildConfig
 import cn.tklvyou.huaiyuanmedia.R
 import cn.tklvyou.huaiyuanmedia.base.MyApplication
 import cn.tklvyou.huaiyuanmedia.base.activity.BaseBottomTabActivity
-import cn.tklvyou.huaiyuanmedia.base.activity.BaseX5WebViewActivity
 import cn.tklvyou.huaiyuanmedia.base.fragment.BaseX5WebViewFragment
 import cn.tklvyou.huaiyuanmedia.base.interfaces.BackHandledInterface
 import cn.tklvyou.huaiyuanmedia.common.Contacts
@@ -20,7 +19,7 @@ import cn.tklvyou.huaiyuanmedia.ui.home.HomeFragment
 import cn.tklvyou.huaiyuanmedia.ui.account.LoginActivity
 import cn.tklvyou.huaiyuanmedia.ui.camera.CameraFragment
 import cn.tklvyou.huaiyuanmedia.ui.mine.MineFragment
-import cn.tklvyou.huaiyuanmedia.ui.service.ServiceFragment
+import cn.tklvyou.huaiyuanmedia.ui.audio.AudioFragment
 import cn.tklvyou.huaiyuanmedia.ui.work.WorkFragment
 import cn.tklvyou.huaiyuanmedia.utils.UpdateAppHttpUtil
 import com.blankj.utilcode.util.SPUtils
@@ -70,7 +69,7 @@ class MainActivity : BaseBottomTabActivity<MainPresenter>(), MainContract.View, 
     private var homeFragment: HomeFragment? = null
     private var workFragment: WorkFragment? = null
     private var cameraFragment: CameraFragment? = null
-    private var serviceFragment: ServiceFragment? = null
+    private var audioFragment: AudioFragment? = null
     private var mineFragment: MineFragment? = null
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -96,13 +95,13 @@ class MainActivity : BaseBottomTabActivity<MainPresenter>(), MainContract.View, 
             homeFragment = HomeFragment()
             cameraFragment = CameraFragment()
             workFragment = WorkFragment()
-            serviceFragment = ServiceFragment()
+            audioFragment = AudioFragment()
             mineFragment = MineFragment()
 
             mFragments!!.add(homeFragment!!)
             mFragments!!.add(cameraFragment!!)
-            mFragments!!.add(workFragment!!)
-            mFragments!!.add(serviceFragment!!)
+            mFragments!!.add(audioFragment!!)
+            mFragments!!.add(audioFragment!!)
             mFragments!!.add(mineFragment!!)
 
 
@@ -235,7 +234,7 @@ class MainActivity : BaseBottomTabActivity<MainPresenter>(), MainContract.View, 
         homeFragment = null
         cameraFragment = null
         workFragment = null
-        serviceFragment = null
+        audioFragment = null
         mineFragment = null
         if (mFragments != null) {
             mFragments!!.clear()

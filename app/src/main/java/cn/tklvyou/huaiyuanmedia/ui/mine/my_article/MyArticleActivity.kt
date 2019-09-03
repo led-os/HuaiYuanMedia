@@ -3,36 +3,21 @@ package cn.tklvyou.huaiyuanmedia.ui.mine.my_article
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
 import cn.tklvyou.huaiyuanmedia.R
-import cn.tklvyou.huaiyuanmedia.base.NullPresenter
-import cn.tklvyou.huaiyuanmedia.base.activity.BaseActivity
 import cn.tklvyou.huaiyuanmedia.base.activity.BaseHttpRecyclerActivity
 import cn.tklvyou.huaiyuanmedia.base.interfaces.AdapterCallBack
 import cn.tklvyou.huaiyuanmedia.model.BasePageModel
 import cn.tklvyou.huaiyuanmedia.model.NewsBean
-import cn.tklvyou.huaiyuanmedia.ui.adapter.ChannelPagerAdapter
 import cn.tklvyou.huaiyuanmedia.ui.adapter.WxCircleAdapter
 import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
-import cn.tklvyou.huaiyuanmedia.ui.mine.concern.MyCameraFragment
-import cn.tklvyou.huaiyuanmedia.ui.mine.concern.MyVideoFragment
-import cn.tklvyou.huaiyuanmedia.utils.CommonUtil
 import cn.tklvyou.huaiyuanmedia.utils.RecycleViewDivider
-import cn.tklvyou.huaiyuanmedia.utils.SizeUtil
 import cn.tklvyou.huaiyuanmedia.widget.dailog.CommonDialog
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
-import com.trello.rxlifecycle3.components.support.RxFragment
 import kotlinx.android.synthetic.main.activity_my_article.*
-import net.lucode.hackware.magicindicator.ViewPagerHelper
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerIndicator
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ClipPagerTitleView
 
 /**
  *@description :我的帖子

@@ -19,6 +19,9 @@ public interface NewListContract {
         void deleteSuccess(int position);
 
         void setJuZhengHeader(List<NewsBean> beans);
+
+        void updateLikeStatus(boolean isLike, int position);
+
     }
 
     interface Presenter extends BaseContract.BasePresenter<View> {
@@ -33,6 +36,11 @@ public interface NewListContract {
         void deleteArticle(int id, int position);
 
         void getJuZhengHeader(String module);
+
+        void addLikeNews(int id, int position);
+
+        void cancelLikeNews(int id, int position);
+
 
     }
 }

@@ -19,12 +19,16 @@ public class NewsMultipleItem<T> implements MultiItemEntity {
     public static final int ZHUAN_LAN = 11;                         //专栏
     public static final int GONG_GAO = 12;                          //公告
     public static final int ZHI_BO = 13;                            //直播
+    public static final int TUI_JIAN = 14;                          //推荐
 
     private int itemType;
     private T dataBean;
 
     public NewsMultipleItem(String model, T dataBean) {
         switch (model) {
+            case "推荐":
+                itemType = TUI_JIAN;
+                break;
             case "V视频":
                 itemType = VIDEO;
                 break;

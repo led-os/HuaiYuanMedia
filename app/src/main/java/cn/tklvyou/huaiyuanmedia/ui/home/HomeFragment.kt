@@ -7,6 +7,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import cn.tklvyou.huaiyuanmedia.R
 import cn.tklvyou.huaiyuanmedia.model.NewsMultipleItem
@@ -16,11 +17,17 @@ import cn.tklvyou.huaiyuanmedia.model.ChannelModel
 import kotlinx.android.synthetic.main.fragment_home.*
 import cn.tklvyou.huaiyuanmedia.ui.adapter.ChannelPagerAdapter
 import cn.tklvyou.huaiyuanmedia.ui.camera.TakePhotoActivity
+import cn.tklvyou.huaiyuanmedia.ui.home.new_list.BlankFragment
+import cn.tklvyou.huaiyuanmedia.ui.home.new_list.GuanZhuFragment
 import cn.tklvyou.huaiyuanmedia.ui.home.new_list.NewsListFragment
 import cn.tklvyou.huaiyuanmedia.ui.listener.OnChannelListener
 import cn.tklvyou.huaiyuanmedia.ui.video_edit.VideoEditActivity
+import com.blankj.utilcode.util.GsonUtils
+import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.SPUtils
 import com.blankj.utilcode.util.ToastUtils
+import com.cjt2325.cameralibrary.util.LogUtil
+import com.google.gson.Gson
 import com.luck.picture.lib.PictureSelector
 import com.luck.picture.lib.config.PictureConfig
 import com.tbruyelle.rxpermissions2.RxPermissions
@@ -45,7 +52,7 @@ class HomeFragment : BaseFragment<HomePresenter>(), HomeContract.View {
     }
 
     private var mSelectedChannels = ArrayList<String>()
-    private val mChannelFragments = ArrayList<RxFragment>()
+    private val mChannelFragments = ArrayList<Fragment>()
     private var mChannelPagerAdapter: ChannelPagerAdapter? = null
 
     private var commonNavigator: CommonNavigator? = null
@@ -86,9 +93,9 @@ class HomeFragment : BaseFragment<HomePresenter>(), HomeContract.View {
         super.onResume()
         if (isRefresh) {
             isRefresh = false
-            if (mChannelFragments.size > 0) {
-                (mChannelFragments[0] as NewsListFragment).refreshData()
-            }
+//            if (mChannelFragments.size > 0) {
+//                (mChannelFragments[0] as NewsListFragment).refreshData()
+//            }
         }
     }
 
@@ -97,10 +104,10 @@ class HomeFragment : BaseFragment<HomePresenter>(), HomeContract.View {
         super.onHiddenChanged(hidden)
 
         if (!hidden && !isFirstResume) {
-            mViewPager.setCurrentItem(0, false)
-            if (mChannelFragments.size > 0) {
-                (mChannelFragments[0] as NewsListFragment).refreshData()
-            }
+//            mViewPager.setCurrentItem(0, false)
+//            if (mChannelFragments.size > 0) {
+//                (mChannelFragments[0] as NewsListFragment).refreshData()
+//            }
         }
     }
 
@@ -137,7 +144,9 @@ class HomeFragment : BaseFragment<HomePresenter>(), HomeContract.View {
 
         initChannelFragments()
 
+
         mChannelPagerAdapter = ChannelPagerAdapter(mChannelFragments, childFragmentManager)
+
         mViewPager.adapter = mChannelPagerAdapter
         mViewPager.offscreenPageLimit = mSelectedChannels.size
 
@@ -220,54 +229,76 @@ class HomeFragment : BaseFragment<HomePresenter>(), HomeContract.View {
      * 初始化已选频道的fragment的集合
      */
     private fun initChannelFragments() {
+        mChannelFragments.clear()
         for ((index, item) in mSelectedChannels.withIndex()) {
-            val newsFragment = NewsListFragment()
+
+            LogUtils.e(index, mChannelFragments.size)
+
             val bundle = Bundle()
-            when (item) {
-                "V视频" -> {
-                    bundle.putInt("type", NewsMultipleItem.VIDEO)
-                }
-                "濉溪TV" -> {
-                    bundle.putInt("type", NewsMultipleItem.TV)
-                }
-                "新闻" -> {
-                    bundle.putInt("type", NewsMultipleItem.NEWS)
-                }
-                "视讯" -> {
-                    bundle.putInt("type", NewsMultipleItem.SHI_XUN)
-                }
-                "问政" -> {
-                    bundle.putInt("type", NewsMultipleItem.WEN_ZHENG)
-                }
-                "矩阵" -> {
-                    bundle.putInt("type", NewsMultipleItem.JU_ZHENG)
-                }
-                "原创" -> {
-                    bundle.putInt("type", NewsMultipleItem.WECHAT_MOMENTS)
-                }
-                "悦读" -> {
-                    bundle.putInt("type", NewsMultipleItem.READING)
-                }
-                "悦听" -> {
-                    bundle.putInt("type", NewsMultipleItem.LISTEN)
-                }
-                "党建" -> {
-                    bundle.putInt("type", NewsMultipleItem.DANG_JIAN)
-                }
-                "专栏" -> {
-                    bundle.putInt("type", NewsMultipleItem.ZHUAN_LAN)
-                }
-                "公告" -> {
-                    bundle.putInt("type", NewsMultipleItem.GONG_GAO)
-                }
-                "直播" -> {
-                    bundle.putInt("type", NewsMultipleItem.ZHI_BO)
+            bundle.putString("param", item)
+
+            LogUtils.e(item)
+
+            if (item == "关注") {
+                val newsFragment = GuanZhuFragment()
+                newsFragment.arguments = bundle
+                mChannelFragments.add(newsFragment)//添加到集合中
+            } else {
+                val newsFragment = NewsListFragment()
+                when (item) {
+                    "推荐" -> {
+                        bundle.putInt("type", NewsMultipleItem.TUI_JIAN)
+                    }
+                    "V视频" -> {
+                        bundle.putInt("type", NewsMultipleItem.VIDEO)
+                    }
+                    "濉溪TV" -> {
+                        bundle.putInt("type", NewsMultipleItem.TV)
+                    }
+                    "新闻" -> {
+                        bundle.putInt("type", NewsMultipleItem.NEWS)
+                    }
+                    "视讯" -> {
+                        bundle.putInt("type", NewsMultipleItem.SHI_XUN)
+                    }
+                    "问政" -> {
+                        bundle.putInt("type", NewsMultipleItem.WEN_ZHENG)
+                    }
+                    "矩阵", "新闻网" -> {
+                        bundle.putInt("type", NewsMultipleItem.JU_ZHENG)
+                    }
+                    "原创" -> {
+                        bundle.putInt("type", NewsMultipleItem.WECHAT_MOMENTS)
+                    }
+                    "悦读" -> {
+                        bundle.putInt("type", NewsMultipleItem.READING)
+                    }
+                    "悦听" -> {
+                        bundle.putInt("type", NewsMultipleItem.LISTEN)
+                    }
+                    "党建" -> {
+                        bundle.putInt("type", NewsMultipleItem.DANG_JIAN)
+                    }
+                    "专栏" -> {
+                        bundle.putInt("type", NewsMultipleItem.ZHUAN_LAN)
+                    }
+                    "公告" -> {
+                        bundle.putInt("type", NewsMultipleItem.GONG_GAO)
+                    }
+                    "直播" -> {
+                        bundle.putInt("type", NewsMultipleItem.ZHI_BO)
+                    }
+
+                    else -> {
+                        bundle.putInt("type", NewsMultipleItem.NEWS)
+                        bundle.putBoolean("banner", false)
+                    }
                 }
 
+                newsFragment.arguments = bundle
+                mChannelFragments.add(newsFragment)//添加到集合中
             }
 
-            newsFragment.arguments = bundle
-            mChannelFragments.add(newsFragment)//添加到集合中
         }
     }
 
@@ -301,9 +332,13 @@ class HomeFragment : BaseFragment<HomePresenter>(), HomeContract.View {
     }
 
     fun reload() {
-        mViewPager.setCurrentItem(0, false)
-        if (mChannelFragments.size > 0) {
-            (mChannelFragments[0] as NewsListFragment).refreshData()
+        if (mChannelFragments.size > mViewPager.currentItem) {
+            if(mChannelFragments[mViewPager.currentItem] is NewsListFragment){
+                (mChannelFragments[mViewPager.currentItem] as NewsListFragment).refreshData()
+            }else if(mChannelFragments[mViewPager.currentItem] is GuanZhuFragment){
+                (mChannelFragments[mViewPager.currentItem] as GuanZhuFragment).refreshData()
+            }
+
         }
     }
 

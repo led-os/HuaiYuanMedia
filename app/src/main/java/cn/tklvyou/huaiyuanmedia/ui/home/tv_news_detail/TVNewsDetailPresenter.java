@@ -18,12 +18,16 @@ public class TVNewsDetailPresenter extends BasePresenter<TVNewsDetailContract.Vi
                 .compose(RxSchedulers.applySchedulers())
                 .compose(mView.bindToLife())
                 .subscribe(result -> {
-                    if (result.getCode() == 1) {
-                        mView.setDetails(result.getData());
-                    } else {
-                        ToastUtils.showShort(result.getMsg());
-                    }
-                }, throwable -> mView.showFailed(""));
+                            if (result.getCode() == 1) {
+                                mView.setDetails(result.getData());
+                            } else {
+                                ToastUtils.showShort(result.getMsg());
+                            }
+                        }, throwable -> {
+                            throwable.printStackTrace();
+                            mView.showFailed("");
+                        }
+                );
     }
 
     @Override
@@ -59,7 +63,7 @@ public class TVNewsDetailPresenter extends BasePresenter<TVNewsDetailContract.Vi
     @Override
     public void addComment(int id, String detail) {
         RetrofitHelper.getInstance().getServer()
-                .addComment(id,detail)
+                .addComment(id, detail)
                 .compose(RxSchedulers.applySchedulers())
                 .compose(mView.bindToLife())
                 .subscribe(result -> {
@@ -71,8 +75,8 @@ public class TVNewsDetailPresenter extends BasePresenter<TVNewsDetailContract.Vi
     }
 
     @Override
-    public void setCollectStatus(int id,boolean isCollect) {
-        if(isCollect){
+    public void setCollectStatus(int id, boolean isCollect) {
+        if (isCollect) {
             RetrofitHelper.getInstance().getServer()
                     .addCollect(id)
                     .compose(RxSchedulers.applySchedulers())
@@ -83,7 +87,7 @@ public class TVNewsDetailPresenter extends BasePresenter<TVNewsDetailContract.Vi
                             mView.setCollectStatusSuccess(true);
                         }
                     }, throwable -> throwable.printStackTrace());
-        }else {
+        } else {
             RetrofitHelper.getInstance().getServer()
                     .cancelCollect(id)
                     .compose(RxSchedulers.applySchedulers())
@@ -105,7 +109,7 @@ public class TVNewsDetailPresenter extends BasePresenter<TVNewsDetailContract.Vi
                 .compose(RxSchedulers.applySchedulers())
                 .compose(mView.bindToLife())
                 .subscribe(result -> {
-                    if(!StringUtils.isEmpty(result.getMsg())){
+                    if (!StringUtils.isEmpty(result.getMsg())) {
                         ToastUtils.showShort(result.getMsg());
                     }
                 }, throwable -> throwable.printStackTrace());

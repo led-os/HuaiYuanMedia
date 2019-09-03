@@ -279,46 +279,51 @@ public abstract class BaseActivity<P extends BaseContract.BasePresenter> extends
 
     @Override
     public void showLoading() {
-        specialLoadingHolder.showLoading();
-//        mFrameLayout4Loading.showLoadingView();
+        runUiThread(() -> specialLoadingHolder.showLoading());
     }
 
     @Override
     public void showPageLoading() {
-        pageHolder.showLoading();
-//        mFrameLayout4Loading.hideLoadingView();
+        runUiThread(() -> pageHolder.showLoading());
     }
 
 
     @Override
     public void showSuccess(String message) {
-        specialLoadingHolder.showLoadSuccess();
-        pageHolder.showLoadSuccess();
-        if (!StringUtils.isEmpty(message)) {
-            ToastUtils.showShort(message);
-        }
+        runUiThread(() -> {
+            specialLoadingHolder.showLoadSuccess();
+            pageHolder.showLoadSuccess();
+            if (!StringUtils.isEmpty(message)) {
+                ToastUtils.showShort(message);
+            }
+        });
     }
 
     @Override
     public void showFailed(String message) {
-        specialLoadingHolder.showLoadFailed();
-        if (!StringUtils.isEmpty(message)) {
-            ToastUtils.showShort(message);
-        }
+        runUiThread(() -> {
+            specialLoadingHolder.showLoadFailed();
+            if (!StringUtils.isEmpty(message)) {
+                ToastUtils.showShort(message);
+            }
+        });
+
     }
 
     @Override
     public void showNoNet() {
-        specialLoadingHolder.showLoadFailed();
-//        mFrameLayout4Loading.showNoNetView();
-//        ToastUtils.showShort("暂无网络");
+        runUiThread(() -> {
+            specialLoadingHolder.showLoadFailed();
+        });
+
     }
 
     @Override
     public void showNoData() {
-        specialLoadingHolder.showEmpty();
-//        mFrameLayout4Loading.doShowNoData();
-//        ToastUtils.showShort("暂无数据");
+        runUiThread(() -> {
+            specialLoadingHolder.showEmpty();
+        });
+
     }
 
 

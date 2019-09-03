@@ -118,7 +118,7 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
         initWebView(newsDetailWebView)
 
         when (type) {
-            "视频", "图片" -> {
+            "视频", "图文" -> {
                 llWXHeader.visibility = View.VISIBLE
                 llArticle.visibility = View.GONE
 
@@ -638,19 +638,11 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
         if (item.like_status == 1) {
             tvGoodStatus.text = "已赞"
             tvGoodStatus.setTextColor(resources.getColor(R.color.colorAccent))
-//            val redGoodDrawable = mContext.resources.getDrawable(R.mipmap.icon_good_select)
-//            redGoodDrawable.bounds = drawables[0].getBounds()
-//            tvGoodStatus.setCompoundDrawables(redGoodDrawable, drawables[1], drawables[2], drawables[3])
             sparkButton.isChecked = true
-//            sparkButton.playAnimation()
         } else {
             tvGoodStatus.text = "赞"
             tvGoodStatus.setTextColor(resources.getColor(R.color.default_gray_text_color))
-//            val grayGoodDrawable = mContext.resources.getDrawable(R.mipmap.icon_details_dianzan)
-//            grayGoodDrawable.bounds = drawables[0].getBounds()
-//            tvGoodStatus.setCompoundDrawables(grayGoodDrawable, drawables[1], drawables[2], drawables[3])
             sparkButton.isChecked = false
-//            sparkButton.playAnimation()
         }
 
 

@@ -10,6 +10,7 @@ import cn.tklvyou.huaiyuanmedia.utils.QiniuUploadManager;
 public interface PublishNewsContract {
     interface View extends BaseContract.BaseView {
         void publishSuccess();
+        void publishError();
 
         void uploadImageSuccess(String url);
 

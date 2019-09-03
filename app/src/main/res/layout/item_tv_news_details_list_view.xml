@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingLeft="@dimen/dp_15"
+    android:paddingTop="@dimen/dp_10"
+    android:paddingRight="@dimen/dp_15"
+    android:paddingBottom="@dimen/dp_10">
+
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/default_black_text_color"
+        android:textSize="@dimen/sp_14" />
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginRight="@dimen/dp_20"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="@color/default_black_text_color"
+        android:textSize="@dimen/sp_14" />
+
+
+    <TextView
+        android:id="@+id/tvTag"
+        android:layout_width="@dimen/dp_45"
+        android:layout_height="@dimen/dp_20"
+        android:background="@drawable/shape_color_accent_radius_5_bg"
+        android:gravity="center"
+        android:text="直播中"
+        android:textColor="#ffffffff"
+        android:textSize="@dimen/sp_10"
+        android:visibility="invisible" />
+
+</LinearLayout>

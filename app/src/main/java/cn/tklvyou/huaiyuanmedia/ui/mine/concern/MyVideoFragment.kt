@@ -19,7 +19,7 @@ import cn.tklvyou.huaiyuanmedia.utils.RecycleViewDivider
 import cn.tklvyou.huaiyuanmedia.widget.dailog.CommonDialog
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
-import kotlinx.android.synthetic.main.fragment_mine_tiezi.*
+import kotlinx.android.synthetic.main.fragment_history_updates.*
 
 /**
  *@description :我的V视
@@ -37,19 +37,18 @@ class MyVideoFragment : BaseHttpRecyclerFragment<MyArticleListPresenter, NewsBea
     }
 
     override fun getFragmentLayoutID(): Int {
-        return R.layout.fragment_mine_tiezi
+        return R.layout.fragment_history_updates
     }
 
     override fun getLoadingView(): View {
-        return cameraRecyclerView
+        return mRecyclerView
     }
 
     override fun initView() {
-        cameraTitleBar.visibility = View.GONE
-        initSmartRefreshLayout(cameraSmartRefreshLayout)
-        initRecyclerView(cameraRecyclerView)
+        initSmartRefreshLayout(mSmartRefreshLayout)
+        initRecyclerView(mRecyclerView)
 
-        cameraRecyclerView.addItemDecoration(RecycleViewDivider(context, LinearLayout.VERTICAL, 20, resources.getColor(R.color.common_bg)))
+        mRecyclerView.addItemDecoration(RecycleViewDivider(context, LinearLayout.VERTICAL, 20, resources.getColor(R.color.common_bg)))
 
         mPresenter.getNewList(moduleName, 1)
     }

@@ -3,6 +3,7 @@ package cn.tklvyou.huaiyuanmedia.ui.mine.concern
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import cn.tklvyou.huaiyuanmedia.R
 import cn.tklvyou.huaiyuanmedia.base.NullPresenter
 import cn.tklvyou.huaiyuanmedia.base.activity.BaseActivity
@@ -23,7 +24,7 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ClipPa
  *@company :途酷科技
  */
 class MyConcernActivity : BaseActivity<NullPresenter>() {
-    private val mFragments = ArrayList<RxFragment>()
+    private val mFragments = ArrayList<Fragment>()
     private var mTabNameList = ArrayList<String>()
     private lateinit var commonNavigator: CommonNavigator
     private var mChannelPagerAdapter: ChannelPagerAdapter? = null
@@ -43,8 +44,9 @@ class MyConcernActivity : BaseActivity<NullPresenter>() {
 
         mTabNameList.add("栏目")
         mTabNameList.add("好友")
-        mFragments.add(MyCameraFragment())
-        mFragments.add(MyVideoFragment())
+
+        mFragments.add(getFragmentByType(1))
+        mFragments.add(getFragmentByType(2))
         initMagicIndicator()
         mChannelPagerAdapter = ChannelPagerAdapter(mFragments, fragmentManager)
         articleViewPager.adapter = mChannelPagerAdapter
@@ -52,6 +54,14 @@ class MyConcernActivity : BaseActivity<NullPresenter>() {
         commonNavigator.notifyDataSetChanged()
     }
 
+
+    private fun getFragmentByType(type: Int): Fragment {
+        val newsFragment = MyConcernFragment()
+        val bundle = Bundle()
+        bundle.putInt("type", type)
+        newsFragment.arguments = bundle
+        return newsFragment
+    }
 
     private fun initMagicIndicator() {
         commonNavigator = CommonNavigator(this)

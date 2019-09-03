@@ -4,31 +4,35 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.os.Bundle
 import android.view.View
+import android.widget.LinearLayout
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import cn.tklvyou.huaiyuanmedia.R
-import cn.tklvyou.huaiyuanmedia.base.fragment.BaseHttpRecyclerFragment
+import cn.tklvyou.huaiyuanmedia.base.fragment.BaseRecyclerFragment
 import cn.tklvyou.huaiyuanmedia.base.interfaces.AdapterCallBack
-import cn.tklvyou.huaiyuanmedia.model.BannerModel
 import cn.tklvyou.huaiyuanmedia.model.BasePageModel
 import cn.tklvyou.huaiyuanmedia.model.NewsBean
-import cn.tklvyou.huaiyuanmedia.model.HaveSecondModuleNewsModel
+import cn.tklvyou.huaiyuanmedia.ui.adapter.CameraHotListAdapter
 import cn.tklvyou.huaiyuanmedia.ui.adapter.ChannelPagerAdapter
-import cn.tklvyou.huaiyuanmedia.ui.adapter.WxCircleAdapter
-import cn.tklvyou.huaiyuanmedia.ui.home.new_list.NewListContract
-import cn.tklvyou.huaiyuanmedia.ui.home.new_list.NewListPresenter
 import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.publish_news.PublishNewsActivity
-import cn.tklvyou.huaiyuanmedia.ui.mine.concern.MyCameraFragment
-import cn.tklvyou.huaiyuanmedia.ui.mine.concern.MyVideoFragment
-import cn.tklvyou.huaiyuanmedia.ui.service.PointActivity
-import cn.tklvyou.huaiyuanmedia.widget.dailog.CommonDialog
+import cn.tklvyou.huaiyuanmedia.ui.audio.point.PointActivity
+import cn.tklvyou.huaiyuanmedia.ui.camera.history_updates.HistoryUpdatesFragment
+import cn.tklvyou.huaiyuanmedia.ui.camera.today_hot.TodayHotActivity
+import cn.tklvyou.huaiyuanmedia.utils.RecycleViewDivider
 import com.adorkable.iosdialog.BottomSheetDialog
+import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.luck.picture.lib.PictureSelector
 import com.luck.picture.lib.config.PictureConfig
 import com.luck.picture.lib.config.PictureMimeType
+import com.scwang.smartrefresh.layout.api.RefreshLayout
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener
 import com.tbruyelle.rxpermissions2.RxPermissions
 import com.trello.rxlifecycle3.components.support.RxFragment
 import kotlinx.android.synthetic.main.fragment_camera.*
@@ -39,17 +43,13 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNav
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerIndicator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ClipPagerTitleView
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView
 import java.io.Serializable
 
-class CameraFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsBean, BaseViewHolder, WxCircleAdapter>(), NewListContract.View {
-    override fun setJuZhengHeader(beans: MutableList<NewsBean>?) {
-    }
+class CameraFragment : BaseRecyclerFragment<CameraPresenter, NewsBean, BaseViewHolder, CameraHotListAdapter>(), CameraContract.View {
 
-
-    override fun initPresenter(): NewListPresenter {
-        return NewListPresenter()
+    override fun initPresenter(): CameraPresenter {
+        return CameraPresenter()
     }
 
     override fun getFragmentLayoutID(): Int {
@@ -59,11 +59,14 @@ class CameraFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsBean, Base
 
     private var isRefresh = false
     private var isChoose = false
-    private val mFragments = ArrayList<RxFragment>()
+    private val mFragments = ArrayList<Fragment>()
     private var mTabNameList = ArrayList<String>()
     private lateinit var commonNavigator: CommonNavigator
     private var mChannelPagerAdapter: ChannelPagerAdapter? = null
 
+    override fun getLoadingView(): View {
+        return mRecyclerView
+    }
 
     override fun initView() {
         cameraTitleBar.setBackgroundResource(R.drawable.shape_gradient_common_titlebar)
@@ -109,26 +112,39 @@ class CameraFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsBean, Base
                         }
                     }
         }
+
         headerView.setOnClickListener {
             startActivity(Intent(context, PointActivity::class.java))
         }
 
         mTabNameList.add("最新动态")
         mTabNameList.add("好友动态")
-        mFragments.add(MyCameraFragment())
-        mFragments.add(MyVideoFragment())
+        mFragments.add(getFragmentByType(true))
+        mFragments.add(getFragmentByType(false))
         initMagicIndicator()
         mChannelPagerAdapter = ChannelPagerAdapter(mFragments, childFragmentManager)
         mViewPager.adapter = mChannelPagerAdapter
         mViewPager.offscreenPageLimit = mTabNameList.size
         commonNavigator.notifyDataSetChanged()
 
-//        initSmartRefreshLayout(cameraSmartRefreshLayout)
-//        initRecyclerView(cameraRecyclerView)
-//
-//        cameraRecyclerView.addItemDecoration(RecycleViewDivider(context, LinearLayout.VERTICAL, 1, resources.getColor(R.color.common_bg)))
+        mSmartRefreshLayout.setOnRefreshListener(object : OnRefreshListener {
+            override fun onRefresh(refreshLayout: RefreshLayout) {
+                isRefresh = true
+                mPresenter.getLifeHotList(1)
+            }
 
-//        mPresenter.getNewList("随手拍", null, 1, false)
+        })
+        initRecyclerView(mRecyclerView)
+        mRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayout.HORIZONTAL, false)
+        mRecyclerView.addItemDecoration(RecycleViewDivider(context, LinearLayout.HORIZONTAL, ConvertUtils.dp2px(10f), Color.WHITE, true))
+
+        btnTodayHot.setOnClickListener {
+            startActivity(Intent(context, TodayHotActivity::class.java))
+        }
+
+
+
+        mPresenter.getLifeHotList(1)
     }
 
     override fun lazyData() {
@@ -137,24 +153,22 @@ class CameraFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsBean, Base
 
     override fun onUserVisible() {
         super.onUserVisible()
-//        if (isChoose) {
-//            isChoose = false
-//            isRefresh = true
-//        } else {
-//            if (isRefresh) {
-//                isRefresh = false
-//                cameraRecyclerView.scrollToPosition(0)
-//                cameraSmartRefreshLayout.autoRefresh()
-//            }
-//        }
+        if (isChoose) {
+            isChoose = false
+            isRefresh = true
+        } else {
+            if (isRefresh) {
+                isRefresh = false
+                mSmartRefreshLayout.autoRefresh()
+            }
+        }
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
-//        if (!hidden && !isFirstResume) {
-//            cameraRecyclerView.scrollToPosition(0)
-//            cameraSmartRefreshLayout.autoRefresh()
-//        }
+        if (!hidden && !isFirstResume) {
+            mSmartRefreshLayout.autoRefresh()
+        }
     }
 
 
@@ -197,27 +211,35 @@ class CameraFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsBean, Base
 
     override fun onRetry() {
         super.onRetry()
-        mPresenter.getNewList("随手拍", null, 1, true)
+        mPresenter.getLifeHotList(1)
     }
 
 
     override fun getListAsync(page: Int) {
-        mPresenter.getNewList("随手拍", null, page, false)
+
     }
 
-    override fun setNewList(p: Int, model: BasePageModel<NewsBean>?) {
+    override fun setLifeHotList(p: Int, model: BasePageModel<NewsBean>?) {
+        mSmartRefreshLayout.finishRefresh()
+
         if (model != null) {
             onLoadSucceed(p, model.data)
         } else {
             onLoadFailed(p, null)
         }
+
+        if (isRefresh) {
+            isRefresh = false
+            (mFragments[mViewPager.currentItem] as HistoryUpdatesFragment).onRetry()
+        }
+
     }
 
     override fun setList(list: MutableList<NewsBean>?) {
-        setList(object : AdapterCallBack<WxCircleAdapter> {
+        setList(object : AdapterCallBack<CameraHotListAdapter> {
 
-            override fun createAdapter(): WxCircleAdapter {
-                return WxCircleAdapter(R.layout.item_winxin_circle, list)
+            override fun createAdapter(): CameraHotListAdapter {
+                return CameraHotListAdapter(R.layout.item_camera_today_hot, list)
             }
 
             override fun refreshAdapter() {
@@ -232,21 +254,24 @@ class CameraFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsBean, Base
     }
 
 
-    override fun setBanner(bannerModelList: MutableList<BannerModel>?) {
-        //该页面用不上此方法
-    }
-
-    override fun setHaveSecondModuleNews(p: Int, datas: MutableList<HaveSecondModuleNewsModel>?) {
-        //该页面用不上此方法
-    }
-
     override fun onItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
         super.onItemClick(adapter, view, position)
 
-        val bean = (adapter as WxCircleAdapter).data[position]
+        val bean = (adapter as CameraHotListAdapter).data[position]
         val id = bean.id
         val type = if (bean.images != null && bean.images.size > 0) "图文" else "视频"
         startNewsDetailActivity(mActivity!!, type, id, position)
+
+    }
+
+    override fun updateLikeStatus(isLike: Boolean, position: Int) {
+        if (isLike) {
+            adapter.data[position].like_status = 1
+        } else {
+            adapter.data[position].like_status = 0
+        }
+
+        adapter.notifyItemChangedAnimal(position)
 
     }
 
@@ -256,21 +281,18 @@ class CameraFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsBean, Base
         intent.putExtra(NewsDetailActivity.INTENT_ID, id)
         intent.putExtra(NewsDetailActivity.INTENT_TYPE, type)
         intent.putExtra(NewsDetailActivity.POSITION, position)
-        startActivityForResult(intent, 0)
+        startActivityForResult(intent, 10)
     }
 
     override fun onItemChildClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
         super.onItemChildClick(adapter, view, position)
-        if (view!!.id == R.id.deleteBtn) {
-            val dialog = CommonDialog(context)
-            dialog.setTitle("温馨提示")
-            dialog.setMessage("是否删除？")
-            dialog.setYesOnclickListener("确认") {
-                val bean = (adapter as WxCircleAdapter).data[position]
-                mPresenter.deleteArticle(bean.id, position)
-                dialog.dismiss()
+        if (view!!.id == R.id.sparkButton) {
+            val bean = (adapter as CameraHotListAdapter).data[position] as NewsBean
+            if (bean.like_status == 1) {
+                mPresenter.cancelLikeNews(bean.id, position)
+            } else {
+                mPresenter.addLikeNews(bean.id, position)
             }
-            dialog.show()
         }
     }
 
@@ -295,19 +317,21 @@ class CameraFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsBean, Base
                     startActivity(intent)
                 }
 
-                0 -> {
+                10 -> {
                     val position = data.getIntExtra("position", 0)
                     val seeNum = data.getIntExtra("seeNum", 0)
                     val zanNum = data.getIntExtra("zanNum", 0)
                     val commenNum = data.getIntExtra("commentNum", 0)
                     val like_status = data.getIntExtra("like_status", 0)
 
-                    val bean = (adapter as WxCircleAdapter).data[position] as NewsBean
-                    bean.comment_num = commenNum
-                    bean.like_num = zanNum
-                    bean.visit_num = seeNum
-                    bean.like_status = like_status
-                    adapter.notifyItemChanged(position)
+                    if (adapter != null) {
+                        val bean = (adapter as CameraHotListAdapter).data[position] as NewsBean
+                        bean.comment_num = commenNum
+                        bean.like_num = zanNum
+                        bean.visit_num = seeNum
+                        bean.like_status = like_status
+                        adapter.notifyItemChanged(position)
+                    }
                 }
 
             }
@@ -315,5 +339,15 @@ class CameraFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsBean, Base
         }
 
     }
+
+
+    private fun getFragmentByType(isMine: Boolean): RxFragment {
+        val newsFragment = HistoryUpdatesFragment()
+        val bundle = Bundle()
+        bundle.putBoolean("isMine", isMine)
+        newsFragment.arguments = bundle
+        return newsFragment
+    }
+
 
 }

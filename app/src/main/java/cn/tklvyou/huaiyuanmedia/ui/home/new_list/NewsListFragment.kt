@@ -29,7 +29,7 @@ import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.publish_wenzheng.PublishWenzhengActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.search_list.SearchListActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.tv_news_detail.TVNewsDetailActivity
-import cn.tklvyou.huaiyuanmedia.ui.service.ServiceWebviewActivity
+import cn.tklvyou.huaiyuanmedia.ui.audio.ServiceWebviewActivity
 import cn.tklvyou.huaiyuanmedia.ui.video_player.VodActivity
 import cn.tklvyou.huaiyuanmedia.utils.BannerGlideImageLoader
 import cn.tklvyou.huaiyuanmedia.utils.GridDividerItemDecoration
@@ -51,6 +51,7 @@ import kotlin.collections.ArrayList
 
 class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultipleItem<Any>, BaseViewHolder, NewsMultipleItemQuickAdapter>(), NewListContract.View {
 
+
     override fun deleteSuccess(position: Int) {
     }
 
@@ -63,6 +64,7 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
     }
 
     private var type = -1
+    private var param = ""
     private var isRefresh = false
     private var audioController: AudioController? = null
 
@@ -71,6 +73,8 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
         initRecyclerView(recyclerView)
 
         type = mBundle.getInt("type", -1)
+        param = mBundle.getString("param", "")
+
         if (type != NewsMultipleItem.VIDEO) {
             refreshLayout.autoRefreshAnimationOnly()
         }
@@ -128,6 +132,15 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
                 recyclerView.addItemDecoration(RecycleViewDivider(context, LinearLayout.VERTICAL, 20, resources.getColor(R.color.common_bg)))
             }
 
+            NewsMultipleItem.TUI_JIAN -> {
+                recyclerView.addItemDecoration(RecycleViewDivider(context, LinearLayout.VERTICAL, 1, resources.getColor(R.color.common_bg)))
+            }
+
+            else -> {
+                recyclerView.addItemDecoration(RecycleViewDivider(context, LinearLayout.VERTICAL, 1, resources.getColor(R.color.common_bg)))
+            }
+
+
         }
 
     }
@@ -148,19 +161,24 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
     override fun lazyData() {
         when (type) {
             NewsMultipleItem.VIDEO -> {
-                mPresenter.getBanner("V视频")
+                mPresenter.getBanner(param)
             }
 
             NewsMultipleItem.TV -> {
-                mPresenter.getHaveSecondModuleNews(1, "濉溪TV", showLoading)
+                mPresenter.getHaveSecondModuleNews(1, param, showLoading)
             }
 
             NewsMultipleItem.NEWS -> {
-                mPresenter.getBanner("新闻")
+                val isShow = mBundle.getBoolean("banner", true)
+                if (isShow) {
+                    mPresenter.getBanner(param)
+                } else {
+                    mPresenter.getNewList(param, null, 1, showLoading)
+                }
             }
 
             NewsMultipleItem.SHI_XUN -> {
-                mPresenter.getNewList("视讯", null, 1, showLoading)
+                mPresenter.getNewList(param, null, 1, showLoading)
             }
 
             NewsMultipleItem.WEN_ZHENG -> {
@@ -169,39 +187,47 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
                     startActivity(Intent(context, PublishWenzhengActivity::class.java))
                     isRefresh = true
                 }
-                mPresenter.getNewList("问政", null, 1, showLoading)
+                mPresenter.getNewList(param, null, 1, showLoading)
             }
 
             NewsMultipleItem.JU_ZHENG -> {
-                mPresenter.getJuZhengHeader("矩阵")
+                mPresenter.getJuZhengHeader(param)
             }
 
             NewsMultipleItem.WECHAT_MOMENTS -> {
-                mPresenter.getNewList("原创", null, 1, showLoading)
+                mPresenter.getNewList(param, null, 1, showLoading)
             }
 
             NewsMultipleItem.READING -> {
-                mPresenter.getNewList("悦读", null, 1, showLoading)
+                mPresenter.getNewList(param, null, 1, showLoading)
             }
 
             NewsMultipleItem.LISTEN -> {
-                mPresenter.getNewList("悦听", null, 1, showLoading)
+                mPresenter.getNewList(param, null, 1, showLoading)
             }
 
             NewsMultipleItem.DANG_JIAN -> {
-                mPresenter.getNewList("党建", null, 1, showLoading)
+                mPresenter.getNewList(param, null, 1, showLoading)
             }
 
             NewsMultipleItem.ZHUAN_LAN -> {
-                mPresenter.getJuZhengHeader("专栏")
+                mPresenter.getJuZhengHeader(param)
             }
 
             NewsMultipleItem.GONG_GAO -> {
-                mPresenter.getNewList("公告", null, 1, showLoading)
+                mPresenter.getNewList(param, null, 1, showLoading)
             }
 
             NewsMultipleItem.ZHI_BO -> {
-                mPresenter.getNewList("直播", null, 1, showLoading)
+                mPresenter.getNewList(param, null, 1, showLoading)
+            }
+
+            NewsMultipleItem.TUI_JIAN -> {
+                mPresenter.getNewList(param, null, 1, showLoading)
+            }
+
+            else -> {
+                mPresenter.getNewList(param, null, 1, showLoading)
             }
 
         }
@@ -211,7 +237,29 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
 
     public fun refreshData() {
         recyclerView.scrollToPosition(0)
-        refreshLayout.autoRefresh()
+        when (type) {
+            NewsMultipleItem.VIDEO, NewsMultipleItem.NEWS -> {
+                if (::bannerModelList.isInitialized) {
+                    refreshLayout.autoRefresh()
+                } else {
+                    showLoading = true
+                    mPresenter.getBanner(param)
+                }
+            }
+
+            NewsMultipleItem.JU_ZHENG, NewsMultipleItem.ZHUAN_LAN -> {
+                if (::juzhengHeaderList.isInitialized) {
+                    refreshLayout.autoRefresh()
+                } else {
+                    showLoading = true
+                    mPresenter.getJuZhengHeader(param)
+                }
+            }
+
+            else -> {
+                refreshLayout.autoRefresh()
+            }
+        }
     }
 
     override fun onUserVisible() {
@@ -234,11 +282,11 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
             this.juzhengHeaderList = beans
             when (type) {
                 NewsMultipleItem.JU_ZHENG -> {
-                    mPresenter.getNewList("矩阵", null, 1, showLoading)
+                    mPresenter.getNewList(param, null, 1, showLoading)
                 }
 
                 NewsMultipleItem.ZHUAN_LAN -> {
-                    mPresenter.getNewList("专栏", null, 1, showLoading)
+                    mPresenter.getNewList(param, null, 1, showLoading)
                 }
             }
         } else {
@@ -255,11 +303,11 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
             this.bannerModelList = bannerModelList
             when (type) {
                 NewsMultipleItem.VIDEO -> {
-                    mPresenter.getNewList("V视频", null, 1, showLoading)
+                    mPresenter.getNewList(param, null, 1, showLoading)
                 }
 
                 NewsMultipleItem.NEWS -> {
-                    mPresenter.getNewList("新闻", null, 1, showLoading)
+                    mPresenter.getNewList(param, null, 1, showLoading)
                 }
             }
         } else {
@@ -318,13 +366,14 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
 
             override fun createAdapter(): NewsMultipleItemQuickAdapter {
                 var adapter: NewsMultipleItemQuickAdapter?
-                if(type == NewsMultipleItem.TV){
-                     val contentList = list.filter { (it.dataBean as HaveSecondModuleNewsModel).module_second != "置顶频道" }
+                if (type == NewsMultipleItem.TV) {
+                    val contentList = list.filter { (it.dataBean as HaveSecondModuleNewsModel).module_second != "置顶频道" }
                             .toList()
                     adapter = NewsMultipleItemQuickAdapter(context, contentList)
-                }else{
+                } else {
                     adapter = NewsMultipleItemQuickAdapter(context, list)
                 }
+
                 when (type) {
                     NewsMultipleItem.VIDEO -> {
                         val view = View.inflate(context, R.layout.item_normal_banner, null)
@@ -332,7 +381,7 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
                         adapter.addHeaderView(view)
                     }
 
-                    NewsMultipleItem.TV ->{
+                    NewsMultipleItem.TV -> {
                         val headerModelList = list.filter { (it.dataBean as HaveSecondModuleNewsModel).module_second == "置顶频道" }
                                 .toList()
 
@@ -360,9 +409,13 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
 
                     NewsMultipleItem.NEWS -> {
                         val view = View.inflate(context, R.layout.item_search_and_banner_header, null)
-                        initBannerView(view, bannerModelList)
-                        initSearchView(view)
-                        adapter.addHeaderView(view)
+                        val isShow = mBundle.getBoolean("banner", true)
+                        if (isShow) {
+                            initBannerView(view, bannerModelList)
+                            initSearchView(view)
+                            adapter.addHeaderView(view)
+                        }
+
                     }
 
                     NewsMultipleItem.JU_ZHENG -> {
@@ -445,6 +498,14 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
                         adapter.setNewData(list)
                     }
 
+                    NewsMultipleItem.TUI_JIAN -> {
+                        adapter.setNewData(list)
+                    }
+
+                    else ->{
+                        adapter.setNewData(list)
+                    }
+
                 }
 
             }
@@ -461,25 +522,6 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
             intent.putExtra("search", etSearch.hint.toString())
             startActivity(intent)
         }
-
-//        val btnClear = view.findViewById<ImageView>(R.id.btnClear)
-
-//        btnClear.setOnClickListener {
-//            etSearch.setText("")
-//        }
-//
-//        etSearch.setOnEditorActionListener { v, actionId, event ->
-//            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-//                val intent = Intent(context, SearchListActivity::class.java)
-//                if (etSearch.text.toString().isEmpty()) {
-//                    intent.putExtra("search", etSearch.hint.toString())
-//                } else {
-//                    intent.putExtra("search", etSearch.text.toString())
-//                }
-//                startActivity(intent)
-//            }
-//            return@setOnEditorActionListener true
-//        }
     }
 
     private var juzhengSecondModule = ""
@@ -511,7 +553,7 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
                         juzhengSecondModule = if (juzhengHeaderList[position].nickname == "全部") "" else juzhengHeaderList[position].nickname
                         mRecyclerView.adapter!!.notifyDataSetChanged()
                         showLoading()
-                        mPresenter.getNewList("矩阵", juzhengSecondModule, 1, false)
+                        mPresenter.getNewList(param, juzhengSecondModule, 1, false)
                     } else {
                         startDetailsActivity(context!!, juzhengHeaderList[position].url)
                     }
@@ -557,7 +599,7 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
                         juzhengSecondModule = if (juzhengHeaderList[position].nickname == "全部") "" else juzhengHeaderList[position].nickname
                         mRecyclerView.adapter!!.notifyDataSetChanged()
                         showLoading()
-                        mPresenter.getNewList("专栏", juzhengSecondModule, 1, false)
+                        mPresenter.getNewList(param, juzhengSecondModule, 1, false)
                     } else {
                         startDetailsActivity(context!!, juzhengHeaderList[position].url)
                     }
@@ -583,55 +625,63 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
 
         when (type) {
             NewsMultipleItem.VIDEO -> {
-                mPresenter.getNewList("V视频", null, page, false)
+                mPresenter.getNewList(param, null, page, false)
             }
 
             NewsMultipleItem.TV -> {
-                mPresenter.getHaveSecondModuleNews(page, "濉溪TV", false)
+                mPresenter.getHaveSecondModuleNews(page, param, false)
             }
 
             NewsMultipleItem.NEWS -> {
-                mPresenter.getNewList("新闻", null, page, false)
+                mPresenter.getNewList(param, null, page, false)
             }
 
             NewsMultipleItem.SHI_XUN -> {
-                mPresenter.getNewList("视讯", null, page, false)
+                mPresenter.getNewList(param, null, page, false)
             }
 
             NewsMultipleItem.WEN_ZHENG -> {
-                mPresenter.getNewList("问政", null, page, false)
+                mPresenter.getNewList(param, null, page, false)
             }
 
             NewsMultipleItem.JU_ZHENG -> {
-                mPresenter.getNewList("矩阵", juzhengSecondModule, page, false)
+                mPresenter.getNewList(param, juzhengSecondModule, page, false)
             }
 
             NewsMultipleItem.ZHUAN_LAN -> {
-                mPresenter.getNewList("专栏", juzhengSecondModule, page, false)
+                mPresenter.getNewList(param, juzhengSecondModule, page, false)
             }
 
             NewsMultipleItem.WECHAT_MOMENTS -> {
-                mPresenter.getNewList("原创", null, page, false)
+                mPresenter.getNewList(param, null, page, false)
             }
 
             NewsMultipleItem.READING -> {
-                mPresenter.getNewList("悦读", null, page, false)
+                mPresenter.getNewList(param, null, page, false)
             }
 
             NewsMultipleItem.LISTEN -> {
-                mPresenter.getNewList("悦听", null, page, false)
+                mPresenter.getNewList(param, null, page, false)
             }
 
             NewsMultipleItem.DANG_JIAN -> {
-                mPresenter.getNewList("党建", null, page, false)
+                mPresenter.getNewList(param, null, page, false)
             }
 
             NewsMultipleItem.GONG_GAO -> {
-                mPresenter.getNewList("公告", null, page, false)
+                mPresenter.getNewList(param, null, page, false)
             }
 
             NewsMultipleItem.ZHI_BO -> {
-                mPresenter.getNewList("直播", null, page, false)
+                mPresenter.getNewList(param, null, page, false)
+            }
+
+            NewsMultipleItem.TUI_JIAN -> {
+                mPresenter.getNewList(param, null, page, false)
+            }
+
+            else ->{
+                mPresenter.getNewList(param, null, page, false)
             }
 
         }
@@ -641,60 +691,9 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
         showLoading = false
         if (model != null) {
             val newList = ArrayList<NewsMultipleItem<Any>>()
-            var modelStr = ""
-            when (type) {
-                NewsMultipleItem.VIDEO -> {
-                    modelStr = "V视频"
-                }
-
-                NewsMultipleItem.NEWS -> {
-                    modelStr = "新闻"
-                }
-
-                NewsMultipleItem.SHI_XUN -> {
-                    modelStr = "视讯"
-                }
-
-                NewsMultipleItem.WEN_ZHENG -> {
-                    modelStr = "问政"
-                }
-
-                NewsMultipleItem.JU_ZHENG -> {
-                    modelStr = "矩阵"
-                }
-
-                NewsMultipleItem.WECHAT_MOMENTS -> {
-                    modelStr = "原创"
-                }
-
-                NewsMultipleItem.READING -> {
-                    modelStr = "悦读"
-                }
-
-                NewsMultipleItem.LISTEN -> {
-                    modelStr = "悦听"
-                }
-
-                NewsMultipleItem.DANG_JIAN -> {
-                    modelStr = "党建"
-                }
-
-                NewsMultipleItem.ZHUAN_LAN -> {
-                    modelStr = "专栏"
-                }
-
-                NewsMultipleItem.GONG_GAO -> {
-                    modelStr = "公告"
-                }
-
-                NewsMultipleItem.ZHI_BO -> {
-                    modelStr = "直播"
-                }
-
-            }
 
             model.data.forEach {
-                newList.add(NewsMultipleItem(modelStr, it))
+                newList.add(NewsMultipleItem(param, it))
             }
 
             onLoadSucceed(p, newList)
@@ -707,14 +706,9 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
         showLoading = false
         if (datas != null) {
             val newList = ArrayList<NewsMultipleItem<Any>>()
-            var modelStr = ""
-            when (type) {
-                NewsMultipleItem.TV -> {
-                    modelStr = "濉溪TV"
-                }
-            }
+
             datas.forEach {
-                newList.add(NewsMultipleItem(modelStr, it))
+                newList.add(NewsMultipleItem(param, it))
             }
             onLoadSucceed(p, newList)
         } else {
@@ -734,7 +728,6 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
                 } else {
                     startNewsDetailActivity(context!!, type, id, position)
                 }
-
             }
 
             NewsMultipleItem.NEWS -> {
@@ -949,11 +942,37 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
                 R.id.play -> {
                     mPresenter.getDetailsById(((adapter as NewsMultipleItemQuickAdapter).data[position].dataBean as NewsBean).id)
                 }
+
+                R.id.sparkButton, R.id.tvGoodNum -> {
+                    val bean = (adapter as NewsMultipleItemQuickAdapter).data[position].dataBean as NewsBean
+                    if (bean.like_status == 1) {
+                        mPresenter.cancelLikeNews(bean.id, position)
+                    } else {
+                        mPresenter.addLikeNews(bean.id, position)
+                    }
+
+                }
+
                 else -> {
                 }
             }
         }
     }
+
+
+    override fun updateLikeStatus(isLike: Boolean, position: Int) {
+        if (isLike) {
+            (adapter.data[position].dataBean as NewsBean).like_status = 1
+            (adapter.data[position].dataBean as NewsBean).like_num = (adapter.data[position].dataBean as NewsBean).like_num + 1
+        } else {
+            (adapter.data[position].dataBean as NewsBean).like_status = 0
+            (adapter.data[position].dataBean as NewsBean).like_num = (adapter.data[position].dataBean as NewsBean).like_num - 1
+        }
+
+        adapter.notifyItemChangedAnimal(position)
+
+    }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

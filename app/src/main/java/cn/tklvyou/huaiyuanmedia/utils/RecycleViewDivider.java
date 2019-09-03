@@ -102,7 +102,17 @@ public class RecycleViewDivider extends RecyclerView.ItemDecoration {
                 outRect.set(0, 0, 0, mDividerHeight);
             }
         } else {
-            outRect.set(0, 0, mDividerHeight, 0);
+            if(enableTop){
+                int itemPosition = ((RecyclerView.LayoutParams) view.getLayoutParams()).getViewLayoutPosition();
+                if (itemPosition == 0) {
+                    outRect.set(mDividerHeight, 0, mDividerHeight, 0);
+                } else {
+                    outRect.set(0, 0, mDividerHeight, 0);
+                }
+            }else {
+                outRect.set(0, 0, mDividerHeight, 0);
+            }
+
         }
     }
 

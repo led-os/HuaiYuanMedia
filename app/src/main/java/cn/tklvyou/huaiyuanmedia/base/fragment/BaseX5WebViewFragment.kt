@@ -124,16 +124,6 @@ abstract class BaseX5WebViewFragment<T : BaseContract.BasePresenter<*>> : BaseFr
         imageFillWidth(html)
     }
 
-    override fun onResume() {
-        mWebView.onResume()
-        super.onResume()
-    }
-
-    override fun onPause() {
-        mWebView.onPause()
-        super.onPause()
-    }
-
 
     protected abstract fun setTitleContent(title: String)
 

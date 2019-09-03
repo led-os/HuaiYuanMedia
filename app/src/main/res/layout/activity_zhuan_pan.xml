@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@mipmap/zhuan_pan_bg"
     android:orientation="vertical"
-    tools:context=".ui.service.ZhuanPanActivity">
+    tools:context=".ui.audio.zhuan_pan.ZhuanPanActivity">
 
     <ImageView
         android:id="@+id/btnBack"

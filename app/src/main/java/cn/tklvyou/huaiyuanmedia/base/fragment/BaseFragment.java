@@ -111,9 +111,6 @@ public abstract class BaseFragment<T extends BaseContract.BasePresenter> extends
         super.onActivityCreated(savedInstanceState);
         //由于fragment生命周期比较复杂,所以Presenter在onCreateView创建视图之后再进行绑定,不然会报空指针异常
         attachView();
-        initView();
-        initPrepare();
-
         specialLoadingHolder = Gloading.from(new SpecialAdapter()).wrap(getLoadingView()).withRetry(new Runnable() {
             @Override
             public void run() {
@@ -121,6 +118,9 @@ public abstract class BaseFragment<T extends BaseContract.BasePresenter> extends
                 onRetry();
             }
         });
+        initView();
+        initPrepare();
+
     }
 
     /**

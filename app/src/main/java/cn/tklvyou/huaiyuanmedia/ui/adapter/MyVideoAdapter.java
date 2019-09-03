@@ -45,7 +45,7 @@ public class MyVideoAdapter extends BaseQuickAdapter<NewsBean, BaseViewHolder> {
         Drawable[] drawables = tvGoodNum.getCompoundDrawables();
 
         if (bean.getLike_status() == 1) {
-            Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_red_good);
+            Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_mini_good);
             redGoodDrawable.setBounds(drawables[0].getBounds());
             tvGoodNum.setCompoundDrawables(redGoodDrawable, drawables[1], drawables[2], drawables[3]);
         } else {
