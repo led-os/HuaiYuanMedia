@@ -80,29 +80,16 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
         }
 
         when (type) {
-            NewsMultipleItem.VIDEO -> {
+
+            NewsMultipleItem.DANG_JIAN, NewsMultipleItem.ZHUAN_LAN, NewsMultipleItem.GONG_GAO, NewsMultipleItem.TUI_JIAN,
+            NewsMultipleItem.NEWS, NewsMultipleItem.SHI_XUN, NewsMultipleItem.WEN_ZHENG, NewsMultipleItem.JU_ZHENG, NewsMultipleItem.ZHUAN_TI -> {
+                recyclerView.addItemDecoration(RecycleViewDivider(context, LinearLayout.VERTICAL, 1, resources.getColor(R.color.common_bg)))
+            }
+
+            NewsMultipleItem.VIDEO, NewsMultipleItem.TV, NewsMultipleItem.ZHI_BO -> {
                 recyclerView.addItemDecoration(RecycleViewDivider(context, LinearLayout.VERTICAL, 20, resources.getColor(R.color.common_bg)))
             }
 
-            NewsMultipleItem.TV -> {
-                recyclerView.addItemDecoration(RecycleViewDivider(context, LinearLayout.VERTICAL, 20, resources.getColor(R.color.common_bg)))
-            }
-
-            NewsMultipleItem.NEWS -> {
-                recyclerView.addItemDecoration(RecycleViewDivider(context, LinearLayout.VERTICAL, 1, resources.getColor(R.color.common_bg)))
-            }
-
-            NewsMultipleItem.SHI_XUN -> {
-                recyclerView.addItemDecoration(RecycleViewDivider(context, LinearLayout.VERTICAL, 1, resources.getColor(R.color.common_bg)))
-            }
-
-            NewsMultipleItem.WEN_ZHENG -> {
-                recyclerView.addItemDecoration(RecycleViewDivider(context, LinearLayout.VERTICAL, 1, resources.getColor(R.color.common_bg)))
-            }
-
-            NewsMultipleItem.JU_ZHENG -> {
-                recyclerView.addItemDecoration(RecycleViewDivider(context, LinearLayout.VERTICAL, 1, resources.getColor(R.color.common_bg)))
-            }
 
             NewsMultipleItem.WECHAT_MOMENTS -> {
             }
@@ -114,26 +101,6 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
 
             NewsMultipleItem.LISTEN -> {
                 recyclerView.addItemDecoration(RecycleViewDivider(context, LinearLayout.VERTICAL, 30, resources.getColor(R.color.common_bg), true))
-            }
-
-            NewsMultipleItem.DANG_JIAN -> {
-                recyclerView.addItemDecoration(RecycleViewDivider(context, LinearLayout.VERTICAL, 1, resources.getColor(R.color.common_bg)))
-            }
-
-            NewsMultipleItem.ZHUAN_LAN -> {
-                recyclerView.addItemDecoration(RecycleViewDivider(context, LinearLayout.VERTICAL, 1, resources.getColor(R.color.common_bg)))
-            }
-
-            NewsMultipleItem.GONG_GAO -> {
-                recyclerView.addItemDecoration(RecycleViewDivider(context, LinearLayout.VERTICAL, 1, resources.getColor(R.color.common_bg)))
-            }
-
-            NewsMultipleItem.ZHI_BO -> {
-                recyclerView.addItemDecoration(RecycleViewDivider(context, LinearLayout.VERTICAL, 20, resources.getColor(R.color.common_bg)))
-            }
-
-            NewsMultipleItem.TUI_JIAN -> {
-                recyclerView.addItemDecoration(RecycleViewDivider(context, LinearLayout.VERTICAL, 1, resources.getColor(R.color.common_bg)))
             }
 
             else -> {
@@ -160,7 +127,7 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
 
     override fun lazyData() {
         when (type) {
-            NewsMultipleItem.VIDEO -> {
+            NewsMultipleItem.VIDEO, NewsMultipleItem.JU_ZHENG, NewsMultipleItem.ZHUAN_TI -> {
                 mPresenter.getBanner(param)
             }
 
@@ -177,10 +144,6 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
                 }
             }
 
-            NewsMultipleItem.SHI_XUN -> {
-                mPresenter.getNewList(param, null, 1, showLoading)
-            }
-
             NewsMultipleItem.WEN_ZHENG -> {
                 floatButton.visibility = View.VISIBLE
                 floatButton.setOnClickListener {
@@ -190,41 +153,17 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
                 mPresenter.getNewList(param, null, 1, showLoading)
             }
 
-            NewsMultipleItem.JU_ZHENG -> {
-                mPresenter.getJuZhengHeader(param)
-            }
 
-            NewsMultipleItem.WECHAT_MOMENTS -> {
+            NewsMultipleItem.WECHAT_MOMENTS, NewsMultipleItem.READING, NewsMultipleItem.LISTEN, NewsMultipleItem.DANG_JIAN,
+            NewsMultipleItem.GONG_GAO, NewsMultipleItem.ZHI_BO, NewsMultipleItem.TUI_JIAN, NewsMultipleItem.SHI_XUN -> {
                 mPresenter.getNewList(param, null, 1, showLoading)
             }
 
-            NewsMultipleItem.READING -> {
-                mPresenter.getNewList(param, null, 1, showLoading)
-            }
-
-            NewsMultipleItem.LISTEN -> {
-                mPresenter.getNewList(param, null, 1, showLoading)
-            }
-
-            NewsMultipleItem.DANG_JIAN -> {
-                mPresenter.getNewList(param, null, 1, showLoading)
-            }
 
             NewsMultipleItem.ZHUAN_LAN -> {
                 mPresenter.getJuZhengHeader(param)
             }
 
-            NewsMultipleItem.GONG_GAO -> {
-                mPresenter.getNewList(param, null, 1, showLoading)
-            }
-
-            NewsMultipleItem.ZHI_BO -> {
-                mPresenter.getNewList(param, null, 1, showLoading)
-            }
-
-            NewsMultipleItem.TUI_JIAN -> {
-                mPresenter.getNewList(param, null, 1, showLoading)
-            }
 
             else -> {
                 mPresenter.getNewList(param, null, 1, showLoading)
@@ -295,8 +234,25 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
         }
     }
 
-    private lateinit var bannerModelList: MutableList<BannerModel>
+    private lateinit var verticalHeaderList: MutableList<NewsBean>
+    override fun setVerticalHeader(beans: MutableList<NewsBean>?) {
+        if (beans != null) {
+            refreshLayout.setEnableRefresh(true)
+            this.verticalHeaderList = beans
+            when (type) {
+                NewsMultipleItem.ZHUAN_TI -> {
+                    mPresenter.getNewList(param, null, 1, showLoading)
+                }
+            }
+        } else {
+            refreshLayout.setEnableRefresh(false)
+            onLoadFailed(1, null)
+        }
 
+    }
+
+
+    private lateinit var bannerModelList: MutableList<BannerModel>
     override fun setBanner(bannerModelList: MutableList<BannerModel>?) {
         if (bannerModelList != null) {
             refreshLayout.setEnableRefresh(true)
@@ -308,6 +264,14 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
 
                 NewsMultipleItem.NEWS -> {
                     mPresenter.getNewList(param, null, 1, showLoading)
+                }
+
+                NewsMultipleItem.JU_ZHENG -> {
+                    mPresenter.getJuZhengHeader(param)
+                }
+
+                NewsMultipleItem.ZHUAN_TI -> {
+                    mPresenter.getVerticalHeader(param)
                 }
             }
         } else {
@@ -346,12 +310,19 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
         banner.setIndicatorGravity(BannerConfig.RIGHT)
         banner.setOnBannerListener(object : OnBannerListener {
             override fun OnBannerClick(position: Int) {
-                if (bannerModelList[position].content.trim().isNotEmpty()) {
+                if (bannerModelList[position].article_id != 0) {
+                    //跳转至新闻详情
+                    bannerSkipToNewsDetail(bannerModelList[position])
+                } else if (bannerModelList[position].url.trim().isNotEmpty()) {
+                    //跳转至外链
+                    startWebDetailsActivity(context!!, bannerModelList[position].url)
+                } else if (bannerModelList[position].content.trim().isNotEmpty()) {
                     val intent = Intent(context, BannerDetailsActivity::class.java)
                     intent.putExtra("title", bannerModelList[position].name)
                     intent.putExtra("content", bannerModelList[position].content)
                     startActivity(intent)
                 }
+
             }
 
         })
@@ -419,8 +390,14 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
                     }
 
                     NewsMultipleItem.JU_ZHENG -> {
+
+                        val bannerView = View.inflate(context, R.layout.item_normal_banner, null)
+                        initBannerView(bannerView, bannerModelList)
+
                         val view = View.inflate(context, R.layout.item_juzheng_header_layout, null)
                         initJuzhengHeaderView(view, juzhengHeaderList)
+
+                        adapter.addHeaderView(bannerView)
                         adapter.addHeaderView(view)
                     }
 
@@ -435,13 +412,27 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
                         adapter.setAudioController(audioController)
                     }
 
+
+                    NewsMultipleItem.ZHUAN_TI -> {
+                        val bannerView = View.inflate(context, R.layout.item_normal_banner, null)
+                        initBannerView(bannerView, bannerModelList)
+
+                        val view = View.inflate(context, R.layout.item_viewfilper_header, null)
+                        initVerticalHeaderView(view, verticalHeaderList)
+
+                        adapter.addHeaderView(bannerView)
+                        adapter.addHeaderView(view)
+                    }
+
                 }
                 return adapter
             }
 
             override fun refreshAdapter() {
                 when (type) {
-                    NewsMultipleItem.VIDEO -> {
+                    NewsMultipleItem.VIDEO, NewsMultipleItem.NEWS, NewsMultipleItem.SHI_XUN, NewsMultipleItem.WEN_ZHENG,
+                    NewsMultipleItem.JU_ZHENG, NewsMultipleItem.WECHAT_MOMENTS, NewsMultipleItem.READING, NewsMultipleItem.DANG_JIAN,
+                    NewsMultipleItem.ZHUAN_LAN, NewsMultipleItem.GONG_GAO, NewsMultipleItem.ZHI_BO, NewsMultipleItem.TUI_JIAN, NewsMultipleItem.ZHUAN_TI -> {
                         adapter.setNewData(list)
                     }
 
@@ -452,65 +443,109 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
                         adapter.loadMoreEnd()
                     }
 
-                    NewsMultipleItem.NEWS -> {
-                        adapter.setNewData(list)
-                    }
-
-                    NewsMultipleItem.SHI_XUN -> {
-                        adapter.setNewData(list)
-                    }
-
-                    NewsMultipleItem.WEN_ZHENG -> {
-                        adapter.setNewData(list)
-                    }
-
-                    NewsMultipleItem.JU_ZHENG -> {
-                        adapter.setNewData(list)
-                    }
-
-
-                    NewsMultipleItem.WECHAT_MOMENTS -> {
-                        adapter.setNewData(list)
-                    }
-
-                    NewsMultipleItem.READING -> {
-                        adapter.setNewData(list)
-                    }
-
                     NewsMultipleItem.LISTEN -> {
                         audioController!!.onPause()
                         adapter.setNewData(list)
                     }
 
-                    NewsMultipleItem.DANG_JIAN -> {
+                    else -> {
                         adapter.setNewData(list)
                     }
-
-                    NewsMultipleItem.ZHUAN_LAN -> {
-                        adapter.setNewData(list)
-                    }
-
-                    NewsMultipleItem.GONG_GAO -> {
-                        adapter.setNewData(list)
-                    }
-
-                    NewsMultipleItem.ZHI_BO -> {
-                        adapter.setNewData(list)
-                    }
-
-                    NewsMultipleItem.TUI_JIAN -> {
-                        adapter.setNewData(list)
-                    }
-
-                    else ->{
-                        adapter.setNewData(list)
-                    }
-
                 }
-
             }
         })
 
+    }
+
+    private fun initVerticalHeaderView(view: View, verticalHeaderList: MutableList<NewsBean>) {
+        val vf = view.findViewById<ViewFlipper>(R.id.mViewFlipper)
+        verticalHeaderList.forEach { bean ->
+            val id = bean.id
+
+            val itemView = View.inflate(context, R.layout.item_view_filper_layout, null)
+            val tvTitle = itemView.findViewById<TextView>(R.id.tvTitle)
+            tvTitle.text = bean.name
+            itemView.setOnClickListener {
+                when (bean.module) {
+                    "V视频" -> {
+                        val type = "视频"
+                        if (bean.url.isNotEmpty()) {
+                            startDetailsActivity(context!!, bean.url)
+                        } else {
+                            startNewsDetailActivity(context!!, type, id)
+                        }
+                    }
+                    "濉溪TV" -> {
+                        if (bean.module_second == "置顶频道") {
+                            val type = if (bean.type == "tv") "电视" else "广播"
+                            TVNewsDetailActivity.startTVNewsDetailActivity(context!!, type, id)
+                        } else {
+                            val type = "电视"
+                            NewsDetailActivity.startNewsDetailActivity(context!!, type, id)
+                        }
+                    }
+                    "新闻", "矩阵", "专栏", "党建", "专题" -> {
+                        val type = "文章"
+                        if (bean.url.isNotEmpty()) {
+                            startDetailsActivity(context!!, bean.url)
+                        } else {
+                            startNewsDetailActivity(context!!, type, id)
+                        }
+                    }
+                    "视讯" -> {
+                        val type = "视讯"
+                        if (bean.url.isNotEmpty()) {
+                            startDetailsActivity(context!!, bean.url)
+                        } else {
+                            startNewsDetailActivity(context!!, type, id)
+                        }
+                    }
+                    "问政" -> {
+                        val type = "问政"
+                        if (bean.url.isNotEmpty()) {
+                            startDetailsActivity(context!!, bean.url)
+                        } else {
+                            startNewsDetailActivity(context!!, type, id)
+                        }
+                    }
+
+                    "原创", "随手拍" -> {
+                        val type = if (bean.images != null && bean.images.size > 0) "图文" else "视频"
+                        if (bean.url.isNotEmpty()) {
+                            startDetailsActivity(context!!, bean.url)
+                        } else {
+                            startNewsDetailActivity(context!!, type, id)
+                        }
+                    }
+                    "悦读" -> {
+                        val type = "悦读"
+                        if (bean.url.isNotEmpty()) {
+                            startDetailsActivity(context!!, bean.url)
+                        } else {
+                            startNewsDetailActivity(context!!, type, id)
+                        }
+                    }
+                    "悦听" -> {
+                        val type = "悦听"
+                        if (bean.url.isNotEmpty()) {
+                            startDetailsActivity(context!!, bean.url)
+                        } else {
+                            startNewsDetailActivity(context!!, type, id)
+                        }
+                    }
+                    "公告" -> {
+                        val type = "公告"
+                        if (bean.url.isNotEmpty()) {
+                            startDetailsActivity(context!!, bean.url)
+                        } else {
+                            startNewsDetailActivity(context!!, type, id)
+                        }
+                    }
+
+                }
+            }
+            vf.addView(itemView)
+        }
     }
 
     private fun initSearchView(view: View) {
@@ -680,7 +715,7 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
                 mPresenter.getNewList(param, null, page, false)
             }
 
-            else ->{
+            else -> {
                 mPresenter.getNewList(param, null, page, false)
             }
 
@@ -850,7 +885,63 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
                 } else {
                     startNewsDetailActivity(context!!, type, id, position)
                 }
+            }
 
+            NewsMultipleItem.ZHUAN_TI -> {
+                val bean = (adapter as NewsMultipleItemQuickAdapter).data[position].dataBean as NewsBean
+                val id = bean.id
+                val type = "文章"
+                if (bean.url.isNotEmpty()) {
+                    startDetailsActivity(context!!, bean.url)
+                } else {
+                    startNewsDetailActivity(context!!, type, id, position)
+                }
+            }
+
+            NewsMultipleItem.TUI_JIAN -> {
+                val bean = (adapter as NewsMultipleItemQuickAdapter).data[position].dataBean as NewsBean
+                val id = bean.id
+                var type = ""
+
+                when (bean.module) {
+                    "原创" -> {
+                        type = if (bean.images != null && bean.images.size > 0) "图文" else "视频"
+                    }
+
+                    "矩阵" -> {
+                        type = "文章"
+                    }
+
+                    "专题" -> {
+                        type = "文章"
+                    }
+
+                    "视讯" -> {
+                        type = "视讯"
+                    }
+
+                    else -> {
+                        type = "文章"
+                    }
+                }
+
+                if (bean.url.isNotEmpty()) {
+                    startDetailsActivity(context!!, bean.url)
+                } else {
+                    startNewsDetailActivity(context!!, type, id, position)
+                }
+
+            }
+
+            else -> {
+                val bean = (adapter as NewsMultipleItemQuickAdapter).data[position].dataBean as NewsBean
+                val id = bean.id
+                val type = "文章"
+                if (bean.url.isNotEmpty()) {
+                    startDetailsActivity(context!!, bean.url)
+                } else {
+                    startNewsDetailActivity(context!!, type, id, position)
+                }
             }
 
         }
@@ -858,18 +949,24 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
 
     }
 
-    private fun startNewsDetailActivity(context: Context, type: String, id: Int, position: Int) {
+    private fun startNewsDetailActivity(context: Context, type: String, id: Int, position: Int = -1) {
         val intent = Intent(context, NewsDetailActivity::class.java)
         intent.putExtra(NewsDetailActivity.INTENT_ID, id)
         intent.putExtra(NewsDetailActivity.INTENT_TYPE, type)
-        intent.putExtra(NewsDetailActivity.POSITION, position)
-        startActivityForResult(intent, 0)
+        if (position == -1) {
+            startActivity(intent)
+        } else {
+            intent.putExtra(NewsDetailActivity.POSITION, position)
+            startActivityForResult(intent, 0)
+        }
+
     }
 
     private fun startDetailsActivity(context: Context, url: String) {
         val intent = Intent(context, ServiceWebviewActivity::class.java)
         intent.putExtra("url", url)
         intent.putExtra("other", true)
+        intent.putExtra("share_title", "")
         startActivity(intent)
     }
 
@@ -880,10 +977,17 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
 
                 //V视频 直播 播放按钮
                 R.id.ivStartPlayer -> {
-                    //打开新的Activity
-                    val intent = Intent(context, VodActivity::class.java)
-                    intent.putExtra("videoPath", ((adapter as NewsMultipleItemQuickAdapter).data[position].dataBean as NewsBean).video)
-                    startActivity(intent)
+
+                    val bean = (adapter as NewsMultipleItemQuickAdapter).data[position].dataBean as NewsBean
+                    if (bean.url.isNotEmpty()) {
+                        startDetailsActivity(context!!, bean.url)
+                    } else {
+                        //打开新的Activity
+                        val intent = Intent(context, VodActivity::class.java)
+                        intent.putExtra("videoPath", bean.video)
+                        startActivity(intent)
+                    }
+
                 }
 
                 //濉溪TV 第一个 播放按钮
@@ -1093,11 +1197,102 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
                     adapter.notifyItemChanged(position)
                 }
 
+                NewsMultipleItem.TUI_JIAN -> {
+                    val bean = (adapter as NewsMultipleItemQuickAdapter).data[position].dataBean as NewsBean
+                    bean.comment_num = commenNum
+                    bean.like_num = zanNum
+                    bean.visit_num = seeNum
+                    bean.like_status = like_status
+                    adapter.notifyItemChanged(position)
+                }
+
+                NewsMultipleItem.ZHUAN_TI -> {
+                    val bean = (adapter as NewsMultipleItemQuickAdapter).data[position].dataBean as NewsBean
+                    bean.comment_num = commenNum
+                    bean.like_num = zanNum
+                    bean.visit_num = seeNum
+                    bean.like_status = like_status
+                    adapter.notifyItemChanged(position+1)
+                }
+
             }
 
         }
     }
 
+
+    /**
+     * 根据banner内容跳转指定新闻页面
+     */
+    private fun bannerSkipToNewsDetail(banner: BannerModel) {
+        val bean = banner.article_info
+        if (bean.url.isNotEmpty()) {
+            startWebDetailsActivity(context!!, bean.url)
+        } else {
+            when (bean.module) {
+
+                "V视频" -> {
+                    val type = if (bean.images != null && bean.images.size > 0) "图文" else "视频"
+                    startNewsDetailActivity(context!!, type, bean.id)
+                }
+
+                "濉溪TV" -> {
+                    if (bean.module_second == "置顶频道") {
+                        val type = if (bean.type == "tv") "电视" else "广播"
+                        TVNewsDetailActivity.startTVNewsDetailActivity(context!!, type, bean.id)
+                    } else {
+                        val type = "电视"
+                        NewsDetailActivity.startNewsDetailActivity(context!!, type, bean.id)
+                    }
+                }
+                "新闻", "矩阵", "新闻网", "专栏", "党建", "专题" -> {
+                    val type = "文章"
+                    startNewsDetailActivity(context!!, type, bean.id)
+                }
+                "视讯" -> {
+                    val type = "视讯"
+                    startNewsDetailActivity(context!!, type, bean.id)
+                }
+                "问政" -> {
+                    val type = "问政"
+                    startNewsDetailActivity(context!!, type, bean.id)
+                }
+
+                "原创", "随手拍" -> {
+                    val type = if (bean.images != null && bean.images.size > 0) "图文" else "视频"
+                    startNewsDetailActivity(context!!, type, bean.id)
+                }
+                "悦读" -> {
+                    val type = "悦读"
+                    startNewsDetailActivity(context!!, type, bean.id)
+                }
+                "悦听" -> {
+                    val type = "悦听"
+                    startNewsDetailActivity(context!!, type, bean.id)
+                }
+                "公告" -> {
+                    val type = "公告"
+                    startNewsDetailActivity(context!!, type, bean.id)
+                }
+                "直播" -> {
+                    val type = "直播"
+                    startNewsDetailActivity(context!!, type, bean.id)
+                }
+
+            }
+
+        }
+
+
+    }
+
+    private fun startWebDetailsActivity(context: Context, url: String, title: String = "") {
+        val intent = Intent(context, ServiceWebviewActivity::class.java)
+        intent.putExtra("url", url)
+        intent.putExtra("other", true)
+        intent.putExtra("share_title", title)
+        startActivity(intent)
+    }
 
     override fun onDestroy() {
         super.onDestroy()

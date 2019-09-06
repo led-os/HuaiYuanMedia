@@ -18,15 +18,17 @@ public class MyArticleListPresenter extends BasePresenter<MyArticleContract.View
         RetrofitHelper.getInstance().getServer()
                 .getMyArticleList(p, module)
                 .compose(RxSchedulers.applySchedulers())
-                .compose(mView.bindToLife())
+//                .compose(mView.bindToLife())
                 .subscribe(result -> {
-                            if (result.getCode() == 1) {
-                                mView.setNewList(p, result.getData());
-                            } else {
-                                ToastUtils.showShort(result.getMsg());
+                            if (mView != null) {
+                                mView.showSuccess(result.getMsg());
+                                if (result.getCode() == 1) {
+                                    mView.setNewList(p, result.getData());
+                                }
                             }
                         }, throwable -> {
-                             mView.showFailed("");
+                            if (mView != null)
+                                mView.showFailed("");
                         }
                 );
     }

@@ -568,6 +568,8 @@ public class CommonTitleBar extends RelativeLayout implements View.OnClickListen
         } else if (centerType == TYPE_CENTER_SEARCHVIEW) {
             // 初始化通用搜索框
             rlMainCenterSearch = new RelativeLayout(context);
+            rlMainCenterSearch.setFocusableInTouchMode(true);
+            rlMainCenterSearch.setFocusable(true);
             rlMainCenterSearch.setBackgroundResource(centerSearchBgResource);
             LayoutParams centerParams = new LayoutParams(MATCH_PARENT, MATCH_PARENT);
             // 设置边距
@@ -638,12 +640,7 @@ public class CommonTitleBar extends RelativeLayout implements View.OnClickListen
             etSearchHint.setHintTextColor(Color.parseColor("#999999"));
             etSearchHint.setTextSize(TypedValue.COMPLEX_UNIT_PX, ScreenUtils.dp2PxInt(context, 14));
             etSearchHint.setPadding(PADDING_5, 0, PADDING_5, 0);
-            if (!centerSearchEditable) {
-                etSearchHint.setCursorVisible(false);
-                etSearchHint.clearFocus();
-                etSearchHint.setFocusable(false);
-                etSearchHint.setOnClickListener(this);
-            }
+
             etSearchHint.setCursorVisible(false);
             etSearchHint.setSingleLine(true);
             etSearchHint.setEllipsize(TextUtils.TruncateAt.END);
@@ -657,6 +654,14 @@ public class CommonTitleBar extends RelativeLayout implements View.OnClickListen
                     etSearchHint.setCursorVisible(true);
                 }
             });
+
+            if (!centerSearchEditable) {
+                etSearchHint.setCursorVisible(false);
+                etSearchHint.clearFocus();
+                etSearchHint.setFocusable(false);
+                etSearchHint.setOnClickListener(this);
+            }
+
             LayoutParams searchHintParams = new LayoutParams(MATCH_PARENT, MATCH_PARENT);
             searchHintParams.addRule(RelativeLayout.END_OF, ivSearch.getId());
             searchHintParams.addRule(RelativeLayout.START_OF, ivVoice.getId());
@@ -742,6 +747,9 @@ public class CommonTitleBar extends RelativeLayout implements View.OnClickListen
     private OnFocusChangeListener focusChangeListener = new OnFocusChangeListener() {
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
+            if(hasFocus) {
+                etSearchHint.setCursorVisible(true);
+            }
             if (centerSearchRightType == TYPE_CENTER_SEARCH_RIGHT_DELETE) {
                 String input = etSearchHint.getText().toString();
                 if (hasFocus && !TextUtils.isEmpty(input)) {
@@ -775,40 +783,40 @@ public class CommonTitleBar extends RelativeLayout implements View.OnClickListen
             }
             lastClickMillis = currentClickMillis;
         } else if (v.equals(tvLeft)) {
-            if(onNavigationListener != null) {
+            if (onNavigationListener != null) {
                 onNavigationListener.onClicked(v);
             }
 //            if(listener != null) {
 //                listener.onClicked(v, ACTION_LEFT_TEXT, null);
 //            }
         } else if (v.equals(btnLeft)) {
-            if(onNavigationListener != null) {
+            if (onNavigationListener != null) {
                 onNavigationListener.onClicked(v);
             }
 //            if(listener != null) {
 //                listener.onClicked(v, ACTION_LEFT_BUTTON, null);
 //            }
         } else if (v.equals(tvRight)) {
-            if(onPositiveListener != null) {
+            if (onPositiveListener != null) {
                 onPositiveListener.onClicked(v);
             }
 //            if(listener != null) {
 //                listener.onClicked(v, ACTION_RIGHT_TEXT, null);
 //            }
         } else if (v.equals(btnRight)) {
-            if(onPositiveListener != null) {
+            if (onPositiveListener != null) {
                 onPositiveListener.onClicked(v);
             }
 //            if(listener != null) {
 //                listener.onClicked(v, ACTION_RIGHT_BUTTON, null);
 //            }
         } else if (v.equals(etSearchHint) || v.equals(ivSearch)) {
-            if(listener != null) {
+            if (listener != null) {
                 listener.onClicked(v, ACTION_SEARCH, null);
             }
         } else if (v.equals(ivVoice)) {
             etSearchHint.setText("");
-            if(listener != null) {
+            if (listener != null) {
                 if (centerSearchRightType == TYPE_CENTER_SEARCH_RIGHT_VOICE) {
                     // 语音按钮被点击
                     listener.onClicked(v, ACTION_SEARCH_VOICE, null);
@@ -817,7 +825,7 @@ public class CommonTitleBar extends RelativeLayout implements View.OnClickListen
                 }
             }
         } else if (v.equals(tvCenter)) {
-            if(listener != null) {
+            if (listener != null) {
                 listener.onClicked(v, ACTION_CENTER_TEXT, null);
             }
         }
@@ -850,9 +858,10 @@ public class CommonTitleBar extends RelativeLayout implements View.OnClickListen
 
     /**
      * 设置标题栏左边样式
-     * @param type 布局显示类型
-     * @param leftText textView下显示的文本内容
-     * @param leftDrawable textView 左边显示的图片资源
+     *
+     * @param type              布局显示类型
+     * @param leftText          textView下显示的文本内容
+     * @param leftDrawable      textView 左边显示的图片资源
      * @param leftImageResource imagebutton下图片资源
      * @param leftCustomViewRes custom下layout 资源
      */
@@ -872,7 +881,7 @@ public class CommonTitleBar extends RelativeLayout implements View.OnClickListen
             case CommonTitleBar.TYPE_LEFT_IMAGEBUTTON:
                 if (leftImageResource != 0) {
                     this.leftImageResource = leftImageResource;
-                }else {
+                } else {
                     this.leftImageResource = R.drawable.comm_titlebar_reback_selector;
                 }
                 break;
@@ -889,12 +898,13 @@ public class CommonTitleBar extends RelativeLayout implements View.OnClickListen
 
     /**
      * 设置标题栏右边样式
-     * @param type 布局显示类型
-     * @param rightText textView下显示的文本内容
+     *
+     * @param type               布局显示类型
+     * @param rightText          textView下显示的文本内容
      * @param rightImageResource imagebutton下图片资源
      * @param rightCustomViewRes custom下layout 资源
      */
-    public void setRightContent(int type,String rightText,int rightImageResource,int rightCustomViewRes) {
+    public void setRightContent(int type, String rightText, int rightImageResource, int rightCustomViewRes) {
         this.rightType = type;
 
         switch (type) {
@@ -922,14 +932,15 @@ public class CommonTitleBar extends RelativeLayout implements View.OnClickListen
     /**
      * 设置标题栏中间样式
      * 注意：请在setLeftType()  setRightType()后调用
-     * @param type 布局显示类型
-     * @param centerText textView下显示的文本内容
-     * @param centerSubText textView下显示的子标题文本内容
-     * @param centerDrawable textView下文字左边的图片
+     *
+     * @param type                   布局显示类型
+     * @param centerText             textView下显示的文本内容
+     * @param centerSubText          textView下显示的子标题文本内容
+     * @param centerDrawable         textView下文字左边的图片
      * @param centerSearchBgResource search 下背景资源
-     * @param centerCustomViewRes custom 下背景资源
+     * @param centerCustomViewRes    custom 下背景资源
      */
-    public void setCenterContent(int type,String centerText,String centerSubText,int centerDrawable,int centerSearchBgResource,int centerCustomViewRes) {
+    public void setCenterContent(int type, String centerText, String centerSubText, int centerDrawable, int centerSearchBgResource, int centerCustomViewRes) {
         this.centerType = type;
 
         switch (type) {
@@ -952,7 +963,7 @@ public class CommonTitleBar extends RelativeLayout implements View.OnClickListen
 
                 if (centerSearchBgResource != 0) {
                     this.centerSearchBgResource = centerSearchBgResource;
-                }else {
+                } else {
                     this.centerSearchBgResource = R.drawable.comm_titlebar_search_gray_shape;
                 }
 
@@ -966,7 +977,6 @@ public class CommonTitleBar extends RelativeLayout implements View.OnClickListen
 
         initMainCenterViews(mContext);
     }
-
 
 
     /**

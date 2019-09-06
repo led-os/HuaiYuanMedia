@@ -80,6 +80,7 @@
             android:layout_height="@dimen/dp_25"
             android:background="@drawable/shape_mine_mobile_alpha_10_bg"
             android:gravity="center"
+            android:text="点击登录"
             android:textColor="@color/white"
             android:textSize="@dimen/sp_10" />
 

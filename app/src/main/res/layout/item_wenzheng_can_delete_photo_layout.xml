@@ -15,6 +15,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:padding="@dimen/dp_5"
-        android:src="@mipmap/icon_red_delete" />
+        android:src="@mipmap/icon_close" />
 
 </FrameLayout>

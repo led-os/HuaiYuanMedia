@@ -20,6 +20,7 @@ import cn.tklvyou.huaiyuanmedia.ui.account.LoginActivity
 import cn.tklvyou.huaiyuanmedia.ui.camera.CameraFragment
 import cn.tklvyou.huaiyuanmedia.ui.mine.MineFragment
 import cn.tklvyou.huaiyuanmedia.ui.audio.AudioFragment
+import cn.tklvyou.huaiyuanmedia.ui.home.new_list.BlankFragment
 import cn.tklvyou.huaiyuanmedia.ui.work.WorkFragment
 import cn.tklvyou.huaiyuanmedia.utils.UpdateAppHttpUtil
 import com.blankj.utilcode.util.SPUtils
@@ -72,6 +73,8 @@ class MainActivity : BaseBottomTabActivity<MainPresenter>(), MainContract.View, 
     private var audioFragment: AudioFragment? = null
     private var mineFragment: MineFragment? = null
 
+    private var blankFragment: BlankFragment? = null
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(Bundle())
     }
@@ -79,53 +82,52 @@ class MainActivity : BaseBottomTabActivity<MainPresenter>(), MainContract.View, 
     override fun initView(savedInstanceState: Bundle?) {
         hideTitleBar()
 
-        isLogin = SPUtils.getInstance().getBoolean("login")
-        if (!isLogin) {
-            startActivity(Intent(this, LoginActivity::class.java))
-            return
-        } else {
+//        isLogin = SPUtils.getInstance().getBoolean("login")
+//        if (!isLogin) {
+//            startActivity(Intent(this, LoginActivity::class.java))
+//            return
+//        } else {
 //            getVersionInfo()
 
-            if (MyApplication.showSplash) {
-                startActivity(Intent(this, SplashActivity::class.java))
-            }
-
-            mFragments = ArrayList()
-
-            homeFragment = HomeFragment()
-            cameraFragment = CameraFragment()
-            workFragment = WorkFragment()
-            audioFragment = AudioFragment()
-            mineFragment = MineFragment()
-
-            mFragments!!.add(homeFragment!!)
-            mFragments!!.add(cameraFragment!!)
-            mFragments!!.add(audioFragment!!)
-            mFragments!!.add(audioFragment!!)
-            mFragments!!.add(mineFragment!!)
-
-
-            bottomNavigationView.enableAnimation(false)
-            bottomNavigationView.enableShiftingMode(false)
-            bottomNavigationView.enableItemShiftingMode(false)
-
-            bottomNavigationView.setOnNavigationItemSelectedListener {
-                when (it.itemId) {
-                    R.id.navigation_home -> {
-                        selectFragment(0)
-                    }
-                    R.id.navigation_camera -> selectFragment(1)
-                    R.id.navigation_service -> selectFragment(2)
-                    R.id.navigation_audio_visual -> selectFragment(3)
-                    R.id.navigation_mine -> selectFragment(4)
-                }
-                return@setOnNavigationItemSelectedListener true
-            }
-
-            selectFragment(0)
-
-            mPresenter.getSystemConfig()
+        if (MyApplication.showSplash) {
+            startActivity(Intent(this, SplashActivity::class.java))
         }
+
+        mFragments = ArrayList()
+
+        homeFragment = HomeFragment()
+        cameraFragment = CameraFragment()
+        workFragment = WorkFragment()
+//            blankFragment = BlankFragment()
+        audioFragment = AudioFragment()
+        mineFragment = MineFragment()
+
+        mFragments!!.add(homeFragment!!)
+        mFragments!!.add(cameraFragment!!)
+        mFragments!!.add(workFragment!!)
+        mFragments!!.add(audioFragment!!)
+        mFragments!!.add(mineFragment!!)
+
+
+        bottomNavigationView.enableAnimation(false)
+        bottomNavigationView.enableShiftingMode(false)
+        bottomNavigationView.enableItemShiftingMode(false)
+
+        bottomNavigationView.setOnNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.navigation_home -> selectFragment(0)
+                R.id.navigation_camera -> selectFragment(1)
+                R.id.navigation_service -> selectFragment(2)
+                R.id.navigation_audio_visual -> selectFragment(3)
+                R.id.navigation_mine -> selectFragment(4)
+            }
+            return@setOnNavigationItemSelectedListener true
+        }
+
+        selectFragment(0)
+
+        mPresenter.getSystemConfig()
+//        }
     }
 
     private fun getVersionInfo() {
@@ -243,12 +245,13 @@ class MainActivity : BaseBottomTabActivity<MainPresenter>(), MainContract.View, 
 
     }
 
+
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if(mBackHandedFragment == null || !mBackHandedFragment!!.onBackPressed()){
-                if(supportFragmentManager.backStackEntryCount == 0){
+            if (mBackHandedFragment == null || !mBackHandedFragment!!.onBackPressed()) {
+                if (supportFragmentManager.backStackEntryCount == 0) {
                     appExit() //退出
-                }else{
+                } else {
                     supportFragmentManager.popBackStack() //fragment 出栈
                 }
             }

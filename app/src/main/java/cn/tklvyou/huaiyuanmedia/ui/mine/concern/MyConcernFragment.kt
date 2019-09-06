@@ -48,12 +48,12 @@ class MyConcernFragment : BaseHttpRecyclerFragment<MyConcernPresenter, ConcernMo
 
         mRecyclerView.addItemDecoration(RecycleViewDivider(context, LinearLayout.VERTICAL, 1, resources.getColor(R.color.common_bg)))
 
-        mPresenter.getConcernList(type, 1)
+        mSmartRefreshLayout.autoRefresh()
     }
 
     override fun onRetry() {
         super.onRetry()
-        mPresenter.getConcernList(type, 1)
+        mSmartRefreshLayout.autoRefresh()
     }
 
     override fun lazyData() {
@@ -93,18 +93,20 @@ class MyConcernFragment : BaseHttpRecyclerFragment<MyConcernPresenter, ConcernMo
         if (view!!.id == R.id.cbCheck) {
             val bean = (adapter as MyConcernAdapter).data[position]
 
-            val dialog = CommonDialog(context)
-            dialog.setTitle("温馨提示")
-            dialog.setMessage(if (!bean.isNoConcern) "是否取消关注？" else "是否添加关注")
-            dialog.setYesOnclickListener("确认") {
-                if (!bean.isNoConcern) {
+            if (!bean.isNoConcern) {
+                val dialog = CommonDialog(context)
+                dialog.setTitle("温馨提示")
+                dialog.setMessage("是否取消关注？")
+                dialog.setYesOnclickListener("确认") {
                     mPresenter.cancelConcern(bean.pid, position, type)
-                }else{
-                    mPresenter.addConcern(bean.pid, position, type)
+
+                    dialog.dismiss()
                 }
-                dialog.dismiss()
+                dialog.show()
+            } else {
+                mPresenter.addConcern(bean.pid, position, type)
             }
-            dialog.show()
+
         }
     }
 

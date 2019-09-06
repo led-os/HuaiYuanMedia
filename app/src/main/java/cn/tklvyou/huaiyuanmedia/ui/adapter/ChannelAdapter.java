@@ -14,7 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.google.android.exoplayer2.C;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.tklvyou.huaiyuanmedia.R;
@@ -22,7 +24,7 @@ import cn.tklvyou.huaiyuanmedia.model.Channel;
 import cn.tklvyou.huaiyuanmedia.ui.listener.OnChannelDragListener;
 
 
-public class ChannelAdapter extends BaseMultiItemQuickAdapter<Channel,BaseViewHolder> {
+public class ChannelAdapter extends BaseMultiItemQuickAdapter<Channel, BaseViewHolder> {
 
     private BaseViewHolder mEditViewHolder;
     private boolean mIsEdit;
@@ -76,13 +78,11 @@ public class ChannelAdapter extends BaseMultiItemQuickAdapter<Channel,BaseViewHo
                 break;
             case Channel.TYPE_OTHER:
                 //频道推荐
-                helper.setText(R.id.tvTitle, channel.title)
-                        .setGone(R.id.tvEdit, false);
+                helper.setText(R.id.tvTitle, channel.title).setGone(R.id.tvEdit, false);
                 break;
             case Channel.TYPE_MY_CHANNEL:
                 //我的频道列表
-                helper
-                        .setVisible(R.id.ivDelete, mIsEdit && !(channel.title.equals("推荐")))//编辑模式就显示删除按钮
+                helper.setVisible(R.id.ivDelete, mIsEdit && !(channel.title.equals("推荐")) && !(channel.title.equals("关注")))//编辑模式就显示删除按钮
                         .setOnLongClickListener(R.id.rlItemView, new View.OnLongClickListener() {
                             @Override
                             public boolean onLongClick(View v) {
@@ -203,8 +203,6 @@ public class ChannelAdapter extends BaseMultiItemQuickAdapter<Channel,BaseViewHo
                                     if (onChannelDragListener != null)
                                         onChannelDragListener.onMoveToMyChannel(currentPosition, myLastPosition + 1);
                                 }
-//                                GlobalParams.mRemovedChannels.remove(channel);
-
                             }
                         });
                 break;
@@ -221,6 +219,17 @@ public class ChannelAdapter extends BaseMultiItemQuickAdapter<Channel,BaseViewHo
         }
         return size;
 
+    }
+
+    public List<Channel> getMyChannel() {
+        List<Channel> channels = new ArrayList<>();
+        for (int i = 0; i < mData.size(); i++) {
+            Channel channel = (Channel) mData.get(i);
+            if (channel.getItemType() == Channel.TYPE_MY_CHANNEL) {
+                channels.add(channel);
+            }
+        }
+        return channels;
     }
 
     private void startAnimation(final View currentView, int targetX, int targetY) {
@@ -334,7 +343,7 @@ public class ChannelAdapter extends BaseMultiItemQuickAdapter<Channel,BaseViewHo
             ImageView imgEdit = (ImageView) view.findViewById(R.id.ivDelete);
             if (imgEdit != null) {
                 boolean isVis = imgEdit.getTag() == null ? false : (boolean) imgEdit.getTag();
-                imgEdit.setVisibility(isVis && isEdit && !mData.get(i).title.equals("推荐") ? View.VISIBLE : View.INVISIBLE);
+                imgEdit.setVisibility(isVis && isEdit && !mData.get(i).title.equals("推荐") && !mData.get(i).title.equals("关注") ? View.VISIBLE : View.INVISIBLE);
             }
         }
     }

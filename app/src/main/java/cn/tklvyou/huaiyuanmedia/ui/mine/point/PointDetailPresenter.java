@@ -27,12 +27,14 @@ public class PointDetailPresenter extends BasePresenter<PointDetailContract.View
                 .compose(RxSchedulers.applySchedulers())
                 .compose(mView.bindToLife())
                 .subscribe(result -> {
-                    if (result.getCode() == RequestConstant.CODE_REQUEST_SUCCESS) {
-                        mView.setPointDetails(page, result.getData());
-                    } else {
-                        ToastUtils.showShort(result.getMsg());
-                    }
-                }, throwable -> mView.showFailed(""));
+                            mView.showSuccess(result.getMsg());
+                            if (result.getCode() == RequestConstant.CODE_REQUEST_SUCCESS) {
+                                mView.setPointDetails(page, result.getData());
+                            }
+                        }, throwable -> {
+                            mView.showFailed("");
+                        }
+                );
     }
 
     @Override

@@ -24,9 +24,9 @@ public interface PublishNewsContract {
     interface Presenter extends BaseContract.BasePresenter<View> {
         void qiniuUploadMultiImage(List<File> files, String token, String uid, QiniuUploadManager manager);
 
-        void publishVShi(String name, String video, String image, String time);
+        void publishYuanChuang(String name, String images, String video, String image, String time);
 
-        void publishSuiShouPai(String name, String images, String video, String image, String time);
+        void publishLifeMsg(String name, String images, String video, String image, String time);
 
         void getQiniuToken();
 

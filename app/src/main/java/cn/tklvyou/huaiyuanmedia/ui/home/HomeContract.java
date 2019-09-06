@@ -9,10 +9,18 @@ import cn.tklvyou.huaiyuanmedia.model.ChannelModel;
 public interface HomeContract {
     interface View extends BaseContract.BaseView{
         void setHomeChannel(List<String> channelList);
-        void setTotalChannel(ChannelModel model);
     }
     interface Presenter extends BaseContract.BasePresenter<View>{
         void getHomeChannel();
+        void saveHomeChannel(String channels);
+    }
+
+
+    interface ChannelView extends BaseContract.BaseView{
+        void setTotalChannel(ChannelModel model);
+    }
+    interface ChannelPresenter extends BaseContract.BasePresenter<ChannelView>{
         void getTotalChannel();
     }
+
 }

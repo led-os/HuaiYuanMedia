@@ -16,9 +16,12 @@ public interface CollectContract {
 
     interface View extends BaseContract.BaseView {
         void setCollectList(int page, BasePageModel<NewsBean> pageModel);
+        void cancelCollectSuccess(boolean isAll);
     }
 
     interface Presenter extends BaseContract.BasePresenter<CollectContract.View> {
         void getCollectPageList(int page);
+        void cancelCollectList(String ids);
+        void cancelCollectAll();
     }
 }

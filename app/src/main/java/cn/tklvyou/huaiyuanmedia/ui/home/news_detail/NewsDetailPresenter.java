@@ -12,24 +12,74 @@ import cn.tklvyou.huaiyuanmedia.base.BasePresenter;
 public class NewsDetailPresenter extends BasePresenter<NewsDetailContract.View> implements NewsDetailContract.Presenter {
 
     @Override
-    public void getDetailsById(int id,boolean showPageLoading) {
+    public void addConcern(int id, int type) {
+        RetrofitHelper.getInstance().getServer()
+                .addConcern(id,type)
+                .compose(RxSchedulers.applySchedulers())
+                .compose(mView.bindToLife())
+                .subscribe(result -> {
+                    if (result.getCode() == 1) {
+                        ToastUtils.showShort("关注成功");
+                        mView.addConcernSuccess();
+                    } else {
+                        ToastUtils.showShort(result.getMsg());
+                    }
+                }, throwable -> throwable.printStackTrace());
+    }
+
+    @Override
+    public void cancelConcern(int id,int type) {
+        RetrofitHelper.getInstance().getServer()
+                .cancelConcern(id,type)
+                .compose(RxSchedulers.applySchedulers())
+                .compose(mView.bindToLife())
+                .subscribe(result -> {
+                    if (result.getCode() == 1) {
+                        ToastUtils.showShort("取消成功");
+                        mView.cancelSuccess();
+                    } else {
+                        ToastUtils.showShort(result.getMsg());
+                    }
+                }, throwable -> throwable.printStackTrace());
+    }
+
+
+    @Override
+    public void getDetailsById(int id,boolean showPageLoading,boolean isLife) {
         if(showPageLoading) {
             mView.showPageLoading();
         }else {
             mView.showLoading();
         }
-        RetrofitHelper.getInstance().getServer()
-                .getArticleDetail(id)
-                .compose(RxSchedulers.applySchedulers())
-                .compose(mView.bindToLife())
-                .subscribe(result -> {
-                    mView.showSuccess(result.getMsg());
-                    if (result.getCode() == 1) {
-                        mView.setDetails(result.getData());
-                    }
-                }, throwable -> {
-                    mView.showFailed("");
-                });
+
+        if(isLife){
+            RetrofitHelper.getInstance().getServer()
+                    .getLifeDetail(id)
+                    .compose(RxSchedulers.applySchedulers())
+                    .compose(mView.bindToLife())
+                    .subscribe(result -> {
+                        mView.showSuccess(result.getMsg());
+                        if (result.getCode() == 1) {
+                            mView.setDetails(result.getData());
+                        }
+                    }, throwable -> {
+                        mView.showFailed("");
+                    });
+        }else {
+            RetrofitHelper.getInstance().getServer()
+                    .getArticleDetail(id)
+                    .compose(RxSchedulers.applySchedulers())
+                    .compose(mView.bindToLife())
+                    .subscribe(result -> {
+                        mView.showSuccess(result.getMsg());
+                        if (result.getCode() == 1) {
+                            mView.setDetails(result.getData());
+                        }
+                    }, throwable -> {
+                        mView.showFailed("");
+                    });
+        }
+
     }
 
     @Override

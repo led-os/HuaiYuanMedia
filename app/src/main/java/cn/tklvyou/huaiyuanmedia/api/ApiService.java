@@ -136,6 +136,13 @@ public interface ApiService {
     Observable<BaseResult<List<String>>> getHomeChannel();
 
     /**
+     * 修改频道
+     */
+    @POST("api/module/add")
+    Observable<BaseResult<Object>> saveHomeChannel(@Query("module") String module);
+
+
+    /**
      * 所有频道
      */
     @POST("api/module/module")
@@ -238,10 +245,22 @@ public interface ApiService {
     Observable<BaseResult<List<NewsBean>>> getJuZhengHeader(@Query("module") String module);
 
     /**
+     * 获取摘要数据
+     */
+    @POST("api/article/zhaiyao")
+    Observable<BaseResult<List<NewsBean>>> getZhaiYaoHeader(@Query("module") String module);
+
+    /**
      * 文章详情
      */
     @POST("api/article/detail")
     Observable<BaseResult<NewsBean>> getArticleDetail(@Query("id") int id);
+
+    /**
+     * 生活圈详情
+     */
+    @POST("api/life/detail")
+    Observable<BaseResult<NewsBean>> getLifeDetail(@Query("id") int id);
 
     /**
      * 删除文章
@@ -280,6 +299,15 @@ public interface ApiService {
     @POST("api/article/addv")
     Observable<BaseResult<Object>> publishVShi(@Query("name") String name, @Query("video") String video,
                                                @Query("image") String image, @Query("time") String time);
+
+
+    /**
+     * 发布原创
+     */
+    @POST("api/article/addy")
+    Observable<BaseResult<Object>> publishYuanChuang(@Query("name") String name, @Query("images") String images,
+                                                     @Query("video") String video, @Query("image") String image, @Query("time") String time);
+
 
 
     /**
@@ -377,6 +405,51 @@ public interface ApiService {
      */
     @POST("api/collect/cancel")
     Observable<BaseResult<BasePageModel<Object>>> cancelCollect(@Query("article_id") int article_id);
+
+    /**
+     * 批量取消收藏
+     *
+     * @param article_id
+     * @return
+     */
+    @POST("api/collect/multi")
+    Observable<BaseResult<BasePageModel<Object>>> cancelCollectList(@Query("article_id") String article_id);
+
+    /**
+     * 一键清空收藏
+     *
+     * @return
+     */
+    @POST("api/collect/all")
+    Observable<BaseResult<BasePageModel<Object>>> cancelCollectAll();
+
+
+
+    /**
+     * 我的评论
+     *
+     * @param p
+     * @return
+     */
+    @POST("api/comment/my")
+    Observable<BaseResult<BasePageModel<NewsBean>>> getMyCommentList(@Query("p") int p);
+
+    /**
+     * 批量取消评论
+     *
+     * @param id
+     * @return
+     */
+    @POST("api/comment/multi")
+    Observable<BaseResult<BasePageModel<Object>>> cancelMyCommentList(@Query("id") String id);
+
+    /**
+     * 一键清空评论
+     *
+     * @return
+     */
+    @POST("api/comment/all")
+    Observable<BaseResult<BasePageModel<Object>>> cancelMyCommentAll();
 
 
     /**

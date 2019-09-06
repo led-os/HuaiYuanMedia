@@ -19,6 +19,7 @@ public class ConcernModel {
     private int user_id;
     private int pid;
     private int type;
+    private String url;
     private String status;
     private int createtime;
     private int updatetime;
@@ -40,6 +41,14 @@ public class ConcernModel {
 
     public void setUser_id(int user_id) {
         this.user_id = user_id;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public int getPid() {

@@ -11,6 +11,7 @@ import cn.tklvyou.huaiyuanmedia.ui.account.LoginActivity
 import cn.tklvyou.huaiyuanmedia.ui.setting.edit_pass.EditPasswordActivity
 import cn.tklvyou.huaiyuanmedia.utils.DataCleanManager
 import cn.tklvyou.huaiyuanmedia.widget.dailog.CommonDialog
+import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.SPUtils
 import com.blankj.utilcode.util.ToastUtils
 import kotlinx.android.synthetic.main.activity_setting.*
@@ -99,6 +100,7 @@ class SettingActivity : BaseActivity<SettingPresenter>(), View.OnClickListener, 
 
 
     private fun handleLogout() {
+        ActivityUtils.finishOtherActivities(this::class.java)
         SPUtils.getInstance().put(PREF_KEY_TOKEN, "")
         SPUtils.getInstance().put("login", false)
         SPUtils.getInstance().put("groupId", 0)

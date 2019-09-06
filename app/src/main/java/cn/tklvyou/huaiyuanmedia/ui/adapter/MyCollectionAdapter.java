@@ -2,6 +2,7 @@ package cn.tklvyou.huaiyuanmedia.ui.adapter;
 
 import android.graphics.drawable.Drawable;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ import java.util.List;
 import cn.tklvyou.huaiyuanmedia.R;
 import cn.tklvyou.huaiyuanmedia.helper.GlideManager;
 import cn.tklvyou.huaiyuanmedia.model.NewsBean;
+import cn.tklvyou.huaiyuanmedia.widget.SwipeRevealLayout;
 
 /**
  * @author :JenkinsZhou
@@ -25,12 +27,41 @@ import cn.tklvyou.huaiyuanmedia.model.NewsBean;
  */
 public class MyCollectionAdapter extends BaseQuickAdapter<NewsBean, BaseViewHolder> {
 
+    private boolean isEdit = false;
+
     public MyCollectionAdapter(List<NewsBean> data) {
-        super(R.layout.item_news_news_layout,data);
+        super(R.layout.item_news_collect_layout, data);
     }
+
+
+    public void setEditModel(boolean isEdit) {
+        this.isEdit = isEdit;
+        for (int i = 0; i < getData().size(); i++) {
+            getData().get(i).setSelect(false);
+        }
+        notifyDataSetChanged();
+    }
+
 
     @Override
     protected void convert(@NonNull BaseViewHolder helper, NewsBean bean) {
+
+        helper.addOnClickListener(R.id.check_box, R.id.itemLayout);
+        SwipeRevealLayout mSwipeLayout = helper.getView(R.id.mSwipeLayout);
+        if (isEdit) {
+            mSwipeLayout.open(true);
+            ImageView mCheckBox = helper.getView(R.id.check_box);
+            if (bean.isSelect()) {
+                mCheckBox.setImageResource(R.mipmap.icon_selected);
+            } else {
+                mCheckBox.setImageResource(R.mipmap.icon_normal);
+            }
+
+        } else {
+            mSwipeLayout.close(true);
+        }
+
+
         helper.setText(R.id.tvTitle, bean.getName());
         helper.setText(R.id.tvTime, bean.getBegintime());
         helper.setText(R.id.tvSeeNum, "" + bean.getVisit_num());
@@ -82,4 +113,5 @@ public class MyCollectionAdapter extends BaseQuickAdapter<NewsBean, BaseViewHold
             }
         }
     }
+
 }

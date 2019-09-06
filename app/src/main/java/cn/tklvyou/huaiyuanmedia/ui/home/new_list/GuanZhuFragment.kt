@@ -74,61 +74,65 @@ class GuanZhuFragment : BaseHttpRecyclerFragment<GuanZhuPresenter, NewsBean, Gua
 
     private var attentionList: MutableList<ConcernModel>? = null
 
-    override fun setAttentionList(model: AttentionModel) {
-        attentionList = model.attention.toMutableList()
+    override fun setAttentionList(model: AttentionModel?) {
+        if(model != null){
+            attentionList = model.attention.toMutableList()
 
-        val concernAllModel = ConcernModel()
-        concernAllModel.nickname = "全部"
-        concernAllModel.id = R.drawable.icon_see_more
-        attentionList!!.add(0, concernAllModel)
+            val concernAllModel = ConcernModel()
+            concernAllModel.nickname = "全部"
+            concernAllModel.id = R.drawable.icon_see_more
+            attentionList!!.add(0, concernAllModel)
 
-        if (model.noattention.isNotEmpty()) {
-            val concernModel = ConcernModel()
-            concernModel.nickname = "关注更多"
-            concernModel.id = R.mipmap.icon_attention_more
-            attentionList!!.add(concernModel)
-        }
-
-
-        if (model.attention == null || model.attention.size == 0) {
-            mAttentionRecyclerView.visibility = View.VISIBLE
-            mSmartRefreshLayout.visibility = View.GONE
-            enableRefresh = true
-        } else {
-            enableRefresh = false
-            mSmartRefreshLayout.visibility = View.VISIBLE
-            mAttentionRecyclerView.visibility = View.GONE
-        }
+            if (model.noattention.isNotEmpty()) {
+                val concernModel = ConcernModel()
+                concernModel.nickname = "关注更多"
+                concernModel.id = R.mipmap.icon_attention_more
+                attentionList!!.add(concernModel)
+            }
 
 
-        for (i in 0 until model.noattention.size) {
-            model.noattention[i].isNoConcern = true
-        }
+            if (model.attention == null || model.attention.size == 0) {
+                mAttentionRecyclerView.visibility = View.VISIBLE
+                mSmartRefreshLayout.visibility = View.GONE
+                enableRefresh = true
+            } else {
+                enableRefresh = false
+                mSmartRefreshLayout.visibility = View.VISIBLE
+                mAttentionRecyclerView.visibility = View.GONE
+            }
 
-        guanZhuAdapter = MyConcernAdapter(R.layout.item_my_concern, model.noattention)
-        mAttentionRecyclerView.adapter = guanZhuAdapter
-        guanZhuAdapter!!.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
-            if (view!!.id == R.id.cbCheck) {
-                val bean = (adapter as MyConcernAdapter).data[position]
 
-                val dialog = CommonDialog(context)
-                dialog.setTitle("温馨提示")
-                dialog.setMessage(if (!bean.isNoConcern) "是否取消关注？" else "是否添加关注")
-                dialog.setYesOnclickListener("确认") {
+            for (i in 0 until model.noattention.size) {
+                model.noattention[i].isNoConcern = true
+            }
+
+            guanZhuAdapter = MyConcernAdapter(R.layout.item_my_concern, model.noattention)
+            mAttentionRecyclerView.adapter = guanZhuAdapter
+            guanZhuAdapter!!.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
+                if (view!!.id == R.id.cbCheck) {
+                    val bean = (adapter as MyConcernAdapter).data[position]
+
                     if (!bean.isNoConcern) {
-                        mPresenter.cancelConcern(bean.id, position, 1)
+                        val dialog = CommonDialog(context)
+                        dialog.setTitle("温馨提示")
+                        dialog.setMessage("是否取消关注？")
+                        dialog.setYesOnclickListener("确认") {
+                            mPresenter.cancelConcern(bean.id, position, 1)
+                            dialog.dismiss()
+                        }
+                        dialog.show()
                     } else {
                         mPresenter.addConcern(bean.id, position, 1)
                     }
-                    dialog.dismiss()
+
+
                 }
-                dialog.show()
             }
-        }
 
 
-        if (model.attention != null && model.attention.size > 0) {
-            mSmartRefreshLayout.autoRefresh()
+            if (model.attention != null && model.attention.size > 0) {
+                mSmartRefreshLayout.autoRefresh()
+            }
         }
 
     }
@@ -245,6 +249,7 @@ class GuanZhuFragment : BaseHttpRecyclerFragment<GuanZhuPresenter, NewsBean, Gua
         val intent = Intent(context, ServiceWebviewActivity::class.java)
         intent.putExtra("url", url)
         intent.putExtra("other", true)
+        intent.putExtra("share_title","")
         startActivity(intent)
     }
 
@@ -272,6 +277,7 @@ class GuanZhuFragment : BaseHttpRecyclerFragment<GuanZhuPresenter, NewsBean, Gua
             mTipView.show()
             flush = false
             flushHeader = true
+            module = ""
             lazyData()
         } else {
             guanZhuAdapter!!.data[position].isNoConcern = true

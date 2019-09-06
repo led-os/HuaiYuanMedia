@@ -4,7 +4,7 @@ public class PointRuleModel {
 
     /**
      * name : 积分兑换,获取与使用规则
-     * nickname : 濉溪发布官方
+     * nickname : 榴香怀远官方
      * time : 2019-08-01
      * content :
      */

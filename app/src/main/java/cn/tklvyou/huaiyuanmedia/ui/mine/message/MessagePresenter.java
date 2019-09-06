@@ -23,14 +23,19 @@ public class MessagePresenter extends BasePresenter<MessageContract.View> implem
         RetrofitHelper.getInstance().getServer()
                 .getSystemMsgList(page)
                 .compose(RxSchedulers.applySchedulers())
-                .compose(mView.bindToLife())
+//                .compose(mView.bindToLife())
                 .subscribe(result -> {
-                    if (result.getCode() == RequestConstant.CODE_REQUEST_SUCCESS) {
-                        mView.setMessageList(page, result.getData());
-                    } else {
-                        ToastUtils.showShort(result.getMsg());
-                    }
-                }, throwable -> mView.showFailed(""));
+                            if (mView != null) {
+                                mView.showSuccess(result.getMsg());
+                                if (result.getCode() == RequestConstant.CODE_REQUEST_SUCCESS) {
+                                    mView.setMessageList(page, result.getData());
+                                }
+                            }
+                        }, throwable -> {
+                            if (mView != null)
+                                mView.showFailed("");
+                        }
+                );
     }
 
     @Override

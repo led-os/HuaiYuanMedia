@@ -63,7 +63,7 @@ class LoginActivity : BaseActivity<AccountLoginPresenter>(), AccountContract.Log
     override fun initView(savedInstanceState: Bundle?) {
         hideTitleBar()
         //销毁非登录页的所有Activity
-        ActivityUtils.finishOtherActivities(LoginActivity::class.java)
+//        ActivityUtils.finishOtherActivities(LoginActivity::class.java)
 
         mFragments = ArrayList()
         mFragments!!.add(PasswordFragment())
@@ -215,7 +215,8 @@ class LoginActivity : BaseActivity<AccountLoginPresenter>(), AccountContract.Log
 
     override fun loginSuccess() {
         MyApplication.showSplash = false
-        startActivity(Intent(this, MainActivity::class.java))
+        finish()
+//        startActivity(Intent(this, MainActivity::class.java))
     }
 
     override fun loginError() {

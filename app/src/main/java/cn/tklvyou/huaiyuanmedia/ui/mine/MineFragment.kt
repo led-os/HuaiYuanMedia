@@ -10,6 +10,7 @@ import cn.tklvyou.huaiyuanmedia.base.interfaces.AdapterCallBack
 import cn.tklvyou.huaiyuanmedia.helper.GlideManager
 import cn.tklvyou.huaiyuanmedia.model.MineRvModel
 import cn.tklvyou.huaiyuanmedia.model.User
+import cn.tklvyou.huaiyuanmedia.ui.account.LoginActivity
 import cn.tklvyou.huaiyuanmedia.ui.account.data.PersonalDataActivity
 import cn.tklvyou.huaiyuanmedia.ui.adapter.MineRvAdapter
 import cn.tklvyou.huaiyuanmedia.ui.mine.browse.RecentBrowseActivity
@@ -26,6 +27,8 @@ import cn.tklvyou.huaiyuanmedia.utils.GridDividerItemDecoration
 import cn.tklvyou.huaiyuanmedia.utils.JSON
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.ResourceUtils
+import com.blankj.utilcode.util.SPUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.google.gson.Gson
@@ -45,10 +48,16 @@ class MineFragment : BaseRecyclerFragment<MinePresenter, MineRvModel, BaseViewHo
         return mineRecyclerView
     }
 
+
     override fun initView() {
         mineTitleBar.setBackgroundResource(android.R.color.transparent)
         mineTitleBar.setPositiveListener {
-            startActivity(Intent(context, SettingActivity::class.java))
+            if (SPUtils.getInstance().getString("token", "").isNotEmpty()) {
+                startActivity(Intent(context, SettingActivity::class.java))
+            } else {
+                ToastUtils.showShort("请登录后操作")
+                startActivity(Intent(context, LoginActivity::class.java))
+            }
         }
         ivAvatar.setOnClickListener(this)
         tvMobile.setOnClickListener(this)
@@ -61,7 +70,10 @@ class MineFragment : BaseRecyclerFragment<MinePresenter, MineRvModel, BaseViewHo
         val json = ResourceUtils.readAssets2String("minelist.json")
         val data = JSON.parseArray(json, MineRvModel::class.java)
         onLoadSucceed(1, data)
-        mPresenter.getUser()
+
+        if (SPUtils.getInstance().getString("token", "").isNotEmpty()) {
+            mPresenter.getUser()
+        }
     }
 
 
@@ -71,13 +83,17 @@ class MineFragment : BaseRecyclerFragment<MinePresenter, MineRvModel, BaseViewHo
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
         if (!hidden && !isFirstResume) {
-            mPresenter.getUser()
+            if (SPUtils.getInstance().getString("token", "").isNotEmpty()) {
+                mPresenter.getUser()
+            }
         }
     }
 
     override fun onUserVisible() {
         super.onUserVisible()
-        mPresenter.getUser()
+        if (SPUtils.getInstance().getString("token", "").isNotEmpty()) {
+            mPresenter.getUser()
+        }
     }
 
 
@@ -96,7 +112,12 @@ class MineFragment : BaseRecyclerFragment<MinePresenter, MineRvModel, BaseViewHo
                 skipPersonalData()
             }
             R.id.llMyPointDetail -> {
-                startActivity(Intent(context, MyPointDetailActivity::class.java))
+                if (SPUtils.getInstance().getString("token", "").isNotEmpty()) {
+                    startActivity(Intent(context, MyPointDetailActivity::class.java))
+                } else {
+                    ToastUtils.showShort("请登录后操作")
+                    startActivity(Intent(context, LoginActivity::class.java))
+                }
             }
             else -> {
             }
@@ -137,7 +158,11 @@ class MineFragment : BaseRecyclerFragment<MinePresenter, MineRvModel, BaseViewHo
     }
 
     private fun skipPersonalData() {
-        startActivity(Intent(context, PersonalDataActivity::class.java))
+        if (SPUtils.getInstance().getString("token", "").isNotEmpty()) {
+            startActivity(Intent(context, PersonalDataActivity::class.java))
+        } else {
+            startActivity(Intent(context, LoginActivity::class.java))
+        }
     }
 
 

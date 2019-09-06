@@ -61,7 +61,8 @@ class PasswordFragment : BaseFragment<AccountPresenter>(), AccountContract.View,
 
     override fun loginSuccess() {
         MyApplication.showSplash = false
-        startActivity(Intent(context, MainActivity::class.java))
+        mActivity.finish()
+//        startActivity(Intent(context, MainActivity::class.java))
     }
 
     override fun loginError() {

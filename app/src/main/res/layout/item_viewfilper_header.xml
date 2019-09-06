@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:background="@color/white"
+    android:orientation="horizontal">
+
+    <TextView
+        android:layout_width="@dimen/dp_50"
+        android:layout_height="@dimen/dp_45"
+        android:gravity="center"
+        android:text="摘要"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/sp_14" />
+
+    <View
+        android:background="@color/common_bg"
+        android:layout_width="@dimen/dp_1"
+        android:layout_marginRight="@dimen/dp_10"
+        android:layout_height="@dimen/dp_20"/>
+
+    <ViewFlipper
+        android:id="@+id/mViewFlipper"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_45"
+        android:autoStart="true"
+        android:background="#fff"
+        android:flipInterval="3000"
+        android:inAnimation="@anim/anim_marquee_in"
+        android:outAnimation="@anim/anim_marquee_out" />
+
+</LinearLayout>

@@ -28,12 +28,12 @@ class BlankFragment : BaseFragment<NullPresenter>() {
     }
 
     override fun getLoadingView(): View {
-        return tvtest
+        return mWebView
     }
 
     override fun lazyData() {
         ToastUtils.showShort("111")
-        tvtest.text = "-------------------"
+//        tvtest.text = "-------------------"
 
     }
 

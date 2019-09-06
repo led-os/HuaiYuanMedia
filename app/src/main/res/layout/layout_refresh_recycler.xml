@@ -5,6 +5,10 @@
     android:background="@color/grayF4F5F7"
     android:layout_height="match_parent">
 
+
+
     <include layout="@layout/layout_recycler" />
+
+
 
 </com.scwang.smartrefresh.layout.SmartRefreshLayout>

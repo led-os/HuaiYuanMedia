@@ -26,16 +26,19 @@ import org.json.JSONObject
  * @date 2019年08月02日14:08
  * @Email: 971613168@qq.com
  */
-class AboutUsActivity : BaseActivity<AboutUsPresenter>(),AboutUsContract.View {
+class AboutUsActivity : BaseActivity<AboutUsPresenter>(), AboutUsContract.View {
     override fun setSystemConfig(model: SystemConfigModel) {
-        GlideManager.loadImg(model.qrcode,ivCode)
+        GlideManager.loadImg(model.qrcode, ivCode)
 
         val localVersionCode = Integer.parseInt(BuildConfig.VERSION_NAME.replace(".", ""))
         val serviceVersionCode = Integer.parseInt(model.android_version.replace(".", ""))
 
-        if (localVersionCode < serviceVersionCode){
+        if (localVersionCode < serviceVersionCode) {
             tvVersionStatus.text = "有新版本可用"
-        }else{
+            btnCheckVersion.setOnClickListener {
+                getVersionInfo()
+            }
+        } else {
             tvVersionStatus.text = "已是最新版本"
         }
     }
@@ -62,10 +65,6 @@ class AboutUsActivity : BaseActivity<AboutUsPresenter>(),AboutUsContract.View {
 
         mPresenter.getSystemConfig()
 
-        btnCheckVersion.setOnClickListener {
-            getVersionInfo()
-        }
-
     }
 
 
@@ -79,7 +78,7 @@ class AboutUsActivity : BaseActivity<AboutUsPresenter>(),AboutUsContract.View {
                 //必须设置实现httpManager接口的对象
                 .setHttpManager(UpdateAppHttpUtil())
                 //必须设置，更新地址
-                .setUpdateUrl(Contacts.PRO_BASE_URL+"api/index/sysconfig")
+                .setUpdateUrl(Contacts.PRO_BASE_URL + "api/index/sysconfig")
                 //以下设置，都是可选
                 //设置请求方式，默认get
                 .setPost(true)

@@ -53,6 +53,18 @@
                     android:textColor="@color/default_gray_text_color"
                     android:textSize="@dimen/sp_13" />
 
+                <TextView
+                    android:id="@+id/tvAttentionStatus"
+                    android:layout_width="@dimen/dp_60"
+                    android:layout_height="@dimen/dp_30"
+                    android:layout_marginLeft="@dimen/dp_15"
+                    android:background="@drawable/shape_color_accent_radius_5_bg"
+                    android:gravity="center"
+                    android:text="未关注"
+                    android:visibility="gone"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_13" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -121,9 +133,9 @@
                         <TextView
                             android:id="@+id/tvNickName"
                             android:layout_width="0dp"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:ellipsize="end"
-                            android:layout_height="wrap_content"
                             android:singleLine="true"
                             android:textColor="@color/default_gray_text_color"
                             android:textSize="@dimen/sp_13" />
@@ -193,12 +205,12 @@
                     </LinearLayout>
 
                     <WebView
-                        android:visibility="gone"
                         android:id="@+id/newsDetailWebView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:overScrollMode="never"
-                        android:scrollbars="none">
+                        android:scrollbars="none"
+                        android:visibility="gone">
 
                     </WebView>
 

@@ -20,23 +20,28 @@ public class MyConcernPresenter extends BasePresenter<MyConcernContract.View> im
         RetrofitHelper.getInstance().getServer()
                 .getMyConcernList(p, type)
                 .compose(RxSchedulers.applySchedulers())
-                .compose(mView.bindToLife())
+//                .compose(mView.bindToLife())
                 .subscribe(result -> {
-                            if (result.getCode() == 1) {
-                                mView.setConcernList(p, result.getData());
-                            } else {
-                                ToastUtils.showShort(result.getMsg());
+                            if (mView != null) {
+                                mView.showSuccess(result.getMsg());
+                                if (result.getCode() == 1) {
+                                    mView.setConcernList(p, result.getData());
+                                }
                             }
+
                         }, throwable -> {
-                            mView.showFailed("");
+                            if (mView != null) {
+                                mView.showFailed("");
+                                mView.setConcernList(p, null);
+                            }
                         }
                 );
     }
 
     @Override
-    public void addConcern(int id,int position, int type) {
+    public void addConcern(int id, int position, int type) {
         RetrofitHelper.getInstance().getServer()
-                .addConcern(id,type)
+                .addConcern(id, type)
                 .compose(RxSchedulers.applySchedulers())
                 .compose(mView.bindToLife())
                 .subscribe(result -> {
@@ -50,9 +55,9 @@ public class MyConcernPresenter extends BasePresenter<MyConcernContract.View> im
     }
 
     @Override
-    public void cancelConcern(int id, int position,int type) {
+    public void cancelConcern(int id, int position, int type) {
         RetrofitHelper.getInstance().getServer()
-                .cancelConcern(id,type)
+                .cancelConcern(id, type)
                 .compose(RxSchedulers.applySchedulers())
                 .compose(mView.bindToLife())
                 .subscribe(result -> {

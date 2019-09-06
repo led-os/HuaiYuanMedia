@@ -9,14 +9,16 @@ import org.jsoup.Jsoup
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.os.Bundle
 import android.view.View
+import android.webkit.WebChromeClient
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.ProgressBar
 import cn.tklvyou.huaiyuanmedia.base.interfaces.BackHandledInterface
 
-
-abstract class BaseX5WebViewFragment<T : BaseContract.BasePresenter<*>> : BaseFragment<T>() {
+abstract class BaseX5WebViewFragment<P : BaseContract.BasePresenter<*>> : BaseFragment<P>() {
 
     private var enablePadding = false
-    private var mProgressBar:ProgressBar? = null
+    private var mProgressBar: ProgressBar? = null
     private lateinit var mWebView: X5WebView
     protected var mBackHandledInterface: BackHandledInterface? = null
 
@@ -28,26 +30,19 @@ abstract class BaseX5WebViewFragment<T : BaseContract.BasePresenter<*>> : BaseFr
     public abstract fun onBackPressed(): Boolean
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (activity !is BackHandledInterface) {
-            throw ClassCastException("Hosting Activity must implement BackHandledInterface")
-        } else {
-            this.mBackHandledInterface = activity as BackHandledInterface
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        //告诉FragmentActivity，当前Fragment在栈顶
-        mBackHandledInterface!!.setSelectedFragment(this)
-    }
-
-    public fun initProgressBar(mProgressBar: ProgressBar){
+    public fun initProgressBar(mProgressBar: ProgressBar) {
         this.mProgressBar = mProgressBar
     }
 
     public fun initWebView(webView: X5WebView) {
+
+        if (mActivity is BackHandledInterface) {
+            this.mBackHandledInterface = mActivity as BackHandledInterface
+            //告诉FragmentActivity，当前Fragment在栈顶
+            mBackHandledInterface!!.setSelectedFragment(this)
+        }
+
+
         this.mWebView = webView
 
         mWebView.webViewClient = object : com.tencent.smtt.sdk.WebViewClient() {
@@ -64,12 +59,13 @@ abstract class BaseX5WebViewFragment<T : BaseContract.BasePresenter<*>> : BaseFr
             }
         }
 
-        mWebView.webChromeClient = object : com.tencent.smtt.sdk.WebChromeClient() {
+        mWebView.webChromeClient = object : com.tencent.smtt.sdk. WebChromeClient() {
 
             override fun onProgressChanged(p0: com.tencent.smtt.sdk.WebView?, p1: Int) {
-                if(p1 >=95){
+
+                if (p1 >= 95) {
                     mProgressBar?.visibility = View.GONE
-                }else{
+                } else {
                     mProgressBar?.visibility = View.VISIBLE
                 }
 
@@ -79,6 +75,7 @@ abstract class BaseX5WebViewFragment<T : BaseContract.BasePresenter<*>> : BaseFr
 
             override fun onReceivedTitle(p0: com.tencent.smtt.sdk.WebView?, p1: String?) {
                 super.onReceivedTitle(p0, p1)
+
                 var title = ""
                 if (p1 == null) {
                     title = ""
@@ -86,21 +83,15 @@ abstract class BaseX5WebViewFragment<T : BaseContract.BasePresenter<*>> : BaseFr
                     title = p1
                 }
                 setTitleContent(title)
+
             }
 
         }
 
-        mWebView.setDownloadListener(object : DownloadListener {
-
-            override fun onDownloadStart(arg0: String, arg1: String, arg2: String,
-                                         arg3: String, arg4: Long) {
-
-            }
-        })
 
         val webSetting = mWebView.settings
         webSetting.allowFileAccess = true
-        webSetting.layoutAlgorithm = WebSettings.LayoutAlgorithm.SINGLE_COLUMN
+//        webSetting.layoutAlgorithm = WebSettings.LayoutAlgorithm.SINGLE_COLUMN
         webSetting.useWideViewPort = false
         webSetting.setSupportMultipleWindows(false)
         webSetting.setLoadWithOverviewMode(true)
@@ -108,20 +99,24 @@ abstract class BaseX5WebViewFragment<T : BaseContract.BasePresenter<*>> : BaseFr
         webSetting.setSupportZoom(false)
         webSetting.javaScriptEnabled = true
         // webSetting.setPageCacheCapacity(IX5WebSettings.DEFAULT_CACHE_CAPACITY);
-        webSetting.pluginState = WebSettings.PluginState.ON_DEMAND
-        webSetting.setRenderPriority(WebSettings.RenderPriority.HIGH)
+//        webSetting.pluginState = WebSettings.PluginState.ON_DEMAND
+//        webSetting.setRenderPriority(WebSettings.RenderPriority.HIGH)
         // webSetting.setPreFectch(true)
 
+
+        LogUtils.e("----------------    13")
     }
 
     public fun loadUrl(url: String) {
         enablePadding = false
         mWebView.loadUrl(url)
+        LogUtils.e("----------------    14")
     }
 
     public fun loadHtml(html: String) {
         enablePadding = true
         imageFillWidth(html)
+        LogUtils.e("----------------    15")
     }
 
 
@@ -164,13 +159,15 @@ abstract class BaseX5WebViewFragment<T : BaseContract.BasePresenter<*>> : BaseFr
 
 
     override fun onDestroy() {
+        super.onDestroy()
+        LogUtils.e("----------------    16")
         mProgressBar = null
         mWebView.removeAllViews()
         try {
             mWebView.destroy()
         } catch (t: Throwable) {
         }
-        super.onDestroy()
+
     }
 
 }

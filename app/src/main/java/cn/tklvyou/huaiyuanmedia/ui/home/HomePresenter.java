@@ -18,20 +18,22 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
 
     @Override
     public void getHomeChannel() {
+        mView.showLoading();
         RetrofitHelper.getInstance().getServer()
                 .getHomeChannel()
                 .compose(RxSchedulers.applySchedulers())
                 .compose(mView.bindToLife())
                 .subscribe(result -> {
+                            mView.showSuccess(result.getMsg());
                             if (result.getCode() == 1) {
                                 mView.setHomeChannel(result.getData());
                                 SPUtils.getInstance().put("channel", new HashSet<String>(result.getData()));
                             } else {
                                 mView.setHomeChannel(new ArrayList<>(SPUtils.getInstance().getStringSet("channel")));
-                                ToastUtils.showShort(result.getMsg());
                             }
                         }, throwable -> {
                             throwable.printStackTrace();
+                            mView.showSuccess("");
                             mView.setHomeChannel(new ArrayList<>(SPUtils.getInstance().getStringSet("channel")));
                         }
 
@@ -39,21 +41,21 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
     }
 
     @Override
-    public void getTotalChannel() {
+    public void saveHomeChannel(String channels) {
+        mView.showLoading();
         RetrofitHelper.getInstance().getServer()
-                .getTotalChannel()
+                .saveHomeChannel(channels)
                 .compose(RxSchedulers.applySchedulers())
                 .compose(mView.bindToLife())
                 .subscribe(result -> {
-                            if (result.getCode() == 1) {
-                                mView.setTotalChannel(result.getData());
-                            } else {
-                                ToastUtils.showShort(result.getMsg());
-                            }
+                            mView.showSuccess(result.getMsg());
+                            getHomeChannel();
                         }, throwable -> {
                             throwable.printStackTrace();
+                            mView.showFailed("");
                         }
 
                 );
     }
+
 }

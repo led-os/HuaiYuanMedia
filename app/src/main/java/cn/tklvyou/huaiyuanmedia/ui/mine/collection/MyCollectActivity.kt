@@ -3,6 +3,7 @@ package cn.tklvyou.huaiyuanmedia.ui.mine.collection
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import cn.tklvyou.huaiyuanmedia.R
@@ -14,10 +15,12 @@ import cn.tklvyou.huaiyuanmedia.ui.adapter.MyCollectionAdapter
 import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.tv_news_detail.TVNewsDetailActivity
 import cn.tklvyou.huaiyuanmedia.ui.audio.ServiceWebviewActivity
+import cn.tklvyou.huaiyuanmedia.widget.dailog.CommonDialog
+import com.blankj.utilcode.util.LogUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
-import kotlinx.android.synthetic.main.layout_recycler.*
-import kotlinx.android.synthetic.main.layout_refresh_recycler.*
+import kotlinx.android.synthetic.main.activity_my_collect.*
 
 /**
  *@description :我的收藏
@@ -34,25 +37,92 @@ class MyCollectActivity : BaseHttpRecyclerActivity<CollectPresenter, NewsBean, B
 
 
     override fun getActivityLayoutID(): Int {
-        return R.layout.layout_refresh_recycler
+        return R.layout.activity_my_collect
     }
 
     override fun getListAsync(page: Int) {
         mPresenter.getCollectPageList(page)
     }
 
+    private var isEdit = false
     override fun initView(savedInstanceState: Bundle?) {
         setTitle("我的收藏")
         setNavigationImage()
         setNavigationOnClickListener { finish() }
+        setPositiveText("编辑")
+        setPositiveOnClickListener {
+            if (adapter != null) {
+                if (isEdit) {
+                    isEdit = false
+                    editLayout.visibility = View.GONE
+                    tvDeleteSelect.text = "删除"
+                    tvDeleteSelect.setTextColor(resources.getColor(R.color.default_gray_text_color))
+                    tvDeleteSelect.isEnabled = false
+                    selectIds.clear()
+                    setPositiveText("编辑")
+                    adapter.setEditModel(false)
+
+                } else {
+                    isEdit = true
+                    editLayout.visibility = View.VISIBLE
+                    setPositiveText("取消")
+                    adapter.setEditModel(true)
+                }
+            }
+        }
+
+
         initSmartRefreshLayout(smartLayoutRoot)
         initRecyclerView(recyclerViewRoot)
-        mPresenter.getCollectPageList(1)
+        smartLayoutRoot.autoRefresh()
+
+        tvClearAll.setOnClickListener {
+            val dialog = CommonDialog(this)
+            dialog.setMessage("确定要清空吗？清空后将永久无法找回，请谨慎操作。")
+            dialog.setYesOnclickListener("确定") {
+                mPresenter.cancelCollectAll()
+                dialog.dismiss()
+            }
+            dialog.show()
+        }
+
+        tvDeleteSelect.setOnClickListener {
+            val idsBuilder = StringBuilder()
+            for (i in 0 until selectIds.size) {
+                if (i == selectIds.size - 1) {
+                    idsBuilder.append(selectIds[i])
+                } else {
+                    idsBuilder.append("" + selectIds[i] + ",")
+                }
+            }
+
+            val dialog = CommonDialog(this)
+            dialog.setMessage("确定要删除这${selectIds.size}个收藏吗？")
+            dialog.setYesOnclickListener("确定") {
+                mPresenter.cancelCollectList(idsBuilder.toString())
+                dialog.dismiss()
+            }
+            dialog.show()
+
+        }
+
     }
 
     override fun onRetry() {
         super.onRetry()
         mPresenter.getCollectPageList(1)
+    }
+
+    override fun cancelCollectSuccess(isAll: Boolean) {
+        if (isAll) {
+            adapter.data.clear()
+            adapter.notifyDataSetChanged()
+            setDeleteSelectBtnBackground(0)
+        } else {
+            selectIds.clear()
+            setDeleteSelectBtnBackground(selectIds.size)
+            smartLayoutRoot.autoRefresh()
+        }
     }
 
 
@@ -71,102 +141,138 @@ class MyCollectActivity : BaseHttpRecyclerActivity<CollectPresenter, NewsBean, B
 
     override fun setCollectList(page: Int, pageModel: BasePageModel<NewsBean>?) {
         if (pageModel != null) {
+            if (page != 1) {
+                sycnList(adapter.data)
+            }
             onLoadSucceed(page, pageModel.data)
         } else {
             onLoadFailed(page, null)
         }
     }
 
-    override fun onItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
-        super.onItemClick(adapter, view, position)
-        val bean = (adapter as MyCollectionAdapter).data[position]
+
+    //选中Id集合
+    private var selectIds = ArrayList<Int>()
+
+    override fun onItemChildClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
+        super.onItemChildClick(adapter, view, position)
+
+        val bean = adapter!!.data[position] as NewsBean
         val id = bean.id
 
-        when (bean.module) {
-            "V视频" -> {
-                val type = "视频"
-                if (bean.url.isNotEmpty()) {
-                    startDetailsActivity(this, bean.url)
-                } else {
-                    startNewsDetailActivity(this, type, id, position)
-                }
-            }
-            "濉溪TV" -> {
-                if (bean.module_second == "置顶频道") {
-                    val type = if (bean.type == "tv") "电视" else "广播"
-                    TVNewsDetailActivity.startTVNewsDetailActivity(this, type, id)
-                } else {
-                    val type = "电视"
-                    NewsDetailActivity.startNewsDetailActivity(this, type, id)
-                }
-            }
-            "新闻", "矩阵", "专栏", "党建" -> {
-                val type = "文章"
-                if (bean.url.isNotEmpty()) {
-                    startDetailsActivity(this, bean.url)
-                } else {
-                    startNewsDetailActivity(this, type, id, position)
-                }
-            }
-            "视讯" -> {
-                val type = "视讯"
-                if (bean.url.isNotEmpty()) {
-                    startDetailsActivity(this, bean.url)
-                } else {
-                    startNewsDetailActivity(this, type, id, position)
-                }
-            }
-            "问政" -> {
-                val type = "问政"
-                if (bean.url.isNotEmpty()) {
-                    startDetailsActivity(this, bean.url)
-                } else {
-                    startNewsDetailActivity(this, type, id, position)
-                }
-            }
+        if (!isEdit) {
 
-            "原创", "随手拍" -> {
-                val type = if (bean.images != null && bean.images.size > 0) "图文" else "视频"
-                if (bean.url.isNotEmpty()) {
-                    startDetailsActivity(this, bean.url)
-                } else {
-                    startNewsDetailActivity(this, type, id, position)
+            when (bean.module) {
+                "V视频" -> {
+                    val type = "视频"
+                    if (bean.url.isNotEmpty()) {
+                        startDetailsActivity(this, bean.url)
+                    } else {
+                        startNewsDetailActivity(this, type, id, position)
+                    }
                 }
-            }
-            "悦读" -> {
-                val type = "悦读"
-                if (bean.url.isNotEmpty()) {
-                    startDetailsActivity(this, bean.url)
-                } else {
-                    startNewsDetailActivity(this, type, id, position)
+                "濉溪TV" -> {
+                    if (bean.module_second == "置顶频道") {
+                        val type = if (bean.type == "tv") "电视" else "广播"
+                        TVNewsDetailActivity.startTVNewsDetailActivity(this, type, id)
+                    } else {
+                        val type = "电视"
+                        NewsDetailActivity.startNewsDetailActivity(this, type, id)
+                    }
                 }
-            }
-            "悦听" -> {
-                val type = "悦听"
-                if (bean.url.isNotEmpty()) {
-                    startDetailsActivity(this, bean.url)
-                } else {
-                    startNewsDetailActivity(this, type, id, position)
+                "新闻", "矩阵", "专栏", "党建" -> {
+                    val type = "文章"
+                    if (bean.url.isNotEmpty()) {
+                        startDetailsActivity(this, bean.url)
+                    } else {
+                        startNewsDetailActivity(this, type, id, position)
+                    }
                 }
-            }
-            "公告" -> {
-                val type = "公告"
-                if (bean.url.isNotEmpty()) {
-                    startDetailsActivity(this, bean.url)
-                } else {
-                    startNewsDetailActivity(this, type, id, position)
+                "视讯" -> {
+                    val type = "视讯"
+                    if (bean.url.isNotEmpty()) {
+                        startDetailsActivity(this, bean.url)
+                    } else {
+                        startNewsDetailActivity(this, type, id, position)
+                    }
                 }
-            }
+                "问政" -> {
+                    val type = "问政"
+                    if (bean.url.isNotEmpty()) {
+                        startDetailsActivity(this, bean.url)
+                    } else {
+                        startNewsDetailActivity(this, type, id, position)
+                    }
+                }
 
+                "原创", "随手拍" -> {
+                    val type = if (bean.images != null && bean.images.size > 0) "图文" else "视频"
+                    if (bean.url.isNotEmpty()) {
+                        startDetailsActivity(this, bean.url)
+                    } else {
+                        startNewsDetailActivity(this, type, id, position)
+                    }
+                }
+                "悦读" -> {
+                    val type = "悦读"
+                    if (bean.url.isNotEmpty()) {
+                        startDetailsActivity(this, bean.url)
+                    } else {
+                        startNewsDetailActivity(this, type, id, position)
+                    }
+                }
+                "悦听" -> {
+                    val type = "悦听"
+                    if (bean.url.isNotEmpty()) {
+                        startDetailsActivity(this, bean.url)
+                    } else {
+                        startNewsDetailActivity(this, type, id, position)
+                    }
+                }
+                "公告" -> {
+                    val type = "公告"
+                    if (bean.url.isNotEmpty()) {
+                        startDetailsActivity(this, bean.url)
+                    } else {
+                        startNewsDetailActivity(this, type, id, position)
+                    }
+                }
+
+            }
+        } else {
+            val isSelect = bean.isSelect
+            if (!isSelect) {
+                selectIds.add(id)
+                bean.isSelect = true
+
+            } else {
+                selectIds.remove(id)
+                bean.isSelect = false
+            }
+            setDeleteSelectBtnBackground(selectIds.size)
+            adapter.notifyItemChanged(position)
         }
 
-
     }
+
+    private fun setDeleteSelectBtnBackground(index: Int) {
+        if (index != 0) {
+            tvDeleteSelect.text = "删除（$index）"
+            tvDeleteSelect.setTextColor(resources.getColor(R.color.redFF4A5C))
+            tvDeleteSelect.isEnabled = true
+        } else {
+            tvDeleteSelect.text = "删除"
+            tvDeleteSelect.setTextColor(resources.getColor(R.color.default_gray_text_color))
+            tvDeleteSelect.isEnabled = false
+        }
+    }
+
 
     private fun startDetailsActivity(context: Context, url: String) {
         val intent = Intent(context, ServiceWebviewActivity::class.java)
         intent.putExtra("url", url)
         intent.putExtra("other", true)
+        intent.putExtra("share_title","")
         startActivity(intent)
     }
 
@@ -181,14 +287,14 @@ class MyCollectActivity : BaseHttpRecyclerActivity<CollectPresenter, NewsBean, B
             val like_status = data.getIntExtra("like_status", 0)
             val hasCollect = data.getBooleanExtra("is_collect", false)
 
-            if(hasCollect) {
+            if (hasCollect) {
                 val bean = (adapter as MyCollectionAdapter).data[position]
                 bean.comment_num = commenNum
                 bean.like_num = zanNum
                 bean.visit_num = seeNum
                 bean.like_status = like_status
                 adapter.notifyItemChanged(position)
-            }else{
+            } else {
                 adapter.remove(position)
             }
 

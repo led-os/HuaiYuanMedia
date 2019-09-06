@@ -1,77 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.SplashActivity">
+    android:scaleType="centerCrop"
+    android:src="@drawable/icon_splash_news_bg" />
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_180"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/splash_top_bg" />
+    <!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"--><!--xmlns:app="http://schemas.android.com/apk/res-auto"--><!--xmlns:tools="http://schemas.android.com/tools"--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--tools:context=".ui.main.SplashActivity">-->
 
-
-    <ImageView
-        android:layout_width="@dimen/dp_107"
-        android:layout_height="@dimen/dp_106"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/dp_165"
-        android:src="@mipmap/splash_logo" />
+    <!--<ImageView--><!--android:layout_width="match_parent"--><!--android:layout_height="@dimen/dp_180"--><!--android:scaleType="centerCrop"--><!--android:src="@mipmap/splash_top_bg" />-->
 
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/dp_370"
-        android:src="@mipmap/splash_center_bg" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/dp_87"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="新闻热线："
-            android:textColor="@color/default_black_text_color"
-            android:textSize="@dimen/sp_12" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0561-6077312"
-            android:textColor="@color/colorAccent"
-            android:textSize="@dimen/sp_12" />
-    </LinearLayout>
+    <!--<ImageView--><!--android:layout_width="@dimen/dp_107"--><!--android:layout_height="@dimen/dp_106"--><!--android:layout_centerHorizontal="true"--><!--android:layout_marginTop="@dimen/dp_165"--><!--android:src="@mipmap/splash_logo" />-->
 
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/dp_45"
-        android:gravity="center"
-        android:text="－濉溪县委宣传部主管－"
-        android:textColor="@color/default_gray_text_color"
-        android:textSize="@dimen/sp_12" />
+    <!--<ImageView--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:layout_centerHorizontal="true"--><!--android:layout_marginTop="@dimen/dp_370"--><!--android:src="@mipmap/splash_center_bg" />-->
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/dp_25"
-        android:gravity="center"
-        android:text="－濉溪县融媒体中心(濉溪县广播电视台)主办－"
-        android:textColor="@color/default_gray_text_color"
-        android:textSize="@dimen/sp_12" />
+    <!--<LinearLayout--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content"--><!--android:layout_alignParentBottom="true"--><!--android:layout_centerHorizontal="true"--><!--android:layout_marginBottom="@dimen/dp_87"--><!--android:gravity="center"--><!--android:orientation="horizontal">-->
+
+    <!--<TextView--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:text="新闻热线："--><!--android:textColor="@color/default_black_text_color"--><!--android:textSize="@dimen/sp_12" />-->
+
+    <!--<TextView--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:text="0561-6077312"--><!--android:textColor="@color/colorAccent"--><!--android:textSize="@dimen/sp_12" />--><!--</LinearLayout>-->
 
 
-</RelativeLayout>
+    <!--<TextView--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content"--><!--android:layout_alignParentBottom="true"--><!--android:layout_marginBottom="@dimen/dp_45"--><!--android:gravity="center"--><!--android:text="－濉溪县委宣传部主管－"--><!--android:textColor="@color/default_gray_text_color"--><!--android:textSize="@dimen/sp_12" />-->
+
+    <!--<TextView--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content"--><!--android:layout_alignParentBottom="true"--><!--android:layout_marginBottom="@dimen/dp_25"--><!--android:gravity="center"--><!--android:text="－濉溪县融媒体中心(濉溪县广播电视台)主办－"--><!--android:textColor="@color/default_gray_text_color"--><!--android:textSize="@dimen/sp_12" />-->
+
+
+    <!--</RelativeLayout>-->

@@ -33,7 +33,7 @@ class TakePhotoActivity : BaseActivity<NullPresenter>() {
         val onlyVideo = intent.getBooleanExtra("is_video", false)
         val page = intent.getStringExtra("page")
 
-        if(page == "V视"){
+        if(page == "原创"){
             jCameraView.setDurationTime(120000) //120s
         }
 

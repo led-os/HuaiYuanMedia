@@ -48,6 +48,7 @@ public class ServiceRvAdapter extends BaseQuickAdapter<ServiceModel, BaseViewHol
                     Intent intent = new Intent(mContext, ServiceWebviewActivity.class);
                     String url =  ((ServiceChildGridRvAdpater)adapter).getData().get(position).getUrl();
                     intent.putExtra("url", url);
+                    intent.putExtra("share_title","");
                     mContext.startActivity(intent);
                 }
             });

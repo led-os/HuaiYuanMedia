@@ -20,6 +20,12 @@ public class ChannelPagerAdapter extends FragmentStatePagerAdapter {
         mFragments = fragmentList != null ? fragmentList : new ArrayList<>();
     }
 
+    public void setData(List<Fragment> mFragments){
+        this.mFragments = mFragments;
+        notifyDataSetChanged();
+    }
+
+
     @Override
     public Fragment getItem(int position) {
         return mFragments.get(position);

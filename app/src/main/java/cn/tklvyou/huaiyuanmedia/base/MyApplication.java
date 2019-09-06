@@ -81,9 +81,6 @@ public class MyApplication extends MultiDexApplication {
         //初始化工具包
         Utils.init(this);
 
-        //初始化网易云播放器
-//        initPlayerSDK();
-
         GlobalClickCallbacks.init(this);
 
         //设置为true时Logcat会输出日志

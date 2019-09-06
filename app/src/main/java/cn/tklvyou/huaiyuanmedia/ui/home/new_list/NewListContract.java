@@ -20,6 +20,8 @@ public interface NewListContract {
 
         void setJuZhengHeader(List<NewsBean> beans);
 
+        void setVerticalHeader(List<NewsBean> beans);
+
         void updateLikeStatus(boolean isLike, int position);
 
     }
@@ -36,6 +38,8 @@ public interface NewListContract {
         void deleteArticle(int id, int position);
 
         void getJuZhengHeader(String module);
+
+        void getVerticalHeader(String module);
 
         void addLikeNews(int id, int position);
 

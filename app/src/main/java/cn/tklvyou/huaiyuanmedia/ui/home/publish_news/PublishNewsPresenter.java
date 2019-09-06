@@ -51,6 +51,7 @@ public class PublishNewsPresenter extends BasePresenter<PublishNewsContract.View
             public void onUploadFailed(String key, String err) {
                 Log.e(TAG, "onUploadFailed:" + err);
                 if (err.contains("no token")) {
+                    mView.publishError();
                     getQiniuToken();
                 }
 
@@ -82,9 +83,9 @@ public class PublishNewsPresenter extends BasePresenter<PublishNewsContract.View
     }
 
     @Override
-    public void publishVShi(String name, String video, String image, String time) {
+    public void publishYuanChuang(String name, String images, String video, String image, String time) {
         RetrofitHelper.getInstance().getServer()
-                .publishVShi(name, video, image, time)
+                .publishYuanChuang(name, images, video, image, time)
                 .compose(RxSchedulers.applySchedulers())
                 .compose(mView.bindToLife())
                 .subscribe(result -> {
@@ -104,7 +105,7 @@ public class PublishNewsPresenter extends BasePresenter<PublishNewsContract.View
     }
 
     @Override
-    public void publishSuiShouPai(String name, String images, String video, String image, String time) {
+    public void publishLifeMsg(String name, String images, String video, String image, String time) {
         RetrofitHelper.getInstance().getServer()
                 .publishLifeMsg(name, images, video, image, time)
                 .compose(RxSchedulers.applySchedulers())
@@ -166,6 +167,7 @@ public class PublishNewsPresenter extends BasePresenter<PublishNewsContract.View
             public void onUploadFailed(String key, String err) {
                 Log.e(TAG, "onUploadFailed:" + err);
                 if (err.contains("no token")) {
+                    mView.publishError();
                     getQiniuToken();
                 }
 

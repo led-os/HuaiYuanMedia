@@ -52,7 +52,7 @@ import cn.tklvyou.huaiyuanmedia.manager.CacheManager;
  *   </pre>
  */
 public abstract class BaseRecyclerActivity<P extends BaseContract.BasePresenter, T, VH extends BaseViewHolder, A extends BaseQuickAdapter<T, VH>>
-        extends BaseActivity<P> implements BaseQuickAdapter.OnItemClickListener, BaseQuickAdapter.OnItemLongClickListener , BaseQuickAdapter.OnItemChildClickListener {
+        extends BaseActivity<P> implements BaseQuickAdapter.OnItemClickListener, BaseQuickAdapter.OnItemLongClickListener, BaseQuickAdapter.OnItemChildClickListener {
 
     private static final String TAG = "BaseRecyclerActivity";
 
@@ -106,7 +106,7 @@ public abstract class BaseRecyclerActivity<P extends BaseContract.BasePresenter,
         adapter.setOnItemLongClickListener(this);
         this.adapter = adapter;
         rvBaseRecycler.setAdapter(this.adapter);
-        this.adapter.setEmptyView(R.layout.common_empty_view,rvBaseRecycler);
+        this.adapter.setEmptyView(R.layout.common_empty_view, rvBaseRecycler);
         this.adapter.setHeaderAndEmpty(true);
 
     }
@@ -127,11 +127,14 @@ public abstract class BaseRecyclerActivity<P extends BaseContract.BasePresenter,
     public void setList(AdapterCallBack<A> callBack) {
         if (adapter == null) {
             setAdapter(callBack.createAdapter());
-        }else {
+        } else {
             callBack.refreshAdapter();
         }
     }
 
+    public void sycnList(List<T> list){
+        this.list = list;
+    }
 
     /**
      * 获取列表，在非UI线程中
@@ -292,7 +295,7 @@ public abstract class BaseRecyclerActivity<P extends BaseContract.BasePresenter,
      * @param newList
      * @param isCache newList是否为缓存
      */
-    private synchronized void onLoadSucceed(final int page, final List<T> newList, final boolean isCache) {
+    public synchronized void onLoadSucceed(final int page, final List<T> newList, final boolean isCache) {
         runThread(TAG + "onLoadSucceed", new Runnable() {
             @Override
             public void run() {

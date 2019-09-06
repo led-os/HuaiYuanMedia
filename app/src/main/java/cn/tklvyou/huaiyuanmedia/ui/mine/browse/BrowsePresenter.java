@@ -24,14 +24,20 @@ public class BrowsePresenter extends BasePresenter<BrowseContract.View> implemen
         RetrofitHelper.getInstance().getServer()
                 .getRecentBrowseList(page)
                 .compose(RxSchedulers.applySchedulers())
-                .compose(mView.bindToLife())
+//                .compose(mView.bindToLife())
                 .subscribe(result -> {
-                    if (result.getCode() == RequestConstant.CODE_REQUEST_SUCCESS) {
-                        mView.setBrowseList(page, result.getData());
-                    } else {
-                        ToastUtils.showShort(result.getMsg());
-                    }
-                }, throwable -> mView.showFailed("") );
+                            if (mView != null) {
+                                mView.showSuccess(result.getMsg());
+                                if (result.getCode() == RequestConstant.CODE_REQUEST_SUCCESS) {
+                                    mView.setBrowseList(page, result.getData());
+                                }
+                            }
+
+                        }, throwable -> {
+                            if (mView != null)
+                                mView.showFailed("");
+                        }
+                );
     }
 
 

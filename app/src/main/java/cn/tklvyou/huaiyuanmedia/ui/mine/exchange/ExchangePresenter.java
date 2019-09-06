@@ -24,25 +24,29 @@ public class ExchangePresenter extends BasePresenter<ExchangeRecordContract.View
         RetrofitHelper.getInstance().getServer()
                 .getExchangeList(page)
                 .compose(RxSchedulers.applySchedulers())
-                .compose(mView.bindToLife())
+//                .compose(mView.bindToLife())
                 .subscribe(result -> {
-                    if (result.getCode() == RequestConstant.CODE_REQUEST_SUCCESS) {
-                        mView.setExchangeList(page, result.getData());
-                    } else {
-                        ToastUtils.showShort(result.getMsg());
+                    if (mView != null) {
+                        mView.showSuccess(result.getMsg());
+                        if (result.getCode() == RequestConstant.CODE_REQUEST_SUCCESS) {
+                            mView.setExchangeList(page, result.getData());
+                        }
                     }
-                }, throwable -> mView.showFailed(""));
+                }, throwable -> {
+                    if (mView != null)
+                        mView.showFailed("");
+                });
     }
 
     @Override
-    public void receiveGoods(int id,int position) {
+    public void receiveGoods(int id, int position) {
         RetrofitHelper.getInstance().getServer()
                 .receiveGoods(id)
                 .compose(RxSchedulers.applySchedulers())
                 .compose(mView.bindToLife())
                 .subscribe(result -> {
                     ToastUtils.showShort(result.getMsg());
-                    if(result.getCode() == 1){
+                    if (result.getCode() == 1) {
                         mView.receiveGoodsSuccess(position);
                     }
                 }, throwable -> throwable.printStackTrace());

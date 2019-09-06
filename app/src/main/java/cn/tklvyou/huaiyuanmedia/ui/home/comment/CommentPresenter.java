@@ -23,15 +23,18 @@ public class CommentPresenter extends BasePresenter<CommentContract.View> implem
         RetrofitHelper.getInstance().getServer()
                 .getCommentList(article_id, p)
                 .compose(RxSchedulers.applySchedulers())
-                .compose(mView.bindToLife())
+//                .compose(mView.bindToLife())
                 .subscribe(result -> {
-                            if (result.getCode() == 1) {
-                                mView.setCommentList(p, result.getData());
-                            } else {
-                                ToastUtils.showShort(result.getMsg());
+                            if (mView != null) {
+                                mView.showSuccess(result.getMsg());
+                                if (result.getCode() == 1) {
+                                    mView.setCommentList(p, result.getData());
+                                }
+
                             }
                         }, throwable -> {
-                            mView.showFailed("");
+                            if (mView != null)
+                                mView.showFailed("");
                         }
                 );
     }

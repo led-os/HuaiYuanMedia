@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -35,7 +36,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitHelper {
     private static String TAG = "RetrofitHelper";
     private long CONNECT_TIMEOUT = 60L;
-    private long READ_TIMEOUT = 30L;
+    private long READ_TIMEOUT = 20L;
     private long WRITE_TIMEOUT = 30L;
     private static RetrofitHelper mInstance = null;
     private Retrofit mRetrofit = null;
@@ -127,6 +128,7 @@ public class RetrofitHelper {
             BaseResult<Object> result = new Gson().fromJson(respString, BaseResult.class);
 
             if (result != null && result.getCode() == 401) {
+                ToastUtils.showShort(result.getMsg());
                 Log.d(TAG, "--->登录失效，自动重新登录");
                 Intent intent = new Intent(MyApplication.getAppContext(), LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -143,7 +145,7 @@ public class RetrofitHelper {
      */
     private class LoggingInterceptor implements Interceptor {
         @Override
-        public Response intercept(Chain chain) throws IOException {
+        public Response intercept(Chain chain) {
             Request request = chain.request();
             long t1 = System.nanoTime();//请求发起的时间
 
@@ -173,18 +175,23 @@ public class RetrofitHelper {
                         request.headers()));
             }
 
-            Response response = chain.proceed(request);
-            long t2 = System.nanoTime();//收到响应事件
+            Response response = null;
+            try {
+                response = chain.proceed(request);
+                long t2 = System.nanoTime();//收到响应事件
 
-            ResponseBody responseBody = response.peekBody(1024 * 1024);//关键代码
+                ResponseBody responseBody = response.peekBody(1024 * 1024);//关键代码
 
-            String responseString = JsonHandleUtils.jsonHandle(responseBody.string());
-            LogUtils.d(String.format("接收响应: [%s] %n返回json:【%s】 %.1fms %n%s",
-                    response.request().url(),
-                    responseString,
-                    (t2 - t1) / 1e6d,
-                    response.headers()
-            ));
+                String responseString = JsonHandleUtils.jsonHandle(responseBody.string());
+                LogUtils.d(String.format("接收响应: [%s] %n返回json:【%s】 %.1fms %n%s",
+                        response.request().url(),
+                        responseString,
+                        (t2 - t1) / 1e6d,
+                        response.headers()
+                ));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             return response;
         }

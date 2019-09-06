@@ -168,6 +168,7 @@ class RecentBrowseActivity : BaseHttpRecyclerActivity<BrowsePresenter, NewsBean,
         val intent = Intent(context, ServiceWebviewActivity::class.java)
         intent.putExtra("url", url)
         intent.putExtra("other",true)
+        intent.putExtra("share_title","")
         startActivity(intent)
     }
 

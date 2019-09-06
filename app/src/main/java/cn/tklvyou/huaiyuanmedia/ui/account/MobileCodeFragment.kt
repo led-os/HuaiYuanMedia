@@ -86,7 +86,8 @@ class MobileCodeFragment : BaseFragment<AccountPresenter>(), AccountContract.Vie
 
     override fun loginSuccess() {
         MyApplication.showSplash = false
-        startActivity(Intent(context, MainActivity::class.java))
+        mActivity.finish()
+//        startActivity(Intent(context, MainActivity::class.java))
     }
 
     override fun loginError() {

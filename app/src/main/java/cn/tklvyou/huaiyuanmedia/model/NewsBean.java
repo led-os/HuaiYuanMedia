@@ -68,6 +68,8 @@ public class NewsBean implements Serializable {
     private List<TelModel> tel_list;
     private boolean isExpand;
     private boolean playStatus;
+    private boolean isSelect;
+    private int attention_status;
 
     public int getId() {
         return id;
@@ -339,5 +341,21 @@ public class NewsBean implements Serializable {
 
     public void setPlayStatus(boolean playStatus) {
         this.playStatus = playStatus;
+    }
+
+    public int getAttention_status() {
+        return attention_status;
+    }
+
+    public void setAttention_status(int attention_status) {
+        this.attention_status = attention_status;
+    }
+
+    public boolean isSelect() {
+        return isSelect;
+    }
+
+    public void setSelect(boolean select) {
+        isSelect = select;
     }
 }

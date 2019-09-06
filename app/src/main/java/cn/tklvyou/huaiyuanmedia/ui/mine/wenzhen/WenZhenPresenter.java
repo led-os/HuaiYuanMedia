@@ -23,15 +23,19 @@ public class WenZhenPresenter extends BasePresenter<WenZhenContract.View> implem
     @Override
     public void getDataPageList(int page) {
         RetrofitHelper.getInstance().getServer()
-                .getMyArticleList(page,"问政")
+                .getMyArticleList(page, "问政")
                 .compose(RxSchedulers.applySchedulers())
-                .compose(mView.bindToLife())
+//                .compose(mView.bindToLife())
                 .subscribe(result -> {
-                    if (result.getCode() == RequestConstant.CODE_REQUEST_SUCCESS) {
-                        mView.setDataList(page, result.getData());
-                    } else {
-                        ToastUtils.showShort(result.getMsg());
+                    if (mView != null) {
+                        mView.showSuccess(result.getMsg());
+                        if (result.getCode() == RequestConstant.CODE_REQUEST_SUCCESS) {
+                            mView.setDataList(page, result.getData());
+                        }
                     }
-                }, throwable -> mView.showFailed(""));
+                }, throwable -> {
+                    if (mView != null)
+                        mView.showFailed("");
+                });
     }
 }

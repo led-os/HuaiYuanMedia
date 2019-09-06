@@ -3,16 +3,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:titlebar="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorAccent"
     tools:context=".ui.home.new_list.BlankFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/tvtest"
-        android:textColor="@color/white"
-        android:gravity="center"
+    <com.wuhenzhizao.titlebar.widget.CommonTitleBar
+        android:id="@+id/mTitleBar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        titlebar:centerDrawable="@mipmap/home_title_logo"
+        titlebar:centerType="textView"
+        titlebar:rightType="textView"
+        titlebar:statusBarMode="light"
+        titlebar:titleBarHeight="@dimen/dp_40" />
+
+    <ProgressBar
+        android:id="@+id/mPageLoadingProgressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:max="100"
+        android:visibility="gone"
+        android:layout_height="3dp" />
+
+    <WebView
+        android:id="@+id/mWebView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </WebView>
 
 </LinearLayout>

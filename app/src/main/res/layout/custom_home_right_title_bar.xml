@@ -3,9 +3,10 @@
     android:layout_width="match_parent"
     android:paddingTop="@dimen/dp_5"
     android:paddingRight="@dimen/dp_15"
-    android:text="V视"
+    android:paddingLeft="@dimen/dp_10"
+    android:text="发布"
     android:gravity="center"
-    android:drawableTop="@mipmap/home_right_title_bar_icon"
+    android:drawableTop="@mipmap/camera_right_title_bar_icon"
     android:textColor="@color/white"
     android:textSize="@dimen/sp_10"
     android:layout_height="match_parent">

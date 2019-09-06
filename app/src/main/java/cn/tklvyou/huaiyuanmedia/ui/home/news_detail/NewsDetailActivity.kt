@@ -30,6 +30,7 @@ import cn.tklvyou.huaiyuanmedia.utils.UrlUtils
 import cn.tklvyou.huaiyuanmedia.utils.YBitmapUtils
 import cn.tklvyou.huaiyuanmedia.widget.SharePopupWindow
 import cn.tklvyou.huaiyuanmedia.widget.VoteLoadButton
+import cn.tklvyou.huaiyuanmedia.widget.dailog.CommonDialog
 import com.blankj.utilcode.util.*
 import com.sina.weibo.sdk.api.WebpageObject
 import com.sina.weibo.sdk.api.WeiboMultiMessage
@@ -87,9 +88,15 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
         return R.layout.activity_news_detail
     }
 
+    //是否是生活圈详情
+    private var isLife = false
+
     private var isLike = false
     private var hasCollect = false
     private var like_num = 0
+
+    //是否已关注
+    private var isAttention = false
 
     private var mAudioControl: AudioController? = null
 
@@ -100,12 +107,16 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
         id = intent.getIntExtra(INTENT_ID, 0)
         type = intent.getStringExtra(INTENT_TYPE)
         item_position = intent.getIntExtra(POSITION, 0)
-
+        isLife = intent.getBooleanExtra("is_life", false)
 
         if (type == "电视") {
             setTitle("视讯")
         } else {
             setTitle(type)
+        }
+
+        if (isLife) {
+            tvAttentionStatus.visibility = View.VISIBLE
         }
 
         setNavigationImage()
@@ -271,26 +282,29 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
             shareToWXFriend()
         }
 
-        mPresenter.getDetailsById(id,true)
+        mPresenter.getDetailsById(id, true,isLife)
 
-        timer = Timer()
-        timerTask = object : TimerTask() {
-            override fun run() {
-                mPresenter.getScoreByRead(id)
-            }
-        }
-
-        when (type) {
-            "视讯", "视频" -> {
-                mPresenter.getScoreByRead(id)
+        if(SPUtils.getInstance().getString("token","").isNotEmpty()){
+            timer = Timer()
+            timerTask = object : TimerTask() {
+                override fun run() {
+                    mPresenter.getScoreByRead(id)
+                }
             }
 
-            "文章", "问政", "悦读", "悦听", "公告", "专栏", "党建" -> {
-                timer!!.schedule(timerTask, 15 * 1000)
-            }
+            when (type) {
+                "视讯", "视频" -> {
+                    mPresenter.getScoreByRead(id)
+                }
 
-            "电视" -> {
-                timer!!.schedule(timerTask, 6 * 60 * 1000)
+                "文章", "问政", "悦读", "悦听", "公告", "专栏", "党建" -> {
+                    timer!!.schedule(timerTask, 15 * 1000)
+                }
+
+                "电视" -> {
+                    timer!!.schedule(timerTask, 6 * 60 * 1000)
+                }
+
             }
 
         }
@@ -300,9 +314,24 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
 
     override fun onRetry() {
         super.onRetry()
-        mPresenter.getDetailsById(id,false)
+        mPresenter.getDetailsById(id, false,isLife)
     }
 
+
+    override fun addConcernSuccess() {
+        isAttention = true
+        tvAttentionStatus.text = "已关注"
+        tvAttentionStatus.setBackgroundResource( R.drawable.shape_gray_stroke_radius_5_bg)
+        tvAttentionStatus.setTextColor(resources.getColor(R.color.default_gray_text_color))
+    }
+
+
+    override fun cancelSuccess() {
+        isAttention = false
+        tvAttentionStatus.text = "关注"
+        tvAttentionStatus.setBackgroundResource( R.drawable.shape_color_accent_radius_5_bg)
+        tvAttentionStatus.setTextColor(resources.getColor(R.color.white))
+    }
 
     override fun setDetails(item: NewsBean) {
         commenNum = item.comment_num
@@ -316,6 +345,8 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
 
         when (type) {
             "视频", "图文" -> {
+                isAttention = item.attention_status == 1
+
                 if (!StringUtils.isEmpty(item.avatar.trim { it <= ' ' })) {
                     Glide.with(this).load(item.avatar)
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -326,6 +357,34 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
 
                 nameTv.text = item.nickname
                 timeTv.text = item.begintime
+
+
+                if (item.attention_status == 1) {
+                    tvAttentionStatus.text = "已关注"
+                    tvAttentionStatus.setBackgroundResource( R.drawable.shape_gray_stroke_radius_5_bg)
+                    tvAttentionStatus.setTextColor(resources.getColor(R.color.default_gray_text_color))
+                } else {
+                    tvAttentionStatus.text = "关注"
+                    tvAttentionStatus.setBackgroundResource( R.drawable.shape_color_accent_radius_5_bg)
+                    tvAttentionStatus.setTextColor(resources.getColor(R.color.white))
+                }
+
+
+                tvAttentionStatus.setOnClickListener {
+                    if(isAttention){
+                        val dialog = CommonDialog(this)
+                        dialog.setTitle("温馨提示")
+                        dialog.setMessage("是否取消关注？")
+                        dialog.setYesOnclickListener("确认") {
+                            mPresenter.cancelConcern(item.user_id, 2)
+                            dialog.dismiss()
+                        }
+                        dialog.show()
+                    }else{
+                        mPresenter.addConcern(item.user_id, 2)
+                    }
+
+                }
 
 
                 if (!TextUtils.isEmpty(item.name)) {
@@ -754,11 +813,11 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
     override fun addCommentSuccess() {
         if (enableHideComment) {
             updateEditTextBodyVisible(View.GONE)
-        }else{
+        } else {
             hideSoftInput(circleEt.windowToken)
         }
 
-        mPresenter.getDetailsById(id,false)
+        mPresenter.getDetailsById(id, false,isLife)
     }
 
     override fun setCollectStatusSuccess(isCollect: Boolean) {
@@ -853,7 +912,9 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
                 }
 
                 override fun onWbShareSuccess() {
-                    mPresenter.getScoreByShare(id)
+                    if(SPUtils.getInstance().getString("token","").isNotEmpty()){
+                        mPresenter.getScoreByShare(id)
+                    }
                     ToastUtils.showShort("分享成功")
                 }
 
@@ -869,7 +930,7 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
         }
     }
 
-    private var mTencent:Tencent? = null
+    private var mTencent: Tencent? = null
     private fun shareToQQ() {
         mTencent = Tencent.createInstance(Contacts.QQ_APPID, application)
 
@@ -884,10 +945,12 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
 //        params.putString(QQShare.SHARE_TO_QQ_SUMMARY, "摘要") //可选，最长40个字
         params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, Contacts.SHARE_BASE_URL + id) //必填 	这条分享消息被好友点击后的跳转URL。
 //        params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "http://avatar.csdn.net/C/3/D/1_u013451048.jpg") // 可选 分享图片的URL或者本地路径
-        params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "濉溪发布")
+        params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "榴香怀远")
         mTencent!!.shareToQQ(this, params, object : IUiListener {
             override fun onComplete(p0: Any?) {
-                mPresenter.getScoreByShare(id)
+                if(SPUtils.getInstance().getString("token","").isNotEmpty()){
+                    mPresenter.getScoreByShare(id)
+                }
                 ToastUtils.showShort("分享成功")
             }
 
@@ -916,7 +979,7 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
         webpage.webpageUrl = Contacts.SHARE_BASE_URL + id
         val msg = WXMediaMessage(webpage)
         msg.title = shareTitle
-        msg.description = "濉溪发布"
+        msg.description = "榴香怀远"
         val bmp = BitmapFactory.decodeResource(resources, R.drawable.share_icon)
         val thumbBmp = Bitmap.createScaledBitmap(bmp, 100, 100, true)
         bmp.recycle()
@@ -934,7 +997,9 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
     private var onClickResult = object : InterfaceUtils.OnClickResult {
         override fun onResult(msg: String?) {
             ToastUtils.showShort("分享成功")
-            mPresenter.getScoreByShare(id)
+            if(SPUtils.getInstance().getString("token","").isNotEmpty()){
+                mPresenter.getScoreByShare(id)
+            }
             InterfaceUtils.getInstance().remove(this)
         }
 
@@ -954,7 +1019,7 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
         webpage.webpageUrl = Contacts.SHARE_BASE_URL + id
         val msg = WXMediaMessage(webpage)
         msg.title = shareTitle
-        msg.description = "濉溪发布"
+        msg.description = "榴香怀远"
         val bmp = BitmapFactory.decodeResource(resources, R.drawable.share_icon)
         val thumbBmp = Bitmap.createScaledBitmap(bmp, 100, 100, true)
         bmp.recycle()
@@ -992,7 +1057,7 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
             val mediaObject = WebpageObject()
             mediaObject.identify = Utility.generateGUID()
             mediaObject.title = shareTitle
-            mediaObject.description = "濉溪发布"
+            mediaObject.description = "榴香怀远"
             val bitmap = BitmapFactory.decodeResource(resources, R.mipmap.default_avatar)
             mediaObject.setThumbImage(YBitmapUtils.changeColor(bitmap))
             mediaObject.actionUrl = Contacts.SHARE_BASE_URL + id

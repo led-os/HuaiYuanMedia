@@ -75,7 +75,7 @@ class HistoryUpdatesFragment : BaseHttpRecyclerFragment<HistoryUpdatesPresenter,
 
             override fun createAdapter(): WxCircleAdapter {
                 val adapter = WxCircleAdapter(R.layout.item_winxin_circle, list)
-                adapter.setEnableDelete()
+//                adapter.setEnableDelete()
                 return adapter
             }
 

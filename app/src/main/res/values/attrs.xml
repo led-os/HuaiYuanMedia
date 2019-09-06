@@ -18,8 +18,8 @@
 
     <declare-styleable name="RoundImageView">
         <attr name="type" format="enum">
-            <enum name="circle" value="1"/>
-            <enum name="round" value="2"/>
+            <enum name="circle" value="1" />
+            <enum name="round" value="2" />
         </attr>
         <attr name="radius" format="dimension" />
     </declare-styleable>
@@ -36,45 +36,62 @@
     </declare-styleable>
 
     <declare-styleable name="ExpandTextView">
-        <attr name="showLines" format="integer"/>
+        <attr name="showLines" format="integer" />
     </declare-styleable>
 
 
     <declare-styleable name="PraiseListView">
-        <attr name="item_color" format="color"/>
-        <attr name="item_selector_color" format="color"/>
+        <attr name="item_color" format="color" />
+        <attr name="item_selector_color" format="color" />
     </declare-styleable>
 
     <declare-styleable name="DYLoadingView">
-        <attr name="radius1" format="dimension"/>
-        <attr name="radius2" format="dimension"/>
-        <attr name="rtlScale" format="float"/>
-        <attr name="ltrScale" format="float"/>
-        <attr name="color1" format="color"/>
-        <attr name="color2" format="color"/>
-        <attr name="mixColor" format="color"/>
-        <attr name="duration" format="integer"/>
-        <attr name="pauseDuration" format="integer"/>
-        <attr name="gap" format="dimension"/>
-        <attr name="scaleStartFraction" format="float"/>
-        <attr name="scaleEndFraction" format="float"/>
+        <attr name="radius1" format="dimension" />
+        <attr name="radius2" format="dimension" />
+        <attr name="rtlScale" format="float" />
+        <attr name="ltrScale" format="float" />
+        <attr name="color1" format="color" />
+        <attr name="color2" format="color" />
+        <attr name="mixColor" format="color" />
+        <attr name="duration" format="integer" />
+        <attr name="pauseDuration" format="integer" />
+        <attr name="gap" format="dimension" />
+        <attr name="scaleStartFraction" format="float" />
+        <attr name="scaleEndFraction" format="float" />
     </declare-styleable>
 
     <!--显示提示的View-->
     <declare-styleable name="TipView">
-        <attr name="tipBackgroundColor" format="color"/>
-        <attr name="tipTextColor" format="color"/>
-        <attr name="tipText" format="string"/>
-        <attr name="tipTextSize" format="dimension"/>
+        <attr name="tipBackgroundColor" format="color" />
+        <attr name="tipTextColor" format="color" />
+        <attr name="tipText" format="string" />
+        <attr name="tipTextSize" format="dimension" />
     </declare-styleable>
 
     <!--ImageView 扩展-->
     <declare-styleable name="ImageViewExt">
         <attr name="ive_scale_type_matrix_ext" format="enum">
-            <enum name="left_crop" value="1"/>
-            <enum name="right_crop" value="2"/>
-            <enum name="center_crop" value="3"/>
+            <enum name="left_crop" value="1" />
+            <enum name="right_crop" value="2" />
+            <enum name="center_crop" value="3" />
         </attr>
+    </declare-styleable>
+
+    <declare-styleable name="SwipeRevealLayout">
+        <attr name="dragEdge">
+            <flag name="left" value="1" />
+            <flag name="right" value="2" />
+            <flag name="top" value="4" />
+            <flag name="bottom" value="8" />
+        </attr>
+        <attr name="mode">
+            <enum name="normal" value="0" />
+            <enum name="same_level" value="1" />
+        </attr>
+
+        <attr name="lockEdge" format="boolean" />
+        <attr name="flingVelocity" format="integer" />
+        <attr name="minDistRequestDisallowParent" format="dimension" />
     </declare-styleable>
 
 </resources>

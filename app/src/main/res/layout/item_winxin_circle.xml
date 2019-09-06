@@ -96,7 +96,7 @@
                 android:text="删除"
                 android:textColor="@color/colorAccent"
                 android:textSize="@dimen/sp_13"
-                android:visibility="visible" />
+                android:visibility="gone" />
 
             <View
                 android:layout_width="0dip"

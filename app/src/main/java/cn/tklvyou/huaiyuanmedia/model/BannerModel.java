@@ -25,6 +25,8 @@ public class BannerModel {
     private int admin_id;
     private int article_id;
     private String module;
+    private String url;
+    private NewsBean article_info;
 
     public int getId() {
         return id;
@@ -104,5 +106,21 @@ public class BannerModel {
 
     public void setModule(String module) {
         this.module = module;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public NewsBean getArticle_info() {
+        return article_info;
+    }
+
+    public void setArticle_info(NewsBean article_info) {
+        this.article_info = article_info;
     }
 }

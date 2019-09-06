@@ -51,7 +51,7 @@ public class WxCircleAdapter extends BaseQuickAdapter<NewsBean, BaseViewHolder> 
         notifyItemChanged(position);
     }
 
-    public void setEnableDelete(){
+    public void setEnableDelete() {
         this.enableDelete = true;
     }
 
@@ -62,7 +62,7 @@ public class WxCircleAdapter extends BaseQuickAdapter<NewsBean, BaseViewHolder> 
         } else {
             helper.setVisible(R.id.deleteBtn, false);
         }
-        helper.addOnClickListener(R.id.deleteBtn,R.id.sparkButton,R.id.tvGoodNum);
+        helper.addOnClickListener(R.id.deleteBtn, R.id.sparkButton, R.id.tvGoodNum);
 
         helper.setText(R.id.nameTv, item.getNickname());
         helper.setText(R.id.timeTv, item.getBegintime());
@@ -97,9 +97,9 @@ public class WxCircleAdapter extends BaseQuickAdapter<NewsBean, BaseViewHolder> 
 
 
         if (!StringUtils.isEmpty(item.getAvatar().trim())) {
-            GlideManager.loadRoundImg(item.getAvatar(),helper.getView(R.id.headIv), 5f);
-        }else {
-            GlideManager.loadRoundImg(R.mipmap.default_avatar,helper.getView(R.id.headIv), 5f);
+            GlideManager.loadRoundImg(item.getAvatar(), helper.getView(R.id.headIv), 5f);
+        } else {
+            GlideManager.loadRoundImg(R.mipmap.default_avatar, helper.getView(R.id.headIv), 5f);
         }
 
         ExpandTextView expandTextView = helper.getView(R.id.contentTv);

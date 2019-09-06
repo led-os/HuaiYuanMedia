@@ -43,7 +43,7 @@ class PublishNewsActivity : BaseActivity<PublishNewsPresenter>(), PublishNewsCon
     private var adapter: GridImageAdapter? = null
     private var isVideo = false
     private var imagePath = ""
-    private var page = "V视"
+    private var page = "原创"
 
     private var imagesBuilder: StringBuilder = StringBuilder()
     private val imageFiles = ArrayList<File>()
@@ -63,7 +63,7 @@ class PublishNewsActivity : BaseActivity<PublishNewsPresenter>(), PublishNewsCon
         isVideo = intent.getBooleanExtra("isVideo", true)
         page = intent.getStringExtra("page")
         var maxLength = 0
-        if (page == "V视") {
+        if (page == "原创") {
             maxLength = 60
         } else {
             maxLength = 70
@@ -133,7 +133,6 @@ class PublishNewsActivity : BaseActivity<PublishNewsPresenter>(), PublishNewsCon
         }
 
         btnSubmit.setOnClickListener {
-            btnSubmit.isEnabled = false
             hideSoftInput(etContent.windowToken)
 
             if (etContent.text.toString().trim().isEmpty()) {
@@ -149,37 +148,32 @@ class PublishNewsActivity : BaseActivity<PublishNewsPresenter>(), PublishNewsCon
 
             if (selectList.isNullOrEmpty()) {
 
-                if (page == "V视") {
+                if (isVideo) {
                     ToastUtils.showShort("请上传拍摄视频")
                 } else {
-                    if (isVideo) {
-                        ToastUtils.showShort("请上传拍摄视频")
-                    } else {
-                        ToastUtils.showShort("请上传拍摄图片")
-                    }
-
+                    ToastUtils.showShort("请上传拍摄图片")
                 }
+
                 return@setOnClickListener
             }
 
+            btnSubmit.isEnabled = false
             showLoading()
-            if (page == "V视") {
+
+            if (isVideo) {
                 mPresenter.qiniuUploadFile(File(selectList!![0].path), true, qiniuToken, "" + AccountHelper.getInstance().uid, qiniuManager)
             } else {
-                if (isVideo) {
-                    mPresenter.qiniuUploadFile(File(selectList!![0].path), true, qiniuToken, "" + AccountHelper.getInstance().uid, qiniuManager)
-                } else {
-                    selectList = adapter!!.list
-                    selectList!!.forEach {
-                        if (it.isCompressed || (it.isCut && it.isCompressed)) {
-                            imageFiles.add(File(it.compressPath))
-                        } else {
-                            imageFiles.add(File(it.path))
-                        }
+                selectList = adapter!!.list
+                selectList!!.forEach {
+                    if (it.isCompressed || (it.isCut && it.isCompressed)) {
+                        imageFiles.add(File(it.compressPath))
+                    } else {
+                        imageFiles.add(File(it.path))
                     }
-                    mPresenter.qiniuUploadMultiImage(imageFiles, qiniuToken, "" + AccountHelper.getInstance().uid, qiniuManager)
                 }
+                mPresenter.qiniuUploadMultiImage(imageFiles, qiniuToken, "" + AccountHelper.getInstance().uid, qiniuManager)
             }
+
         }
 
         mPresenter.getQiniuToken()
@@ -190,10 +184,10 @@ class PublishNewsActivity : BaseActivity<PublishNewsPresenter>(), PublishNewsCon
         mmr.setDataSource(selectList!![0].path)
         val durationTime = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION).toInt()
 
-        if (page == "V视") {
-            mPresenter.publishVShi(etContent.text.toString().trim(), videoUrl, url, "" + durationTime / 1000)
+        if (page == "原创") {
+            mPresenter.publishYuanChuang(etContent.text.toString().trim(), "", videoUrl, url, "" + durationTime / 1000)
         } else {
-            mPresenter.publishSuiShouPai(etContent.text.toString().trim(), "", videoUrl, url, "" + durationTime / 1000)
+            mPresenter.publishLifeMsg(etContent.text.toString().trim(), "", videoUrl, url, "" + durationTime / 1000)
         }
 
     }
@@ -212,7 +206,13 @@ class PublishNewsActivity : BaseActivity<PublishNewsPresenter>(), PublishNewsCon
                 imagesBuilder.append(item)
             }
         }
-        mPresenter.publishSuiShouPai(etContent.text.toString().trim(), imagesBuilder.toString(), "", "", "")
+
+        if (page == "原创") {
+            mPresenter.publishYuanChuang(etContent.text.toString().trim(), imagesBuilder.toString(), "", "", "")
+        } else {
+            mPresenter.publishLifeMsg(etContent.text.toString().trim(), imagesBuilder.toString(), "", "", "")
+        }
+
     }
 
 
@@ -225,7 +225,6 @@ class PublishNewsActivity : BaseActivity<PublishNewsPresenter>(), PublishNewsCon
     override fun publishError() {
         btnSubmit.isEnabled = true
     }
-
 
 
     private val onAddPicClickListener = object : GridImageAdapter.onAddPicClickListener {

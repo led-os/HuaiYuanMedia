@@ -54,6 +54,25 @@ public class NewListPresenter extends BasePresenter<NewListContract.View> implem
                 });
     }
 
+
+    @Override
+    public void getVerticalHeader(String module) {
+        RetrofitHelper.getInstance().getServer()
+                .getZhaiYaoHeader(module)
+                .compose(RxSchedulers.applySchedulers())
+                .compose(mView.bindToLife())
+                .subscribe(result -> {
+                    if (result.getCode() == 1) {
+                        mView.setVerticalHeader(result.getData());
+                    } else {
+                        ToastUtils.showShort(result.getMsg());
+                    }
+                }, throwable -> {
+                    mView.setVerticalHeader(null);
+                    mView.showFailed("");
+                });
+    }
+
     @Override
     public void getNewList(String module, String module_second, int p, boolean showLoading) {
         if (showLoading) {

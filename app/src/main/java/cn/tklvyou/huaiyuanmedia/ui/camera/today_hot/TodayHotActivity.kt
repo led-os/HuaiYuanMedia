@@ -12,6 +12,7 @@ import cn.tklvyou.huaiyuanmedia.base.activity.BaseHttpRecyclerActivity
 import cn.tklvyou.huaiyuanmedia.base.interfaces.AdapterCallBack
 import cn.tklvyou.huaiyuanmedia.model.BasePageModel
 import cn.tklvyou.huaiyuanmedia.model.NewsBean
+import cn.tklvyou.huaiyuanmedia.ui.account.LoginActivity
 import cn.tklvyou.huaiyuanmedia.ui.adapter.TodayHotRvAdapter
 import cn.tklvyou.huaiyuanmedia.ui.camera.CameraContract
 import cn.tklvyou.huaiyuanmedia.ui.camera.TakePhotoActivity
@@ -20,6 +21,7 @@ import cn.tklvyou.huaiyuanmedia.ui.home.publish_news.PublishNewsActivity
 import cn.tklvyou.huaiyuanmedia.utils.GridDividerItemDecoration
 import com.adorkable.iosdialog.BottomSheetDialog
 import com.blankj.utilcode.util.LogUtils
+import com.blankj.utilcode.util.SPUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -50,44 +52,49 @@ class TodayHotActivity : BaseHttpRecyclerActivity<TodayHotPresenter, NewsBean, B
         setNavigationOnClickListener { finish() }
         setPositiveCustom(R.layout.custom_camera_right_title_bar)
         commonTitleBar.rightCustomView.setOnClickListener {
-            RxPermissions(this)
-                    .request(Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA)
-                    .subscribe { granted ->
-                        if (granted) {
-                            // Always true pre-M
-                            BottomSheetDialog(this)
-                                    .init()
-                                    .setCancelable(true)    //设置手机返回按钮是否有效
-                                    .setCanceledOnTouchOutside(true)  //设置 点击空白处是否取消 Dialog 显示
-                                    //如果条目样式一样，可以直接设置默认样式
-                                    .setDefaultItemStyle(BottomSheetDialog.SheetItemTextStyle("#000000", 16))
-                                    .setBottomBtnStyle(BottomSheetDialog.SheetItemTextStyle("#ff0000", 18))
-                                    .addSheetItem("拍摄") { which ->
-                                        val intent = Intent(this, TakePhotoActivity::class.java)
-                                        intent.putExtra("page", "随手拍")
-                                        startActivity(intent)
-                                    }
-                                    .addSheetItem("从手机相册选择") { which ->
-                                        // 进入相册 以下是例子：不需要的api可以不写
-                                        PictureSelector.create(this)
-                                                .openGallery(PictureMimeType.ofImage())
-                                                .theme(R.style.picture_default_style)
-                                                .maxSelectNum(9)
-                                                .minSelectNum(1)
-                                                .selectionMode(PictureConfig.MULTIPLE)
-                                                .previewImage(true)
-                                                .isCamera(true)
-                                                .enableCrop(false)
-                                                .compress(true)
-                                                .previewEggs(true)
-                                                .openClickSound(false)
-                                                .forResult(PictureConfig.CHOOSE_REQUEST)
-                                    }
-                                    .show()
-                        } else {
-                            ToastUtils.showShort("权限拒绝，无法使用")
+            if(SPUtils.getInstance().getString("token","").isNotEmpty()) {
+                RxPermissions(this)
+                        .request(Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA)
+                        .subscribe { granted ->
+                            if (granted) {
+                                // Always true pre-M
+                                BottomSheetDialog(this)
+                                        .init()
+                                        .setCancelable(true)    //设置手机返回按钮是否有效
+                                        .setCanceledOnTouchOutside(true)  //设置 点击空白处是否取消 Dialog 显示
+                                        //如果条目样式一样，可以直接设置默认样式
+                                        .setDefaultItemStyle(BottomSheetDialog.SheetItemTextStyle("#000000", 16))
+                                        .setBottomBtnStyle(BottomSheetDialog.SheetItemTextStyle("#ff0000", 18))
+                                        .addSheetItem("拍摄") { which ->
+                                            val intent = Intent(this, TakePhotoActivity::class.java)
+                                            intent.putExtra("page", "随手拍")
+                                            startActivity(intent)
+                                        }
+                                        .addSheetItem("从手机相册选择") { which ->
+                                            // 进入相册 以下是例子：不需要的api可以不写
+                                            PictureSelector.create(this)
+                                                    .openGallery(PictureMimeType.ofImage())
+                                                    .theme(R.style.picture_default_style)
+                                                    .maxSelectNum(9)
+                                                    .minSelectNum(1)
+                                                    .selectionMode(PictureConfig.MULTIPLE)
+                                                    .previewImage(true)
+                                                    .isCamera(true)
+                                                    .enableCrop(false)
+                                                    .compress(true)
+                                                    .previewEggs(true)
+                                                    .openClickSound(false)
+                                                    .forResult(PictureConfig.CHOOSE_REQUEST)
+                                        }
+                                        .show()
+                            } else {
+                                ToastUtils.showShort("权限拒绝，无法使用")
+                            }
                         }
-                    }
+            }else{
+                ToastUtils.showShort("请登录后操作")
+                startActivity(Intent(this, LoginActivity::class.java))
+            }
         }
 
         initSmartRefreshLayout(mRefreshLayout)
@@ -173,6 +180,7 @@ class TodayHotActivity : BaseHttpRecyclerActivity<TodayHotPresenter, NewsBean, B
         intent.putExtra(NewsDetailActivity.INTENT_ID, id)
         intent.putExtra(NewsDetailActivity.INTENT_TYPE, type)
         intent.putExtra(NewsDetailActivity.POSITION, position)
+        intent.putExtra("is_life",true)
         startActivityForResult(intent, 0)
     }
 

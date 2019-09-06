@@ -9,12 +9,14 @@ import cn.tklvyou.huaiyuanmedia.base.interfaces.AdapterCallBack
 import cn.tklvyou.huaiyuanmedia.model.BasePageModel
 import cn.tklvyou.huaiyuanmedia.model.NewsBean
 import cn.tklvyou.huaiyuanmedia.ui.adapter.MyCollectionAdapter
+import cn.tklvyou.huaiyuanmedia.ui.adapter.MySearchRvAdapter
 import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
+import com.wuhenzhizao.titlebar.widget.CommonTitleBar
 import kotlinx.android.synthetic.main.activity_search_list.*
 
-class SearchListActivity : BaseHttpRecyclerActivity<SearchPresenter, NewsBean, BaseViewHolder, MyCollectionAdapter>(), SearchContract.View {
+class SearchListActivity : BaseHttpRecyclerActivity<SearchPresenter, NewsBean, BaseViewHolder, MySearchRvAdapter>(), SearchContract.View {
 
 
     override fun initPresenter(): SearchPresenter {
@@ -30,32 +32,32 @@ class SearchListActivity : BaseHttpRecyclerActivity<SearchPresenter, NewsBean, B
     private var searchStr = ""
 
     override fun initView(savedInstanceState: Bundle?) {
-        setTitle("搜索结果")
+        searchStr = intent.getStringExtra("search")
+
         setNavigationImage()
         setNavigationOnClickListener { finish() }
 
+        setPositiveText("搜索")
+        setPositiveOnClickListener {
+
+            if (commonTitleBar.searchKey.isEmpty()) {
+                searchStr = commonTitleBar.centerSearchEditText.hint.toString()
+            } else {
+                searchStr = commonTitleBar.searchKey
+            }
+
+            mPresenter.searchNewList("", searchStr, 1)
+            hideSoftInput(commonTitleBar.centerSearchEditText.windowToken)
+        }
+
+        commonTitleBar.setCenterContent(CommonTitleBar.TYPE_CENTER_SEARCHVIEW, "", "", 0, R.drawable.shape_title_bar_search_radius_5_bg, 0)
+
         initSmartRefreshLayout(smartRefreshLayout)
         initRecyclerView(recyclerView)
-        searchStr = intent.getStringExtra("search")
-        etSearch.hint = searchStr
 
-        btnClear.setOnClickListener {
-            etSearch.setText("")
-        }
 
-        etSearch.setOnEditorActionListener { v, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                if (etSearch.text.toString().isEmpty()) {
-                    searchStr = etSearch.hint.toString()
-                } else {
-                    searchStr = etSearch.text.toString()
-                }
-
-                mPresenter.searchNewList("新闻", searchStr, 1)
-                hideSoftInput(etSearch.windowToken)
-            }
-            return@setOnEditorActionListener true
-        }
+        commonTitleBar.centerSearchEditText.hint = searchStr
+        commonTitleBar.centerSearchEditText.setText(searchStr)
 
     }
 
@@ -69,10 +71,10 @@ class SearchListActivity : BaseHttpRecyclerActivity<SearchPresenter, NewsBean, B
     }
 
     override fun setList(list: MutableList<NewsBean>?) {
-        setList(object : AdapterCallBack<MyCollectionAdapter> {
+        setList(object : AdapterCallBack<MySearchRvAdapter> {
 
-            override fun createAdapter(): MyCollectionAdapter {
-                return MyCollectionAdapter(list)
+            override fun createAdapter(): MySearchRvAdapter {
+                return MySearchRvAdapter(list)
             }
 
             override fun refreshAdapter() {
@@ -83,12 +85,12 @@ class SearchListActivity : BaseHttpRecyclerActivity<SearchPresenter, NewsBean, B
 
 
     override fun getListAsync(page: Int) {
-        mPresenter.searchNewList("新闻", searchStr, page)
+        mPresenter.searchNewList("", searchStr, page)
     }
 
     override fun onItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
         super.onItemClick(adapter, view, position)
-        val bean = (adapter as MyCollectionAdapter).data[position]
+        val bean = (adapter as MySearchRvAdapter).data[position]
         val id = bean.id
 
         val type = "文章"
