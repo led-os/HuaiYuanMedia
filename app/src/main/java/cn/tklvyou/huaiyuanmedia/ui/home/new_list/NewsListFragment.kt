@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,6 +37,7 @@ import cn.tklvyou.huaiyuanmedia.utils.GridDividerItemDecoration
 import cn.tklvyou.huaiyuanmedia.utils.RecycleViewDivider
 import cn.tklvyou.huaiyuanmedia.widget.page_recycler.PageRecyclerView
 import com.blankj.utilcode.util.SPUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.youth.banner.Banner
@@ -74,8 +76,9 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
 
         type = mBundle.getInt("type", -1)
         param = mBundle.getString("param", "")
+        val firstPage = mBundle.getBoolean("is_first", false)
 
-        if (type != NewsMultipleItem.VIDEO) {
+        if (!firstPage) {
             refreshLayout.autoRefreshAnimationOnly()
         }
 
@@ -655,9 +658,11 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
 
     /**
      * 分页加载 自动调用的方法
+     *
+     *
+     *
      */
     override fun getListAsync(page: Int) {
-
         when (type) {
             NewsMultipleItem.VIDEO -> {
                 mPresenter.getNewList(param, null, page, false)
@@ -1212,7 +1217,7 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
                     bean.like_num = zanNum
                     bean.visit_num = seeNum
                     bean.like_status = like_status
-                    adapter.notifyItemChanged(position+1)
+                    adapter.notifyItemChanged(position + 1)
                 }
 
             }

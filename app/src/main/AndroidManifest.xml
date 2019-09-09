@@ -127,6 +127,7 @@
         <activity android:name=".ui.mine.browse.RecentBrowseActivity" />
         <activity android:name=".ui.mine.wenzhen.MyWenZhenActivity" />
         <activity android:name=".ui.mine.collection.MyCollectActivity" />
+        <activity android:name=".ui.mine.my_dianzan.MyDianZanActivity" />
         <activity
             android:name=".ui.video_player.VodActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

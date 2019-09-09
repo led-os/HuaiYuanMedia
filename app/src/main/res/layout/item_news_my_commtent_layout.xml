@@ -4,16 +4,18 @@
     android:id="@+id/mSwipeLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_gravity="center"
     android:background="@color/white"
     android:orientation="horizontal"
     app:dragEdge="left"
     app:lockEdge="true"
     app:mode="same_level">
 
+
     <ImageView
         android:id="@+id/check_box"
         android:layout_width="@dimen/dp_40"
-        android:layout_height="match_parent"
+        android:layout_height="@dimen/dp_220"
         android:layout_gravity="center_vertical"
         android:scaleType="centerInside"
         android:src="@mipmap/icon_normal" />
@@ -22,113 +24,48 @@
         android:id="@+id/itemLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:padding="@dimen/dp_13">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
-            <cn.tklvyou.huaiyuanmedia.widget.TagTextView
-                android:id="@+id/tvTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:lines="2"
-                android:textColor="@color/default_black_text_color"
-                android:textSize="@dimen/sp_16" />
-
-            <LinearLayout
-                android:id="@+id/llMultiImage"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_82"
-                android:layout_marginTop="@dimen/dp_14"
-                android:visibility="gone">
-
-                <ImageView
-                    android:id="@+id/ivImageFirst"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@color/bg_no_photo"
-                    android:scaleType="centerCrop" />
-
-                <ImageView
-                    android:id="@+id/ivImageSecond"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/dp_4"
-                    android:layout_marginRight="@dimen/dp_4"
-                    android:layout_weight="1"
-                    android:background="@color/bg_no_photo"
-                    android:scaleType="centerCrop" />
-
-                <ImageView
-                    android:id="@+id/ivImageThree"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@color/bg_no_photo"
-                    android:scaleType="centerCrop" />
-
-            </LinearLayout>
+            <ImageView
+                android:id="@+id/ivAvatar"
+                android:layout_width="@dimen/dp_50"
+                android:layout_height="@dimen/dp_50"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/default_avatar" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_15"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp_15"
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tvTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/tvNickname"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
                     android:singleLine="true"
-                    android:text="0小时前"
-                    android:textColor="@color/default_gray_text_color"
-                    android:textSize="@dimen/sp_13" />
+                    android:text="-"
+                    android:textColor="@color/default_black_text_color"
+                    android:textSize="@dimen/sp_16" />
 
                 <TextView
-                    android:id="@+id/deleteBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dip"
-                    android:background="@drawable/im_selector_social_dig_name_bg"
-                    android:paddingLeft="3dp"
-                    android:paddingRight="3dp"
-                    android:text="删除"
-                    android:textColor="#8290AF"
-                    android:textSize="@dimen/sp_13"
-                    android:visibility="gone" />
-
-                <View
-                    android:layout_width="0dip"
-                    android:layout_height="1dip"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:id="@+id/tvSeeNum"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:drawableLeft="@mipmap/icon_eye"
-                    android:drawablePadding="@dimen/dp_8"
-                    android:gravity="center"
-                    android:text="0"
-                    android:textColor="@color/default_gray_text_color"
-                    android:textSize="@dimen/sp_13" />
-
-                <TextView
-                    android:id="@+id/tvGoodNum"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/dp_25"
-                    android:drawableLeft="@mipmap/icon_good"
-                    android:drawablePadding="@dimen/dp_8"
-                    android:gravity="center"
-                    android:text="0"
+                    android:id="@+id/tvCommentTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:singleLine="true"
+                    android:text="-"
                     android:textColor="@color/default_gray_text_color"
                     android:textSize="@dimen/sp_13" />
 
@@ -136,16 +73,151 @@
 
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/ivImageOne"
-            android:layout_width="@dimen/dp_114"
-            android:layout_height="@dimen/dp_82"
-            android:layout_marginLeft="@dimen/dp_20"
-            android:background="@color/bg_no_photo"
-            android:scaleType="centerCrop"
-            android:visibility="gone" />
+        <TextView
+            android:id="@+id/tvCommentContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_15"
+            android:layout_marginBottom="@dimen/dp_15"
+            android:text="-"
+            android:textColor="@color/default_black_text_color"
+            android:textSize="@dimen/sp_14" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_1"
+            android:background="@color/common_bg" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_15"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <cn.tklvyou.huaiyuanmedia.widget.TagTextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:lines="2"
+                    android:textColor="@color/default_black_text_color"
+                    android:textSize="@dimen/sp_16" />
+
+                <LinearLayout
+                    android:id="@+id/llMultiImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_82"
+                    android:layout_marginTop="@dimen/dp_14"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/ivImageFirst"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/bg_no_photo"
+                        android:scaleType="centerCrop" />
+
+                    <ImageView
+                        android:id="@+id/ivImageSecond"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/dp_4"
+                        android:layout_marginRight="@dimen/dp_4"
+                        android:layout_weight="1"
+                        android:background="@color/bg_no_photo"
+                        android:scaleType="centerCrop" />
+
+                    <ImageView
+                        android:id="@+id/ivImageThree"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/bg_no_photo"
+                        android:scaleType="centerCrop" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="0小时前"
+                        android:textColor="@color/default_gray_text_color"
+                        android:textSize="@dimen/sp_13" />
+
+                    <TextView
+                        android:id="@+id/deleteBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dip"
+                        android:background="@drawable/im_selector_social_dig_name_bg"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:text="删除"
+                        android:textColor="#8290AF"
+                        android:textSize="@dimen/sp_13"
+                        android:visibility="gone" />
+
+                    <View
+                        android:layout_width="0dip"
+                        android:layout_height="1dip"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:id="@+id/tvSeeNum"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:drawableLeft="@mipmap/icon_eye"
+                        android:drawablePadding="@dimen/dp_8"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textColor="@color/default_gray_text_color"
+                        android:textSize="@dimen/sp_13" />
+
+                    <TextView
+                        android:id="@+id/tvGoodNum"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/dp_25"
+                        android:drawableLeft="@mipmap/icon_good"
+                        android:drawablePadding="@dimen/dp_8"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textColor="@color/default_gray_text_color"
+                        android:textSize="@dimen/sp_13" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/ivImageOne"
+                android:layout_width="@dimen/dp_114"
+                android:layout_height="@dimen/dp_82"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:background="@color/bg_no_photo"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+
+        </LinearLayout>
 
     </LinearLayout>
+
 
 </cn.tklvyou.huaiyuanmedia.widget.SwipeRevealLayout>
 

@@ -14,6 +14,7 @@ import cn.tklvyou.huaiyuanmedia.model.HaveSecondModuleNewsModel;
 import cn.tklvyou.huaiyuanmedia.model.LotteryModel;
 import cn.tklvyou.huaiyuanmedia.model.LotteryResultModel;
 import cn.tklvyou.huaiyuanmedia.model.MessageModel;
+import cn.tklvyou.huaiyuanmedia.model.MyCommentModel;
 import cn.tklvyou.huaiyuanmedia.model.NewsBean;
 import cn.tklvyou.huaiyuanmedia.model.PointDetailModel;
 import cn.tklvyou.huaiyuanmedia.model.PointModel;
@@ -309,7 +310,6 @@ public interface ApiService {
                                                      @Query("video") String video, @Query("image") String image, @Query("time") String time);
 
 
-
     /**
      * 发布生活圈
      */
@@ -424,7 +424,6 @@ public interface ApiService {
     Observable<BaseResult<BasePageModel<Object>>> cancelCollectAll();
 
 
-
     /**
      * 我的评论
      *
@@ -432,7 +431,7 @@ public interface ApiService {
      * @return
      */
     @POST("api/comment/my")
-    Observable<BaseResult<BasePageModel<NewsBean>>> getMyCommentList(@Query("p") int p);
+    Observable<BaseResult<BasePageModel<MyCommentModel>>> getMyCommentList(@Query("p") int p);
 
     /**
      * 批量取消评论
@@ -450,6 +449,33 @@ public interface ApiService {
      */
     @POST("api/comment/all")
     Observable<BaseResult<BasePageModel<Object>>> cancelMyCommentAll();
+
+
+    /**
+     * 我的点赞
+     *
+     * @param p
+     * @return
+     */
+    @POST("api/like/index")
+    Observable<BaseResult<BasePageModel<NewsBean>>> getMyLikeList(@Query("p") int p);
+
+    /**
+     * 批量取消点赞
+     *
+     * @param article_id
+     * @return
+     */
+    @POST("api/like/multi")
+    Observable<BaseResult<BasePageModel<Object>>> cancelMyLikeList(@Query("article_id") String article_id);
+
+    /**
+     * 一键清空点赞
+     *
+     * @return
+     */
+    @POST("api/like/all")
+    Observable<BaseResult<BasePageModel<Object>>> cancelMyLikeAll();
 
 
     /**

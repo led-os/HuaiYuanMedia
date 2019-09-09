@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/HuaiYuanMedia.iml" filepath="$PROJECT_DIR$/.idea/HuaiYuanMedia.iml" />
       <module fileurl="file://$PROJECT_DIR$/HuaiYuanMedia.iml" filepath="$PROJECT_DIR$/HuaiYuanMedia.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/lib-ios-dialog/lib-ios-dialog.iml" filepath="$PROJECT_DIR$/lib-ios-dialog/lib-ios-dialog.iml" />

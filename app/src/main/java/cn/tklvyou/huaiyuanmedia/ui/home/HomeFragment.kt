@@ -86,7 +86,7 @@ class HomeFragment : BaseFragment<HomePresenter>(), HomeContract.View {
 
         homeTitleBar.rightCustomView.setOnClickListener {
 
-            if(SPUtils.getInstance().getString("token","").isNotEmpty()) {
+            if (SPUtils.getInstance().getString("token", "").isNotEmpty()) {
                 RxPermissions(this)
                         .request(Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA)
                         .subscribe { granted ->
@@ -127,7 +127,7 @@ class HomeFragment : BaseFragment<HomePresenter>(), HomeContract.View {
                                 ToastUtils.showShort("权限拒绝，无法使用")
                             }
                         }
-            }else{
+            } else {
                 ToastUtils.showShort("请登录后操作")
                 startActivity(Intent(context, LoginActivity::class.java))
             }
@@ -151,41 +151,6 @@ class HomeFragment : BaseFragment<HomePresenter>(), HomeContract.View {
         initMagicIndicator()
 
         initPageFragment()
-
-
-        mPresenter.getHomeChannel()
-    }
-
-    private fun initPageFragment() {
-        mChannelPagerAdapter = ChannelPagerAdapter(mChannelFragments, childFragmentManager)
-
-        mViewPager.adapter = mChannelPagerAdapter
-        mViewPager.offscreenPageLimit = mSelectedChannels.size
-
-        mViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrollStateChanged(p0: Int) {
-            }
-
-            override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {
-            }
-
-            override fun onPageSelected(p0: Int) {
-
-                if (mSelectedChannels.size > p0) {
-                    if (mSelectedChannels[p0] == "原创") {
-                        homeTitleBar.rightCustomView.visibility = View.VISIBLE
-                    } else {
-                        homeTitleBar.rightCustomView.visibility = View.GONE
-                    }
-
-                } else {
-                    homeTitleBar.rightCustomView.visibility = View.GONE
-                }
-
-            }
-
-        })
-
 
         ivAddChannel.setOnClickListener {
             val dialogFragment = ChannelDialogFragment()
@@ -316,6 +281,39 @@ class HomeFragment : BaseFragment<HomePresenter>(), HomeContract.View {
                 }
             })
         }
+
+        mPresenter.getHomeChannel()
+    }
+
+    private fun initPageFragment() {
+        mChannelPagerAdapter = ChannelPagerAdapter(mChannelFragments, childFragmentManager)
+
+        mViewPager.adapter = mChannelPagerAdapter
+        mViewPager.offscreenPageLimit = mSelectedChannels.size
+        mViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(p0: Int) {
+            }
+
+            override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {
+            }
+
+            override fun onPageSelected(p0: Int) {
+
+                if (mSelectedChannels.size > p0) {
+                    if (mSelectedChannels[p0] == "原创") {
+                        homeTitleBar.rightCustomView.visibility = View.VISIBLE
+                    } else {
+                        homeTitleBar.rightCustomView.visibility = View.GONE
+                    }
+
+                } else {
+                    homeTitleBar.rightCustomView.visibility = View.GONE
+                }
+
+            }
+
+        })
+
     }
 
     override fun lazyData() {
@@ -376,29 +374,15 @@ class HomeFragment : BaseFragment<HomePresenter>(), HomeContract.View {
     }
 
 
-    private fun flushHomeChannel(channelList: MutableList<String>) {
-        mSelectedChannels = channelList
-        commonNavigator!!.notifyDataSetChanged()
-
-        initChannelFragments()
-
-        mChannelPagerAdapter!!.setData(mChannelFragments)
-
-        mChannelFragments.forEach {
-            LogUtils.e(it.javaClass.name)
-        }
-
-    }
-
     override fun setHomeChannel(channelList: MutableList<String>?) {
         mSelectedChannels = channelList as ArrayList<String>
 
         commonNavigator!!.notifyDataSetChanged()
-
+        magicIndicator.onPageSelected(0)
         initChannelFragments()
-
-        mChannelPagerAdapter!!.setData(mChannelFragments)
-        mViewPager.offscreenPageLimit = mSelectedChannels.size
+        initPageFragment()
+//        mChannelPagerAdapter!!.setData(mChannelFragments)
+//        mViewPager.offscreenPageLimit = mSelectedChannels.size
 
     }
 
@@ -412,6 +396,10 @@ class HomeFragment : BaseFragment<HomePresenter>(), HomeContract.View {
 
             val bundle = Bundle()
             bundle.putString("param", item)
+
+            if (index == 0) {
+                bundle.putBoolean("is_first", true)
+            }
 
             if (item == "关注") {
                 val newsFragment = GuanZhuFragment()
@@ -546,6 +534,7 @@ class HomeFragment : BaseFragment<HomePresenter>(), HomeContract.View {
     }
 
     fun reload() {
+        LogUtils.e(mChannelFragments.size, mViewPager.currentItem)
         if (mChannelFragments.size > mViewPager.currentItem) {
             if (mChannelFragments[mViewPager.currentItem] is NewsListFragment) {
                 (mChannelFragments[mViewPager.currentItem] as NewsListFragment).refreshData()

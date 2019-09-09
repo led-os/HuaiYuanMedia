@@ -2,13 +2,14 @@ package cn.tklvyou.huaiyuanmedia.ui.mine.comment;
 
 import cn.tklvyou.huaiyuanmedia.base.BaseContract;
 import cn.tklvyou.huaiyuanmedia.model.BasePageModel;
+import cn.tklvyou.huaiyuanmedia.model.MyCommentModel;
 import cn.tklvyou.huaiyuanmedia.model.NewsBean;
 
 public interface MyCommentContract {
 
 
     interface View extends BaseContract.BaseView {
-        void setMyConmmentList(int page, BasePageModel<NewsBean> pageModel);
+        void setMyConmmentList(int page, BasePageModel<MyCommentModel> pageModel);
 
         void cancelCommentSuccess(boolean isAll);
     }

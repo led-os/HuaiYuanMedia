@@ -4,8 +4,10 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.LinearGradient
 import android.os.Bundle
 import android.view.View
+import android.widget.LinearLayout
 import cn.tklvyou.huaiyuanmedia.R
 import cn.tklvyou.huaiyuanmedia.base.activity.BaseHttpRecyclerActivity
 import cn.tklvyou.huaiyuanmedia.base.interfaces.AdapterCallBack
@@ -15,6 +17,7 @@ import cn.tklvyou.huaiyuanmedia.ui.adapter.MyCollectionAdapter
 import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.tv_news_detail.TVNewsDetailActivity
 import cn.tklvyou.huaiyuanmedia.ui.audio.ServiceWebviewActivity
+import cn.tklvyou.huaiyuanmedia.utils.RecycleViewDivider
 import cn.tklvyou.huaiyuanmedia.widget.dailog.CommonDialog
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.ToastUtils
@@ -74,6 +77,8 @@ class MyCollectActivity : BaseHttpRecyclerActivity<CollectPresenter, NewsBean, B
 
         initSmartRefreshLayout(smartLayoutRoot)
         initRecyclerView(recyclerViewRoot)
+        recyclerViewRoot.addItemDecoration(RecycleViewDivider(this,LinearLayout.VERTICAL))
+
         smartLayoutRoot.autoRefresh()
 
         tvClearAll.setOnClickListener {
@@ -180,7 +185,7 @@ class MyCollectActivity : BaseHttpRecyclerActivity<CollectPresenter, NewsBean, B
                         NewsDetailActivity.startNewsDetailActivity(this, type, id)
                     }
                 }
-                "新闻", "矩阵", "专栏", "党建" -> {
+                "新闻", "矩阵", "专栏", "党建", "专题" -> {
                     val type = "文章"
                     if (bean.url.isNotEmpty()) {
                         startDetailsActivity(this, bean.url)
@@ -237,6 +242,14 @@ class MyCollectActivity : BaseHttpRecyclerActivity<CollectPresenter, NewsBean, B
                         startNewsDetailActivity(this, type, id, position)
                     }
                 }
+                else -> {
+                    val type = "文章"
+                    if (bean.url.isNotEmpty()) {
+                        startDetailsActivity(this, bean.url)
+                    } else {
+                        startNewsDetailActivity(this, type, id, position)
+                    }
+                }
 
             }
         } else {
@@ -272,7 +285,7 @@ class MyCollectActivity : BaseHttpRecyclerActivity<CollectPresenter, NewsBean, B
         val intent = Intent(context, ServiceWebviewActivity::class.java)
         intent.putExtra("url", url)
         intent.putExtra("other", true)
-        intent.putExtra("share_title","")
+        intent.putExtra("share_title", "")
         startActivity(intent)
     }
 
@@ -285,18 +298,13 @@ class MyCollectActivity : BaseHttpRecyclerActivity<CollectPresenter, NewsBean, B
             val zanNum = data.getIntExtra("zanNum", 0)
             val commenNum = data.getIntExtra("commentNum", 0)
             val like_status = data.getIntExtra("like_status", 0)
-            val hasCollect = data.getBooleanExtra("is_collect", false)
 
-            if (hasCollect) {
-                val bean = (adapter as MyCollectionAdapter).data[position]
-                bean.comment_num = commenNum
-                bean.like_num = zanNum
-                bean.visit_num = seeNum
-                bean.like_status = like_status
-                adapter.notifyItemChanged(position)
-            } else {
-                adapter.remove(position)
-            }
+            val bean = (adapter as MyCollectionAdapter).data[position]
+            bean.comment_num = commenNum
+            bean.like_num = zanNum
+            bean.visit_num = seeNum
+            bean.like_status = like_status
+            adapter.notifyItemChanged(position)
 
         }
     }

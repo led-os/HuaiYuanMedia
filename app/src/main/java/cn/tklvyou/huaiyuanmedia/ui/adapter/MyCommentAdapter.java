@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.blankj.utilcode.util.StringUtils;
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
@@ -15,15 +16,16 @@ import java.util.List;
 
 import cn.tklvyou.huaiyuanmedia.R;
 import cn.tklvyou.huaiyuanmedia.helper.GlideManager;
+import cn.tklvyou.huaiyuanmedia.model.MyCommentModel;
 import cn.tklvyou.huaiyuanmedia.model.NewsBean;
 import cn.tklvyou.huaiyuanmedia.widget.SwipeRevealLayout;
 
 
-public class MyCommentAdapter extends BaseQuickAdapter<NewsBean, BaseViewHolder> {
+public class MyCommentAdapter extends BaseQuickAdapter<MyCommentModel, BaseViewHolder> {
 
     private boolean isEdit = false;
 
-    public MyCommentAdapter(List<NewsBean> data) {
+    public MyCommentAdapter(List<MyCommentModel> data) {
         super(R.layout.item_news_my_commtent_layout, data);
     }
 
@@ -38,13 +40,12 @@ public class MyCommentAdapter extends BaseQuickAdapter<NewsBean, BaseViewHolder>
 
 
     @Override
-    protected void convert(@NonNull BaseViewHolder helper, NewsBean bean) {
-
+    protected void convert(@NonNull BaseViewHolder helper, MyCommentModel bean) {
         helper.addOnClickListener(R.id.check_box, R.id.itemLayout);
         SwipeRevealLayout mSwipeLayout = helper.getView(R.id.mSwipeLayout);
+        ImageView mCheckBox = helper.getView(R.id.check_box);
         if (isEdit) {
             mSwipeLayout.open(true);
-            ImageView mCheckBox = helper.getView(R.id.check_box);
             if (bean.isSelect()) {
                 mCheckBox.setImageResource(R.mipmap.icon_selected);
             } else {
@@ -55,9 +56,13 @@ public class MyCommentAdapter extends BaseQuickAdapter<NewsBean, BaseViewHolder>
             mSwipeLayout.close(true);
         }
 
+        GlideManager.loadCircleImg(bean.getComment_avatar(),helper.getView(R.id.ivAvatar));
 
+        helper.setText(R.id.tvNickname, bean.getComment_nickname());
+        helper.setText(R.id.tvCommentTime, bean.getComment_begintime());
+        helper.setText(R.id.tvCommentContent, bean.getDetail());
         helper.setText(R.id.tvTitle, bean.getName());
-        helper.setText(R.id.tvTime, bean.getBegintime());
+        helper.setText(R.id.tvTime, ""+bean.getCreatetime());
         helper.setText(R.id.tvSeeNum, "" + bean.getVisit_num());
         helper.setText(R.id.tvGoodNum, "" + bean.getLike_num());
 

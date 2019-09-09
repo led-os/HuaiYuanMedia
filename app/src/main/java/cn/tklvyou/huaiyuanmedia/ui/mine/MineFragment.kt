@@ -15,10 +15,12 @@ import cn.tklvyou.huaiyuanmedia.ui.account.data.PersonalDataActivity
 import cn.tklvyou.huaiyuanmedia.ui.adapter.MineRvAdapter
 import cn.tklvyou.huaiyuanmedia.ui.mine.browse.RecentBrowseActivity
 import cn.tklvyou.huaiyuanmedia.ui.mine.collection.MyCollectActivity
+import cn.tklvyou.huaiyuanmedia.ui.mine.comment.MyCommentActivity
 import cn.tklvyou.huaiyuanmedia.ui.mine.concern.MyConcernActivity
 import cn.tklvyou.huaiyuanmedia.ui.mine.exchange.MyExchangeRecordActivity
 import cn.tklvyou.huaiyuanmedia.ui.mine.message.MyMessageActivity
 import cn.tklvyou.huaiyuanmedia.ui.mine.my_article.MyArticleActivity
+import cn.tklvyou.huaiyuanmedia.ui.mine.my_dianzan.MyDianZanActivity
 import cn.tklvyou.huaiyuanmedia.ui.mine.point.MyPointDetailActivity
 import cn.tklvyou.huaiyuanmedia.ui.mine.wenzhen.MyWenZhenActivity
 import cn.tklvyou.huaiyuanmedia.ui.setting.AboutUsActivity
@@ -175,11 +177,11 @@ class MineFragment : BaseRecyclerFragment<MinePresenter, MineRvModel, BaseViewHo
             }
             //我的评论
             1 -> {
-
+                startActivity(Intent(context, MyCommentActivity::class.java))
             }
             //我的点赞
             2 -> {
-
+                startActivity(Intent(context, MyDianZanActivity::class.java))
             }
             //我的关注
             3 -> {
