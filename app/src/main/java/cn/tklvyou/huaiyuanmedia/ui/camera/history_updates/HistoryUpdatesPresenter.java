@@ -67,7 +67,7 @@ public class HistoryUpdatesPresenter extends BasePresenter<HistoryUpdatesContrac
     @Override
     public void deleteArticles(int id, int position) {
         RetrofitHelper.getInstance().getServer()
-                .deleteArticles(id)
+                .deleteArticle(id)
                 .compose(RxSchedulers.applySchedulers())
                 .compose(mView.bindToLife())
                 .subscribe(result -> {

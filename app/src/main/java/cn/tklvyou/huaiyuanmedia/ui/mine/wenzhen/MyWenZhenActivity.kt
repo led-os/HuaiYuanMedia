@@ -46,7 +46,7 @@ class MyWenZhenActivity : BaseHttpRecyclerActivity<WenZhenPresenter, NewsBean, B
         setNavigationOnClickListener { finish() }
         initSmartRefreshLayout(smartLayoutRoot)
         initRecyclerView(recyclerViewRoot)
-        mPresenter.getDataPageList(1)
+        smartLayoutRoot.autoRefresh()
     }
 
     override fun onRetry() {

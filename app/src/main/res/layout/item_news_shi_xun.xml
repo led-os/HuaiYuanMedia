@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:orientation="vertical"
     android:paddingLeft="@dimen/dp_15"
@@ -94,16 +95,26 @@
             android:textColor="@color/default_gray_text_color"
             android:textSize="@dimen/sp_13" />
 
+        <com.varunest.sparkbutton.SparkButton
+            android:id="@+id/sparkButton"
+            android:layout_width="@dimen/dp_20"
+            android:layout_height="match_parent"
+            android:enabled="false"
+            android:layout_marginLeft="@dimen/dp_25"
+            app:sparkbutton_activeImage="@mipmap/icon_mini_good"
+            app:sparkbutton_iconSize="@dimen/dp_12"
+            app:sparkbutton_inActiveImage="@mipmap/icon_good"
+            app:sparkbutton_pressOnTouch="false"
+            app:sparkbutton_primaryColor="@color/colorAccent"
+            app:sparkbutton_secondaryColor="@color/grayAccent" />
+
         <TextView
             android:id="@+id/tvGoodNum"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/dp_25"
-            android:drawableLeft="@mipmap/icon_good"
-            android:drawablePadding="@dimen/dp_8"
             android:gravity="center"
             android:text="0"
-            android:textColor="@color/default_gray_text_color"
+            android:textColor="#ff999999"
             android:textSize="@dimen/sp_13" />
 
 

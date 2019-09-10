@@ -11,6 +11,7 @@ import com.blankj.utilcode.util.StringUtils;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.varunest.sparkbutton.SparkButton;
 
 import java.util.List;
 
@@ -24,11 +25,18 @@ import cn.tklvyou.huaiyuanmedia.widget.SwipeRevealLayout;
 public class MyCommentAdapter extends BaseQuickAdapter<MyCommentModel, BaseViewHolder> {
 
     private boolean isEdit = false;
+    private boolean showAnimal = false;
+    private int refreshPosition = -1;
 
     public MyCommentAdapter(List<MyCommentModel> data) {
         super(R.layout.item_news_my_commtent_layout, data);
     }
 
+    public void notifyItemChangedAnimal(int position) {
+        showAnimal = true;
+        refreshPosition = position;
+        notifyItemChanged(position);
+    }
 
     public void setEditModel(boolean isEdit) {
         this.isEdit = isEdit;
@@ -42,6 +50,8 @@ public class MyCommentAdapter extends BaseQuickAdapter<MyCommentModel, BaseViewH
     @Override
     protected void convert(@NonNull BaseViewHolder helper, MyCommentModel bean) {
         helper.addOnClickListener(R.id.check_box, R.id.itemLayout);
+        helper.addOnClickListener(R.id.sparkButton, R.id.tvGoodNum);
+
         SwipeRevealLayout mSwipeLayout = helper.getView(R.id.mSwipeLayout);
         ImageView mCheckBox = helper.getView(R.id.check_box);
         if (isEdit) {
@@ -62,22 +72,20 @@ public class MyCommentAdapter extends BaseQuickAdapter<MyCommentModel, BaseViewH
         helper.setText(R.id.tvCommentTime, bean.getComment_begintime());
         helper.setText(R.id.tvCommentContent, bean.getDetail());
         helper.setText(R.id.tvTitle, bean.getName());
-        helper.setText(R.id.tvTime, ""+bean.getCreatetime());
+        helper.setText(R.id.tvTime, ""+bean.getBegintime());
         helper.setText(R.id.tvSeeNum, "" + bean.getVisit_num());
         helper.setText(R.id.tvGoodNum, "" + bean.getLike_num());
 
-        TextView tvGoodNum = helper.getView(R.id.tvGoodNum);
-
-        Drawable[] drawables = tvGoodNum.getCompoundDrawables();
-
+        SparkButton sparkButton = helper.getView(R.id.sparkButton);
         if (bean.getLike_status() == 1) {
-            Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_mini_good);
-            redGoodDrawable.setBounds(drawables[0].getBounds());
-            tvGoodNum.setCompoundDrawables(redGoodDrawable, drawables[1], drawables[2], drawables[3]);
+            sparkButton.setChecked(true);
+            if (showAnimal && helper.getLayoutPosition() == refreshPosition) {
+                refreshPosition = -1;
+                showAnimal = false;
+                sparkButton.playAnimation();
+            }
         } else {
-            Drawable grayGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_good);
-            grayGoodDrawable.setBounds(drawables[0].getBounds());
-            tvGoodNum.setCompoundDrawables(grayGoodDrawable, drawables[1], drawables[2], drawables[3]);
+            sparkButton.setChecked(false);
         }
 
 

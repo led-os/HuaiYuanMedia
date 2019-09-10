@@ -17,11 +17,18 @@ public interface CollectContract {
     interface View extends BaseContract.BaseView {
         void setCollectList(int page, BasePageModel<NewsBean> pageModel);
         void cancelCollectSuccess(boolean isAll);
+        void updateLikeStatus(boolean isLike, int position);
     }
 
     interface Presenter extends BaseContract.BasePresenter<CollectContract.View> {
         void getCollectPageList(int page);
         void cancelCollectList(String ids);
         void cancelCollectAll();
+
+        void addLikeNews(int id, int position);
+
+        void cancelLikeNews(int id, int position);
+
+
     }
 }

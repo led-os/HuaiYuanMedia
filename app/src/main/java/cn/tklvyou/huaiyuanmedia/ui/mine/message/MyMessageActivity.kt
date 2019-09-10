@@ -61,7 +61,7 @@ class MyMessageActivity : BaseHttpRecyclerActivity<MessagePresenter, MessageMode
         initSmartRefreshLayout(smartLayoutRoot)
         initRecyclerView(recyclerViewRoot)
         recyclerViewRoot.layoutManager = LinearLayoutManager(this)
-        mPresenter.getMsgPageList(1)
+        smartLayoutRoot.autoRefresh()
     }
 
     override fun onRetry() {

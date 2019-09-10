@@ -95,6 +95,7 @@
             android:drawablePadding="@dimen/dp_8"
             android:gravity="center"
             android:text="0"
+            android:visibility="gone"
             android:textColor="@color/default_gray_text_color"
             android:textSize="@dimen/sp_13" />
 

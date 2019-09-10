@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="@dimen/dp_13"
-    tools:context=".ui.audio.point_rule.PointRuleActivity">
+    tools:context=".ui.camera.point_rule.PointRuleActivity">
 
     <TextView
         android:id="@+id/tvTitle"

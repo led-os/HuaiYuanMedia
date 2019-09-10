@@ -19,6 +19,7 @@ import cn.tklvyou.huaiyuanmedia.base.fragment.BaseHttpRecyclerFragment
 import cn.tklvyou.huaiyuanmedia.base.interfaces.AdapterCallBack
 import cn.tklvyou.huaiyuanmedia.helper.GlideManager
 import cn.tklvyou.huaiyuanmedia.model.*
+import cn.tklvyou.huaiyuanmedia.ui.account.LoginActivity
 import cn.tklvyou.huaiyuanmedia.ui.adapter.JuzhengHeaderViewholder
 import cn.tklvyou.huaiyuanmedia.ui.adapter.NewsMultipleItemQuickAdapter
 import cn.tklvyou.huaiyuanmedia.ui.adapter.SuixiHeaderRvAdapter
@@ -150,8 +151,14 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
             NewsMultipleItem.WEN_ZHENG -> {
                 floatButton.visibility = View.VISIBLE
                 floatButton.setOnClickListener {
-                    startActivity(Intent(context, PublishWenzhengActivity::class.java))
-                    isRefresh = true
+                    if (SPUtils.getInstance().getString("token", "").isNotEmpty()) {
+                        startActivity(Intent(context, PublishWenzhengActivity::class.java))
+                        isRefresh = true
+                    } else {
+                        ToastUtils.showShort("请登录后操作")
+                        startActivity(Intent(context, LoginActivity::class.java))
+                    }
+
                 }
                 mPresenter.getNewList(param, null, 1, showLoading)
             }
@@ -1052,7 +1059,7 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
                     mPresenter.getDetailsById(((adapter as NewsMultipleItemQuickAdapter).data[position].dataBean as NewsBean).id)
                 }
 
-                R.id.sparkButton, R.id.tvGoodNum -> {
+                R.id.sparkButton, R.id.tvGoodNum, R.id.sparkButton1, R.id.tvGoodNum1 -> {
                     val bean = (adapter as NewsMultipleItemQuickAdapter).data[position].dataBean as NewsBean
                     if (bean.like_status == 1) {
                         mPresenter.cancelLikeNews(bean.id, position)
@@ -1078,7 +1085,15 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
             (adapter.data[position].dataBean as NewsBean).like_num = (adapter.data[position].dataBean as NewsBean).like_num - 1
         }
 
-        adapter.notifyItemChangedAnimal(position)
+        when (type) {
+            NewsMultipleItem.JU_ZHENG, NewsMultipleItem.ZHUAN_TI -> {
+                adapter.notifyItemChangedAnimal(position + 1)
+            }
+            else -> {
+                adapter.notifyItemChangedAnimal(position)
+            }
+        }
+
 
     }
 

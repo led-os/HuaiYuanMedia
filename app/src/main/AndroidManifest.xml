@@ -48,10 +48,10 @@
         <activity android:name=".ui.main.SplashActivity" />
         <activity android:name=".ui.home.all_tv.AllTvActivity" />
         <activity android:name=".ui.home.all_juzheng.AllJuZhengActivity" />
-        <activity android:name=".ui.audio.point_rule.PointRuleActivity" />
-        <activity android:name=".ui.audio.goods_detail.GoodsDetailsActivity" />
-        <activity android:name=".ui.audio.point.PointActivity" />
-        <activity android:name=".ui.audio.zhuan_pan.ZhuanPanActivity" />
+        <activity android:name="cn.tklvyou.huaiyuanmedia.ui.camera.point_rule.PointRuleActivity" />
+        <activity android:name="cn.tklvyou.huaiyuanmedia.ui.camera.goods_detail.GoodsDetailsActivity" />
+        <activity android:name="cn.tklvyou.huaiyuanmedia.ui.camera.point.PointActivity" />
+        <activity android:name="cn.tklvyou.huaiyuanmedia.ui.camera.zhuan_pan.ZhuanPanActivity" />
         <activity android:name=".ui.audio.ServiceWebviewActivity" />
         <activity android:name=".ui.home.publish_news.PublishNewsActivity" />
         <activity android:name=".ui.home.publish_wenzheng.PublishWenzhengActivity" />

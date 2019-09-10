@@ -79,21 +79,10 @@ public class WxCircleAdapter extends BaseQuickAdapter<NewsBean, BaseViewHolder> 
                 sparkButton.playAnimation();
             }
         } else {
+            refreshPosition = -1;
+            showAnimal = false;
             sparkButton.setChecked(false);
         }
-
-
-//        Drawable[] drawables = tvGoodNum.getCompoundDrawables();
-//
-//        if (item.getLike_status() == 1) {
-//            Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_mini_good);
-//            redGoodDrawable.setBounds(drawables[0].getBounds());
-//            tvGoodNum.setCompoundDrawables(redGoodDrawable, drawables[1], drawables[2], drawables[3]);
-//        } else {
-//            Drawable grayGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_good);
-//            grayGoodDrawable.setBounds(drawables[0].getBounds());
-//            tvGoodNum.setCompoundDrawables(grayGoodDrawable, drawables[1], drawables[2], drawables[3]);
-//        }
 
 
         if (!StringUtils.isEmpty(item.getAvatar().trim())) {

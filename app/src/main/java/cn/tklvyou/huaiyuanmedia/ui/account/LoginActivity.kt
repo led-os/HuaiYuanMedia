@@ -60,14 +60,23 @@ class LoginActivity : BaseActivity<AccountLoginPresenter>(), AccountContract.Log
 
     private var isPasswordType = true
 
+    private var jump = false
     override fun initView(savedInstanceState: Bundle?) {
         hideTitleBar()
         //销毁非登录页的所有Activity
 //        ActivityUtils.finishOtherActivities(LoginActivity::class.java)
 
+        jump = intent.getBooleanExtra("jump", false)
+
+        val passwordFragment = PasswordFragment()
+        val mobileCodeFragment = MobileCodeFragment()
+        val mBundle = Bundle()
+        mBundle.putBoolean("jump", jump)
+        passwordFragment.arguments = mBundle
+        mobileCodeFragment.arguments = mBundle
         mFragments = ArrayList()
-        mFragments!!.add(PasswordFragment())
-        mFragments!!.add(MobileCodeFragment())
+        mFragments!!.add(passwordFragment)
+        mFragments!!.add(mobileCodeFragment)
 
         RxPermissions(this)
                 .request(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE)
@@ -215,8 +224,11 @@ class LoginActivity : BaseActivity<AccountLoginPresenter>(), AccountContract.Log
 
     override fun loginSuccess() {
         MyApplication.showSplash = false
+        if (jump) {
+            startActivity(Intent(this, MainActivity::class.java))
+        }
         finish()
-//        startActivity(Intent(this, MainActivity::class.java))
+
     }
 
     override fun loginError() {
@@ -278,15 +290,15 @@ class LoginActivity : BaseActivity<AccountLoginPresenter>(), AccountContract.Log
     override fun onDestroy() {
         super.onDestroy()
 
-        if(iUiListener != null){
+        if (iUiListener != null) {
             iUiListener = null
         }
 
-        if(mSsoHandler != null){
+        if (mSsoHandler != null) {
             mSsoHandler = null
         }
 
-        if(mTencent != null){
+        if (mTencent != null) {
             mTencent = null
         }
 

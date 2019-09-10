@@ -74,6 +74,7 @@ public class MyCommentModel {
     private String comment_nickname;
     private String detail;
     private int comment_createtime;
+    private String begintime;
     private String comment_begintime;
     private int like_status;
     private List<String> images;
@@ -333,6 +334,14 @@ public class MyCommentModel {
 
     public void setComment_createtime(int comment_createtime) {
         this.comment_createtime = comment_createtime;
+    }
+
+    public String getBegintime() {
+        return begintime;
+    }
+
+    public void setBegintime(String begintime) {
+        this.begintime = begintime;
     }
 
     public String getComment_begintime() {

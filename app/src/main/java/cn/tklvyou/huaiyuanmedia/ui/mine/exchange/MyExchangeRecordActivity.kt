@@ -39,7 +39,7 @@ class MyExchangeRecordActivity : BaseHttpRecyclerActivity<ExchangePresenter, Exc
         initSmartRefreshLayout(smartLayoutRoot)
         initRecyclerView(recyclerViewRoot)
         recyclerViewRoot.layoutManager = LinearLayoutManager(this)
-        mPresenter.getExchangePageList(1)
+        smartLayoutRoot.autoRefresh()
     }
 
     override fun onRetry() {

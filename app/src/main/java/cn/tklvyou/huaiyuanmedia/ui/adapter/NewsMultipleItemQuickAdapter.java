@@ -202,6 +202,7 @@ public class NewsMultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<News
             case NewsMultipleItem.SHI_XUN:
                 bean = (NewsBean) item.getDataBean();
 
+                helper.addOnClickListener(R.id.sparkButton, R.id.tvGoodNum);
                 helper.setText(R.id.tvName, bean.getName());
                 helper.setText(R.id.tvSeeNum, "" + bean.getVisit_num());
                 helper.setText(R.id.tvTime, "" + bean.getBegintime());
@@ -212,18 +213,16 @@ public class NewsMultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<News
 
                 helper.addOnClickListener(R.id.ivStartPlayer);
 
-                tvGoodNum = helper.getView(R.id.tvGoodNum);
-
-                drawables = tvGoodNum.getCompoundDrawables();
-
+                SparkButton sparkButton = helper.getView(R.id.sparkButton);
                 if (bean.getLike_status() == 1) {
-                    Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_mini_good);
-                    redGoodDrawable.setBounds(drawables[0].getBounds());
-                    tvGoodNum.setCompoundDrawables(redGoodDrawable, drawables[1], drawables[2], drawables[3]);
+                    sparkButton.setChecked(true);
+                    if (showAnimal && helper.getLayoutPosition() == refreshPosition) {
+                        refreshPosition = -1;
+                        showAnimal = false;
+                        sparkButton.playAnimation();
+                    }
                 } else {
-                    Drawable grayGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_good);
-                    grayGoodDrawable.setBounds(drawables[0].getBounds());
-                    tvGoodNum.setCompoundDrawables(grayGoodDrawable, drawables[1], drawables[2], drawables[3]);
+                    sparkButton.setChecked(false);
                 }
 
                 break;
@@ -272,19 +271,18 @@ public class NewsMultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<News
                 helper.setText(R.id.tvTime, bean.getBegintime());
                 helper.setText(R.id.tvSeeNum, "" + bean.getVisit_num());
                 helper.setText(R.id.tvGoodNum, "" + bean.getLike_num());
+                helper.addOnClickListener(R.id.sparkButton, R.id.tvGoodNum);
 
-                tvGoodNum = helper.getView(R.id.tvGoodNum);
-
-                drawables = tvGoodNum.getCompoundDrawables();
-
+                sparkButton = helper.getView(R.id.sparkButton);
                 if (bean.getLike_status() == 1) {
-                    Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_mini_good);
-                    redGoodDrawable.setBounds(drawables[0].getBounds());
-                    tvGoodNum.setCompoundDrawables(redGoodDrawable, drawables[1], drawables[2], drawables[3]);
+                    sparkButton.setChecked(true);
+                    if (showAnimal && helper.getLayoutPosition() == refreshPosition) {
+                        refreshPosition = -1;
+                        showAnimal = false;
+                        sparkButton.playAnimation();
+                    }
                 } else {
-                    Drawable grayGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_good);
-                    grayGoodDrawable.setBounds(drawables[0].getBounds());
-                    tvGoodNum.setCompoundDrawables(grayGoodDrawable, drawables[1], drawables[2], drawables[3]);
+                    sparkButton.setChecked(false);
                 }
 
                 if (!StringUtils.isEmpty(bean.getImage())) {
@@ -425,7 +423,7 @@ public class NewsMultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<News
                 helper.setText(R.id.tvCommentNum, "" + bean.getComment_num());
                 helper.setText(R.id.tvGoodNum, "" + bean.getLike_num());
 
-                SparkButton sparkButton = helper.getView(R.id.sparkButton);
+                sparkButton = helper.getView(R.id.sparkButton);
                 if (bean.getLike_status() == 1) {
                     sparkButton.setChecked(true);
                     if (showAnimal && helper.getLayoutPosition() == refreshPosition) {
@@ -519,6 +517,7 @@ public class NewsMultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<News
             case NewsMultipleItem.LISTEN:
                 bean = (NewsBean) item.getDataBean();
 
+                helper.addOnClickListener(R.id.sparkButton, R.id.tvGoodNum);
                 helper.setText(R.id.tvName, bean.getName());
                 helper.setText(R.id.tvBeginTime, bean.getBegintime());
 
@@ -531,20 +530,17 @@ public class NewsMultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<News
                 helper.setText(R.id.tvSeeNum, "" + bean.getVisit_num());
                 helper.setText(R.id.tvGoodNum, "" + bean.getLike_num());
 
-                tvGoodNum = helper.getView(R.id.tvGoodNum);
-
-                drawables = tvGoodNum.getCompoundDrawables();
-
+                sparkButton = helper.getView(R.id.sparkButton);
                 if (bean.getLike_status() == 1) {
-                    Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_mini_good);
-                    redGoodDrawable.setBounds(drawables[0].getBounds());
-                    tvGoodNum.setCompoundDrawables(redGoodDrawable, drawables[1], drawables[2], drawables[3]);
+                    sparkButton.setChecked(true);
+                    if (showAnimal && helper.getLayoutPosition() == refreshPosition) {
+                        refreshPosition = -1;
+                        showAnimal = false;
+                        sparkButton.playAnimation();
+                    }
                 } else {
-                    Drawable grayGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_good);
-                    grayGoodDrawable.setBounds(drawables[0].getBounds());
-                    tvGoodNum.setCompoundDrawables(grayGoodDrawable, drawables[1], drawables[2], drawables[3]);
+                    sparkButton.setChecked(false);
                 }
-
 
                 if (bean.getPlayStatus()) {
                     helper.getView(R.id.play).setVisibility(View.GONE);
@@ -856,19 +852,34 @@ public class NewsMultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<News
                     helper.setText(R.id.tvSeeNum, "" + bean.getVisit_num());
                     helper.setText(R.id.tvGoodNum1, "" + bean.getLike_num());
 
-                    tvGoodNum = helper.getView(R.id.tvGoodNum1);
+                    helper.addOnClickListener(R.id.sparkButton1, R.id.tvGoodNum1);
 
-                    drawables = tvGoodNum.getCompoundDrawables();
-
+                    sparkButton = helper.getView(R.id.sparkButton1);
                     if (bean.getLike_status() == 1) {
-                        Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_mini_good);
-                        redGoodDrawable.setBounds(drawables[0].getBounds());
-                        tvGoodNum.setCompoundDrawables(redGoodDrawable, drawables[1], drawables[2], drawables[3]);
+                        sparkButton.setChecked(true);
+                        if (showAnimal && helper.getLayoutPosition() == refreshPosition) {
+                            refreshPosition = -1;
+                            showAnimal = false;
+                            sparkButton.playAnimation();
+                        }
                     } else {
-                        Drawable grayGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_good);
-                        grayGoodDrawable.setBounds(drawables[0].getBounds());
-                        tvGoodNum.setCompoundDrawables(grayGoodDrawable, drawables[1], drawables[2], drawables[3]);
+                        sparkButton.setChecked(false);
                     }
+
+
+//                    tvGoodNum = helper.getView(R.id.tvGoodNum1);
+//
+//                    drawables = tvGoodNum.getCompoundDrawables();
+//
+//                    if (bean.getLike_status() == 1) {
+//                        Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_mini_good);
+//                        redGoodDrawable.setBounds(drawables[0].getBounds());
+//                        tvGoodNum.setCompoundDrawables(redGoodDrawable, drawables[1], drawables[2], drawables[3]);
+//                    } else {
+//                        Drawable grayGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_good);
+//                        grayGoodDrawable.setBounds(drawables[0].getBounds());
+//                        tvGoodNum.setCompoundDrawables(grayGoodDrawable, drawables[1], drawables[2], drawables[3]);
+//                    }
 
                     if (!StringUtils.isEmpty(bean.getVideo())) {
                         helper.setGone(R.id.videoLayout, true);
@@ -924,19 +935,18 @@ public class NewsMultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<News
                 helper.setText(R.id.tvTime, bean.getBegintime());
                 helper.setText(R.id.tvSeeNum, "" + bean.getVisit_num());
                 helper.setText(R.id.tvGoodNum, "" + bean.getLike_num());
+                helper.addOnClickListener(R.id.sparkButton, R.id.tvGoodNum);
 
-                tvGoodNum = helper.getView(R.id.tvGoodNum);
-
-                drawables = tvGoodNum.getCompoundDrawables();
-
+                sparkButton = helper.getView(R.id.sparkButton);
                 if (bean.getLike_status() == 1) {
-                    Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_mini_good);
-                    redGoodDrawable.setBounds(drawables[0].getBounds());
-                    tvGoodNum.setCompoundDrawables(redGoodDrawable, drawables[1], drawables[2], drawables[3]);
+                    sparkButton.setChecked(true);
+                    if (showAnimal && helper.getLayoutPosition() == refreshPosition) {
+                        refreshPosition = -1;
+                        showAnimal = false;
+                        sparkButton.playAnimation();
+                    }
                 } else {
-                    Drawable grayGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_good);
-                    grayGoodDrawable.setBounds(drawables[0].getBounds());
-                    tvGoodNum.setCompoundDrawables(grayGoodDrawable, drawables[1], drawables[2], drawables[3]);
+                    sparkButton.setChecked(false);
                 }
 
                 if (!StringUtils.isEmpty(bean.getImage())) {

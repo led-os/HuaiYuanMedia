@@ -25,14 +25,9 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import kotlinx.android.synthetic.main.activity_my_collect.*
 
-/**
- *@description :我的收藏
- *@company :途酷科技
- * @author :JenkinsZhou
- * @date 2019年08月02日11:04
- * @Email: 971613168@qq.com
- */
+
 class MyCollectActivity : BaseHttpRecyclerActivity<CollectPresenter, NewsBean, BaseViewHolder, MyCollectionAdapter>(), CollectContract.View {
+
 
     override fun initPresenter(): CollectPresenter {
         return CollectPresenter()
@@ -77,7 +72,7 @@ class MyCollectActivity : BaseHttpRecyclerActivity<CollectPresenter, NewsBean, B
 
         initSmartRefreshLayout(smartLayoutRoot)
         initRecyclerView(recyclerViewRoot)
-        recyclerViewRoot.addItemDecoration(RecycleViewDivider(this,LinearLayout.VERTICAL))
+        recyclerViewRoot.addItemDecoration(RecycleViewDivider(this, LinearLayout.VERTICAL))
 
         smartLayoutRoot.autoRefresh()
 
@@ -167,91 +162,105 @@ class MyCollectActivity : BaseHttpRecyclerActivity<CollectPresenter, NewsBean, B
 
         if (!isEdit) {
 
-            when (bean.module) {
-                "V视频" -> {
-                    val type = "视频"
-                    if (bean.url.isNotEmpty()) {
-                        startDetailsActivity(this, bean.url)
-                    } else {
-                        startNewsDetailActivity(this, type, id, position)
-                    }
-                }
-                "濉溪TV" -> {
-                    if (bean.module_second == "置顶频道") {
-                        val type = if (bean.type == "tv") "电视" else "广播"
-                        TVNewsDetailActivity.startTVNewsDetailActivity(this, type, id)
-                    } else {
-                        val type = "电视"
-                        NewsDetailActivity.startNewsDetailActivity(this, type, id)
-                    }
-                }
-                "新闻", "矩阵", "专栏", "党建", "专题" -> {
-                    val type = "文章"
-                    if (bean.url.isNotEmpty()) {
-                        startDetailsActivity(this, bean.url)
-                    } else {
-                        startNewsDetailActivity(this, type, id, position)
-                    }
-                }
-                "视讯" -> {
-                    val type = "视讯"
-                    if (bean.url.isNotEmpty()) {
-                        startDetailsActivity(this, bean.url)
-                    } else {
-                        startNewsDetailActivity(this, type, id, position)
-                    }
-                }
-                "问政" -> {
-                    val type = "问政"
-                    if (bean.url.isNotEmpty()) {
-                        startDetailsActivity(this, bean.url)
-                    } else {
-                        startNewsDetailActivity(this, type, id, position)
+            when (view!!.id) {
+                R.id.itemLayout -> {
+                    when (bean.module) {
+                        "V视频" -> {
+                            val type = "视频"
+                            if (bean.url.isNotEmpty()) {
+                                startDetailsActivity(this, bean.url)
+                            } else {
+                                startNewsDetailActivity(this, type, id, position)
+                            }
+                        }
+                        "濉溪TV" -> {
+                            if (bean.module_second == "置顶频道") {
+                                val type = if (bean.type == "tv") "电视" else "广播"
+                                TVNewsDetailActivity.startTVNewsDetailActivity(this, type, id)
+                            } else {
+                                val type = "电视"
+                                NewsDetailActivity.startNewsDetailActivity(this, type, id)
+                            }
+                        }
+                        "新闻", "矩阵", "专栏", "党建", "专题" -> {
+                            val type = "文章"
+                            if (bean.url.isNotEmpty()) {
+                                startDetailsActivity(this, bean.url)
+                            } else {
+                                startNewsDetailActivity(this, type, id, position)
+                            }
+                        }
+                        "视讯" -> {
+                            val type = "视讯"
+                            if (bean.url.isNotEmpty()) {
+                                startDetailsActivity(this, bean.url)
+                            } else {
+                                startNewsDetailActivity(this, type, id, position)
+                            }
+                        }
+                        "问政" -> {
+                            val type = "问政"
+                            if (bean.url.isNotEmpty()) {
+                                startDetailsActivity(this, bean.url)
+                            } else {
+                                startNewsDetailActivity(this, type, id, position)
+                            }
+                        }
+
+                        "原创", "随手拍" -> {
+                            val type = if (bean.images != null && bean.images.size > 0) "图文" else "视频"
+                            if (bean.url.isNotEmpty()) {
+                                startDetailsActivity(this, bean.url)
+                            } else {
+                                startNewsDetailActivity(this, type, id, position)
+                            }
+                        }
+                        "悦读" -> {
+                            val type = "悦读"
+                            if (bean.url.isNotEmpty()) {
+                                startDetailsActivity(this, bean.url)
+                            } else {
+                                startNewsDetailActivity(this, type, id, position)
+                            }
+                        }
+                        "悦听" -> {
+                            val type = "悦听"
+                            if (bean.url.isNotEmpty()) {
+                                startDetailsActivity(this, bean.url)
+                            } else {
+                                startNewsDetailActivity(this, type, id, position)
+                            }
+                        }
+                        "公告" -> {
+                            val type = "公告"
+                            if (bean.url.isNotEmpty()) {
+                                startDetailsActivity(this, bean.url)
+                            } else {
+                                startNewsDetailActivity(this, type, id, position)
+                            }
+                        }
+                        else -> {
+                            val type = "文章"
+                            if (bean.url.isNotEmpty()) {
+                                startDetailsActivity(this, bean.url)
+                            } else {
+                                startNewsDetailActivity(this, type, id, position)
+                            }
+                        }
+
                     }
                 }
 
-                "原创", "随手拍" -> {
-                    val type = if (bean.images != null && bean.images.size > 0) "图文" else "视频"
-                    if (bean.url.isNotEmpty()) {
-                        startDetailsActivity(this, bean.url)
+                R.id.sparkButton, R.id.tvGoodNum -> {
+                    if (bean.like_status == 1) {
+                        mPresenter.cancelLikeNews(bean.id, position)
                     } else {
-                        startNewsDetailActivity(this, type, id, position)
-                    }
-                }
-                "悦读" -> {
-                    val type = "悦读"
-                    if (bean.url.isNotEmpty()) {
-                        startDetailsActivity(this, bean.url)
-                    } else {
-                        startNewsDetailActivity(this, type, id, position)
-                    }
-                }
-                "悦听" -> {
-                    val type = "悦听"
-                    if (bean.url.isNotEmpty()) {
-                        startDetailsActivity(this, bean.url)
-                    } else {
-                        startNewsDetailActivity(this, type, id, position)
-                    }
-                }
-                "公告" -> {
-                    val type = "公告"
-                    if (bean.url.isNotEmpty()) {
-                        startDetailsActivity(this, bean.url)
-                    } else {
-                        startNewsDetailActivity(this, type, id, position)
-                    }
-                }
-                else -> {
-                    val type = "文章"
-                    if (bean.url.isNotEmpty()) {
-                        startDetailsActivity(this, bean.url)
-                    } else {
-                        startNewsDetailActivity(this, type, id, position)
+                        mPresenter.addLikeNews(bean.id, position)
                     }
                 }
 
             }
+
         } else {
             val isSelect = bean.isSelect
             if (!isSelect) {
@@ -266,6 +275,19 @@ class MyCollectActivity : BaseHttpRecyclerActivity<CollectPresenter, NewsBean, B
             adapter.notifyItemChanged(position)
         }
 
+    }
+
+
+    override fun updateLikeStatus(isLike: Boolean, position: Int) {
+        if (isLike) {
+            adapter.data[position].like_status = 1
+            adapter.data[position].like_num = adapter.data[position].like_num + 1
+        } else {
+            adapter.data[position].like_status = 0
+            adapter.data[position].like_num = adapter.data[position].like_num - 1
+        }
+
+        adapter.notifyItemChangedAnimal(position)
     }
 
     private fun setDeleteSelectBtnBackground(index: Int) {

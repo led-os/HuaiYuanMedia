@@ -54,12 +54,7 @@ class MineFragment : BaseRecyclerFragment<MinePresenter, MineRvModel, BaseViewHo
     override fun initView() {
         mineTitleBar.setBackgroundResource(android.R.color.transparent)
         mineTitleBar.setPositiveListener {
-            if (SPUtils.getInstance().getString("token", "").isNotEmpty()) {
-                startActivity(Intent(context, SettingActivity::class.java))
-            } else {
-                ToastUtils.showShort("请登录后操作")
-                startActivity(Intent(context, LoginActivity::class.java))
-            }
+            startActivity(Intent(context, SettingActivity::class.java))
         }
         ivAvatar.setOnClickListener(this)
         tvMobile.setOnClickListener(this)

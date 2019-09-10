@@ -266,14 +266,8 @@ public interface ApiService {
     /**
      * 删除文章
      */
-    @POST("api/article/dels")
-    Observable<BaseResult<Object>> deleteArticle(@Query("id") int id);
-
-    /**
-     * 删除V视
-     */
     @POST("api/article/del")
-    Observable<BaseResult<Object>> deleteArticles(@Query("id") int id);
+    Observable<BaseResult<Object>> deleteArticle(@Query("id") int id);
 
     /**
      * 点赞

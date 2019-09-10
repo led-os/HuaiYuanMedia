@@ -49,6 +49,12 @@ class SettingActivity : BaseActivity<SettingPresenter>(), View.OnClickListener, 
         } catch (e: Exception) {
 
         }
+
+        if (SPUtils.getInstance().getString("token", "").isEmpty()) {
+            tvLogOut.visibility = View.INVISIBLE
+        }
+
+
     }
 
 
@@ -58,8 +64,9 @@ class SettingActivity : BaseActivity<SettingPresenter>(), View.OnClickListener, 
         }
         when (v.id) {
             R.id.ivSkipEditPass -> {
-                if (!AccountHelper.getInstance().isLogin) {
-                    ToastUtils.showShort("您还未登录")
+                if (SPUtils.getInstance().getString("token", "").isEmpty()) {
+                    ToastUtils.showShort("请登录后操作")
+                    startActivity(Intent(this, LoginActivity::class.java))
                     return
                 }
                 startActivity(Intent(this, EditPasswordActivity::class.java))
@@ -104,7 +111,9 @@ class SettingActivity : BaseActivity<SettingPresenter>(), View.OnClickListener, 
         SPUtils.getInstance().put(PREF_KEY_TOKEN, "")
         SPUtils.getInstance().put("login", false)
         SPUtils.getInstance().put("groupId", 0)
-        startActivity(Intent(this, LoginActivity::class.java))
+        val intent= Intent(this, LoginActivity::class.java)
+        intent.putExtra("jump",true)
+        startActivity(intent)
         finish()
     }
 

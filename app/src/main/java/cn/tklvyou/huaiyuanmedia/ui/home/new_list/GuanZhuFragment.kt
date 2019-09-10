@@ -75,7 +75,7 @@ class GuanZhuFragment : BaseHttpRecyclerFragment<GuanZhuPresenter, NewsBean, Gua
     private var attentionList: MutableList<ConcernModel>? = null
 
     override fun setAttentionList(model: AttentionModel?) {
-        if(model != null){
+        if (model != null) {
             attentionList = model.attention.toMutableList()
 
             val concernAllModel = ConcernModel()
@@ -245,11 +245,26 @@ class GuanZhuFragment : BaseHttpRecyclerFragment<GuanZhuPresenter, NewsBean, Gua
 
     }
 
+    override fun onItemChildClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
+        super.onItemChildClick(adapter, view, position)
+        when (view!!.id) {
+            R.id.sparkButton, R.id.tvGoodNum -> {
+                val bean = adapter!!.data[position] as NewsBean
+                if (bean.like_status == 1) {
+                    mPresenter.cancelLikeNews(bean.id, position)
+                } else {
+                    mPresenter.addLikeNews(bean.id, position)
+                }
+
+            }
+        }
+    }
+
     private fun startDetailsActivity(context: Context, url: String) {
         val intent = Intent(context, ServiceWebviewActivity::class.java)
         intent.putExtra("url", url)
         intent.putExtra("other", true)
-        intent.putExtra("share_title","")
+        intent.putExtra("share_title", "")
         startActivity(intent)
     }
 
@@ -263,6 +278,15 @@ class GuanZhuFragment : BaseHttpRecyclerFragment<GuanZhuPresenter, NewsBean, Gua
 
 
     override fun updateLikeStatus(isLike: Boolean, position: Int) {
+        if (isLike) {
+            adapter.data[position].like_status = 1
+            adapter.data[position].like_num = adapter.data[position].like_num + 1
+        } else {
+            adapter.data[position].like_status = 0
+            adapter.data[position].like_num = adapter.data[position].like_num - 1
+        }
+
+        adapter.notifyItemChangedAnimal(position + 1)
     }
 
 

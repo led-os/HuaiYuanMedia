@@ -26,7 +26,7 @@ import kotlinx.android.synthetic.main.activity_my_article.*
  * @date 2019年08月05日10:16
  * @Email: 971613168@qq.com
  */
-class MyArticleActivity : BaseHttpRecyclerActivity<MyArticleListPresenter, NewsBean, BaseViewHolder, WxCircleAdapter>(), MyArticleContract.View  {
+class MyArticleActivity : BaseHttpRecyclerActivity<MyArticleListPresenter, NewsBean, BaseViewHolder, WxCircleAdapter>(), MyArticleContract.View {
 
     override fun initPresenter(): MyArticleListPresenter {
         return MyArticleListPresenter()
@@ -41,7 +41,7 @@ class MyArticleActivity : BaseHttpRecyclerActivity<MyArticleListPresenter, NewsB
         return cameraRecyclerView
     }
 
-    val moduleName= "随手拍"
+    val moduleName = ""
 
     override fun initView(savedInstanceState: Bundle?) {
         setTitle("我的帖子")
@@ -53,10 +53,8 @@ class MyArticleActivity : BaseHttpRecyclerActivity<MyArticleListPresenter, NewsB
 
         cameraRecyclerView.addItemDecoration(RecycleViewDivider(this, LinearLayout.VERTICAL, 1, resources.getColor(R.color.common_bg)))
 
-        mPresenter.getNewList(moduleName, 1)
+        cameraSmartRefreshLayout.autoRefresh()
     }
-
-
 
 
     override fun onRetry() {
@@ -108,23 +106,46 @@ class MyArticleActivity : BaseHttpRecyclerActivity<MyArticleListPresenter, NewsB
 
     override fun onItemChildClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
         super.onItemChildClick(adapter, view, position)
-        if (view!!.id == R.id.deleteBtn) {
-            val dialog = CommonDialog(this)
-            dialog.setTitle("温馨提示")
-            dialog.setMessage("是否删除？")
-            dialog.setYesOnclickListener("确认") {
-                val bean = (adapter as WxCircleAdapter).data[position]
-                mPresenter.deleteArticle(bean.id, position)
-                dialog.dismiss()
+        val bean = (adapter as WxCircleAdapter).data[position]
+        when (view!!.id) {
+            R.id.deleteBtn -> {
+                val dialog = CommonDialog(this)
+                dialog.setTitle("温馨提示")
+                dialog.setMessage("是否删除？")
+                dialog.setYesOnclickListener("确认") {
+                    mPresenter.deleteArticle(bean.id, position)
+                    dialog.dismiss()
+                }
+                dialog.show()
             }
-            dialog.show()
+
+            R.id.sparkButton, R.id.tvGoodNum -> {
+                if (bean.like_status == 1) {
+                    mPresenter.cancelLikeNews(bean.id, position)
+                } else {
+                    mPresenter.addLikeNews(bean.id, position)
+                }
+            }
         }
+
     }
+
+    override fun updateLikeStatus(isLike: Boolean, position: Int) {
+        if (isLike) {
+            adapter.data[position].like_status = 1
+            adapter.data[position].like_num = adapter.data[position].like_num + 1
+        } else {
+            adapter.data[position].like_status = 0
+            adapter.data[position].like_num = adapter.data[position].like_num - 1
+        }
+
+        adapter.notifyItemChangedAnimal(position)
+    }
+
 
     override fun deleteSuccess(position: Int) {
         adapter.remove(position)
     }
-
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

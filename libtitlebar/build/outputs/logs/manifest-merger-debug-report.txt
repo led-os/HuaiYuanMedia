@@ -1,45 +1,45 @@
 -- Merging decision tree log ---
 manifest
-ADDED from F:\AndroidProject\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml:1:1-11:12
-INJECTED from F:\AndroidProject\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml:1:1-11:12
-INJECTED from F:\AndroidProject\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml:1:1-11:12
-INJECTED from F:\AndroidProject\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml:1:1-11:12
-INJECTED from F:\AndroidProject\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml:1:1-11:12
-INJECTED from F:\AndroidProject\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml:1:1-11:12
-INJECTED from F:\AndroidProject\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml:1:1-11:12
+ADDED from E:\android\android project\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml:1:1-11:12
+INJECTED from E:\android\android project\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml:1:1-11:12
+INJECTED from E:\android\android project\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml:1:1-11:12
+INJECTED from E:\android\android project\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml:1:1-11:12
+INJECTED from E:\android\android project\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml:1:1-11:12
+INJECTED from E:\android\android project\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml:1:1-11:12
+INJECTED from E:\android\android project\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml:1:1-11:12
 	package
-		ADDED from F:\AndroidProject\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml:2:5-39
-		INJECTED from F:\AndroidProject\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml
-		INJECTED from F:\AndroidProject\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml
+		ADDED from E:\android\android project\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml:2:5-39
+		INJECTED from E:\android\android project\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml
+		INJECTED from E:\android\android project\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml
 	android:versionName
-		INJECTED from F:\AndroidProject\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml
-		ADDED from F:\AndroidProject\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml:1:1-11:12
-		INJECTED from F:\AndroidProject\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml
+		INJECTED from E:\android\android project\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml
+		ADDED from E:\android\android project\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml:1:1-11:12
+		INJECTED from E:\android\android project\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml
 	android:versionCode
-		INJECTED from F:\AndroidProject\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml
-		ADDED from F:\AndroidProject\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml:1:1-11:12
-		INJECTED from F:\AndroidProject\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml
+		INJECTED from E:\android\android project\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml
+		ADDED from E:\android\android project\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml:1:1-11:12
+		INJECTED from E:\android\android project\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml
 	xmlns:android
-		ADDED from F:\AndroidProject\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml:1:11-69
+		ADDED from E:\android\android project\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml:1:11-69
 application
-ADDED from F:\AndroidProject\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml:4:5-9:19
+ADDED from E:\android\android project\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml:4:5-9:19
 	android:supportsRtl
-		ADDED from F:\AndroidProject\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml:7:9-35
+		ADDED from E:\android\android project\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml:7:9-35
 	android:label
-		ADDED from F:\AndroidProject\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml:6:9-41
+		ADDED from E:\android\android project\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml:6:9-41
 	android:allowBackup
-		ADDED from F:\AndroidProject\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml:5:9-35
+		ADDED from E:\android\android project\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml:5:9-35
 uses-sdk
-INJECTED from F:\AndroidProject\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from F:\AndroidProject\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml
-INJECTED from F:\AndroidProject\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml
-INJECTED from F:\AndroidProject\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml
-INJECTED from F:\AndroidProject\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml
+INJECTED from E:\android\android project\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from E:\android\android project\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml
+INJECTED from E:\android\android project\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml
+INJECTED from E:\android\android project\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml
+INJECTED from E:\android\android project\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml
 	android:targetSdkVersion
-		INJECTED from F:\AndroidProject\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml
-		ADDED from F:\AndroidProject\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml
-		INJECTED from F:\AndroidProject\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml
+		INJECTED from E:\android\android project\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml
+		ADDED from E:\android\android project\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml
+		INJECTED from E:\android\android project\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from F:\AndroidProject\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml
-		ADDED from F:\AndroidProject\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml
-		INJECTED from F:\AndroidProject\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml
+		INJECTED from E:\android\android project\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml
+		ADDED from E:\android\android project\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml
+		INJECTED from E:\android\android project\HuaiYuanMedia\libtitlebar\src\main\AndroidManifest.xml

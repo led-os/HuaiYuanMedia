@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import com.blankj.utilcode.util.StringUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.varunest.sparkbutton.SparkButton;
 
 import java.util.List;
 
@@ -29,8 +30,17 @@ public class MyCollectionAdapter extends BaseQuickAdapter<NewsBean, BaseViewHold
 
     private boolean isEdit = false;
 
+    private boolean showAnimal = false;
+    private int refreshPosition = -1;
+
     public MyCollectionAdapter(List<NewsBean> data) {
         super(R.layout.item_news_collect_layout, data);
+    }
+
+    public void notifyItemChangedAnimal(int position) {
+        showAnimal = true;
+        refreshPosition = position;
+        notifyItemChanged(position);
     }
 
 
@@ -66,19 +76,19 @@ public class MyCollectionAdapter extends BaseQuickAdapter<NewsBean, BaseViewHold
         helper.setText(R.id.tvTime, bean.getBegintime());
         helper.setText(R.id.tvSeeNum, "" + bean.getVisit_num());
         helper.setText(R.id.tvGoodNum, "" + bean.getLike_num());
-
-        TextView tvGoodNum = helper.getView(R.id.tvGoodNum);
-
-        Drawable[] drawables = tvGoodNum.getCompoundDrawables();
-
+        helper.addOnClickListener(R.id.sparkButton, R.id.tvGoodNum);
+        SparkButton sparkButton = helper.getView(R.id.sparkButton);
         if (bean.getLike_status() == 1) {
-            Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_mini_good);
-            redGoodDrawable.setBounds(drawables[0].getBounds());
-            tvGoodNum.setCompoundDrawables(redGoodDrawable, drawables[1], drawables[2], drawables[3]);
+            sparkButton.setChecked(true);
+            if (showAnimal && helper.getLayoutPosition() == refreshPosition) {
+                refreshPosition = -1;
+                showAnimal = false;
+                sparkButton.playAnimation();
+            }
         } else {
-            Drawable grayGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_good);
-            grayGoodDrawable.setBounds(drawables[0].getBounds());
-            tvGoodNum.setCompoundDrawables(grayGoodDrawable, drawables[1], drawables[2], drawables[3]);
+            refreshPosition = -1;
+            showAnimal = false;
+            sparkButton.setChecked(false);
         }
 
 

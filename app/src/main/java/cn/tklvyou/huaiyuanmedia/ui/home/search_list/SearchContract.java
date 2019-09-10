@@ -16,9 +16,14 @@ public interface SearchContract {
 
     interface View extends BaseContract.BaseView {
         void setNewList(int p, BasePageModel<NewsBean> model);
+        void updateLikeStatus(boolean isLike, int position);
     }
 
     interface Presenter extends BaseContract.BasePresenter<SearchContract.View> {
         void searchNewList(String module, String name, int p);
+        void addLikeNews(int id, int position);
+
+        void cancelLikeNews(int id, int position);
+
     }
 }

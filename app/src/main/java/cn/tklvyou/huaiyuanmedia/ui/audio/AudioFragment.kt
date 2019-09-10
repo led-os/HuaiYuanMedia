@@ -1,26 +1,17 @@
 package cn.tklvyou.huaiyuanmedia.ui.audio
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.view.View
-import android.widget.ImageView
 import android.widget.LinearLayout
 import cn.tklvyou.huaiyuanmedia.R
-import cn.tklvyou.huaiyuanmedia.base.NullPresenter
 import cn.tklvyou.huaiyuanmedia.base.fragment.BaseHttpRecyclerFragment
-import cn.tklvyou.huaiyuanmedia.base.fragment.BaseRecyclerFragment
 import cn.tklvyou.huaiyuanmedia.base.interfaces.AdapterCallBack
 import cn.tklvyou.huaiyuanmedia.model.BasePageModel
 import cn.tklvyou.huaiyuanmedia.model.NewsBean
-import cn.tklvyou.huaiyuanmedia.model.ServiceModel
 import cn.tklvyou.huaiyuanmedia.ui.adapter.AudioRvAdapter
-import cn.tklvyou.huaiyuanmedia.ui.adapter.ServiceRvAdapter
-import cn.tklvyou.huaiyuanmedia.ui.audio.point.PointActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.tv_news_detail.TVNewsDetailActivity
-import cn.tklvyou.huaiyuanmedia.utils.JSON
 import cn.tklvyou.huaiyuanmedia.utils.RecycleViewDivider
-import com.blankj.utilcode.util.ResourceUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import kotlinx.android.synthetic.main.fragment_audio.*

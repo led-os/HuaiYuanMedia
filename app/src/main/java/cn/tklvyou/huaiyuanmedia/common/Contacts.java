@@ -11,7 +11,9 @@ public class Contacts {
 
     public static final String WX_APPID = "wx3314443bcadc6e01";
 
-    public static final String QQ_APPID = "101717196";
+    public static final String QQ_APPID = "101788396";
+
+    public static final String SHARE_DOWNLOAD_URL = "http://huaiyuanweb.dashuiniu.com.cn/#/upload";
 
     public static final String SHARE_BASE_URL = "http://huaiyuanweb.dashuiniu.com.cn/#/articleDetail/";
 

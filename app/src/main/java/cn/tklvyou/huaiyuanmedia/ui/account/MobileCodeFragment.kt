@@ -26,8 +26,10 @@ class MobileCodeFragment : BaseFragment<AccountPresenter>(), AccountContract.Vie
         return R.layout.fragment_mobile_code_login
     }
 
+    private var jump = false
     override fun initView() {
 
+        jump = mBundle.getBoolean("jump", false)
         etAccount.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
                 if (p0 != null) {
@@ -86,8 +88,10 @@ class MobileCodeFragment : BaseFragment<AccountPresenter>(), AccountContract.Vie
 
     override fun loginSuccess() {
         MyApplication.showSplash = false
+        if (jump) {
+            startActivity(Intent(context, MainActivity::class.java))
+        }
         mActivity.finish()
-//        startActivity(Intent(context, MainActivity::class.java))
     }
 
     override fun loginError() {
@@ -143,5 +147,10 @@ class MobileCodeFragment : BaseFragment<AccountPresenter>(), AccountContract.Vie
         mPresenter.codeLogin(account, code)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        timeCount?.cancel()
+        timeCount = null
+    }
 
 }

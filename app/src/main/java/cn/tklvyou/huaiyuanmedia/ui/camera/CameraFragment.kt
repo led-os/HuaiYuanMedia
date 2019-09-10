@@ -20,7 +20,7 @@ import cn.tklvyou.huaiyuanmedia.ui.adapter.CameraHotListAdapter
 import cn.tklvyou.huaiyuanmedia.ui.adapter.ChannelPagerAdapter
 import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.publish_news.PublishNewsActivity
-import cn.tklvyou.huaiyuanmedia.ui.audio.point.PointActivity
+import cn.tklvyou.huaiyuanmedia.ui.camera.point.PointActivity
 import cn.tklvyou.huaiyuanmedia.ui.camera.history_updates.HistoryUpdatesFragment
 import cn.tklvyou.huaiyuanmedia.ui.camera.today_hot.TodayHotActivity
 import cn.tklvyou.huaiyuanmedia.utils.RecycleViewDivider

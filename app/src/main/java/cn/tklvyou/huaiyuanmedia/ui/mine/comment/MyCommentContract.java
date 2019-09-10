@@ -12,6 +12,8 @@ public interface MyCommentContract {
         void setMyConmmentList(int page, BasePageModel<MyCommentModel> pageModel);
 
         void cancelCommentSuccess(boolean isAll);
+
+        void updateLikeStatus(boolean isLike, int position);
     }
 
     interface Presenter extends BaseContract.BasePresenter<MyCommentContract.View> {
@@ -20,5 +22,11 @@ public interface MyCommentContract {
         void cancelCommentList(String ids);
 
         void cancelCommentAll();
+
+        void addLikeNews(int id, int position);
+
+        void cancelLikeNews(int id, int position);
+
+
     }
 }

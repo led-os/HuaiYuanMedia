@@ -24,7 +24,10 @@ class PasswordFragment : BaseFragment<AccountPresenter>(), AccountContract.View,
         return R.layout.fragment_password
     }
 
+    private var jump = false
     override fun initView() {
+        jump = mBundle.getBoolean("jump", false)
+
         etAccount.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
                 if (p0 != null) {
@@ -61,8 +64,11 @@ class PasswordFragment : BaseFragment<AccountPresenter>(), AccountContract.View,
 
     override fun loginSuccess() {
         MyApplication.showSplash = false
+        if (jump) {
+            startActivity(Intent(context, MainActivity::class.java))
+        }
         mActivity.finish()
-//        startActivity(Intent(context, MainActivity::class.java))
+
     }
 
     override fun loginError() {
