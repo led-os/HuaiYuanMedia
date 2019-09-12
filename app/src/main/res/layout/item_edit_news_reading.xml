@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cn.tklvyou.huaiyuanmedia.widget.SwipeRevealLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mSwipeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="horizontal"
+    app:dragEdge="left"
+    app:lockEdge="true"
+    app:mode="same_level">
+
+    <ImageView
+        android:id="@+id/check_box"
+        android:layout_width="@dimen/dp_40"
+        android:layout_height="@dimen/dp_100"
+        android:layout_gravity="center_vertical"
+        android:scaleType="centerInside"
+        android:src="@mipmap/icon_normal" />
+
+    <LinearLayout
+        android:id="@+id/itemLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+
+        <ImageView
+            android:scaleType="centerCrop"
+            android:id="@+id/ivReadingImage"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_120"
+            android:background="@color/bg_no_photo" />
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_50"
+            android:ellipsize="end"
+            android:lines="2"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/dp_10"
+            android:textColor="@color/default_black_text_color"
+            android:textSize="@dimen/sp_13" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_30"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/dp_10">
+
+            <TextView
+                android:id="@+id/tvBeginTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:text="0小时前"
+                android:textColor="@color/default_gray_text_color"
+                android:textSize="@dimen/sp_13" />
+
+            <TextView
+                android:id="@+id/tvSeeNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@mipmap/icon_eye"
+                android:drawablePadding="@dimen/dp_5"
+                android:singleLine="true"
+                android:text="0"
+                android:textColor="@color/default_gray_text_color"
+                android:textSize="@dimen/sp_13" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</cn.tklvyou.huaiyuanmedia.widget.SwipeRevealLayout>

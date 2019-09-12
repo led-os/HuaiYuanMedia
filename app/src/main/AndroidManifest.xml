@@ -36,16 +36,26 @@
         android:supportsRtl="true"
         android:theme="@style/CustomAppTheme"
         tools:replace="android:theme">
-        <activity android:name=".ui.mine.comment.MyCommentActivity"></activity>
+        <activity android:name=".ui.mine.comment.MyCommentActivity"/>
 
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
 
+        <activity android:name=".ui.main.SplashActivity" android:theme="@style/SplashActivityTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity android:name=".ui.home.comment.CommentListActivity" />
+        <activity android:name=".ui.main.WebviewActivity" android:launchMode="singleTop" />
         <activity android:name=".ui.home.search_list.SearchListActivity" />
         <activity android:name=".ui.account.AgreementActivity" />
-        <activity android:name=".ui.main.SplashActivity" />
+
         <activity android:name=".ui.home.all_tv.AllTvActivity" />
         <activity android:name=".ui.home.all_juzheng.AllJuZhengActivity" />
         <activity android:name="cn.tklvyou.huaiyuanmedia.ui.camera.point_rule.PointRuleActivity" />
@@ -64,14 +74,10 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:configChanges="screenLayout"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
+
         <activity
             android:name=".ui.account.LoginActivity"
             android:configChanges="keyboard|orientation|keyboardHidden|screenSize|uiMode|screenLayout"

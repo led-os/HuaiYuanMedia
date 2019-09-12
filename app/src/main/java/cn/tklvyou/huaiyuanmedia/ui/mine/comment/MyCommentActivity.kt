@@ -239,6 +239,24 @@ class MyCommentActivity : BaseHttpRecyclerActivity<MyCommentPresenter, MyComment
                             }
                         }
 
+                        "直播"->{
+                            val type = "直播"
+                            if (bean.url.isNotEmpty()) {
+                                startDetailsActivity(this, bean.url)
+                            } else {
+                                startNewsDetailActivity(this, type, id, position)
+                            }
+                        }
+
+                        else -> {
+                            val type = "文章"
+                            if (bean.url.isNotEmpty()) {
+                                startDetailsActivity(this, bean.url)
+                            } else {
+                                startNewsDetailActivity(this, type, id, position)
+                            }
+                        }
+
                     }
                 }
 

@@ -223,7 +223,6 @@ class LoginActivity : BaseActivity<AccountLoginPresenter>(), AccountContract.Log
 
 
     override fun loginSuccess() {
-        MyApplication.showSplash = false
         if (jump) {
             startActivity(Intent(this, MainActivity::class.java))
         }

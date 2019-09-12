@@ -1,6 +1,8 @@
 package cn.tklvyou.huaiyuanmedia.base.activity
 
 import android.view.KeyEvent
+import android.view.View
+import android.widget.ProgressBar
 import cn.tklvyou.huaiyuanmedia.base.BaseContract
 import cn.tklvyou.huaiyuanmedia.widget.x5.X5WebView
 import com.blankj.utilcode.util.LogUtils
@@ -11,6 +13,12 @@ import org.jsoup.Jsoup
 abstract class BaseX5WebViewActivity<P : BaseContract.BasePresenter<*>> : BaseActivity<P>() {
 
     private lateinit var mWebView: X5WebView
+
+    private var mProgressBar: ProgressBar? = null
+
+    public fun initProgressBar(mProgressBar: ProgressBar) {
+        this.mProgressBar = mProgressBar
+    }
 
     public fun initWebView(webView: X5WebView) {
         this.mWebView = webView
@@ -29,6 +37,13 @@ abstract class BaseX5WebViewActivity<P : BaseContract.BasePresenter<*>> : BaseAc
         mWebView.webChromeClient = object : com.tencent.smtt.sdk.WebChromeClient() {
 
             override fun onProgressChanged(p0: com.tencent.smtt.sdk.WebView?, p1: Int) {
+                if (p1 >= 95) {
+                    mProgressBar?.visibility = View.GONE
+                } else {
+                    mProgressBar?.visibility = View.VISIBLE
+                }
+
+                mProgressBar?.progress = p1
                 super.onProgressChanged(p0, p1)
             }
 

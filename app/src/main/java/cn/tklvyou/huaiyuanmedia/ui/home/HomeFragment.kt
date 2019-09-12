@@ -306,6 +306,7 @@ class HomeFragment : BaseFragment<HomePresenter>(), HomeContract.View {
                         homeTitleBar.rightCustomView.visibility = View.GONE
                     }
 
+
                 } else {
                     homeTitleBar.rightCustomView.visibility = View.GONE
                 }

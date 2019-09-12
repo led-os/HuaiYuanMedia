@@ -17,6 +17,7 @@ public interface MyArticleContract {
         void setNewList(int p, BasePageModel<NewsBean> model);
         void deleteSuccess(int position);
         void updateLikeStatus(boolean isLike, int position);
+        void cancelArticleSuccess(boolean isAll);
     }
 
     interface Presenter extends BaseContract.BasePresenter<MyArticleContract.View> {
@@ -26,5 +27,8 @@ public interface MyArticleContract {
         void addLikeNews(int id, int position);
 
         void cancelLikeNews(int id, int position);
+
+        void cancelArticleList(String ids);
+        void cancelArticleAll();
     }
 }

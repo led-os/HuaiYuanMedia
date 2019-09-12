@@ -82,7 +82,7 @@ class PointActivity : BaseHttpRecyclerActivity<PointPresenter, PointModel, BaseV
         }
 
         tvNickName.text = bean.nickname
-        tvPointScore.text = "积分：${bean.score}"
+        tvPointScore.text = "石榴籽：${bean.score}"
     }
 
     override fun setGoods(page: Int, pageModel: BasePageModel<PointModel>?) {

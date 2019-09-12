@@ -38,4 +38,33 @@ public class WenZhenPresenter extends BasePresenter<WenZhenContract.View> implem
                         mView.showFailed("");
                 });
     }
+
+    @Override
+    public void cancelArticleList(String ids) {
+        RetrofitHelper.getInstance().getServer()
+                .cancelArticleList(ids)
+                .compose(RxSchedulers.applySchedulers())
+                .compose(mView.bindToLife())
+                .subscribe(result -> {
+                    mView.showSuccess(result.getMsg());
+                    if (result.getCode() == RequestConstant.CODE_REQUEST_SUCCESS) {
+                        mView.cancelArticleSuccess(false);
+                    }
+                }, throwable -> mView.showFailed(""));
+    }
+
+    @Override
+    public void cancelArticleAll() {
+        RetrofitHelper.getInstance().getServer()
+                .cancelArticleAll()
+                .compose(RxSchedulers.applySchedulers())
+                .compose(mView.bindToLife())
+                .subscribe(result -> {
+                    mView.showSuccess(result.getMsg());
+                    if (result.getCode() == RequestConstant.CODE_REQUEST_SUCCESS) {
+                        mView.cancelArticleSuccess(true);
+                    }
+                }, throwable -> mView.showFailed(""));
+    }
+
 }

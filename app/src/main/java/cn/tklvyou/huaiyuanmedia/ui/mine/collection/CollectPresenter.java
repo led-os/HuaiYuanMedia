@@ -29,7 +29,6 @@ public class CollectPresenter extends BasePresenter<CollectContract.View> implem
                 .compose(RxSchedulers.applySchedulers())
 //                .compose(mView.bindToLife())
                 .subscribe(result -> {
-                            LogUtils.e(new Gson().toJson(result));
                             if (mView != null) {
                                 mView.showSuccess(result.getMsg());
                                 if (result.getCode() == RequestConstant.CODE_REQUEST_SUCCESS) {

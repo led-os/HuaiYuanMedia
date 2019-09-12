@@ -131,7 +131,7 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
 
     override fun lazyData() {
         when (type) {
-            NewsMultipleItem.VIDEO, NewsMultipleItem.JU_ZHENG, NewsMultipleItem.ZHUAN_TI -> {
+            NewsMultipleItem.VIDEO, NewsMultipleItem.JU_ZHENG, NewsMultipleItem.ZHUAN_TI, NewsMultipleItem.TUI_JIAN -> {
                 mPresenter.getBanner(param)
             }
 
@@ -165,7 +165,7 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
 
 
             NewsMultipleItem.WECHAT_MOMENTS, NewsMultipleItem.READING, NewsMultipleItem.LISTEN, NewsMultipleItem.DANG_JIAN,
-            NewsMultipleItem.GONG_GAO, NewsMultipleItem.ZHI_BO, NewsMultipleItem.TUI_JIAN, NewsMultipleItem.SHI_XUN -> {
+            NewsMultipleItem.GONG_GAO, NewsMultipleItem.ZHI_BO, NewsMultipleItem.SHI_XUN -> {
                 mPresenter.getNewList(param, null, 1, showLoading)
             }
 
@@ -224,6 +224,14 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
         }
     }
 
+
+    override fun onUserInvisible() {
+        super.onUserInvisible()
+        if (type == NewsMultipleItem.LISTEN) {
+            audioController?.onPause()
+        }
+    }
+
     private lateinit var juzhengHeaderList: MutableList<NewsBean>
     override fun setJuZhengHeader(beans: MutableList<NewsBean>?) {
         if (beans != null) {
@@ -276,6 +284,10 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
                     mPresenter.getNewList(param, null, 1, showLoading)
                 }
 
+                NewsMultipleItem.TUI_JIAN -> {
+                    mPresenter.getNewList(param, null, 1, showLoading)
+                }
+
                 NewsMultipleItem.JU_ZHENG -> {
                     mPresenter.getJuZhengHeader(param)
                 }
@@ -283,6 +295,8 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
                 NewsMultipleItem.ZHUAN_TI -> {
                     mPresenter.getVerticalHeader(param)
                 }
+
+
             }
         } else {
             refreshLayout.setEnableRefresh(false)
@@ -431,6 +445,12 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
                         initVerticalHeaderView(view, verticalHeaderList)
 
                         adapter.addHeaderView(bannerView)
+                        adapter.addHeaderView(view)
+                    }
+
+                    NewsMultipleItem.TUI_JIAN -> {
+                        val view = View.inflate(context, R.layout.item_normal_banner, null)
+                        initBannerView(view, bannerModelList)
                         adapter.addHeaderView(view)
                     }
 
@@ -1086,7 +1106,7 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
         }
 
         when (type) {
-            NewsMultipleItem.JU_ZHENG, NewsMultipleItem.ZHUAN_TI -> {
+            NewsMultipleItem.JU_ZHENG, NewsMultipleItem.ZHUAN_TI, NewsMultipleItem.TUI_JIAN -> {
                 adapter.notifyItemChangedAnimal(position + 1)
             }
             else -> {
@@ -1223,7 +1243,7 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
                     bean.like_num = zanNum
                     bean.visit_num = seeNum
                     bean.like_status = like_status
-                    adapter.notifyItemChanged(position)
+                    adapter.notifyItemChanged(position + 1)
                 }
 
                 NewsMultipleItem.ZHUAN_TI -> {

@@ -1,8 +1,5 @@
 package cn.tklvyou.huaiyuanmedia.ui.mine.concern
 
-import android.app.Activity
-import android.content.Context
-import android.content.Intent
 import android.view.View
 import android.widget.LinearLayout
 import cn.tklvyou.huaiyuanmedia.R
@@ -10,12 +7,7 @@ import cn.tklvyou.huaiyuanmedia.base.fragment.BaseHttpRecyclerFragment
 import cn.tklvyou.huaiyuanmedia.base.interfaces.AdapterCallBack
 import cn.tklvyou.huaiyuanmedia.model.BasePageModel
 import cn.tklvyou.huaiyuanmedia.model.ConcernModel
-import cn.tklvyou.huaiyuanmedia.model.NewsBean
 import cn.tklvyou.huaiyuanmedia.ui.adapter.MyConcernAdapter
-import cn.tklvyou.huaiyuanmedia.ui.adapter.WxCircleAdapter
-import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
-import cn.tklvyou.huaiyuanmedia.ui.mine.my_article.MyArticleContract
-import cn.tklvyou.huaiyuanmedia.ui.mine.my_article.MyArticleListPresenter
 import cn.tklvyou.huaiyuanmedia.utils.RecycleViewDivider
 import cn.tklvyou.huaiyuanmedia.widget.dailog.CommonDialog
 import com.chad.library.adapter.base.BaseQuickAdapter

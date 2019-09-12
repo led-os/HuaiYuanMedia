@@ -3,6 +3,7 @@ package cn.tklvyou.huaiyuanmedia.api;
 import java.util.List;
 
 import cn.tklvyou.huaiyuanmedia.base.BaseResult;
+import cn.tklvyou.huaiyuanmedia.model.AdModel;
 import cn.tklvyou.huaiyuanmedia.model.AttentionModel;
 import cn.tklvyou.huaiyuanmedia.model.BannerModel;
 import cn.tklvyou.huaiyuanmedia.model.BasePageModel;
@@ -25,12 +26,33 @@ import cn.tklvyou.huaiyuanmedia.model.User;
 import cn.tklvyou.huaiyuanmedia.model.VoteOptionModel;
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
+import okhttp3.ResponseBody;
+import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Query;
+import retrofit2.http.Streaming;
+import retrofit2.http.Url;
 
 public interface ApiService {
+
+    /**
+     * 下载网络图片
+     * @param fileUrl
+     * @return
+     */
+    @GET
+    @Streaming
+    Observable<ResponseBody> downLoadFile(@Url String fileUrl);
+
+
+    /**
+     * 广告页数据
+     */
+    @POST("api/index/start")
+    Observable<BaseResult<List<AdModel>>> getAdView();
+
 
     /**
      * 获取七牛云上传token
@@ -482,13 +504,48 @@ public interface ApiService {
     Observable<BaseResult<BasePageModel<NewsBean>>> getRecentBrowseList(@Query("p") int p);
 
     /**
-     * 我的文章相关
+     * 批量取消最近浏览
+     *
+     * @param article_id
+     * @return
+     */
+    @POST("api/userlog/multi")
+    Observable<BaseResult<BasePageModel<Object>>> cancelUserlogList(@Query("article_id") String article_id);
+
+    /**
+     * 一键清空最近浏览
+     *
+     * @return
+     */
+    @POST("api/userlog/all")
+    Observable<BaseResult<BasePageModel<Object>>> cancelUserlogAll();
+
+    /**
+     * 我的帖子
      *
      * @param p
      * @return
      */
     @POST("api/article/my")
     Observable<BaseResult<BasePageModel<NewsBean>>> getMyArticleList(@Query("p") int p, @Query("module") String module);
+
+
+    /**
+     * 批量取消我的帖子
+     *
+     * @param id
+     * @return
+     */
+    @POST("api/article/multi")
+    Observable<BaseResult<BasePageModel<Object>>> cancelArticleList(@Query("id") String id);
+
+    /**
+     * 一键清空我的帖子
+     *
+     * @return
+     */
+    @POST("api/article/all")
+    Observable<BaseResult<BasePageModel<Object>>> cancelArticleAll();
 
 
     /**

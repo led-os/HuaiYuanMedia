@@ -9,9 +9,13 @@
     android:orientation="vertical">
 
     <ScrollView
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:id="@+id/mScrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:descendantFocusability="blocksDescendants">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -61,9 +65,9 @@
                     android:background="@drawable/shape_color_accent_radius_5_bg"
                     android:gravity="center"
                     android:text="未关注"
-                    android:visibility="gone"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/sp_13" />
+                    android:textSize="@dimen/sp_13"
+                    android:visibility="gone" />
 
             </LinearLayout>
 

@@ -63,7 +63,6 @@ class PasswordFragment : BaseFragment<AccountPresenter>(), AccountContract.View,
     }
 
     override fun loginSuccess() {
-        MyApplication.showSplash = false
         if (jump) {
             startActivity(Intent(context, MainActivity::class.java))
         }

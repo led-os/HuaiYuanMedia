@@ -82,30 +82,20 @@ class MainActivity : BaseBottomTabActivity<MainPresenter>(), MainContract.View, 
     override fun initView(savedInstanceState: Bundle?) {
         hideTitleBar()
 
-//        isLogin = SPUtils.getInstance().getBoolean("login")
-//        if (!isLogin) {
-//            startActivity(Intent(this, LoginActivity::class.java))
-//            return
-//        } else {
-//            getVersionInfo()
-
-        if (MyApplication.showSplash) {
-            startActivity(Intent(this, SplashActivity::class.java))
-        }
+        getVersionInfo()
 
         mFragments = ArrayList()
 
         homeFragment = HomeFragment()
         cameraFragment = CameraFragment()
         workFragment = WorkFragment()
-//            blankFragment = BlankFragment()
         audioFragment = AudioFragment()
         mineFragment = MineFragment()
 
         mFragments!!.add(homeFragment!!)
+        mFragments!!.add(audioFragment!!)
         mFragments!!.add(cameraFragment!!)
         mFragments!!.add(workFragment!!)
-        mFragments!!.add(audioFragment!!)
         mFragments!!.add(mineFragment!!)
 
 
@@ -116,9 +106,9 @@ class MainActivity : BaseBottomTabActivity<MainPresenter>(), MainContract.View, 
         bottomNavigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.navigation_home -> selectFragment(0)
-                R.id.navigation_camera -> selectFragment(1)
-                R.id.navigation_service -> selectFragment(2)
-                R.id.navigation_audio_visual -> selectFragment(3)
+                R.id.navigation_audio_visual -> selectFragment(1)
+                R.id.navigation_camera -> selectFragment(2)
+                R.id.navigation_service -> selectFragment(3)
                 R.id.navigation_mine -> selectFragment(4)
             }
             return@setOnNavigationItemSelectedListener true
@@ -127,7 +117,6 @@ class MainActivity : BaseBottomTabActivity<MainPresenter>(), MainContract.View, 
         selectFragment(0)
 
         mPresenter.getSystemConfig()
-//        }
     }
 
     private fun getVersionInfo() {

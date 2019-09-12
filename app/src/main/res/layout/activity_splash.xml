@@ -1,30 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scaleType="centerCrop"
-    android:src="@drawable/icon_splash_news_bg" />
-
-    <!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"--><!--xmlns:app="http://schemas.android.com/apk/res-auto"--><!--xmlns:tools="http://schemas.android.com/tools"--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--tools:context=".ui.main.SplashActivity">-->
-
-    <!--<ImageView--><!--android:layout_width="match_parent"--><!--android:layout_height="@dimen/dp_180"--><!--android:scaleType="centerCrop"--><!--android:src="@mipmap/splash_top_bg" />-->
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
 
 
-    <!--<ImageView--><!--android:layout_width="@dimen/dp_107"--><!--android:layout_height="@dimen/dp_106"--><!--android:layout_centerHorizontal="true"--><!--android:layout_marginTop="@dimen/dp_165"--><!--android:src="@mipmap/splash_logo" />-->
+    <ImageView
+        android:id="@+id/ivAdvertising"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:scaleType="centerCrop"
+        android:visibility="gone" />
 
+    <LinearLayout
+        android:id="@+id/layoutSkip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/shape_color_accent_stroke_radius_15_bg"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp_4"
+        android:visibility="visible">
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:paddingRight="@dimen/dp_5"
+            android:text="跳过"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/sp_12" />
+    </LinearLayout>
 
-    <!--<ImageView--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:layout_centerHorizontal="true"--><!--android:layout_marginTop="@dimen/dp_370"--><!--android:src="@mipmap/splash_center_bg" />-->
-
-    <!--<LinearLayout--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content"--><!--android:layout_alignParentBottom="true"--><!--android:layout_centerHorizontal="true"--><!--android:layout_marginBottom="@dimen/dp_87"--><!--android:gravity="center"--><!--android:orientation="horizontal">-->
-
-    <!--<TextView--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:text="新闻热线："--><!--android:textColor="@color/default_black_text_color"--><!--android:textSize="@dimen/sp_12" />-->
-
-    <!--<TextView--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:text="0561-6077312"--><!--android:textColor="@color/colorAccent"--><!--android:textSize="@dimen/sp_12" />--><!--</LinearLayout>-->
-
-
-    <!--<TextView--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content"--><!--android:layout_alignParentBottom="true"--><!--android:layout_marginBottom="@dimen/dp_45"--><!--android:gravity="center"--><!--android:text="－濉溪县委宣传部主管－"--><!--android:textColor="@color/default_gray_text_color"--><!--android:textSize="@dimen/sp_12" />-->
-
-    <!--<TextView--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content"--><!--android:layout_alignParentBottom="true"--><!--android:layout_marginBottom="@dimen/dp_25"--><!--android:gravity="center"--><!--android:text="－濉溪县融媒体中心(濉溪县广播电视台)主办－"--><!--android:textColor="@color/default_gray_text_color"--><!--android:textSize="@dimen/sp_12" />-->
-
-
-    <!--</RelativeLayout>-->
+</FrameLayout>

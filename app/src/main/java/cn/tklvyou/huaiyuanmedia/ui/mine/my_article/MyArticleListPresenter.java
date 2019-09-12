@@ -8,6 +8,7 @@ import com.blankj.utilcode.util.ToastUtils;
 import cn.tklvyou.huaiyuanmedia.api.RetrofitHelper;
 import cn.tklvyou.huaiyuanmedia.api.RxSchedulers;
 import cn.tklvyou.huaiyuanmedia.base.BasePresenter;
+import cn.tklvyou.huaiyuanmedia.common.RequestConstant;
 
 
 @SuppressLint("CheckResult")
@@ -97,5 +98,32 @@ public class MyArticleListPresenter extends BasePresenter<MyArticleContract.View
     }
 
 
+    @Override
+    public void cancelArticleList(String ids) {
+        RetrofitHelper.getInstance().getServer()
+                .cancelArticleList(ids)
+                .compose(RxSchedulers.applySchedulers())
+                .compose(mView.bindToLife())
+                .subscribe(result -> {
+                    mView.showSuccess(result.getMsg());
+                    if (result.getCode() == RequestConstant.CODE_REQUEST_SUCCESS) {
+                        mView.cancelArticleSuccess(false);
+                    }
+                }, throwable -> mView.showFailed(""));
+    }
+
+    @Override
+    public void cancelArticleAll() {
+        RetrofitHelper.getInstance().getServer()
+                .cancelArticleAll()
+                .compose(RxSchedulers.applySchedulers())
+                .compose(mView.bindToLife())
+                .subscribe(result -> {
+                    mView.showSuccess(result.getMsg());
+                    if (result.getCode() == RequestConstant.CODE_REQUEST_SUCCESS) {
+                        mView.cancelArticleSuccess(true);
+                    }
+                }, throwable -> mView.showFailed(""));
+    }
 
 }

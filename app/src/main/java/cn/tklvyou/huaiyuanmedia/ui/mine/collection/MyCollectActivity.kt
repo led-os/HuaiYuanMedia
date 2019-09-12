@@ -13,10 +13,14 @@ import cn.tklvyou.huaiyuanmedia.base.activity.BaseHttpRecyclerActivity
 import cn.tklvyou.huaiyuanmedia.base.interfaces.AdapterCallBack
 import cn.tklvyou.huaiyuanmedia.model.BasePageModel
 import cn.tklvyou.huaiyuanmedia.model.NewsBean
+import cn.tklvyou.huaiyuanmedia.model.NewsMultipleItem
 import cn.tklvyou.huaiyuanmedia.ui.adapter.MyCollectionAdapter
+import cn.tklvyou.huaiyuanmedia.ui.adapter.NewsMultipleItemQuickAdapter
 import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.tv_news_detail.TVNewsDetailActivity
 import cn.tklvyou.huaiyuanmedia.ui.audio.ServiceWebviewActivity
+import cn.tklvyou.huaiyuanmedia.ui.home.AudioController
+import cn.tklvyou.huaiyuanmedia.ui.video_player.VodActivity
 import cn.tklvyou.huaiyuanmedia.utils.RecycleViewDivider
 import cn.tklvyou.huaiyuanmedia.widget.dailog.CommonDialog
 import com.blankj.utilcode.util.LogUtils
@@ -26,7 +30,7 @@ import com.chad.library.adapter.base.BaseViewHolder
 import kotlinx.android.synthetic.main.activity_my_collect.*
 
 
-class MyCollectActivity : BaseHttpRecyclerActivity<CollectPresenter, NewsBean, BaseViewHolder, MyCollectionAdapter>(), CollectContract.View {
+class MyCollectActivity : BaseHttpRecyclerActivity<CollectPresenter, NewsMultipleItem<NewsBean>, BaseViewHolder, MyCollectionAdapter>(), CollectContract.View {
 
 
     override fun initPresenter(): CollectPresenter {
@@ -126,11 +130,15 @@ class MyCollectActivity : BaseHttpRecyclerActivity<CollectPresenter, NewsBean, B
     }
 
 
-    override fun setList(list: MutableList<NewsBean>?) {
+    private var audioController: AudioController? = null
+    override fun setList(list: MutableList<NewsMultipleItem<NewsBean>>?) {
         setList(object : AdapterCallBack<MyCollectionAdapter> {
 
             override fun createAdapter(): MyCollectionAdapter {
-                return MyCollectionAdapter(list)
+                val adapter = MyCollectionAdapter(list)
+                audioController = AudioController(this@MyCollectActivity)
+                adapter.setAudioController(audioController)
+                return adapter
             }
 
             override fun refreshAdapter() {
@@ -144,7 +152,13 @@ class MyCollectActivity : BaseHttpRecyclerActivity<CollectPresenter, NewsBean, B
             if (page != 1) {
                 sycnList(adapter.data)
             }
-            onLoadSucceed(page, pageModel.data)
+
+            val data = ArrayList<NewsMultipleItem<NewsBean>>()
+            pageModel.data.forEach {
+                data.add(NewsMultipleItem(it.module, it))
+            }
+
+            onLoadSucceed(page, data)
         } else {
             onLoadFailed(page, null)
         }
@@ -157,7 +171,7 @@ class MyCollectActivity : BaseHttpRecyclerActivity<CollectPresenter, NewsBean, B
     override fun onItemChildClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
         super.onItemChildClick(adapter, view, position)
 
-        val bean = adapter!!.data[position] as NewsBean
+        val bean = (adapter!!.data[position] as NewsMultipleItem<NewsBean>).dataBean
         val id = bean.id
 
         if (!isEdit) {
@@ -239,6 +253,14 @@ class MyCollectActivity : BaseHttpRecyclerActivity<CollectPresenter, NewsBean, B
                                 startNewsDetailActivity(this, type, id, position)
                             }
                         }
+                        "直播" -> {
+                            val type = "直播"
+                            if (bean.url.isNotEmpty()) {
+                                startDetailsActivity(this, bean.url)
+                            } else {
+                                startNewsDetailActivity(this, type, id, position)
+                            }
+                        }
                         else -> {
                             val type = "文章"
                             if (bean.url.isNotEmpty()) {
@@ -249,6 +271,22 @@ class MyCollectActivity : BaseHttpRecyclerActivity<CollectPresenter, NewsBean, B
                         }
 
                     }
+                }
+
+                //V视频 直播 播放按钮
+                R.id.ivStartPlayer -> {
+                    audioController?.onPause()
+
+                    val bean = (adapter.data[position] as NewsMultipleItem<NewsBean>).dataBean as NewsBean
+                    if (bean.url.isNotEmpty()) {
+                        startDetailsActivity(this, bean.url)
+                    } else {
+                        //打开新的Activity
+                        val intent = Intent(this, VodActivity::class.java)
+                        intent.putExtra("videoPath", bean.video)
+                        startActivity(intent)
+                    }
+
                 }
 
                 R.id.sparkButton, R.id.tvGoodNum -> {
@@ -280,11 +318,11 @@ class MyCollectActivity : BaseHttpRecyclerActivity<CollectPresenter, NewsBean, B
 
     override fun updateLikeStatus(isLike: Boolean, position: Int) {
         if (isLike) {
-            adapter.data[position].like_status = 1
-            adapter.data[position].like_num = adapter.data[position].like_num + 1
+            adapter.data[position].dataBean.like_status = 1
+            adapter.data[position].dataBean.like_num = adapter.data[position].dataBean.like_num + 1
         } else {
-            adapter.data[position].like_status = 0
-            adapter.data[position].like_num = adapter.data[position].like_num - 1
+            adapter.data[position].dataBean.like_status = 0
+            adapter.data[position].dataBean.like_num = adapter.data[position].dataBean.like_num - 1
         }
 
         adapter.notifyItemChangedAnimal(position)
@@ -321,7 +359,7 @@ class MyCollectActivity : BaseHttpRecyclerActivity<CollectPresenter, NewsBean, B
             val commenNum = data.getIntExtra("commentNum", 0)
             val like_status = data.getIntExtra("like_status", 0)
 
-            val bean = (adapter as MyCollectionAdapter).data[position]
+            val bean = (adapter as MyCollectionAdapter).data[position].dataBean
             bean.comment_num = commenNum
             bean.like_num = zanNum
             bean.visit_num = seeNum
@@ -338,5 +376,11 @@ class MyCollectActivity : BaseHttpRecyclerActivity<CollectPresenter, NewsBean, B
         intent.putExtra(NewsDetailActivity.POSITION, position)
         startActivityForResult(intent, 0)
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        audioController?.release()
+    }
+
 
 }

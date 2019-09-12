@@ -72,4 +72,34 @@ public class BrowsePresenter extends BasePresenter<BrowseContract.View> implemen
     }
 
 
+    @Override
+    public void cancelArticleList(String ids) {
+        RetrofitHelper.getInstance().getServer()
+                .cancelUserlogList(ids)
+                .compose(RxSchedulers.applySchedulers())
+                .compose(mView.bindToLife())
+                .subscribe(result -> {
+                    mView.showSuccess(result.getMsg());
+                    if (result.getCode() == RequestConstant.CODE_REQUEST_SUCCESS) {
+                        mView.cancelArticleSuccess(false);
+                    }
+                }, throwable -> mView.showFailed(""));
+    }
+
+    @Override
+    public void cancelArticleAll() {
+        RetrofitHelper.getInstance().getServer()
+                .cancelUserlogAll()
+                .compose(RxSchedulers.applySchedulers())
+                .compose(mView.bindToLife())
+                .subscribe(result -> {
+                    mView.showSuccess(result.getMsg());
+                    if (result.getCode() == RequestConstant.CODE_REQUEST_SUCCESS) {
+                        mView.cancelArticleSuccess(true);
+                    }
+                }, throwable -> mView.showFailed(""));
+    }
+
+
+
 }

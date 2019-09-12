@@ -295,7 +295,6 @@ class CameraFragment : BaseRecyclerFragment<CameraPresenter, NewsBean, BaseViewH
         intent.putExtra(NewsDetailActivity.INTENT_ID, id)
         intent.putExtra(NewsDetailActivity.INTENT_TYPE, type)
         intent.putExtra(NewsDetailActivity.POSITION, position)
-        intent.putExtra("is_life",true)
         startActivityForResult(intent, 10)
     }
 

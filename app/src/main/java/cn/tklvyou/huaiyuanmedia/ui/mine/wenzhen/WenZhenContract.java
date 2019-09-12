@@ -16,9 +16,12 @@ public interface WenZhenContract {
 
     interface View extends BaseContract.BaseView {
         void setDataList(int page, BasePageModel<NewsBean> pageModel);
+        void cancelArticleSuccess(boolean isAll);
     }
 
     interface Presenter extends BaseContract.BasePresenter<View> {
         void getDataPageList(int page);
+        void cancelArticleList(String ids);
+        void cancelArticleAll();
     }
 }

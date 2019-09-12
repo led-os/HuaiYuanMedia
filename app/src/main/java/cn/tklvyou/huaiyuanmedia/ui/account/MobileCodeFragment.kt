@@ -87,7 +87,6 @@ class MobileCodeFragment : BaseFragment<AccountPresenter>(), AccountContract.Vie
 
 
     override fun loginSuccess() {
-        MyApplication.showSplash = false
         if (jump) {
             startActivity(Intent(context, MainActivity::class.java))
         }

@@ -17,6 +17,7 @@ public interface BrowseContract {
     interface View extends BaseContract.BaseView {
         void setBrowseList(int page, BasePageModel<NewsBean> pageModel);
         void updateLikeStatus(boolean isLike, int position);
+        void cancelArticleSuccess(boolean isAll);
     }
 
     interface Presenter extends BaseContract.BasePresenter<View> {
@@ -24,5 +25,7 @@ public interface BrowseContract {
         void addLikeNews(int id, int position);
 
         void cancelLikeNews(int id, int position);
+        void cancelArticleList(String ids);
+        void cancelArticleAll();
     }
 }

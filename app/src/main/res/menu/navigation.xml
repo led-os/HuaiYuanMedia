@@ -7,6 +7,11 @@
         android:title="首页" />
 
     <item
+        android:id="@+id/navigation_audio_visual"
+        android:icon="@mipmap/tab_audio_visual_normal"
+        android:title="视听" />
+
+    <item
         android:id="@+id/navigation_camera"
         android:icon="@mipmap/tab_life_circle_normal"
         android:title="生活圈" />
@@ -15,11 +20,6 @@
         android:id="@+id/navigation_service"
         android:icon="@mipmap/tab_handle_affair_normal"
         android:title="办事" />
-
-    <item
-        android:id="@+id/navigation_audio_visual"
-        android:icon="@mipmap/tab_audio_visual_normal"
-        android:title="视听" />
 
     <item
         android:id="@+id/navigation_mine"

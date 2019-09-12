@@ -27,10 +27,6 @@ class BlankFragment : BaseFragment<NullPresenter>() {
         return R.layout.fragment_blank
     }
 
-    override fun getLoadingView(): View {
-        return mWebView
-    }
-
     override fun lazyData() {
         ToastUtils.showShort("111")
 //        tvtest.text = "-------------------"

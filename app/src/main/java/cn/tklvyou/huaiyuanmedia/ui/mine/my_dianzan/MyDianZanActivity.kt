@@ -12,10 +12,13 @@ import cn.tklvyou.huaiyuanmedia.base.activity.BaseHttpRecyclerActivity
 import cn.tklvyou.huaiyuanmedia.base.interfaces.AdapterCallBack
 import cn.tklvyou.huaiyuanmedia.model.BasePageModel
 import cn.tklvyou.huaiyuanmedia.model.NewsBean
+import cn.tklvyou.huaiyuanmedia.model.NewsMultipleItem
 import cn.tklvyou.huaiyuanmedia.ui.adapter.MyCollectionAdapter
 import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.tv_news_detail.TVNewsDetailActivity
 import cn.tklvyou.huaiyuanmedia.ui.audio.ServiceWebviewActivity
+import cn.tklvyou.huaiyuanmedia.ui.home.AudioController
+import cn.tklvyou.huaiyuanmedia.ui.video_player.VodActivity
 import cn.tklvyou.huaiyuanmedia.utils.RecycleViewDivider
 import cn.tklvyou.huaiyuanmedia.widget.dailog.CommonDialog
 import com.blankj.utilcode.util.LogUtils
@@ -24,7 +27,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import kotlinx.android.synthetic.main.activity_my_collect.*
 
-class MyDianZanActivity : BaseHttpRecyclerActivity<MyDianZanPresenter, NewsBean, BaseViewHolder, MyCollectionAdapter>(), MyDianZanContract.View {
+class MyDianZanActivity : BaseHttpRecyclerActivity<MyDianZanPresenter, NewsMultipleItem<NewsBean>, BaseViewHolder, MyCollectionAdapter>(), MyDianZanContract.View {
 
     override fun initPresenter(): MyDianZanPresenter {
         return MyDianZanPresenter()
@@ -122,12 +125,15 @@ class MyDianZanActivity : BaseHttpRecyclerActivity<MyDianZanPresenter, NewsBean,
         }
     }
 
-
-    override fun setList(list: MutableList<NewsBean>?) {
+    private var audioController: AudioController? = null
+    override fun setList(list: MutableList<NewsMultipleItem<NewsBean>>?) {
         setList(object : AdapterCallBack<MyCollectionAdapter> {
 
             override fun createAdapter(): MyCollectionAdapter {
-                return MyCollectionAdapter(list)
+                val adapter = MyCollectionAdapter(list)
+                audioController = AudioController(this@MyDianZanActivity)
+                adapter.setAudioController(audioController)
+                return adapter
             }
 
             override fun refreshAdapter() {
@@ -141,7 +147,11 @@ class MyDianZanActivity : BaseHttpRecyclerActivity<MyDianZanPresenter, NewsBean,
             if (page != 1) {
                 sycnList(adapter.data)
             }
-            onLoadSucceed(page, pageModel.data)
+            val data = ArrayList<NewsMultipleItem<NewsBean>>()
+            pageModel.data.forEach {
+                data.add(NewsMultipleItem(it.module, it))
+            }
+            onLoadSucceed(page, data)
         } else {
             onLoadFailed(page, null)
         }
@@ -151,16 +161,13 @@ class MyDianZanActivity : BaseHttpRecyclerActivity<MyDianZanPresenter, NewsBean,
     //选中Id集合
     private var selectIds = ArrayList<Int>()
 
-    override fun onItemChildClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
+    override fun onItemChildClick(adapter: BaseQuickAdapter<*, *>, view: View?, position: Int) {
         super.onItemChildClick(adapter, view, position)
-
-        val bean = adapter!!.data[position] as NewsBean
+        val bean = (adapter.data[position] as NewsMultipleItem<NewsBean>).dataBean
         val id = bean.id
-
         if (!isEdit) {
-
-            when(view!!.id){
-                R.id.itemLayout ->{
+            when (view!!.id) {
+                R.id.itemLayout -> {
                     when (bean.module) {
                         "V视频" -> {
                             val type = "视频"
@@ -204,7 +211,7 @@ class MyDianZanActivity : BaseHttpRecyclerActivity<MyDianZanPresenter, NewsBean,
                             }
                         }
 
-                        "原创", "随手拍" -> {
+                        "原创", "生活圈" -> {
                             val type = if (bean.images != null && bean.images.size > 0) "图文" else "视频"
                             if (bean.url.isNotEmpty()) {
                                 startDetailsActivity(this, bean.url)
@@ -236,6 +243,16 @@ class MyDianZanActivity : BaseHttpRecyclerActivity<MyDianZanPresenter, NewsBean,
                                 startNewsDetailActivity(this, type, id, position)
                             }
                         }
+
+                        "直播" -> {
+                            val type = "直播"
+                            if (bean.url.isNotEmpty()) {
+                                startDetailsActivity(this, bean.url)
+                            } else {
+                                startNewsDetailActivity(this, type, id, position)
+                            }
+                        }
+
                         else -> {
                             val type = "文章"
                             if (bean.url.isNotEmpty()) {
@@ -244,8 +261,24 @@ class MyDianZanActivity : BaseHttpRecyclerActivity<MyDianZanPresenter, NewsBean,
                                 startNewsDetailActivity(this, type, id, position)
                             }
                         }
-
                     }
+
+                }
+
+                //V视频 直播 播放按钮
+                R.id.ivStartPlayer -> {
+                    audioController?.onPause()
+
+                    val bean = (adapter.data[position] as NewsMultipleItem<NewsBean>).dataBean as NewsBean
+                    if (bean.url.isNotEmpty()) {
+                        startDetailsActivity(this, bean.url)
+                    } else {
+                        //打开新的Activity
+                        val intent = Intent(this, VodActivity::class.java)
+                        intent.putExtra("videoPath", bean.video)
+                        startActivity(intent)
+                    }
+
                 }
 
                 R.id.sparkButton, R.id.tvGoodNum -> {
@@ -255,6 +288,7 @@ class MyDianZanActivity : BaseHttpRecyclerActivity<MyDianZanPresenter, NewsBean,
                         mPresenter.addLikeNews(bean.id, position)
                     }
                 }
+
             }
 
         } else {
@@ -271,17 +305,17 @@ class MyDianZanActivity : BaseHttpRecyclerActivity<MyDianZanPresenter, NewsBean,
             adapter.notifyItemChanged(position)
         }
 
-    }
 
+    }
 
 
     override fun updateLikeStatus(isLike: Boolean, position: Int) {
         if (isLike) {
-            adapter.data[position].like_status = 1
-            adapter.data[position].like_num = adapter.data[position].like_num + 1
+            adapter.data[position].dataBean.like_status = 1
+            adapter.data[position].dataBean.like_num = adapter.data[position].dataBean.like_num + 1
         } else {
-            adapter.data[position].like_status = 0
-            adapter.data[position].like_num = adapter.data[position].like_num - 1
+            adapter.data[position].dataBean.like_status = 0
+            adapter.data[position].dataBean.like_num = adapter.data[position].dataBean.like_num - 1
         }
 
         adapter.notifyItemChangedAnimal(position)
@@ -318,7 +352,7 @@ class MyDianZanActivity : BaseHttpRecyclerActivity<MyDianZanPresenter, NewsBean,
             val commenNum = data.getIntExtra("commentNum", 0)
             val like_status = data.getIntExtra("like_status", 0)
 
-            val bean = (adapter as MyCollectionAdapter).data[position]
+            val bean = adapter.data[position].dataBean
             bean.comment_num = commenNum
             bean.like_num = zanNum
             bean.visit_num = seeNum
@@ -334,6 +368,11 @@ class MyDianZanActivity : BaseHttpRecyclerActivity<MyDianZanPresenter, NewsBean,
         intent.putExtra(NewsDetailActivity.INTENT_TYPE, type)
         intent.putExtra(NewsDetailActivity.POSITION, position)
         startActivityForResult(intent, 0)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        audioController?.release()
     }
 
 }

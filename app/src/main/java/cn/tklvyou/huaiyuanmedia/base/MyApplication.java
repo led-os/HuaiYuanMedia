@@ -57,7 +57,6 @@ public class MyApplication extends MultiDexApplication {
     }
 
     private static Application mContext;
-    public static boolean showSplash = true;
 
     private IWXAPI iwxapi;
 

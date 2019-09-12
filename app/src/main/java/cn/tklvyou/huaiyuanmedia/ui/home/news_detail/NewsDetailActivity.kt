@@ -11,6 +11,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.ScrollView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -95,6 +96,8 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
     private var hasCollect = false
     private var like_num = 0
 
+    private var scrollBottom = false
+
     //是否已关注
     private var isAttention = false
 
@@ -107,16 +110,11 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
         id = intent.getIntExtra(INTENT_ID, 0)
         type = intent.getStringExtra(INTENT_TYPE)
         item_position = intent.getIntExtra(POSITION, 0)
-        isLife = intent.getBooleanExtra("is_life", false)
 
         if (type == "电视") {
             setTitle("视讯")
         } else {
             setTitle(type)
-        }
-
-        if (isLife) {
-            tvAttentionStatus.visibility = View.VISIBLE
         }
 
         setNavigationImage()
@@ -130,9 +128,10 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
 
         when (type) {
             "视频", "图文" -> {
+                setPositiveImage(R.mipmap.icon_collect_normal)
+                tvAttentionStatus.visibility = View.VISIBLE
                 llWXHeader.visibility = View.VISIBLE
                 llArticle.visibility = View.GONE
-
             }
 
             "电视" -> {
@@ -282,9 +281,9 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
             shareToWXFriend()
         }
 
-        mPresenter.getDetailsById(id, true,isLife)
+        mPresenter.getDetailsById(id, true, isLife)
 
-        if(SPUtils.getInstance().getString("token","").isNotEmpty()){
+        if (SPUtils.getInstance().getString("token", "").isNotEmpty()) {
             timer = Timer()
             timerTask = object : TimerTask() {
                 override fun run() {
@@ -314,14 +313,14 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
 
     override fun onRetry() {
         super.onRetry()
-        mPresenter.getDetailsById(id, false,isLife)
+        mPresenter.getDetailsById(id, false, isLife)
     }
 
 
     override fun addConcernSuccess() {
         isAttention = true
         tvAttentionStatus.text = "已关注"
-        tvAttentionStatus.setBackgroundResource( R.drawable.shape_gray_stroke_radius_5_bg)
+        tvAttentionStatus.setBackgroundResource(R.drawable.shape_gray_stroke_radius_5_bg)
         tvAttentionStatus.setTextColor(resources.getColor(R.color.default_gray_text_color))
     }
 
@@ -329,7 +328,7 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
     override fun cancelSuccess() {
         isAttention = false
         tvAttentionStatus.text = "关注"
-        tvAttentionStatus.setBackgroundResource( R.drawable.shape_color_accent_radius_5_bg)
+        tvAttentionStatus.setBackgroundResource(R.drawable.shape_color_accent_radius_5_bg)
         tvAttentionStatus.setTextColor(resources.getColor(R.color.white))
     }
 
@@ -341,10 +340,24 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
         //收藏状态
         hasCollect = item.collect_status == 1
 
-
+        newsDetailWebView.isFocusable = false
 
         when (type) {
             "视频", "图文" -> {
+                setPositiveOnClickListener {
+                    if (hasCollect) {
+                        mPresenter.setCollectStatus(id, false)
+                    } else {
+                        mPresenter.setCollectStatus(id, true)
+                    }
+                }
+
+                if (hasCollect) {
+                    commonTitleBar.rightImageButton.setImageDrawable(resources.getDrawable(R.mipmap.icon_collect))
+                } else {
+                    commonTitleBar.rightImageButton.setImageDrawable(resources.getDrawable(R.mipmap.icon_collect_normal))
+                }
+
                 isAttention = item.attention_status == 1
 
                 if (!StringUtils.isEmpty(item.avatar.trim { it <= ' ' })) {
@@ -361,17 +374,17 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
 
                 if (item.attention_status == 1) {
                     tvAttentionStatus.text = "已关注"
-                    tvAttentionStatus.setBackgroundResource( R.drawable.shape_gray_stroke_radius_5_bg)
+                    tvAttentionStatus.setBackgroundResource(R.drawable.shape_gray_stroke_radius_5_bg)
                     tvAttentionStatus.setTextColor(resources.getColor(R.color.default_gray_text_color))
                 } else {
                     tvAttentionStatus.text = "关注"
-                    tvAttentionStatus.setBackgroundResource( R.drawable.shape_color_accent_radius_5_bg)
+                    tvAttentionStatus.setBackgroundResource(R.drawable.shape_color_accent_radius_5_bg)
                     tvAttentionStatus.setTextColor(resources.getColor(R.color.white))
                 }
 
 
                 tvAttentionStatus.setOnClickListener {
-                    if(isAttention){
+                    if (isAttention) {
                         val dialog = CommonDialog(this)
                         dialog.setTitle("温馨提示")
                         dialog.setMessage("是否取消关注？")
@@ -380,7 +393,7 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
                             dialog.dismiss()
                         }
                         dialog.show()
-                    }else{
+                    } else {
                         mPresenter.addConcern(item.user_id, 2)
                     }
 
@@ -746,6 +759,10 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
             commentContainer.addView(commentView)
         }
 
+        if (scrollBottom) {
+            mScrollView.fullScroll(ScrollView.FOCUS_DOWN)
+        }
+
     }
 
     override fun sendVoteSuccess(optionModelList: MutableList<VoteOptionModel>) {
@@ -816,8 +833,8 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
         } else {
             hideSoftInput(circleEt.windowToken)
         }
-
-        mPresenter.getDetailsById(id, false,isLife)
+        scrollBottom = true
+        mPresenter.getDetailsById(id, false, isLife)
     }
 
     override fun setCollectStatusSuccess(isCollect: Boolean) {
@@ -912,7 +929,7 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
                 }
 
                 override fun onWbShareSuccess() {
-                    if(SPUtils.getInstance().getString("token","").isNotEmpty()){
+                    if (SPUtils.getInstance().getString("token", "").isNotEmpty()) {
                         mPresenter.getScoreByShare(id)
                     }
                     ToastUtils.showShort("分享成功")
@@ -948,7 +965,7 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
         params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "榴香怀远")
         mTencent!!.shareToQQ(this, params, object : IUiListener {
             override fun onComplete(p0: Any?) {
-                if(SPUtils.getInstance().getString("token","").isNotEmpty()){
+                if (SPUtils.getInstance().getString("token", "").isNotEmpty()) {
                     mPresenter.getScoreByShare(id)
                 }
                 ToastUtils.showShort("分享成功")
@@ -997,7 +1014,7 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
     private var onClickResult = object : InterfaceUtils.OnClickResult {
         override fun onResult(msg: String?) {
             ToastUtils.showShort("分享成功")
-            if(SPUtils.getInstance().getString("token","").isNotEmpty()){
+            if (SPUtils.getInstance().getString("token", "").isNotEmpty()) {
                 mPresenter.getScoreByShare(id)
             }
             InterfaceUtils.getInstance().remove(this)

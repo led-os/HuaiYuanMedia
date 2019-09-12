@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         titlebar:bottomShadowHeight="0dp"
-        titlebar:centerText="标题栏"
+        titlebar:centerText=""
         titlebar:centerTextColor="#ffffff"
         titlebar:centerTextSize="@dimen/sp_19"
         titlebar:centerType="textView"

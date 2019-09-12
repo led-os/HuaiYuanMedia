@@ -55,7 +55,6 @@ class BindPhoneActivity : BaseTitleActivity<BindPhonePresenter>(), BindPhoneCont
     }
 
     override fun bindSuccess() {
-        MyApplication.showSplash = false
         startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
