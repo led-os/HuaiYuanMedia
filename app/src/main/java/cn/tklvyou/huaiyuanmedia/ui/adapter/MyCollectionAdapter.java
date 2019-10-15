@@ -449,12 +449,6 @@ public class MyCollectionAdapter extends BaseMultiItemQuickAdapter<NewsMultipleI
             case NewsMultipleItem.READING:
                 bean = (NewsBean) item.getDataBean();
 
-                if (helper.getLayoutPosition() == 0) {
-                    helper.getView(R.id.ivReadingImage).getLayoutParams().height = ConvertUtils.dp2px(90);
-                } else {
-                    helper.getView(R.id.ivReadingImage).getLayoutParams().height = ConvertUtils.dp2px(115);
-                }
-
                 helper.setText(R.id.tvName, bean.getName());
                 helper.setText(R.id.tvBeginTime, bean.getBegintime());
                 helper.setText(R.id.tvSeeNum, "" + bean.getVisit_num());
@@ -816,20 +810,6 @@ public class MyCollectionAdapter extends BaseMultiItemQuickAdapter<NewsMultipleI
                         sparkButton.setChecked(false);
                     }
 
-
-//                    tvGoodNum = helper.getView(R.id.tvGoodNum1);
-//
-//                    drawables = tvGoodNum.getCompoundDrawables();
-//
-//                    if (bean.getLike_status() == 1) {
-//                        Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_mini_good);
-//                        redGoodDrawable.setBounds(drawables[0].getBounds());
-//                        tvGoodNum.setCompoundDrawables(redGoodDrawable, drawables[1], drawables[2], drawables[3]);
-//                    } else {
-//                        Drawable grayGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_good);
-//                        grayGoodDrawable.setBounds(drawables[0].getBounds());
-//                        tvGoodNum.setCompoundDrawables(grayGoodDrawable, drawables[1], drawables[2], drawables[3]);
-//                    }
 
                     if (!StringUtils.isEmpty(bean.getVideo())) {
                         helper.setGone(R.id.videoLayout, true);

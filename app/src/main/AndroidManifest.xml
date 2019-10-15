@@ -21,7 +21,6 @@
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" /> <!-- 硬件加速对X5视频播放非常重要，建议开启 -->
     <uses-permission android:name="android.permission.GET_TASKS" />
 
     <application
@@ -36,13 +35,20 @@
         android:supportsRtl="true"
         android:theme="@style/CustomAppTheme"
         tools:replace="android:theme">
-        <activity android:name=".ui.mine.comment.MyCommentActivity"/>
+        <activity android:name=".ui.home.ping_xuan.PingXuanPersionActivity"></activity>
+        <activity android:name=".ui.home.ping_xuan.PingXuanDetailsActivity"></activity>
+        <activity android:name=".ui.video_edit.PicturePreviewActivity" />
+        <activity android:name=".ui.video_edit.selCover.SelCoverTimeActivity" />
+        <activity android:name=".ui.video_edit.CameraActivity" />
+        <activity android:name=".ui.mine.comment.MyCommentActivity" />
 
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
 
-        <activity android:name=".ui.main.SplashActivity" android:theme="@style/SplashActivityTheme">
+        <activity
+            android:name=".ui.main.SplashActivity"
+            android:theme="@style/SplashActivityTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -50,34 +56,36 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".ui.home.comment.CommentListActivity" />
-        <activity android:name=".ui.main.WebviewActivity" android:launchMode="singleTop" />
-        <activity android:name=".ui.home.search_list.SearchListActivity" />
-        <activity android:name=".ui.account.AgreementActivity" />
+        <activity
+            android:name=".ui.main.WebviewActivity"
+            android:launchMode="singleTop" />
+        <activity android:name=".ui.home.ping_xuan.search.PingXuanSearchListActivity" />
+        <activity android:name=".ui.home.search_list.SearchListActivity"/>
 
+        <activity android:name=".ui.account.AgreementActivity" />
         <activity android:name=".ui.home.all_tv.AllTvActivity" />
         <activity android:name=".ui.home.all_juzheng.AllJuZhengActivity" />
-        <activity android:name="cn.tklvyou.huaiyuanmedia.ui.camera.point_rule.PointRuleActivity" />
-        <activity android:name="cn.tklvyou.huaiyuanmedia.ui.camera.goods_detail.GoodsDetailsActivity" />
-        <activity android:name="cn.tklvyou.huaiyuanmedia.ui.camera.point.PointActivity" />
-        <activity android:name="cn.tklvyou.huaiyuanmedia.ui.camera.zhuan_pan.ZhuanPanActivity" />
+        <activity android:name=".ui.camera.point_rule.PointRuleActivity" />
+        <activity android:name=".ui.camera.goods_detail.GoodsDetailsActivity" />
+        <activity android:name=".ui.camera.point.PointActivity" />
+        <activity android:name=".ui.camera.zhuan_pan.ZhuanPanActivity" />
         <activity android:name=".ui.audio.ServiceWebviewActivity" />
         <activity android:name=".ui.home.publish_news.PublishNewsActivity" />
         <activity android:name=".ui.home.publish_wenzheng.PublishWenzhengActivity" />
         <activity android:name=".ui.home.BannerDetailsActivity" />
-        <activity android:name=".ui.video_edit.VideoEditActivity" />
+        <activity android:name=".ui.video_edit.VideoOptionActivity" />
+        <activity android:name=".ui.video_edit.localEdit.LocalVideoActivity" />
         <activity android:name=".ui.camera.today_hot.TodayHotActivity" />
         <activity
             android:name=".ui.camera.TakePhotoActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.MainActivity"
-            android:configChanges="screenLayout"
+            android:configChanges="screenLayout|orientation|keyboardHidden|screenSize"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait">
-        </activity>
-
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" /> <!-- stateHidden| -->
         <activity
             android:name=".ui.account.LoginActivity"
             android:configChanges="keyboard|orientation|keyboardHidden|screenSize|uiMode|screenLayout"
@@ -92,7 +100,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="tencent101717196" />
+                <data android:scheme="tencent101788396" />
             </intent-filter>
         </activity>
         <activity

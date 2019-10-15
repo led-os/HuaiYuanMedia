@@ -119,11 +119,37 @@ class SplashActivity : BaseActivity<AdPresenter>(), MainContract.AdView {
                             handler.removeMessages(0)
                             finish()
                         }
+                    }else {
+                        ivAdvertising.setOnClickListener {
+                            jump = true
+                        }
                     }
 
                 }
             }, 4500)
 
+        }else if(SPStaticUtils.getBoolean("ad2", false)){
+            layoutSkip.visibility = View.VISIBLE
+
+            val url = SPStaticUtils.getString("ad2_url", "")
+            val folder = cacheDir.absolutePath + File.separator + "download"
+            val appDir = File(folder, "pictures")
+            val fileName = "ad2.png"
+            val destFile = File(appDir, fileName)
+
+            ivAdvertising.setImageBitmap(ImageUtils.getBitmap(destFile))
+
+            if (url.isNotEmpty()) {
+                ivAdvertising.setOnClickListener {
+                    jump = false
+                    val intent = Intent(this, WebviewActivity::class.java)
+                    intent.putExtra("url", url)
+                    intent.putExtra("ad", true)
+                    startActivity(intent)
+                    handler.removeMessages(0)
+                    finish()
+                }
+            }
         }
 
 
@@ -171,7 +197,6 @@ class SplashActivity : BaseActivity<AdPresenter>(), MainContract.AdView {
 
                 })
 
-
                 if (data[0].url.isNotEmpty()) {
                     ivAdvertising.setOnClickListener {
                         jump = false
@@ -184,60 +209,74 @@ class SplashActivity : BaseActivity<AdPresenter>(), MainContract.AdView {
                     }
                 }
 
-                if (size > 1) {
-                    handler.postDelayed({
-                        runUiThread {
-                            Glide.with(this).downloadOnly().load(data[1].image).into(object : SimpleTarget<File>() {
+            } else {
+                SPStaticUtils.put("ad1", false)
+                SPStaticUtils.put("ad1_url", "")
+            }
+        }
 
-                                override fun onResourceReady(resource: File, transition: Transition<in File>?) {
+        if (size > 1) {
 
-                                    try {
-                                        //获取到下载得到的图片，进行本地保存
-                                        val folder = cacheDir.absolutePath + File.separator + "download"
-                                        val appDir = File(folder, "pictures")
-                                        if (!appDir.exists()) {
-                                            appDir.mkdirs()
+            if (data[1].image.isNotEmpty()) {
+                handler.postDelayed({
+                    runUiThread {
+                        Glide.with(this).downloadOnly().load(data[1].image).into(object : SimpleTarget<File>() {
+
+                            override fun onResourceReady(resource: File, transition: Transition<in File>?) {
+
+                                try {
+                                    //获取到下载得到的图片，进行本地保存
+                                    val folder = cacheDir.absolutePath + File.separator + "download"
+                                    val appDir = File(folder, "pictures")
+                                    if (!appDir.exists()) {
+                                        appDir.mkdirs()
+                                    }
+                                    val fileName = "ad2.png"
+                                    val destFile = File(appDir, fileName)
+
+                                    val status = YBitmapUtils.copy(resource, destFile)
+                                    if (status) {
+                                        if (!SPStaticUtils.getBoolean("ad2", false)) {
+                                            ivAdvertising.setImageBitmap(ImageUtils.getBitmap(resource))
                                         }
-                                        val fileName = "ad2.png"
-                                        val destFile = File(appDir, fileName)
-
-                                        val status = YBitmapUtils.copy(resource, destFile)
-                                        if (status) {
-                                            if (!SPStaticUtils.getBoolean("ad2", false)) {
-                                                ivAdvertising.setImageBitmap(ImageUtils.getBitmap(resource))
-                                            }
-                                            SPStaticUtils.put("ad2", true)
-                                            SPStaticUtils.put("ad2_url", data[1].url)
-                                        } else {
-                                            ToastUtils.showShort("下载失败")
-                                        }
-
-
-                                    } catch (e: Exception) {
+                                        SPStaticUtils.put("ad2", true)
+                                        SPStaticUtils.put("ad2_url", data[1].url)
+                                    } else {
                                         ToastUtils.showShort("下载失败")
                                     }
 
-
+                                } catch (e: Exception) {
+                                    ToastUtils.showShort("下载失败")
                                 }
 
-                            })
 
-                            if (data[1].url.isNotEmpty()) {
-                                ivAdvertising.setOnClickListener {
-                                    jump = false
-                                    val intent = Intent(this, WebviewActivity::class.java)
-                                    intent.putExtra("url", data[1].url)
-                                    intent.putExtra("ad", true)
-                                    startActivity(intent)
-                                    handler.removeMessages(0)
-                                    finish()
-                                }
+                            }
+
+                        })
+
+                        if (data[1].url.isNotEmpty()) {
+                            ivAdvertising.setOnClickListener {
+                                jump = false
+                                val intent = Intent(this, WebviewActivity::class.java)
+                                intent.putExtra("url", data[1].url)
+                                intent.putExtra("ad", true)
+                                startActivity(intent)
+                                handler.removeMessages(0)
+                                finish()
+                            }
+                        }else{
+                            ivAdvertising.setOnClickListener {
+                                jump = true
                             }
                         }
-                    }, 4500)
-                }
+                    }
+                }, 4500)
 
+            } else {
+                SPStaticUtils.put("ad2", false)
+                SPStaticUtils.put("ad2_url", "")
             }
+
         }
 
 

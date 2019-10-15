@@ -175,6 +175,15 @@
             android:orientation="horizontal"
             android:padding="@dimen/dp_13">
 
+            <ImageView
+                android:id="@+id/ivImageOne"
+                android:layout_width="@dimen/dp_114"
+                android:layout_height="@dimen/dp_82"
+                android:layout_marginRight="@dimen/dp_20"
+                android:background="@color/bg_no_photo"
+                android:scaleType="centerCrop"
+                android:visibility="visible" />
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -339,16 +348,6 @@
                 </LinearLayout>
 
             </LinearLayout>
-
-
-            <ImageView
-                android:id="@+id/ivImageOne"
-                android:layout_width="@dimen/dp_114"
-                android:layout_height="@dimen/dp_82"
-                android:layout_marginLeft="@dimen/dp_20"
-                android:background="@color/bg_no_photo"
-                android:scaleType="centerCrop"
-                android:visibility="gone" />
 
         </LinearLayout>
 

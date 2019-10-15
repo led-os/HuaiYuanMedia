@@ -177,5 +177,32 @@ public class NewListPresenter extends BasePresenter<NewListContract.View> implem
                 }, throwable -> throwable.printStackTrace());
     }
 
+    @Override
+    public void getPingXuanList(int p, boolean showLoading) {
+        if (showLoading) {
+            mView.showLoading();
+        }
+        RetrofitHelper.getInstance().getServer()
+                .getPingXuanList("评选",p)
+                .compose(RxSchedulers.applySchedulers())
+//                .compose(mView.bindToLife())
+                .subscribe(result -> {
+                            mView.showSuccess("");
+                            if (result.getCode() == 1) {
+                                if (mView != null) {
+                                    mView.setPingXuanList(p, result.getData());
+                                }
+                            } else {
+                                ToastUtils.showShort(result.getMsg());
+                            }
+                        }, throwable -> {
+                            if (mView != null) {
+                                mView.setNewList(p, null);
+                                mView.showFailed("");
+                            }
+                        }
+                );
+    }
+
 
 }

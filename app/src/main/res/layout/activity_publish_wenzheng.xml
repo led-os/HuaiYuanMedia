@@ -34,7 +34,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="问政对象"
+                    android:text="爆料对象"
                     android:textColor="@color/default_black_text_color"
                     android:textSize="@dimen/sp_14" />
 
@@ -46,7 +46,7 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:gravity="right|center"
-                    android:hint="选择问政对象"
+                    android:hint="选择爆料对象"
                     android:textSize="@dimen/sp_14" />
 
             </LinearLayout>
@@ -91,7 +91,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/dp_50"
                     android:gravity="center"
-                    android:text="问政内容"
+                    android:text="爆料内容"
                     android:textColor="@color/default_black_text_color"
                     android:textSize="@dimen/sp_14" />
 
@@ -103,7 +103,7 @@
                     android:background="@drawable/shape_gray_radius_8_bg"
                     android:gravity="top"
                     android:maxLength="50"
-                    android:hint="输入问政内容（限50字以内）"
+                    android:hint="输入爆料内容（限50字以内）"
                     android:padding="@dimen/dp_10"
                     android:textSize="@dimen/sp_14" />
 

@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,9 +28,10 @@ import cn.tklvyou.huaiyuanmedia.ui.home.all_juzheng.AllJuZhengActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.all_tv.AllTvActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.publish_wenzheng.PublishWenzhengActivity
-import cn.tklvyou.huaiyuanmedia.ui.home.search_list.SearchListActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.tv_news_detail.TVNewsDetailActivity
 import cn.tklvyou.huaiyuanmedia.ui.audio.ServiceWebviewActivity
+import cn.tklvyou.huaiyuanmedia.ui.home.ping_xuan.PingXuanDetailsActivity
+import cn.tklvyou.huaiyuanmedia.ui.home.search_list.SearchListActivity
 import cn.tklvyou.huaiyuanmedia.ui.video_player.VodActivity
 import cn.tklvyou.huaiyuanmedia.utils.BannerGlideImageLoader
 import cn.tklvyou.huaiyuanmedia.utils.GridDividerItemDecoration
@@ -103,7 +103,7 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
                 recyclerView.addItemDecoration(GridDividerItemDecoration(30, resources.getColor(R.color.common_bg), true))
             }
 
-            NewsMultipleItem.LISTEN -> {
+            NewsMultipleItem.LISTEN, NewsMultipleItem.PING_XUAN -> {
                 recyclerView.addItemDecoration(RecycleViewDivider(context, LinearLayout.VERTICAL, 30, resources.getColor(R.color.common_bg), true))
             }
 
@@ -131,6 +131,11 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
 
     override fun lazyData() {
         when (type) {
+
+            NewsMultipleItem.PING_XUAN ->{
+                mPresenter.getPingXuanList(1,showLoading)
+            }
+
             NewsMultipleItem.VIDEO, NewsMultipleItem.JU_ZHENG, NewsMultipleItem.ZHUAN_TI, NewsMultipleItem.TUI_JIAN -> {
                 mPresenter.getBanner(param)
             }
@@ -530,8 +535,8 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
                             startNewsDetailActivity(context!!, type, id)
                         }
                     }
-                    "问政" -> {
-                        val type = "问政"
+                    "爆料" -> {
+                        val type = "爆料"
                         if (bean.url.isNotEmpty()) {
                             startDetailsActivity(context!!, bean.url)
                         } else {
@@ -695,6 +700,10 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
                 mPresenter.getNewList(param, null, page, false)
             }
 
+            NewsMultipleItem.PING_XUAN ->{
+                mPresenter.getPingXuanList(page,false)
+            }
+
             NewsMultipleItem.TV -> {
                 mPresenter.getHaveSecondModuleNews(page, param, false)
             }
@@ -769,6 +778,22 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
         }
     }
 
+    override fun setPingXuanList(p: Int, model: BasePageModel<PingXuanModel>?) {
+        showLoading = false
+        if (model != null) {
+            val newList = ArrayList<NewsMultipleItem<Any>>()
+
+            model.data.forEach {
+                newList.add(NewsMultipleItem("评选", it))
+            }
+
+            onLoadSucceed(p, newList)
+        } else {
+            onLoadFailed(p, null)
+        }
+    }
+
+
     override fun setHaveSecondModuleNews(p: Int, datas: MutableList<HaveSecondModuleNewsModel>?) {
         showLoading = false
         if (datas != null) {
@@ -833,7 +858,7 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
             NewsMultipleItem.WEN_ZHENG -> {
                 val bean = (adapter as NewsMultipleItemQuickAdapter).data[position].dataBean as NewsBean
                 val id = bean.id
-                val type = "问政"
+                val type = "爆料"
                 if (bean.url.isNotEmpty()) {
                     startDetailsActivity(context!!, bean.url)
                 } else {
@@ -930,6 +955,14 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
                 }
             }
 
+            NewsMultipleItem.PING_XUAN ->{
+                val bean = (adapter as NewsMultipleItemQuickAdapter).data[position].dataBean as PingXuanModel
+                val id = bean.id
+                val intent = Intent(context,PingXuanDetailsActivity::class.java)
+                intent.putExtra("id",id)
+                startActivity(intent)
+            }
+
             NewsMultipleItem.TUI_JIAN -> {
                 val bean = (adapter as NewsMultipleItemQuickAdapter).data[position].dataBean as NewsBean
                 val id = bean.id
@@ -964,6 +997,8 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
                 }
 
             }
+
+
 
             else -> {
                 val bean = (adapter as NewsMultipleItemQuickAdapter).data[position].dataBean as NewsBean
@@ -1293,8 +1328,8 @@ class NewsListFragment : BaseHttpRecyclerFragment<NewListPresenter, NewsMultiple
                     val type = "视讯"
                     startNewsDetailActivity(context!!, type, bean.id)
                 }
-                "问政" -> {
-                    val type = "问政"
+                "爆料" -> {
+                    val type = "爆料"
                     startNewsDetailActivity(context!!, type, bean.id)
                 }
 

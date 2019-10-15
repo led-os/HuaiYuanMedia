@@ -23,6 +23,7 @@ import cn.tklvyou.huaiyuanmedia.ui.home.publish_news.PublishNewsActivity
 import cn.tklvyou.huaiyuanmedia.ui.camera.point.PointActivity
 import cn.tklvyou.huaiyuanmedia.ui.camera.history_updates.HistoryUpdatesFragment
 import cn.tklvyou.huaiyuanmedia.ui.camera.today_hot.TodayHotActivity
+import cn.tklvyou.huaiyuanmedia.ui.video_edit.CameraActivity
 import cn.tklvyou.huaiyuanmedia.utils.RecycleViewDivider
 import com.adorkable.iosdialog.BottomSheetDialog
 import com.blankj.utilcode.util.ConvertUtils
@@ -87,7 +88,7 @@ class CameraFragment : BaseRecyclerFragment<CameraPresenter, NewsBean, BaseViewH
                                         .setDefaultItemStyle(BottomSheetDialog.SheetItemTextStyle("#000000", 16))
                                         .setBottomBtnStyle(BottomSheetDialog.SheetItemTextStyle("#ff0000", 18))
                                         .addSheetItem("拍摄") { which ->
-                                            val intent = Intent(context, TakePhotoActivity::class.java)
+                                            val intent = Intent(context, CameraActivity::class.java)
                                             intent.putExtra("page", "生活圈")
                                             startActivity(intent)
                                             isRefresh = true

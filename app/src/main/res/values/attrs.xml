@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <declare-styleable name="NestedWebViewRecyclerViewGroup">
+        <attr name="switchDuration" format="integer" />
+        <attr name="scrollbarEnable" format="boolean" />
+        <attr name="scrollbarColor" format="color" />
+        <attr name="scrollbarMinHeight" format="dimension" />
+        <attr name="scrollbarWidth" format="dimension" />
+        <attr name="scrollbarMarginRight" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="HeaderViewPager">
+        <attr name="hvp_topOffset" format="dimension"/>
+    </declare-styleable>
+
     <declare-styleable name="SwitchView">
         <attr name="bgColor" format="color|reference" />
         <attr name="leftColor" format="color|reference" />
@@ -92,6 +106,13 @@
         <attr name="lockEdge" format="boolean" />
         <attr name="flingVelocity" format="integer" />
         <attr name="minDistRequestDisallowParent" format="dimension" />
+    </declare-styleable>
+
+
+    <declare-styleable name="FocusImageView">
+        <attr name="focus_focusing_id" format="integer" />
+        <attr name="focus_success_id" format="integer" />
+        <attr name="focus_fail_id" format="integer" />
     </declare-styleable>
 
 </resources>

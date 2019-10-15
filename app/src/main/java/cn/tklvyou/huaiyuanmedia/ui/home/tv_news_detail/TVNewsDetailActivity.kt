@@ -154,23 +154,6 @@ class TVNewsDetailActivity : BaseRecyclerActivity<TVNewsDetailPresenter, TelMode
 
 
     override fun setDetails(item: NewsBean) {
-        //收藏状态
-//        hasCollect = item.collect_status == 1
-//
-//        setPositiveOnClickListener {
-//            if (hasCollect) {
-//                mPresenter.setCollectStatus(id, false)
-//            } else {
-//                mPresenter.setCollectStatus(id, true)
-//            }
-//        }
-//
-//        if (hasCollect) {
-//            commonTitleBar.rightImageButton.setImageDrawable(resources.getDrawable(R.mipmap.icon_collect))
-//        } else {
-//            commonTitleBar.rightImageButton.setImageDrawable(resources.getDrawable(R.mipmap.icon_collect_normal))
-//        }
-
         tvTvName.text = item.name
         tvSeeNum.text = "" + item.visit_num
         seeNum = item.visit_num
@@ -245,39 +228,6 @@ class TVNewsDetailActivity : BaseRecyclerActivity<TVNewsDetailPresenter, TelMode
 
                 mVideoView.setVideoPath(item.video)
                 mVideoView.setOnErrorListener { p0 ->
-                    //                    when (p0) {
-//                        PLOnErrorListener.MEDIA_ERROR_UNKNOWN -> {
-//                            ToastUtils.showShort("未知错误")
-//                        }
-//                        PLOnErrorListener.ERROR_CODE_OPEN_FAILED -> {
-//                            ToastUtils.showShort("播放器打开失败")
-//                        }
-//                        PLOnErrorListener.ERROR_CODE_IO_ERROR -> {
-//                            ToastUtils.showShort("网络异常")
-//                        }
-//                        PLOnErrorListener.ERROR_CODE_SEEK_FAILED -> {
-//                            ToastUtils.showShort("拖动失败")
-//                        }
-//                        PLOnErrorListener.ERROR_CODE_CACHE_FAILED -> {
-//                            ToastUtils.showShort("预加载失败")
-//                        }
-//                        PLOnErrorListener.ERROR_CODE_HW_DECODE_FAILURE -> {
-//                            ToastUtils.showShort("硬解失败")
-//                        }
-//                        PLOnErrorListener.ERROR_CODE_PLAYER_DESTROYED -> {
-//                            ToastUtils.showShort("播放器已被销毁")
-//                        }
-//                        PLOnErrorListener.ERROR_CODE_PLAYER_VERSION_NOT_MATCH -> {
-//                            ToastUtils.showShort("so 库版本不匹配，需要升级")
-//                        }
-//                        PLOnErrorListener.ERROR_CODE_PLAYER_CREATE_AUDIO_FAILED -> {
-//                            ToastUtils.showShort("AudioTrack 初始化失败，可能无法播放音频")
-//                        }
-//
-//                        else -> {
-//                            ToastUtils.showShort("未知错误！")
-//                        }
-//                    }
                     true
                 }
                 mVideoView.setOnCompletionListener {

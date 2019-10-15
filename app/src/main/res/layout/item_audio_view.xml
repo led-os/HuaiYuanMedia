@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RadioButton xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mTvName"
+    android:layout_width="@dimen/dp_122"
+    android:layout_height="match_parent"
+    android:background="@null"
+    android:button="@null"
+    android:checked="false"
+    android:ellipsize="end"
+    android:gravity="center"
+    android:singleLine="true"
+    android:textColor="@drawable/selector_default_text_color"
+    android:textSize="@dimen/sp_16">
+
+</RadioButton>

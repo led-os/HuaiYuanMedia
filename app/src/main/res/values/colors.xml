@@ -41,4 +41,13 @@
     <!--红色区域-->
     <color name="redFF4A5C">#FF4A5C</color>
 
+
+    <color name="red">#FF0000</color> <!--红色 -->
+    <color name="middle_gray">#7f808080</color>
+    <color name="black_50">#7F000000</color>
+    <color name="colorWhite70">#B3FFFFFF</color>
+    <color name="colorWhite40">#66ffffff</color>
+    <color name="colorWhite10">#1AFFFFFF</color>
+    <color name="color_454545">#454545</color>
+    <color name="colorWhite30">#4dffffff</color>
 </resources>

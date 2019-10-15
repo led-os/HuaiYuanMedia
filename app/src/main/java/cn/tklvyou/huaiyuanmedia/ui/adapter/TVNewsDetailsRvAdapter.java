@@ -44,7 +44,7 @@ public class TVNewsDetailsRvAdapter extends BaseQuickAdapter<TelModel.ListBean, 
         }
 
         helper.setText(R.id.tvName, bean.getContent());
-        helper.setText(R.id.tvDate, bean.getDate());
+        helper.setText(R.id.tvDate, bean.getTime());
 
 
     }

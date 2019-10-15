@@ -197,8 +197,8 @@ class MyCommentActivity : BaseHttpRecyclerActivity<MyCommentPresenter, MyComment
                                 startNewsDetailActivity(this, type, id, position)
                             }
                         }
-                        "问政" -> {
-                            val type = "问政"
+                        "爆料" -> {
+                            val type = "爆料"
                             if (bean.url.isNotEmpty()) {
                                 startDetailsActivity(this, bean.url)
                             } else {

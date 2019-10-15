@@ -18,7 +18,7 @@ import cn.tklvyou.huaiyuanmedia.widget.SwipeRevealLayout;
 
 /**
  * @author :JenkinsZhou
- * @description :问政适配器
+ * @description :爆料适配器
  * @company :途酷科技
  * @date 2019年08月02日18:06
  * @Email: 971613168@qq.com

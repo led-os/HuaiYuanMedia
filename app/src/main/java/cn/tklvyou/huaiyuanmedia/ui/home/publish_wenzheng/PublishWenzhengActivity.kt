@@ -32,7 +32,7 @@ class PublishWenzhengActivity : BaseActivity<PublishWenzhengPresenter>(), Publis
 
         tvModuleSecond.setOnClickListener {
             val dialog = SelectListDialog(this)
-            dialog.setTitle("选择问政对象")
+            dialog.setTitle("选择爆料对象")
             dialog.setLayoutManager(GridLayoutManager(this, 4))
             dialog.setAdapter(object : TBaseAdapter<NewsBean>(R.layout.item_juzheng_header_child_layout, wenzhengBeans) {
                 override fun onBind(holder: DialogBindViewHolder, position: Int, t: NewsBean) {
@@ -51,7 +51,7 @@ class PublishWenzhengActivity : BaseActivity<PublishWenzhengPresenter>(), Publis
 
     override fun setQiniuToken(token: String) {
         this.qiniuToken = token
-        mPresenter.getJuZhengHeader("问政")
+        mPresenter.getJuZhengHeader("爆料")
     }
 
     override fun initPresenter(): PublishWenzhengPresenter {
@@ -75,7 +75,7 @@ class PublishWenzhengActivity : BaseActivity<PublishWenzhengPresenter>(), Publis
 
 
     override fun initView(savedInstanceState: Bundle?) {
-        setTitle("发布问政")
+        setTitle("发布爆料")
         setNavigationText("", R.mipmap.icon_titlebar_back)
         setNavigationOnClickListener { finish() }
 
@@ -105,7 +105,7 @@ class PublishWenzhengActivity : BaseActivity<PublishWenzhengPresenter>(), Publis
             content = etContent.text.toString().trim()
 
             if (moduleSecond.isEmpty()) {
-                ToastUtils.showShort("请选择问政对象")
+                ToastUtils.showShort("请选择爆料对象")
                 return@setOnClickListener
             }
 

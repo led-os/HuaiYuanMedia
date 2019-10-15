@@ -13,14 +13,18 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.ScrollView
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import cn.tklvyou.huaiyuanmedia.R
+import cn.tklvyou.huaiyuanmedia.base.activity.BaseActivity
 import cn.tklvyou.huaiyuanmedia.base.activity.BaseWebViewActivity
 import cn.tklvyou.huaiyuanmedia.common.Contacts
 import cn.tklvyou.huaiyuanmedia.helper.GlideManager
+import cn.tklvyou.huaiyuanmedia.model.CommentModel
 import cn.tklvyou.huaiyuanmedia.model.NewsBean
 import cn.tklvyou.huaiyuanmedia.model.VoteOptionModel
+import cn.tklvyou.huaiyuanmedia.ui.adapter.CommentRvAdapter
 import cn.tklvyou.huaiyuanmedia.ui.home.AudioController
 import cn.tklvyou.huaiyuanmedia.ui.home.ImagePagerActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.comment.CommentListActivity
@@ -32,6 +36,7 @@ import cn.tklvyou.huaiyuanmedia.utils.YBitmapUtils
 import cn.tklvyou.huaiyuanmedia.widget.SharePopupWindow
 import cn.tklvyou.huaiyuanmedia.widget.VoteLoadButton
 import cn.tklvyou.huaiyuanmedia.widget.dailog.CommonDialog
+import cn.tklvyou.huaiyuanmedia.widget.rich_web_list.view.HeaderScrollHelper
 import com.blankj.utilcode.util.*
 import com.sina.weibo.sdk.api.WebpageObject
 import com.sina.weibo.sdk.api.WeiboMultiMessage
@@ -53,7 +58,7 @@ import java.util.*
 /**
  * Created by yiw on 2016/1/6.
  */
-class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetailContract.View {
+class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContract.View {
 
     companion object {
         public val INTENT_TYPE = "type"
@@ -96,7 +101,6 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
     private var hasCollect = false
     private var like_num = 0
 
-    private var scrollBottom = false
 
     //是否已关注
     private var isAttention = false
@@ -124,7 +128,7 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
             finish()
         }
 
-        initWebView(newsDetailWebView)
+//        initWebView(newsDetailWebView)
 
         when (type) {
             "视频", "图文" -> {
@@ -165,7 +169,7 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
                 llArticle.visibility = View.VISIBLE
             }
 
-            "问政" -> {
+            "爆料" -> {
                 llWXHeader.visibility = View.GONE
                 contentTv.visibility = View.GONE
                 llVideo.visibility = View.GONE
@@ -296,7 +300,7 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
                     mPresenter.getScoreByRead(id)
                 }
 
-                "文章", "问政", "悦读", "悦听", "公告", "专栏", "党建" -> {
+                "文章", "爆料", "悦读", "悦听", "公告", "专栏", "党建" -> {
                     timer!!.schedule(timerTask, 15 * 1000)
                 }
 
@@ -341,6 +345,7 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
         hasCollect = item.collect_status == 1
 
         newsDetailWebView.isFocusable = false
+        newsDetailWebView.settings.setNeedInitialFocus(false)
 
         when (type) {
             "视频", "图文" -> {
@@ -529,10 +534,10 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
                 }
             }
 
-            "问政" -> {
+            "爆料" -> {
 
                 tvTitle.text = item.name
-                tvNickName.text = "问政对象：${item.module_second}"
+                tvNickName.text = "爆料对象：${item.module_second}"
                 tvBeginTime.text = item.begintime
                 tvSeeNum.text = "" + item.visit_num
 
@@ -732,37 +737,27 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
 
         this.like_num = item.like_num
 
-        commentContainer.removeAllViews()
-        //评论列表
-        item.comment.forEach {
-            val commentView = View.inflate(this, R.layout.item_news_comment_view, null)
-            val ivAvatar = commentView.findViewById<ImageView>(R.id.ivAvatar)
-            val tvNickname = commentView.findViewById<TextView>(R.id.tvNickName)
-            val tvTime = commentView.findViewById<TextView>(R.id.tvTime)
-            val tvContent = commentView.findViewById<TextView>(R.id.tvContent)
-            val tvTag = commentView.findViewById<TextView>(R.id.tvTag)
+        loadCommentList(item.comment)
 
-            if (it.admin_status == 1) {
-                tvTag.visibility = View.VISIBLE
-            } else {
-                tvTag.visibility = View.INVISIBLE
+    }
+
+    private fun loadHtml(content: String) {
+        newsDetailWebView.setShow(content)
+    }
+
+
+    private fun loadCommentList(list: MutableList<CommentModel>?){
+        val adapter = CommentRvAdapter(R.layout.item_news_comment_view,list)
+        mCommentRecyclerView.layoutManager = LinearLayoutManager(this)
+        mCommentRecyclerView.adapter = adapter
+        adapter.bindToRecyclerView(mCommentRecyclerView)
+        adapter.setEmptyView(R.layout.common_empty_view)
+        //滚动绑定
+        scrollableLayout.setCurrentScrollableContainer(object : HeaderScrollHelper.ScrollableContainer {
+            override fun getScrollableView(): View {
+                return mCommentRecyclerView
             }
-
-            if (it.avatar.trim().isNotEmpty()) {
-                GlideManager.loadRoundImg(it.avatar, ivAvatar, 5f, R.mipmap.default_avatar, true)
-            }
-
-            tvNickname.text = it.nickname
-            tvTime.text = "" + it.createtime
-            tvContent.text = it.detail
-
-            commentContainer.addView(commentView)
-        }
-
-        if (scrollBottom) {
-            mScrollView.fullScroll(ScrollView.FOCUS_DOWN)
-        }
-
+        })
     }
 
     override fun sendVoteSuccess(optionModelList: MutableList<VoteOptionModel>) {
@@ -833,7 +828,6 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
         } else {
             hideSoftInput(circleEt.windowToken)
         }
-        scrollBottom = true
         mPresenter.getDetailsById(id, false, isLife)
     }
 
@@ -848,8 +842,6 @@ class NewsDetailActivity : BaseWebViewActivity<NewsDetailPresenter>(), NewsDetai
 
     }
 
-    override fun setTitleContent(title: String) {
-    }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
 

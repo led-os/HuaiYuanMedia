@@ -13,7 +13,8 @@ import cn.tklvyou.huaiyuanmedia.base.activity.BaseActivity
 import cn.tklvyou.huaiyuanmedia.helper.AccountHelper
 import cn.tklvyou.huaiyuanmedia.ui.adapter.GridImageAdapter
 import cn.tklvyou.huaiyuanmedia.ui.camera.TakePhotoActivity
-import cn.tklvyou.huaiyuanmedia.ui.video_edit.VideoEditActivity
+import cn.tklvyou.huaiyuanmedia.ui.video_edit.CameraActivity
+import cn.tklvyou.huaiyuanmedia.ui.video_edit.VideoOptionActivity
 import cn.tklvyou.huaiyuanmedia.utils.QiniuUploadManager
 import com.blankj.utilcode.util.ToastUtils
 import com.luck.picture.lib.PictureSelector
@@ -119,7 +120,7 @@ class PublishNewsActivity : BaseActivity<PublishNewsPresenter>(), PublishNewsCon
             }
 
             ivAddVideo.setOnClickListener {
-                val intent = Intent(this, TakePhotoActivity::class.java)
+                val intent = Intent(this, CameraActivity::class.java)
                 intent.putExtra("page", page)
                 intent.putExtra("is_video", true)
                 startActivity(intent)
@@ -258,28 +259,6 @@ class PublishNewsActivity : BaseActivity<PublishNewsPresenter>(), PublishNewsCon
                     selectList = PictureSelector.obtainMultipleResult(data)
                     adapter!!.list = selectList
                     adapter!!.notifyDataSetChanged()
-                }
-
-
-                10 -> {
-                    selectList = PictureSelector.obtainMultipleResult(data)
-                    val intent = Intent(this, VideoEditActivity::class.java)
-                    intent.putExtra("page", page)
-                    intent.putExtra("data", selectList as Serializable)
-                    intent.putExtra("hasBack", true)
-                    startActivityForResult(intent, 12)
-                }
-
-                12 -> {
-                    videoLayout.visibility = View.VISIBLE
-                    ivAddVideo.visibility = View.GONE
-
-                    picRecyclerView.visibility = View.GONE
-                    videoLayout.visibility = View.VISIBLE
-
-                    imagePath = intent.getStringExtra("videoImage")
-                    ivVideo.background = BitmapDrawable(imagePath)
-
                 }
 
             }

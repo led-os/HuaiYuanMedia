@@ -22,13 +22,6 @@ abstract class BaseX5WebViewFragment<P : BaseContract.BasePresenter<*>> : BaseFr
     private lateinit var mWebView: X5WebView
     protected var mBackHandledInterface: BackHandledInterface? = null
 
-    /**
-     * 所有继承BackHandledFragment的子类都将在这个方法中实现物理Back键按下后的逻辑
-     * FragmentActivity捕捉到物理返回键点击事件后会首先询问Fragment是否消费该事件
-     * 如果没有Fragment消息时FragmentActivity自己才会消费该事件
-     */
-    public abstract fun onBackPressed(): Boolean
-
 
     public fun initProgressBar(mProgressBar: ProgressBar) {
         this.mProgressBar = mProgressBar
@@ -94,29 +87,27 @@ abstract class BaseX5WebViewFragment<P : BaseContract.BasePresenter<*>> : BaseFr
 //        webSetting.layoutAlgorithm = WebSettings.LayoutAlgorithm.SINGLE_COLUMN
         webSetting.useWideViewPort = false
         webSetting.setSupportMultipleWindows(false)
-        webSetting.setLoadWithOverviewMode(true)
+        webSetting.loadWithOverviewMode = true
         webSetting.domStorageEnabled = true
         webSetting.setSupportZoom(false)
+        webSetting.builtInZoomControls = true
+        webSetting.displayZoomControls = false
         webSetting.javaScriptEnabled = true
         // webSetting.setPageCacheCapacity(IX5WebSettings.DEFAULT_CACHE_CAPACITY);
 //        webSetting.pluginState = WebSettings.PluginState.ON_DEMAND
 //        webSetting.setRenderPriority(WebSettings.RenderPriority.HIGH)
         // webSetting.setPreFectch(true)
 
-
-        LogUtils.e("----------------    13")
     }
 
     public fun loadUrl(url: String) {
         enablePadding = false
         mWebView.loadUrl(url)
-        LogUtils.e("----------------    14")
     }
 
     public fun loadHtml(html: String) {
         enablePadding = true
         imageFillWidth(html)
-        LogUtils.e("----------------    15")
     }
 
 
@@ -148,7 +139,6 @@ abstract class BaseX5WebViewFragment<P : BaseContract.BasePresenter<*>> : BaseFr
 
         //对数据进行包装,除去WebView默认存在的一定像素的边距问题
         doc.body().append("<p></p>") //修复富文本为纯图片时部分手机显示不出来
-        LogUtils.e(doc)
         val data = "<html><head><style>img{width:100% !important;}</style></head><body style='margin:0;padding:0'>${doc}</body></html>"
 
 
@@ -160,7 +150,6 @@ abstract class BaseX5WebViewFragment<P : BaseContract.BasePresenter<*>> : BaseFr
 
     override fun onDestroy() {
         super.onDestroy()
-        LogUtils.e("----------------    16")
         mProgressBar = null
         mWebView.removeAllViews()
         try {

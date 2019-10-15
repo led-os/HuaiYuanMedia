@@ -38,4 +38,68 @@ public class AudioPresenter extends BasePresenter<AudioContract.View> implements
                 );
     }
 
+    @Override
+    public void getDetailsById(int id) {
+        mView.showLoading();
+        RetrofitHelper.getInstance().getServer()
+                .getArticleDetail(id)
+                .compose(RxSchedulers.applySchedulers())
+                .compose(mView.bindToLife())
+                .subscribe(result -> {
+                            mView.showSuccess(result.getMsg());
+                            if (result.getCode() == 1) {
+                                mView.setDetails(result.getData());
+                            }
+                        }, throwable -> {
+                            throwable.printStackTrace();
+                            mView.showFailed("");
+                        }
+                );
+    }
+
+    @Override
+    public void addLikeNews(int id) {
+        RetrofitHelper.getInstance().getServer()
+                .addLikeNews(id)
+                .compose(RxSchedulers.applySchedulers())
+                .compose(mView.bindToLife())
+                .subscribe(result -> {
+                    if (result.getCode() == 1) {
+                        mView.updateLikeStatus(true);
+                    } else {
+                        ToastUtils.showShort(result.getMsg());
+                    }
+                }, throwable -> throwable.printStackTrace());
+    }
+
+    @Override
+    public void cancelLikeNews(int id) {
+        RetrofitHelper.getInstance().getServer()
+                .cancelLikeNews(id)
+                .compose(RxSchedulers.applySchedulers())
+                .compose(mView.bindToLife())
+                .subscribe(result -> {
+                    if (result.getCode() == 1) {
+                        mView.updateLikeStatus(false);
+                    } else {
+                        ToastUtils.showShort(result.getMsg());
+                    }
+                }, throwable -> throwable.printStackTrace());
+    }
+
+    @Override
+    public void addComment(int id, String detail) {
+        RetrofitHelper.getInstance().getServer()
+                .addComment(id, detail)
+                .compose(RxSchedulers.applySchedulers())
+                .compose(mView.bindToLife())
+                .subscribe(result -> {
+                    ToastUtils.showShort(result.getMsg());
+                    if (result.getCode() == 1) {
+                        mView.addCommentSuccess(id);
+                    }
+                }, throwable -> throwable.printStackTrace());
+    }
+
+
 }

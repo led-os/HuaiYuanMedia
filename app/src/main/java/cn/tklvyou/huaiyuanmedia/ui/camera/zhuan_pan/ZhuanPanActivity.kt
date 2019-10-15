@@ -43,6 +43,10 @@ import kotlinx.android.synthetic.main.activity_zhuan_pan.*
 
 
 class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.View {
+    override fun addNum() {
+        num++
+        tvNum.text = "剩余转盘次数：$num"
+    }
 
     override fun initPresenter(): ZhuanPanPresenter {
         return ZhuanPanPresenter()
@@ -120,10 +124,7 @@ class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.Vie
                 val dialog = ConfirmDialog(this@ZhuanPanActivity)
                 dialog.setTitle("新增石榴籽")
 
-//                dialog.setStyleMessage(SpanUtils().append("转盘送积分活动获得石榴籽")
-//                        .append(scoreStr).setForegroundColor(resources.getColor(R.color.colorAccent))
-//                        .create())
-                dialog.setStyleMessage(SpanUtils().appendLine("恭喜您").setHorizontalAlign(Layout.Alignment.ALIGN_CENTER).setFontSize(17,true).setForegroundColor(Color.parseColor("#FF3C44"))
+                dialog.setStyleMessage(SpanUtils().appendLine("恭喜您").setHorizontalAlign(Layout.Alignment.ALIGN_CENTER).setFontSize(17, true).setForegroundColor(Color.parseColor("#FF3C44"))
                         .append("获得$scoreStr").setHorizontalAlign(Layout.Alignment.ALIGN_CENTER).setForegroundColor(Color.parseColor("#FF3C44"))
                         .create())
 
@@ -145,21 +146,6 @@ class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.Vie
                 } else {
                     ToastUtils.showShort("转盘次数不足")
                 }
-
-
-//                val builder = AlertDialog.Builder(this@ZhuanPanActivity)
-//                builder.setTitle("温馨提示")
-//                builder.setMessage("确定要消耗一次抽奖机会？")
-//                builder.setPositiveButton("确定") { dialog, which ->
-//                    if (num > 0) {
-//                        wheelSurfView.goBtn.isEnabled = false
-//                        mPresenter.startLottery()
-//                    } else {
-//                        ToastUtils.showShort("转盘次数不足")
-//                    }
-//                }
-//                builder.setNegativeButton("取消") { dialog, which -> }
-//                builder.show()
 
             }
         })
@@ -286,7 +272,7 @@ class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.Vie
         params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "榴香怀远")
         mTencent!!.shareToQQ(this, params, object : IUiListener {
             override fun onComplete(p0: Any?) {
-//                mPresenter.getScoreByShare(id)
+                mPresenter.shareAward()
                 ToastUtils.showShort("分享成功")
             }
 
@@ -378,6 +364,7 @@ class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.Vie
                 }
 
                 override fun onWbShareSuccess() {
+                    mPresenter.shareAward()
                     ToastUtils.showShort("分享成功")
                 }
 
@@ -396,12 +383,11 @@ class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.Vie
     private var onClickResult = object : InterfaceUtils.OnClickResult {
         override fun onResult(msg: String?) {
             ToastUtils.showShort("分享成功")
-//            mPresenter.getScoreByShare(id)
+            mPresenter.shareAward()
             InterfaceUtils.getInstance().remove(this)
         }
 
     }
-
 
 
 }

@@ -10,7 +10,7 @@ import cn.tklvyou.huaiyuanmedia.R
 import cn.tklvyou.huaiyuanmedia.base.NullPresenter
 import cn.tklvyou.huaiyuanmedia.base.activity.BaseActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.publish_news.PublishNewsActivity
-import cn.tklvyou.huaiyuanmedia.ui.video_edit.VideoEditActivity
+import cn.tklvyou.huaiyuanmedia.ui.video_edit.VideoOptionActivity
 import com.blankj.utilcode.util.ImageUtils
 import com.cjt2325.cameralibrary.JCameraView
 import com.luck.picture.lib.entity.LocalMedia
@@ -69,7 +69,7 @@ class TakePhotoActivity : BaseActivity<NullPresenter>() {
 
             override fun recordSuccess(videoUrlPath: String, firstFrame: Bitmap) {
                 //获取视频首帧图片以及视频地址
-                val intent = Intent(this@TakePhotoActivity, VideoEditActivity::class.java)
+                val intent = Intent(this@TakePhotoActivity, VideoOptionActivity::class.java)
                 intent.putExtra("page", page)
                 intent.putExtra("isVideo", true)
 

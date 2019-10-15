@@ -13,18 +13,15 @@ import androidx.viewpager.widget.ViewPager
 import cn.tklvyou.huaiyuanmedia.R
 import cn.tklvyou.huaiyuanmedia.model.NewsMultipleItem
 import cn.tklvyou.huaiyuanmedia.base.fragment.BaseFragment
-import cn.tklvyou.huaiyuanmedia.model.Channel
-import cn.tklvyou.huaiyuanmedia.model.NewsBean
 import cn.tklvyou.huaiyuanmedia.ui.account.LoginActivity
 import kotlinx.android.synthetic.main.fragment_home.*
 import cn.tklvyou.huaiyuanmedia.ui.adapter.ChannelPagerAdapter
-import cn.tklvyou.huaiyuanmedia.ui.camera.TakePhotoActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.new_list.GuanZhuFragment
 import cn.tklvyou.huaiyuanmedia.ui.home.new_list.NewsListFragment
 import cn.tklvyou.huaiyuanmedia.ui.home.publish_news.PublishNewsActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.search_list.SearchListActivity
 import cn.tklvyou.huaiyuanmedia.ui.listener.OnChannelListener
-import cn.tklvyou.huaiyuanmedia.ui.video_edit.VideoEditActivity
+import cn.tklvyou.huaiyuanmedia.ui.video_edit.CameraActivity
 import com.adorkable.iosdialog.BottomSheetDialog
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.SPUtils
@@ -100,7 +97,7 @@ class HomeFragment : BaseFragment<HomePresenter>(), HomeContract.View {
                                         .setDefaultItemStyle(BottomSheetDialog.SheetItemTextStyle("#000000", 16))
                                         .setBottomBtnStyle(BottomSheetDialog.SheetItemTextStyle("#ff0000", 18))
                                         .addSheetItem("拍摄") { which ->
-                                            val intent = Intent(context, TakePhotoActivity::class.java)
+                                            val intent = Intent(context, CameraActivity::class.java)
                                             intent.putExtra("page", "原创")
                                             startActivity(intent)
                                             isRefresh = true
@@ -205,7 +202,7 @@ class HomeFragment : BaseFragment<HomePresenter>(), HomeContract.View {
 //                                bundle.putInt("type", NewsMultipleItem.SHI_XUN)
 //                            }
 //
-//                            "问政" -> {
+//                            "爆料" -> {
 //                                bundle.putInt("type", NewsMultipleItem.WEN_ZHENG)
 //                            }
 //
@@ -379,11 +376,19 @@ class HomeFragment : BaseFragment<HomePresenter>(), HomeContract.View {
         mSelectedChannels = channelList as ArrayList<String>
 
         commonNavigator!!.notifyDataSetChanged()
-        magicIndicator.onPageSelected(0)
+
+
         initChannelFragments()
         initPageFragment()
-//        mChannelPagerAdapter!!.setData(mChannelFragments)
-//        mViewPager.offscreenPageLimit = mSelectedChannels.size
+
+
+        if(mChannelFragments.size > 1) {
+            magicIndicator.onPageSelected(1)
+            mViewPager.setCurrentItem(1, false)
+        }else{
+            magicIndicator.onPageSelected(0)
+        }
+
 
     }
 
@@ -409,6 +414,9 @@ class HomeFragment : BaseFragment<HomePresenter>(), HomeContract.View {
             } else {
                 val newsFragment = NewsListFragment()
                 when (item) {
+                    "评选" -> {
+                        bundle.putInt("type", NewsMultipleItem.PING_XUAN)
+                    }
 
                     "推荐" -> {
                         bundle.putInt("type", NewsMultipleItem.TUI_JIAN)
@@ -430,7 +438,7 @@ class HomeFragment : BaseFragment<HomePresenter>(), HomeContract.View {
                         bundle.putInt("type", NewsMultipleItem.SHI_XUN)
                     }
 
-                    "问政" -> {
+                    "爆料" -> {
                         bundle.putInt("type", NewsMultipleItem.WEN_ZHENG)
                     }
 
@@ -517,7 +525,7 @@ class HomeFragment : BaseFragment<HomePresenter>(), HomeContract.View {
 //                // 2.media.getCutPath();为裁剪后path，需判断media.isCut();是否为true  注意：音视频除外
 //                // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true  注意：音视频除外
 //                // 如果裁剪并压缩了，以取压缩路径为准，因为是先裁剪后压缩的
-//                val intent = Intent(context, VideoEditActivity::class.java)
+//                val intent = Intent(context, VideoOptionActivity::class.java)
 //                intent.putExtra("page", "V视")
 //                intent.putExtra("data", selectList as Serializable)
 //                startActivity(intent)

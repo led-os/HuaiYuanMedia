@@ -17,7 +17,6 @@ import cn.tklvyou.huaiyuanmedia.base.activity.BaseActivity
 import cn.tklvyou.huaiyuanmedia.ui.receiver.Observer
 import cn.tklvyou.huaiyuanmedia.ui.receiver.PhoneCallStateObserver
 import kotlinx.android.synthetic.main.activity_vod_player.*
-import kotlinx.android.synthetic.main.activity_vod_player.btnBack
 import java.util.*
 
 
@@ -136,12 +135,13 @@ class VodActivity : BaseActivity<NullPresenter>() {
         mVideoPath = intent.getStringExtra("videoPath")
     }
 
+
     private fun initPlayer() {
         mDYLoading.start()
 
-
         mVideoView.setBufferingIndicator(mDYLoading)
         mVideoView.setVideoPath(mVideoPath)
+        mVideoView.addIOCache(mVideoPath)
         mVideoView.setOnErrorListener { p0 ->
 //            when (p0) {
 //                PLOnErrorListener.MEDIA_ERROR_UNKNOWN -> {
@@ -214,8 +214,10 @@ class VodActivity : BaseActivity<NullPresenter>() {
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
-                val progress = seekBar.progress
-                mVideoView.seekTo(progress.toLong())
+                if(mVideoView.canSeekBackward() || mVideoView.canSeekForward()){
+                    val progress = seekBar.progress
+                    mVideoView.seekTo(progress.toLong())
+                }
                 mHandler.sendEmptyMessage(UP_DATE_CODE)
             }
         })

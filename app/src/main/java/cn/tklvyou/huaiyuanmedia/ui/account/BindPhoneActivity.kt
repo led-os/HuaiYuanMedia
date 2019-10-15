@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.EditText
 import cn.tklvyou.huaiyuanmedia.R
 import cn.tklvyou.huaiyuanmedia.base.MyApplication
+import cn.tklvyou.huaiyuanmedia.base.activity.BaseActivity
 import cn.tklvyou.huaiyuanmedia.base.activity.BaseTitleActivity
 import cn.tklvyou.huaiyuanmedia.common.CommonConstant.TIME_INTERVAL
 import cn.tklvyou.huaiyuanmedia.common.CommonConstant.TIME_ONE_SECOND
@@ -17,7 +18,7 @@ import com.blankj.utilcode.util.ToastUtils
 import com.wuhenzhizao.titlebar.widget.CommonTitleBar
 import kotlinx.android.synthetic.main.activity_phone_edit.*
 
-class BindPhoneActivity : BaseTitleActivity<BindPhonePresenter>(), BindPhoneContract.View, View.OnClickListener {
+class BindPhoneActivity : BaseActivity<BindPhonePresenter>(), BindPhoneContract.View, View.OnClickListener {
 
     private var timeCount: TimeCount? = null
 
@@ -39,12 +40,12 @@ class BindPhoneActivity : BaseTitleActivity<BindPhonePresenter>(), BindPhoneCont
         return R.layout.activity_bind_phone
     }
 
-    override fun setTitleBar(titleBar: CommonTitleBar?) {
-        titleBar!!.setMainTitle("绑定手机号")
-    }
-
     private var third_id = 0
     override fun initView(savedInstanceState: Bundle?) {
+        setTitle("绑定手机号")
+        setNavigationImage()
+        setNavigationOnClickListener { finish() }
+
         third_id = intent.getIntExtra("third_id", 0)
         tvSendVCode.setOnClickListener(this)
         tvConfirmBind.setOnClickListener(this)

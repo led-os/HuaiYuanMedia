@@ -42,4 +42,21 @@ public class ZhuanPanPresenter extends BasePresenter<ZhuanPanContract.View> impl
                     mView.setLotteryResult(null);
                 });
     }
+
+    @Override
+    public void shareAward() {
+        RetrofitHelper.getInstance().getServer()
+                .shareAward()
+                .compose(RxSchedulers.applySchedulers())
+                .compose(mView.bindToLife())
+                .subscribe(result -> {
+                    mView.showSuccess(result.getMsg());
+                    if (result.getCode() == 1) {
+                        mView.addNum();
+                    }
+
+                }, throwable -> {
+                    throwable.printStackTrace();
+                });
+    }
 }

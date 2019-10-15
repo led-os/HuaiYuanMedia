@@ -19,7 +19,7 @@ import com.chad.library.adapter.base.BaseViewHolder
 import kotlinx.android.synthetic.main.activity_my_wenzheng.*
 
 /**
- *@description :问政记录
+ *@description :爆料记录
  *@company :途酷科技
  * @author :JenkinsZhou
  * @date 2019年08月02日11:04
@@ -45,7 +45,7 @@ class MyWenZhenActivity : BaseHttpRecyclerActivity<WenZhenPresenter, NewsBean, B
     private var selectIds = ArrayList<Int>()
 
     override fun initView(savedInstanceState: Bundle?) {
-        setTitle("问政")
+        setTitle("爆料")
         setNavigationImage()
         setNavigationOnClickListener { finish() }
         setPositiveText("编辑")
@@ -100,7 +100,7 @@ class MyWenZhenActivity : BaseHttpRecyclerActivity<WenZhenPresenter, NewsBean, B
             }
 
             val dialog = CommonDialog(this)
-            dialog.setMessage("确定要删除这${selectIds.size}个问政吗？")
+            dialog.setMessage("确定要删除这${selectIds.size}个爆料吗？")
             dialog.setYesOnclickListener("确定") {
                 mPresenter.cancelArticleList(idsBuilder.toString())
                 dialog.dismiss()
@@ -169,7 +169,7 @@ class MyWenZhenActivity : BaseHttpRecyclerActivity<WenZhenPresenter, NewsBean, B
         if (!isEdit) {
             when (view!!.id) {
                 R.id.itemLayout -> {
-                    val type = "问政"
+                    val type = "爆料"
                     if (bean.url.isNotEmpty()) {
                         startDetailsActivity(this,bean.url)
                     } else {

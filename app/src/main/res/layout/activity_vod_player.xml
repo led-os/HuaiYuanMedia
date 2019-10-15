@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
 
@@ -63,8 +63,8 @@
                 <ImageView
                     android:id="@+id/mMediaActions"
                     android:layout_width="@dimen/dp_30"
-                    android:layout_marginLeft="15dp"
                     android:layout_height="match_parent"
+                    android:layout_marginLeft="15dp"
                     android:src="@drawable/exo_icon_pause" />
 
                 <TextView

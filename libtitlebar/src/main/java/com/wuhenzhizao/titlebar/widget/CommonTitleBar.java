@@ -1002,6 +1002,15 @@ public class CommonTitleBar extends RelativeLayout implements View.OnClickListen
     }
 
     /**
+     * 隐藏标题栏（状态栏不变）
+     */
+    public void hideTitleBar() {
+        if (rlMain != null) {
+            rlMain.setVisibility(View.GONE);
+        }
+    }
+
+    /**
      * 切换状态栏模式
      */
     public void toggleStatusBarMode() {

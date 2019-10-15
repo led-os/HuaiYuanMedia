@@ -29,6 +29,7 @@ import cn.tklvyou.huaiyuanmedia.helper.GlideManager;
 import cn.tklvyou.huaiyuanmedia.model.NewsBean;
 import cn.tklvyou.huaiyuanmedia.model.NewsMultipleItem;
 import cn.tklvyou.huaiyuanmedia.model.HaveSecondModuleNewsModel;
+import cn.tklvyou.huaiyuanmedia.model.PingXuanModel;
 import cn.tklvyou.huaiyuanmedia.ui.home.AudioController;
 import cn.tklvyou.huaiyuanmedia.ui.home.ImagePagerActivity;
 import cn.tklvyou.huaiyuanmedia.ui.video_player.VodActivity;
@@ -65,6 +66,7 @@ public class NewsMultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<News
         addItemType(NewsMultipleItem.ZHI_BO, R.layout.item_news_zhi_bo_layout);
         addItemType(NewsMultipleItem.TUI_JIAN, R.layout.item_news_tui_jian_layout);
         addItemType(NewsMultipleItem.ZHUAN_TI, R.layout.item_news_news_layout);
+        addItemType(NewsMultipleItem.PING_XUAN, R.layout.item_news_ping_xuan_layout);
     }
 
     private AudioController mAudioControl;
@@ -981,6 +983,14 @@ public class NewsMultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<News
                     }
                 }
                 break;
+
+                case NewsMultipleItem.PING_XUAN:
+                    PingXuanModel pingXuanModel = (PingXuanModel) item.getDataBean();
+                    helper.setText(R.id.tvName, pingXuanModel.getName());
+                    helper.setText(R.id.tvContent, "简介："+pingXuanModel.getDetail());
+                    helper.setText(R.id.tvAddress, "发起单位：" + pingXuanModel.getCompany());
+                    break;
+
             default:
                 break;
         }

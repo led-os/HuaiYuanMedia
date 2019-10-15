@@ -10,7 +10,7 @@ public class NewsMultipleItem<T> implements MultiItemEntity {
     public static final int TV = 2;                                 //濉溪TV
     public static final int NEWS = 3;                               //新闻
     public static final int SHI_XUN = 4;                            //视讯
-    public static final int WEN_ZHENG = 5;                          //问政
+    public static final int WEN_ZHENG = 5;                          //爆料
     public static final int JU_ZHENG = 6;                           //文字+单张靠右的图片
     public static final int WECHAT_MOMENTS = 7;                     //微信朋友圈
     public static final int READING = 8;                            //悦读（瀑布流卡片）
@@ -21,6 +21,7 @@ public class NewsMultipleItem<T> implements MultiItemEntity {
     public static final int ZHI_BO = 13;                            //直播
     public static final int TUI_JIAN = 14;                          //推荐
     public static final int ZHUAN_TI = 15;                          //专题
+    public static final int PING_XUAN = 16;                         //评选
 
     private int itemType;
     private T dataBean;
@@ -42,7 +43,7 @@ public class NewsMultipleItem<T> implements MultiItemEntity {
             case "视讯":
                 itemType = SHI_XUN;
                 break;
-            case "问政":
+            case "爆料":
                 itemType = WEN_ZHENG;
                 break;
             case "矩阵":
@@ -71,6 +72,9 @@ public class NewsMultipleItem<T> implements MultiItemEntity {
                 break;
             case "专题":
                 itemType = ZHUAN_TI;
+                break;
+            case "评选":
+                itemType = PING_XUAN;
                 break;
             default:
                 itemType = WEN_ZHENG;

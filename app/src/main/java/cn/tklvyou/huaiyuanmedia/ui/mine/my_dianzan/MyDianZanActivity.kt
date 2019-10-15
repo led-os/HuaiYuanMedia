@@ -202,8 +202,8 @@ class MyDianZanActivity : BaseHttpRecyclerActivity<MyDianZanPresenter, NewsMulti
                                 startNewsDetailActivity(this, type, id, position)
                             }
                         }
-                        "问政" -> {
-                            val type = "问政"
+                        "爆料" -> {
+                            val type = "爆料"
                             if (bean.url.isNotEmpty()) {
                                 startDetailsActivity(this, bean.url)
                             } else {
@@ -281,7 +281,7 @@ class MyDianZanActivity : BaseHttpRecyclerActivity<MyDianZanPresenter, NewsMulti
 
                 }
 
-                R.id.sparkButton, R.id.tvGoodNum -> {
+                R.id.sparkButton,R.id.sparkButton1, R.id.tvGoodNum, R.id.tvGoodNum1 -> {
                     if (bean.like_status == 1) {
                         mPresenter.cancelLikeNews(bean.id, position)
                     } else {

@@ -131,7 +131,6 @@ abstract class BaseX5WebViewActivity<P : BaseContract.BasePresenter<*>> : BaseAc
 
         //对数据进行包装,除去WebView默认存在的一定像素的边距问题
         doc.body().append("<p></p>") //修复富文本为纯图片时部分手机显示不出来
-        LogUtils.e(doc)
         val data = "<html><head><style>img{width:100% !important;}</style></head><body style='margin:0;padding:0'>${doc}</body></html>"
 
 

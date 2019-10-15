@@ -7,6 +7,7 @@ import cn.tklvyou.huaiyuanmedia.model.LotteryResultModel;
 
 public interface ZhuanPanContract {
     interface View extends BaseContract.BaseView {
+        void addNum();
         void setLotteryModel(LotteryModel model);
         void setLotteryResult(LotteryResultModel model);
     }
@@ -16,6 +17,8 @@ public interface ZhuanPanContract {
         void getLotteryModel();
 
         void startLottery();
+
+        void shareAward();
 
     }
 

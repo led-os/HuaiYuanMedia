@@ -11,28 +11,31 @@ android {
             storePassword 'tklvyou'
             keyAlias = 'media'
             keyPassword 'tklvyou'
-
-
         }
+
     }
     compileSdkVersion 28
     defaultConfig {
         applicationId "cn.tklvyou.huaiyuanmedia"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0.0"
+        versionCode 6
+        versionName "1.0.5"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled true
 
+        ndk {
+            abiFilters 'armeabi', 'armeabi-v7a', "arm64-v8a"
+        }
+
+        //过滤abi无效
         externalNativeBuild {
             cmake {
                 //生成.so库的目标平台
-                abiFilters 'x86_64', 'armeabi-v7a'
+//                abiFilters 'armeabi', 'armeabi-v7a'  //, "arm64-v8a"
             }
         }
-
     }
 
     //配置 CMakeLists.txt 路径
@@ -123,20 +126,27 @@ dependencies {
     implementation project(path: ':picture_library')
     implementation project(path: ':libzhuanpan')
     implementation 'de.hdodenhof:circleimageview:2.1.0'
-    //视频处理
-    implementation 'com.github.wseemann:FFmpegMediaMetadataRetriever-armeabi-v7a:1.0.14'
+
     implementation project(path: ':lib-ios-dialog')
     implementation project(path: ':wxcamera')
     implementation files('libs/commons-lang-2.6.jar')
     //音频处理
     implementation 'com.google.android.exoplayer:exoplayer:2.9.0'
-    implementation files('libs/pldroid-player-2.1.8.jar')
+
     implementation 'com.sina.weibo.sdk:core:2.0.3:openDefaultRelease@aar'
     implementation files('libs/open_sdk_r6137_lite.jar')
 
     //七牛云
     implementation 'com.qiniu:qiniu-android-sdk:7.3.15'
+    implementation files('libs/pldroid-player-2.1.8.jar')
 
     implementation 'com.github.zyyoona7:EasyPopup:1.1.2'
+
+    //视频编辑操作
+    implementation 'com.github.yangjie10930:EpMedia:v0.9.5'
+    implementation 'com.danikula:videocache:2.7.0'
+    //==================mp4parser====================
+    implementation 'com.googlecode.mp4parser:isoparser:1.1.21'
+
 
 }

@@ -22,7 +22,9 @@ import cn.tklvyou.huaiyuanmedia.ui.mine.MineFragment
 import cn.tklvyou.huaiyuanmedia.ui.audio.AudioFragment
 import cn.tklvyou.huaiyuanmedia.ui.home.new_list.BlankFragment
 import cn.tklvyou.huaiyuanmedia.ui.work.WorkFragment
+import cn.tklvyou.huaiyuanmedia.utils.AndroidBug5497Workaround
 import cn.tklvyou.huaiyuanmedia.utils.UpdateAppHttpUtil
+import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.SPUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.trello.rxlifecycle3.components.support.RxFragment
@@ -73,7 +75,6 @@ class MainActivity : BaseBottomTabActivity<MainPresenter>(), MainContract.View, 
     private var audioFragment: AudioFragment? = null
     private var mineFragment: MineFragment? = null
 
-    private var blankFragment: BlankFragment? = null
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(Bundle())
@@ -81,6 +82,7 @@ class MainActivity : BaseBottomTabActivity<MainPresenter>(), MainContract.View, 
 
     override fun initView(savedInstanceState: Bundle?) {
         hideTitleBar()
+        AndroidBug5497Workaround.assistActivity(this)
 
         getVersionInfo()
 
@@ -237,7 +239,11 @@ class MainActivity : BaseBottomTabActivity<MainPresenter>(), MainContract.View, 
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (mBackHandedFragment == null || !mBackHandedFragment!!.onBackPressed()) {
+            if (bottomNavigationView.currentItem == 1) {
+                if (!audioFragment!!.onBackPressed()) {
+                    appExit() //退出
+                }
+            } else if (mBackHandedFragment == null || !mBackHandedFragment!!.onBackPressed()) {
                 if (supportFragmentManager.backStackEntryCount == 0) {
                     appExit() //退出
                 } else {

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_454545"
+    android:keepScreenOn="true"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/mLocalSelTimeTv">
+
+        <cn.tklvyou.huaiyuanmedia.ui.video_edit.localEdit.VideoPreviewView
+            android:id="@+id/mLocalVideoView"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/mLocalSelTimeTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/local_frame_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:text="已选取30秒"
+        android:textColor="@color/white" />
+
+    <FrameLayout
+        android:id="@+id/local_frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="67dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="38dp"
+        android:background="@color/colorWhite30">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/mLocalRecyclerView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+        <cn.tklvyou.huaiyuanmedia.ui.video_edit.localEdit.ThumbnailView
+            android:id="@+id/mLocalThumbView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
+
+    <include layout="@layout/pop_video_loading" />
+
+</RelativeLayout>

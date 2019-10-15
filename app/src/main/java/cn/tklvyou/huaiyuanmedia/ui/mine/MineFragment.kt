@@ -194,7 +194,7 @@ class MineFragment : BaseRecyclerFragment<MinePresenter, MineRvModel, BaseViewHo
             6 -> {
                 startActivity(Intent(context, RecentBrowseActivity::class.java))
             }
-            //问政记录
+            //爆料记录
             7 -> {
                 startActivity(Intent(context, MyWenZhenActivity::class.java))
             }

@@ -18,6 +18,7 @@ import cn.tklvyou.huaiyuanmedia.ui.camera.CameraContract
 import cn.tklvyou.huaiyuanmedia.ui.camera.TakePhotoActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.publish_news.PublishNewsActivity
+import cn.tklvyou.huaiyuanmedia.ui.video_edit.CameraActivity
 import cn.tklvyou.huaiyuanmedia.utils.GridDividerItemDecoration
 import com.adorkable.iosdialog.BottomSheetDialog
 import com.blankj.utilcode.util.LogUtils
@@ -66,8 +67,8 @@ class TodayHotActivity : BaseHttpRecyclerActivity<TodayHotPresenter, NewsBean, B
                                         .setDefaultItemStyle(BottomSheetDialog.SheetItemTextStyle("#000000", 16))
                                         .setBottomBtnStyle(BottomSheetDialog.SheetItemTextStyle("#ff0000", 18))
                                         .addSheetItem("拍摄") { which ->
-                                            val intent = Intent(this, TakePhotoActivity::class.java)
-                                            intent.putExtra("page", "随手拍")
+                                            val intent = Intent(this, CameraActivity::class.java)
+                                            intent.putExtra("page", "生活圈")
                                             startActivity(intent)
                                         }
                                         .addSheetItem("从手机相册选择") { which ->

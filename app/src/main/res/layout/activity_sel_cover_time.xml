@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0E0517">
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/sel_cover_tv"
+        android:layout_below="@+id/rl_title"
+        android:layout_centerInParent="true">
+
+        <VideoView
+            android:id="@+id/mSelCoverVideoView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/sel_cover_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/sel_cover_frame_layout"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:text="已选封面"
+        android:textColor="@color/white"
+        android:textSize="12sp" />
+
+    <FrameLayout
+        android:id="@+id/sel_cover_frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="63dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="40dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/mCutRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="63dp" />
+
+        <cn.tklvyou.huaiyuanmedia.ui.video_edit.selCover.view.ThumbnailSelTimeView
+            android:id="@+id/mThumbSelTimeView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
+
+    <include layout="@layout/pop_video_loading" />
+
+</RelativeLayout>

@@ -23,7 +23,7 @@ public class WenZhenPresenter extends BasePresenter<WenZhenContract.View> implem
     @Override
     public void getDataPageList(int page) {
         RetrofitHelper.getInstance().getServer()
-                .getMyArticleList(page, "问政")
+                .getMyArticleList(page, "爆料")
                 .compose(RxSchedulers.applySchedulers())
 //                .compose(mView.bindToLife())
                 .subscribe(result -> {

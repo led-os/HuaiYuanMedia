@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,14 +8,14 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <ScrollView
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:id="@+id/mScrollView"
+
+    <cn.tklvyou.huaiyuanmedia.widget.rich_web_list.view.HeaderViewPager
+        android:id="@+id/scrollableLayout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:descendantFocusability="blocksDescendants">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/dp_50"
+        android:orientation="vertical"
+        app:hvp_topOffset="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -208,15 +208,23 @@
 
                     </LinearLayout>
 
-                    <WebView
+
+                    <cn.tklvyou.huaiyuanmedia.widget.rich_web_list.web.RichWebView
                         android:id="@+id/newsDetailWebView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:overScrollMode="never"
                         android:scrollbars="none"
-                        android:visibility="gone">
+                        android:visibility="gone" />
 
-                    </WebView>
+                    <!--<WebView-->
+                    <!---->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!---->
+                    <!--&gt;-->
+
+                    <!--</WebView>-->
 
                 </LinearLayout>
 
@@ -301,7 +309,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/dp_20"
                         android:padding="@dimen/dp_10"
-                        android:src="@mipmap/icon_wx_share" />
+                        android:src="@mipmap/icon_wx_share"
+                        android:visibility="gone" />
 
 
                     <ImageView
@@ -310,7 +319,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/dp_20"
                         android:padding="@dimen/dp_10"
-                        android:src="@mipmap/icon_wx_circle_share" />
+                        android:src="@mipmap/icon_wx_circle_share"
+                        android:visibility="gone" />
 
 
                     <ImageView
@@ -381,9 +391,23 @@
 
         </LinearLayout>
 
-    </ScrollView>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/black"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/mCommentRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </cn.tklvyou.huaiyuanmedia.widget.rich_web_list.view.HeaderViewPager>
+
 
     <LinearLayout
+        android:layout_gravity="bottom"
         android:id="@+id/editTextBodyLl"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_50"
@@ -415,6 +439,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:layout_gravity="bottom"
         android:id="@+id/optionLayout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_50"
@@ -532,4 +557,4 @@
     </LinearLayout>
 
 
-</LinearLayout>
+</FrameLayout>

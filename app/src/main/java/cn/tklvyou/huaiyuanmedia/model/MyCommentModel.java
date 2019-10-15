@@ -8,7 +8,7 @@ public class MyCommentModel {
      * id : 1052
      * user_id : 119
      * admin_id : 0
-     * module : 问政
+     * module : 爆料
      * module_second : 民政局
      * name : 关于人才补贴的问题
      * image :

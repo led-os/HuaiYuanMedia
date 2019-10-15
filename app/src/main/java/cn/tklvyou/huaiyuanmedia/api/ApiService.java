@@ -17,6 +17,8 @@ import cn.tklvyou.huaiyuanmedia.model.LotteryResultModel;
 import cn.tklvyou.huaiyuanmedia.model.MessageModel;
 import cn.tklvyou.huaiyuanmedia.model.MyCommentModel;
 import cn.tklvyou.huaiyuanmedia.model.NewsBean;
+import cn.tklvyou.huaiyuanmedia.model.PingXuanModel;
+import cn.tklvyou.huaiyuanmedia.model.PingXuanPersionModel;
 import cn.tklvyou.huaiyuanmedia.model.PointDetailModel;
 import cn.tklvyou.huaiyuanmedia.model.PointModel;
 import cn.tklvyou.huaiyuanmedia.model.PointRuleModel;
@@ -336,7 +338,7 @@ public interface ApiService {
 
 
     /**
-     * 发布问政
+     * 发布爆料
      */
     @POST("api/article/addw")
     Observable<BaseResult<Object>> publishWenZheng(@Query("module_second") String module_second, @Query("name") String name,
@@ -367,6 +369,12 @@ public interface ApiService {
      */
     @POST("api/score/rule")
     Observable<BaseResult<PointRuleModel>> getScoreRule();
+
+    /**
+     * 分享得积分
+     */
+    @POST("api/score/share_award")
+    Observable<BaseResult<Object>> shareAward();
 
     /**
      * 积分抽奖奖品列表
@@ -613,5 +621,40 @@ public interface ApiService {
      */
     @POST("api/life/hot")
     Observable<BaseResult<BasePageModel<NewsBean>>> getLifeHotList(@Query("p") int p);
+
+
+    /**
+     * 评选列表
+     */
+    @POST("api/selection/index")
+    Observable<BaseResult<BasePageModel<PingXuanModel>>> getPingXuanList(@Query("module") String module, @Query("p") int p);
+
+
+    /**
+     * 评选活动详情
+     */
+    @POST("api/selection/selection")
+    Observable<BaseResult<PingXuanModel>> getPingXuanDetails(@Query("id") int id);
+
+
+    /**
+     * 评选选手详情
+     */
+    @POST("api/selection/option")
+    Observable<BaseResult<PingXuanPersionModel>> getPingXuanPersionDetails(@Query("id") int id);
+
+
+    /**
+     * 投票
+     */
+    @POST("api/selection/vote")
+    Observable<BaseResult<Object>> vote(@Query("id") int id);
+
+
+    /**
+     * 评选选手列表
+     */
+    @POST("api/selection/option_list")
+    Observable<BaseResult<BasePageModel<PingXuanPersionModel>>> getPingXuanPersionList(@Query("id") int id, @Query("p") int p, @Query("search") String search, @Query("sort") String sort);
 
 }

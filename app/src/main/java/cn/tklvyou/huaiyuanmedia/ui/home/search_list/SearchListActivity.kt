@@ -1,5 +1,8 @@
 package cn.tklvyou.huaiyuanmedia.ui.home.search_list
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -15,10 +18,13 @@ import cn.tklvyou.huaiyuanmedia.model.NewsBean
 import cn.tklvyou.huaiyuanmedia.ui.adapter.MyCollectionAdapter
 import cn.tklvyou.huaiyuanmedia.ui.adapter.MySearchRvAdapter
 import cn.tklvyou.huaiyuanmedia.ui.adapter.SearchHistoryRvAdapter
+import cn.tklvyou.huaiyuanmedia.ui.audio.ServiceWebviewActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
+import cn.tklvyou.huaiyuanmedia.ui.home.tv_news_detail.TVNewsDetailActivity
 import cn.tklvyou.huaiyuanmedia.widget.dailog.CommonDialog
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.SPUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.google.gson.Gson
@@ -61,28 +67,7 @@ class SearchListActivity : BaseHttpRecyclerActivity<SearchPresenter, NewsBean, B
 
         setPositiveText("搜索")
         setPositiveOnClickListener {
-
-            if (commonTitleBar.searchKey.isEmpty()) {
-                commonTitleBar.centerSearchEditText.setText(commonTitleBar.centerSearchEditText.hint.toString())
-                searchStr = commonTitleBar.centerSearchEditText.hint.toString()
-            } else {
-                searchStr = commonTitleBar.searchKey
-            }
-
-            searchView.visibility = View.INVISIBLE
-            smartRefreshLayout.visibility = View.VISIBLE
-            mPresenter.searchNewList("", searchStr, 1)
-            hideSoftInput(commonTitleBar.centerSearchEditText.windowToken)
-
-            if (searchHistoryList.contains(searchStr)) {
-                return@setPositiveOnClickListener
-            }
-
-            if (searchHistoryList.size < 10) {
-                searchHistoryList.add(searchStr)
-            } else {
-                searchHistoryList.add(0, searchStr)
-            }
+            search()
         }
 
         commonTitleBar.setCenterContent(CommonTitleBar.TYPE_CENTER_SEARCHVIEW, "", "", 0, R.drawable.shape_title_bar_search_radius_5_bg, 0)
@@ -105,6 +90,15 @@ class SearchListActivity : BaseHttpRecyclerActivity<SearchPresenter, NewsBean, B
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+        })
+
+        commonTitleBar.setListener(object:CommonTitleBar.OnTitleBarListener{
+            override fun onClicked(v: View?, action: Int, extra: String?) {
+                if(action == CommonTitleBar.ACTION_SEARCH_SUBMIT){
+                    search()
+                }
             }
 
         })
@@ -143,6 +137,31 @@ class SearchListActivity : BaseHttpRecyclerActivity<SearchPresenter, NewsBean, B
         }
     }
 
+    private fun search() {
+        if (commonTitleBar.searchKey.isEmpty()) {
+            commonTitleBar.centerSearchEditText.setText(commonTitleBar.centerSearchEditText.hint.toString())
+            searchStr = commonTitleBar.centerSearchEditText.hint.toString()
+        } else {
+            searchStr = commonTitleBar.searchKey
+        }
+
+        searchView.visibility = View.INVISIBLE
+        smartRefreshLayout.visibility = View.VISIBLE
+        mPresenter.searchNewList("", searchStr, 1)
+        hideSoftInput(commonTitleBar.centerSearchEditText.windowToken)
+
+
+        if (searchHistoryList.contains(searchStr.trim())) {
+            return
+        }
+
+        if (searchHistoryList.size < 10) {
+            searchHistoryList.add(searchStr)
+        } else {
+            searchHistoryList.set(0, searchStr)
+        }
+    }
+
 
     override fun setNewList(p: Int, model: BasePageModel<NewsBean>?) {
         if (model != null) {
@@ -175,10 +194,118 @@ class SearchListActivity : BaseHttpRecyclerActivity<SearchPresenter, NewsBean, B
         val bean = (adapter as MySearchRvAdapter).data[position]
         val id = bean.id
 
-        val type = "文章"
-        NewsDetailActivity.startNewsDetailActivity(this, type, id)
+        when (bean.module) {
+            "V视频" -> {
+                val type = "视频"
+                if (bean.url.isNotEmpty()) {
+                    startDetailsActivity(this, bean.url)
+                } else {
+                    startNewsDetailActivity(this, type, id, position)
+                }
+            }
+            "濉溪TV" -> {
+                if (bean.module_second == "置顶频道") {
+                    val type = if (bean.type == "tv") "电视" else "广播"
+                    TVNewsDetailActivity.startTVNewsDetailActivity(this, type, id)
+                } else {
+                    val type = "电视"
+                    NewsDetailActivity.startNewsDetailActivity(this, type, id)
+                }
+            }
+            "新闻", "矩阵", "专栏", "党建", "专题" -> {
+                val type = "文章"
+                if (bean.url.isNotEmpty()) {
+                    startDetailsActivity(this, bean.url)
+                } else {
+                    startNewsDetailActivity(this, type, id, position)
+                }
+            }
+            "视讯" -> {
+                val type = "视讯"
+                if (bean.url.isNotEmpty()) {
+                    startDetailsActivity(this, bean.url)
+                } else {
+                    startNewsDetailActivity(this, type, id, position)
+                }
+            }
+            "爆料" -> {
+                val type = "爆料"
+                if (bean.url.isNotEmpty()) {
+                    startDetailsActivity(this, bean.url)
+                } else {
+                    startNewsDetailActivity(this, type, id, position)
+                }
+            }
+
+            "原创", "生活圈" -> {
+                val type = if (bean.images != null && bean.images.size > 0) "图文" else "视频"
+                if (bean.url.isNotEmpty()) {
+                    startDetailsActivity(this, bean.url)
+                } else {
+                    startNewsDetailActivity(this, type, id, position)
+                }
+            }
+            "悦读" -> {
+                val type = "悦读"
+                if (bean.url.isNotEmpty()) {
+                    startDetailsActivity(this, bean.url)
+                } else {
+                    startNewsDetailActivity(this, type, id, position)
+                }
+            }
+            "悦听" -> {
+                val type = "悦听"
+                if (bean.url.isNotEmpty()) {
+                    startDetailsActivity(this, bean.url)
+                } else {
+                    startNewsDetailActivity(this, type, id, position)
+                }
+            }
+            "公告" -> {
+                val type = "公告"
+                if (bean.url.isNotEmpty()) {
+                    startDetailsActivity(this, bean.url)
+                } else {
+                    startNewsDetailActivity(this, type, id, position)
+                }
+            }
+
+            "直播" -> {
+                val type = "直播"
+                if (bean.url.isNotEmpty()) {
+                    startDetailsActivity(this, bean.url)
+                } else {
+                    startNewsDetailActivity(this, type, id, position)
+                }
+            }
+
+            else -> {
+                val type = "文章"
+                if (bean.url.isNotEmpty()) {
+                    startDetailsActivity(this, bean.url)
+                } else {
+                    startNewsDetailActivity(this, type, id, position)
+                }
+            }
+        }
+
     }
 
+    private fun startDetailsActivity(context: Context, url: String) {
+        val intent = Intent(context, ServiceWebviewActivity::class.java)
+        intent.putExtra("url", url)
+        intent.putExtra("other", true)
+        intent.putExtra("share_title", "")
+        startActivity(intent)
+    }
+
+    private fun startNewsDetailActivity(context: Context, type: String, id: Int, position: Int) {
+        val intent = Intent(context, NewsDetailActivity::class.java)
+        intent.putExtra(NewsDetailActivity.INTENT_ID, id)
+        intent.putExtra(NewsDetailActivity.INTENT_TYPE, type)
+        intent.putExtra(NewsDetailActivity.POSITION, position)
+        startActivityForResult(intent, 0)
+    }
 
     override fun onItemChildClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
         super.onItemChildClick(adapter, view, position)
@@ -194,6 +321,24 @@ class SearchListActivity : BaseHttpRecyclerActivity<SearchPresenter, NewsBean, B
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && data != null) {
+            val position = data.getIntExtra("position", 0)
+            val seeNum = data.getIntExtra("seeNum", 0)
+            val zanNum = data.getIntExtra("zanNum", 0)
+            val commenNum = data.getIntExtra("commentNum", 0)
+            val like_status = data.getIntExtra("like_status", 0)
+
+            val bean = adapter!!.data[position] as NewsBean
+            bean.comment_num = commenNum
+            bean.like_num = zanNum
+            bean.visit_num = seeNum
+            bean.like_status = like_status
+            adapter.notifyItemChanged(position)
+
+        }
+    }
 
     override fun updateLikeStatus(isLike: Boolean, position: Int) {
         if (isLike) {

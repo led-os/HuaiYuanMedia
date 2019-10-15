@@ -10,6 +10,7 @@ import androidx.multidex.MultiDexApplication;
 
 import com.billy.android.loading.Gloading;
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.Utils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshFooterCreator;
@@ -35,6 +36,9 @@ import cn.tklvyou.huaiyuanmedia.manager.FrameLifecycleCallbacks;
  */
 
 public class MyApplication extends MultiDexApplication {
+
+    public static int screenWidth;
+    public static int screenHeight;
 
     static {
         //设置全局的Header构建器
@@ -64,6 +68,9 @@ public class MyApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         mContext = this;
+        screenWidth = ScreenUtils.getScreenWidth();
+        screenHeight = ScreenUtils.getScreenHeight();
+
         //异常处理初始化
         CrashManager.init(mContext);
         //初始化微信相关配置

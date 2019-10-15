@@ -154,7 +154,7 @@ class MyArticleActivity : BaseHttpRecyclerActivity<MyArticleListPresenter, NewsB
 
             override fun createAdapter(): WxCircleEditAdapter {
                 val adapter = WxCircleEditAdapter(R.layout.item_edit_winxin_circle, list)
-                adapter.setEnableDelete()
+//                adapter.setEnableDelete()
                 return adapter
             }
 
