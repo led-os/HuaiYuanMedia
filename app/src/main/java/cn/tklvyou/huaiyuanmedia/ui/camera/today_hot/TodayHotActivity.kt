@@ -19,6 +19,7 @@ import cn.tklvyou.huaiyuanmedia.ui.camera.TakePhotoActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.publish_news.PublishNewsActivity
 import cn.tklvyou.huaiyuanmedia.ui.video_edit.CameraActivity
+import cn.tklvyou.huaiyuanmedia.ui.video_edit.VideoOptionActivity
 import cn.tklvyou.huaiyuanmedia.utils.GridDividerItemDecoration
 import com.adorkable.iosdialog.BottomSheetDialog
 import com.blankj.utilcode.util.LogUtils
@@ -53,7 +54,7 @@ class TodayHotActivity : BaseHttpRecyclerActivity<TodayHotPresenter, NewsBean, B
         setNavigationOnClickListener { finish() }
         setPositiveCustom(R.layout.custom_camera_right_title_bar)
         commonTitleBar.rightCustomView.setOnClickListener {
-            if(SPUtils.getInstance().getString("token","").isNotEmpty()) {
+            if (SPUtils.getInstance().getString("token", "").isNotEmpty()) {
                 RxPermissions(this)
                         .request(Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA)
                         .subscribe { granted ->
@@ -87,12 +88,28 @@ class TodayHotActivity : BaseHttpRecyclerActivity<TodayHotPresenter, NewsBean, B
                                                     .openClickSound(false)
                                                     .forResult(PictureConfig.CHOOSE_REQUEST)
                                         }
+                                        .addSheetItem("从手机相册选择视频") { which ->
+                                            // 进入相册 以下是例子：不需要的api可以不写
+                                            PictureSelector.create(this)
+                                                    .openGallery(PictureMimeType.ofVideo())
+                                                    .theme(R.style.picture_default_style)
+                                                    .selectionMode(PictureConfig.SINGLE)
+                                                    .previewVideo(true)
+                                                    .videoMaxSecond(90)
+                                                    .videoMinSecond(3)
+                                                    .enableCrop(false)
+                                                    .compress(true)
+                                                    .recordVideoSecond(90)
+                                                    .previewEggs(true)
+                                                    .openClickSound(false)
+                                                    .forResult(200)
+                                        }
                                         .show()
                             } else {
                                 ToastUtils.showShort("权限拒绝，无法使用")
                             }
                         }
-            }else{
+            } else {
                 ToastUtils.showShort("请登录后操作")
                 startActivity(Intent(this, LoginActivity::class.java))
             }
@@ -139,7 +156,6 @@ class TodayHotActivity : BaseHttpRecyclerActivity<TodayHotPresenter, NewsBean, B
     }
 
 
-
     override fun onItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
         super.onItemClick(adapter, view, position)
 
@@ -149,7 +165,6 @@ class TodayHotActivity : BaseHttpRecyclerActivity<TodayHotPresenter, NewsBean, B
         startNewsDetailActivity(this, type, id, position)
 
     }
-
 
 
     override fun onItemChildClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
@@ -175,7 +190,6 @@ class TodayHotActivity : BaseHttpRecyclerActivity<TodayHotPresenter, NewsBean, B
     }
 
 
-
     private fun startNewsDetailActivity(context: Context, type: String, id: Int, position: Int) {
         val intent = Intent(context, NewsDetailActivity::class.java)
         intent.putExtra(NewsDetailActivity.INTENT_ID, id)
@@ -190,6 +204,23 @@ class TodayHotActivity : BaseHttpRecyclerActivity<TodayHotPresenter, NewsBean, B
         if (resultCode == Activity.RESULT_OK && data != null) {
 
             when (requestCode) {
+                200 -> {
+                    // 图片、视频、音频选择结果回调
+                    val selectList = PictureSelector.obtainMultipleResult(data)
+                    // 例如 LocalMedia 里面返回三种path
+                    // 1.media.getPath(); 为原图path
+                    // 2.media.getCutPath();为裁剪后path，需判断media.isCut();是否为true  注意：音视频除外
+                    // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true  注意：音视频除外
+                    // 如果裁剪并压缩了，以取压缩路径为准，因为是先裁剪后压缩的
+
+                    if (selectList == null || selectList.size < 1) {
+                        ToastUtils.showShort("选取视频异常，请重试")
+                        return
+                    }
+
+                    VideoOptionActivity.launch(this, selectList[0].path, "随手拍")
+                }
+
                 PictureConfig.CHOOSE_REQUEST -> {
                     // 图片、视频、音频选择结果回调
                     val selectList = PictureSelector.obtainMultipleResult(data)
@@ -205,7 +236,7 @@ class TodayHotActivity : BaseHttpRecyclerActivity<TodayHotPresenter, NewsBean, B
                     startActivity(intent)
                 }
 
-                0 ->{
+                0 -> {
                     val position = data.getIntExtra("position", 0)
                     val seeNum = data.getIntExtra("seeNum", 0)
                     val zanNum = data.getIntExtra("zanNum", 0)

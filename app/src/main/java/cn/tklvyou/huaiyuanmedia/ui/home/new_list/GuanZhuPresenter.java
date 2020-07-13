@@ -87,7 +87,9 @@ public class GuanZhuPresenter extends BasePresenter<GuanZhuContract.View> implem
                             throwable.printStackTrace();
                             if (mView != null) {
                                 mView.setGuanZhuNews(p, null);
-                                mView.showFailed("");
+                                if (p <= 1) {
+                                    mView.showFailed("");
+                                }
                             }
                         }
                 );

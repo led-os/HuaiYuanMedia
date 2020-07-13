@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">榴香怀远</string>
+    <string name="app_name">榴乡怀远</string>
 
     <string name="custom_activityoncrash_error_activity_error_occurred_explanation">抱歉，出现了不可预期的错误，您可重新启动应用，或者将错误信息反馈给我们，感谢您的理解与支持！</string>
     <string name="custom_activityoncrash_error_activity_unknown_exception">未知异常</string>

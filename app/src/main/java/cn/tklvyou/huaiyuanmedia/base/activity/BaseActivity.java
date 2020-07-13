@@ -12,7 +12,11 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.app.SkinAppCompatDelegateImpl;
 import androidx.fragment.app.FragmentManager;
 
 import com.billy.android.loading.Gloading;
@@ -20,6 +24,7 @@ import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.trello.rxlifecycle3.LifecycleTransformer;
+import com.trello.rxlifecycle3.android.ActivityEvent;
 import com.trello.rxlifecycle3.components.support.RxAppCompatActivity;
 import com.wuhenzhizao.titlebar.widget.CommonTitleBar;
 
@@ -101,6 +106,13 @@ public abstract class BaseActivity<P extends BaseContract.BasePresenter> extends
         initView(savedInstanceState);
     }
 
+    @NonNull
+    @Override
+    public AppCompatDelegate getDelegate() {
+        return SkinAppCompatDelegateImpl.get(this, this);
+    }
+
+
     /**
      * 覆写此方法可以更改Loading绑定的View
      *
@@ -167,6 +179,16 @@ public abstract class BaseActivity<P extends BaseContract.BasePresenter> extends
         baseTitleBar.getCenterTextView().setText(title);
     }
 
+
+    /**
+     * 设置标题栏中间文字内容 + 左边图片
+     *
+     * @param title
+     */
+    public void setTitle(String title, int drawableId) {
+        baseTitleBar.getCenterTextView().setText(title);
+        baseTitleBar.setCenterTextDrawable(drawableId);
+    }
 
     /**
      * 设置标题栏 中间文字 与 中间副标题文字内容
@@ -334,7 +356,7 @@ public abstract class BaseActivity<P extends BaseContract.BasePresenter> extends
 
     @Override
     public <T> LifecycleTransformer<T> bindToLife() {
-        return this.bindToLifecycle();
+        return this.bindUntilEvent(ActivityEvent.DESTROY);
     }
 
 

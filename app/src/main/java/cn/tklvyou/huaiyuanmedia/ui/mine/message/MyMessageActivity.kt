@@ -42,6 +42,9 @@ class MyMessageActivity : BaseHttpRecyclerActivity<MessagePresenter, MessageMode
     }
 
     override fun initView(savedInstanceState: Bundle?) {
+        initSmartRefreshLayout(smartLayoutRoot)
+        initRecyclerView(recyclerViewRoot)
+
         setTitle("我的消息")
         setNavigationImage()
         setNavigationOnClickListener { finish() }
@@ -58,8 +61,7 @@ class MyMessageActivity : BaseHttpRecyclerActivity<MessagePresenter, MessageMode
         }
 
 
-        initSmartRefreshLayout(smartLayoutRoot)
-        initRecyclerView(recyclerViewRoot)
+
         recyclerViewRoot.layoutManager = LinearLayoutManager(this)
         smartLayoutRoot.autoRefresh()
     }

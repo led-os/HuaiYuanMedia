@@ -37,6 +37,10 @@ public class InterfaceUtils {
         mResults.remove(activity);
     }
 
+    public void clear() {
+        mResults.clear();
+    }
+
     /**
      * 可以修改，让使用者根据需求进行设置（如需要数据可以使用参数）
      */

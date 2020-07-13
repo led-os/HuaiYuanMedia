@@ -1,9 +1,34 @@
 <resources>
 
-    <style name="SplashActivityTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@drawable/icon_splash</item>
+    <style name="SplashActivityTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@mipmap/icon_splash</item>
         <item name="android:windowFullscreen">true</item>
+        <item name="android:fitsSystemWindows">false</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="Test" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="materialButtonStyle">@style/AppTheme.Button</item>
+        <item name="android:windowBackground">@android:color/white</item>
+        <!--<item name="android:windowAnimationStyle">@style/WindowsAnim</item>-->
+        <item name="android:fitsSystemWindows">false</item>
+        <item name="android:clipToPadding">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="AppTheme.Button" parent="Widget.MaterialComponents.Button">
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
     </style>
 
     <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
@@ -19,7 +44,7 @@
     </style>
 
 
-    <style name="CustomAppTheme" parent="AppTheme.Base">
+    <style name="CustomAppTheme" parent="Test">
 
     </style>
 
@@ -69,10 +94,6 @@
         <item name="android:backgroundDimEnabled">true</item>
     </style>
 
-
-    <!--<item name="android:thumbOffset">8dip</item>
-        <item name="android:paddingLeft">8dip</item>
-        <item name="android:paddingRight">8dip</item>-->
 
     <style name="MediaController_SeekBar" parent="android:Widget.SeekBar">
         <item name="android:progressDrawable">@drawable/seekbar_progress_drawable</item>

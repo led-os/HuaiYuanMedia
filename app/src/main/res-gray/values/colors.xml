@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary_gray">#808080</color>
+    <color name="colorPrimaryDark_gray">#808080</color>
+    <color name="colorAccent_gray">#808080</color>
+
+    <color name="grayAccent_gray">#22D7EAF8</color>
+    <color name="colorWhite_gray">#FFFFFF</color>
+    <color name="colorBlack_gray">#231717</color>
+    <color name="colorGray_gray">#D0D0D0</color>
+    <color name="color_black_alpha_20_gray">#33000000</color>
+    <color name="colorTransparents_gray">#30000000</color>
+    <color name="background_color_gray_gray">#F5F5F5</color>
+    <color name="white_gray">#ffffffff</color>
+    <color name="black_gray">#000000</color>
+
+
+    <color name="common_bg_gray">#f4f4f4</color>
+    <color name="common_divider_gray">#e0e0e0</color>
+    <color name="default_clickable_color_gray">#cccccc</color>
+    <color name="praise_item_default_gray">#333333</color>
+    <color name="praise_item_selector_default_gray">#cccccc</color>
+    <color name="im_social_dig_name_bg_gray">#DDDDDD</color>
+    <color name="default_black_text_color_gray">#333333</color>
+    <color name="default_gray_text_color_gray">#999999</color>
+    <color name="bg_no_photo_gray">#EEEEEE</color>
+
+    <!--灰色区域-->
+    <color name="grayF4F5F7_gray">#F4F5F7</color>
+
+    <color name="grayEEEEEE_gray">#EEEEEE</color>
+    <color name="grayAAAAAA_gray">#AAAAAA</color>
+    <color name="grayF4F4F4_gray">#F4F4F4</color>
+    <color name="grayCCCCCC_gray">#CCCCCC</color>
+    <color name="gray999999_gray"> #999999</color>
+
+    <!--黑色区域-->
+    <color name="black333333_gray">#333333</color>
+
+    <color name="black171717_gray">#171717</color>
+
+    <!--红色区域-->
+    <color name="redFF4A5C_gray">#FF4A5C</color>
+
+
+    <color name="red_gray">#FF0000</color> <!--红色 -->
+    <color name="middle_gray_gray">#7f808080</color>
+    <color name="black_50_gray">#7F000000</color>
+    <color name="colorWhite70_gray">#B3FFFFFF</color>
+    <color name="colorWhite40_gray">#66ffffff</color>
+    <color name="colorWhite10_gray">#1AFFFFFF</color>
+    <color name="color_454545_gray">#454545</color>
+    <color name="colorWhite30_gray">#4dffffff</color>
+</resources>

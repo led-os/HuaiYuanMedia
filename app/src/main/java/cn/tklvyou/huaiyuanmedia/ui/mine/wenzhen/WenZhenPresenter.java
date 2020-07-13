@@ -25,7 +25,7 @@ public class WenZhenPresenter extends BasePresenter<WenZhenContract.View> implem
         RetrofitHelper.getInstance().getServer()
                 .getMyArticleList(page, "爆料")
                 .compose(RxSchedulers.applySchedulers())
-//                .compose(mView.bindToLife())
+                .compose(mView.bindToLife())
                 .subscribe(result -> {
                     if (mView != null) {
                         mView.showSuccess(result.getMsg());
@@ -56,7 +56,7 @@ public class WenZhenPresenter extends BasePresenter<WenZhenContract.View> implem
     @Override
     public void cancelArticleAll() {
         RetrofitHelper.getInstance().getServer()
-                .cancelArticleAll()
+                .cancelArticleAll("爆料")
                 .compose(RxSchedulers.applySchedulers())
                 .compose(mView.bindToLife())
                 .subscribe(result -> {

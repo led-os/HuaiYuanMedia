@@ -103,9 +103,10 @@ public class SharePopupWindow extends PopupWindow {
     private void setPopConfig() {
         this.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         this.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+//        this.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
         // 设置弹出窗体可点击
         this.setFocusable(true);
-        this.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        this.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//Color.TRANSPARENT
         this.setOutsideTouchable(true);// 设置外部触摸会关闭窗口
         // 设置动画
 //        this.setAnimationStyle(R.style.IosDialog);
@@ -125,6 +126,10 @@ public class SharePopupWindow extends PopupWindow {
     public void showAtScreenBottom(View parent){
         this.showAtLocation(parent, Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL,0,0);
         popOutShadow();
+    }
+
+    public void showAtScreenBottomNoShadow(View parent){
+        this.showAtLocation(parent, Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL,0,0);
     }
 
 

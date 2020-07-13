@@ -6,9 +6,11 @@ import android.os.StrictMode;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.multidex.MultiDexApplication;
 
 import com.billy.android.loading.Gloading;
+import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.Utils;
@@ -30,6 +32,12 @@ import cn.tklvyou.huaiyuanmedia.R;
 import cn.tklvyou.huaiyuanmedia.common.Contacts;
 import cn.tklvyou.huaiyuanmedia.crash.CrashManager;
 import cn.tklvyou.huaiyuanmedia.manager.FrameLifecycleCallbacks;
+import cn.tklvyou.huaiyuanmedia.utils.DateUtils;
+import skin.support.SkinCompatManager;
+import skin.support.app.SkinAppCompatViewInflater;
+import skin.support.content.res.SkinCompatUserThemeManager;
+import skin.support.design.app.SkinMaterialViewInflater;
+import skin.support.utils.Slog;
 
 /**
  * Created by Administrator on 2019/2/27.
@@ -95,7 +103,57 @@ public class MyApplication extends MultiDexApplication {
         Gloading.initDefault(new GlobalAdapter());
 
         initTencentTBS();
+
+//        initSkinManager();
     }
+
+    private void initSkinManager() {
+        // 框架换肤日志打印
+        Slog.DEBUG = true;
+
+//        SkinCompatManager.withoutActivity(this)
+//                .addInflater(new SkinAppCompatViewInflater())           // 基础控件换肤初始化
+//                .setSkinStatusBarColorEnable(false)                     // 关闭状态栏换肤，默认打开[可选]
+//                .setSkinWindowBackgroundEnable(false)                   // 关闭windowBackground换肤，默认打开[可选]
+//                .loadSkin();
+        SkinCompatManager.withoutActivity(this)
+                .addInflater(new SkinAppCompatViewInflater())   // 基础控件换肤
+                .addInflater(new SkinMaterialViewInflater())    // material design
+                .setSkinStatusBarColorEnable(true)              // 关闭状态栏换肤
+//                .setSkinWindowBackgroundEnable(false)           // 关闭windowBackground换肤
+//                .setSkinAllActivityEnable(false)                // true: 默认所有的Activity都换肤; false: 只有实现SkinCompatSupportable接口的Activity换肤
+                .loadSkin();
+
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+
+        if (DateUtils.compareToDate(DateUtils.getNowDate(0), "2020-04-08")) {
+            SkinCompatManager.getInstance().loadSkin("gray", new SkinCompatManager.SkinLoaderListener() {
+                @Override
+                public void onStart() {
+                    System.out.println("===============  onStart ===================");
+                }
+
+                @Override
+                public void onSuccess() {
+                    System.out.println("===============  onSuccess ===================");
+                }
+
+                @Override
+                public void onFailed(String errMsg) {
+                    System.out.println("===============  " + errMsg + " ===================");
+                }
+            }, SkinCompatManager.SKIN_LOADER_STRATEGY_BUILD_IN);
+
+        } else {
+            // 清除所有已有颜色值。
+            SkinCompatUserThemeManager.get().clearColors();
+        }
+
+//        SkinCompatManager.getInstance().notifyUpdateSkin();
+//        SkinCompatUserThemeManager.get().apply();
+
+    }
+
 
     private void initTencentTBS() {
         //搜集本地tbs内核信息并上报服务器，服务器返回结果决定使用哪个内核。
@@ -114,7 +172,7 @@ public class MyApplication extends MultiDexApplication {
             }
         };
         //x5内核初始化接口
-        QbSdk.initX5Environment(getApplicationContext(),  cb);
+        QbSdk.initX5Environment(getApplicationContext(), cb);
     }
 
     private void initWb() {

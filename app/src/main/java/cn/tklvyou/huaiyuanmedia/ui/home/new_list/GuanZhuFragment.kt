@@ -20,6 +20,7 @@ import cn.tklvyou.huaiyuanmedia.ui.adapter.JuzhengHeaderViewholder
 import cn.tklvyou.huaiyuanmedia.ui.adapter.MyConcernAdapter
 import cn.tklvyou.huaiyuanmedia.ui.audio.ServiceWebviewActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
+import cn.tklvyou.huaiyuanmedia.ui.video_player.VodActivity
 import cn.tklvyou.huaiyuanmedia.utils.RecycleViewDivider
 import cn.tklvyou.huaiyuanmedia.widget.dailog.CommonDialog
 import cn.tklvyou.huaiyuanmedia.widget.page_recycler.PageRecyclerView
@@ -157,9 +158,9 @@ class GuanZhuFragment : BaseHttpRecyclerFragment<GuanZhuPresenter, NewsBean, Gua
             override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
                 val bean = headerList[position]
                 if (bean.nickname == "关注更多" || bean.nickname == "全部") {
-                    GlideManager.loadRoundImg(bean.id, (holder as JuzhengHeaderViewholder).ivAvatar)
+                    GlideManager.loadCircleImg(bean.id, (holder as JuzhengHeaderViewholder).ivAvatar)
                 } else {
-                    GlideManager.loadRoundImg(bean.avatar, (holder as JuzhengHeaderViewholder).ivAvatar)
+                    GlideManager.loadCircleImg(bean.avatar, (holder as JuzhengHeaderViewholder).ivAvatar)
                 }
 
                 holder.tvNickName.text = bean.nickname
@@ -236,7 +237,7 @@ class GuanZhuFragment : BaseHttpRecyclerFragment<GuanZhuPresenter, NewsBean, Gua
         super.onItemClick(adapter, view, position)
         val bean = (adapter as GuanZhuRvAdapter).data[position] as NewsBean
         val id = bean.id
-        val type = "文章"
+        val type =if (bean.video.isEmpty()) "文章" else "视讯"
         if (bean.url.isNotEmpty()) {
             startDetailsActivity(context!!, bean.url)
         } else {
@@ -254,6 +255,21 @@ class GuanZhuFragment : BaseHttpRecyclerFragment<GuanZhuPresenter, NewsBean, Gua
                     mPresenter.cancelLikeNews(bean.id, position)
                 } else {
                     mPresenter.addLikeNews(bean.id, position)
+                }
+
+            }
+
+            //V视频 直播 播放按钮
+            R.id.ivStartPlayer -> {
+
+                val bean = adapter!!.data[position] as NewsBean
+                if (bean.url.isNotEmpty()) {
+                    startDetailsActivity(context!!, bean.url)
+                } else {
+                    //打开新的Activity
+                    val intent = Intent(context, VodActivity::class.java)
+                    intent.putExtra("videoPath", bean.video)
+                    startActivity(intent)
                 }
 
             }

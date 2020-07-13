@@ -24,7 +24,7 @@ public class ExchangePresenter extends BasePresenter<ExchangeRecordContract.View
         RetrofitHelper.getInstance().getServer()
                 .getExchangeList(page)
                 .compose(RxSchedulers.applySchedulers())
-//                .compose(mView.bindToLife())
+                .compose(mView.bindToLife())
                 .subscribe(result -> {
                     if (mView != null) {
                         mView.showSuccess(result.getMsg());

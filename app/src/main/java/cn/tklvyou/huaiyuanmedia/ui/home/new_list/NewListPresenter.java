@@ -83,18 +83,18 @@ public class NewListPresenter extends BasePresenter<NewListContract.View> implem
                 .compose(RxSchedulers.applySchedulers())
 //                .compose(mView.bindToLife())
                 .subscribe(result -> {
-                            mView.showSuccess("");
+                            mView.showSuccess(result.getMsg());
                             if (result.getCode() == 1) {
                                 if (mView != null) {
                                     mView.setNewList(p, result.getData());
                                 }
-                            } else {
-                                ToastUtils.showShort(result.getMsg());
                             }
                         }, throwable -> {
                             if (mView != null) {
                                 mView.setNewList(p, null);
-                                mView.showFailed("");
+                                if (p <= 1) {
+                                    mView.showFailed("");
+                                }
                             }
                         }
                 );
@@ -111,18 +111,16 @@ public class NewListPresenter extends BasePresenter<NewListContract.View> implem
                 .compose(RxSchedulers.applySchedulers())
 //                .compose(mView.bindToLife())
                 .subscribe(result -> {
-                            mView.showSuccess("");
+                            mView.showSuccess(result.getMsg());
                             if (result.getCode() == 1) {
                                 if (mView != null) {
                                     mView.setHaveSecondModuleNews(p, result.getData());
                                 }
-                            } else {
-                                ToastUtils.showShort(result.getMsg());
                             }
                         }, throwable -> {
                             if (mView != null) {
                                 mView.setHaveSecondModuleNews(p, null);
-                                mView.showFailed("");
+                                mView.showFailed(throwable.getMessage());
                             }
                         }
                 );
@@ -183,7 +181,7 @@ public class NewListPresenter extends BasePresenter<NewListContract.View> implem
             mView.showLoading();
         }
         RetrofitHelper.getInstance().getServer()
-                .getPingXuanList("评选",p)
+                .getPingXuanList("评选", p)
                 .compose(RxSchedulers.applySchedulers())
 //                .compose(mView.bindToLife())
                 .subscribe(result -> {

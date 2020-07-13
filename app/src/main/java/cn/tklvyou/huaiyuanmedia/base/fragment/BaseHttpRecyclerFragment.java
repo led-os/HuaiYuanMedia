@@ -99,15 +99,6 @@ public abstract class BaseHttpRecyclerFragment<P extends BaseContract.BasePresen
     }
 
 
-    /**
-     * 处理网络请求加载成功结果
-     *
-     * @param page
-     * @param list
-     */
-    public void onLoadSuccess(int page, List<T> list) {
-        onLoadSucceed(page, list);
-    }
 
     /**
      * 处理网络请求加载失败结果
@@ -115,8 +106,12 @@ public abstract class BaseHttpRecyclerFragment<P extends BaseContract.BasePresen
      * @param page
      * @param e
      */
-    public void onLoadError(int page, Exception e) {
-        onLoadFailed(page, e);
+    @Override
+    public synchronized void onLoadFailed(int page, Exception e) {
+        super.onLoadFailed(page, e);
+        if (adapter != null) {
+            adapter.loadMoreFail();
+        }
     }
 
 }

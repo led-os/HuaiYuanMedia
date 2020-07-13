@@ -15,12 +15,10 @@ import cn.tklvyou.huaiyuanmedia.R
 import cn.tklvyou.huaiyuanmedia.base.MyApplication
 import cn.tklvyou.huaiyuanmedia.base.activity.BaseActivity
 import cn.tklvyou.huaiyuanmedia.common.Contacts
+import cn.tklvyou.huaiyuanmedia.model.MessageEvent
 import cn.tklvyou.huaiyuanmedia.ui.main.MainActivity
 import cn.tklvyou.huaiyuanmedia.utils.InterfaceUtils
-import com.blankj.utilcode.util.ActivityUtils
-import com.blankj.utilcode.util.ConvertUtils
-import com.blankj.utilcode.util.LogUtils
-import com.blankj.utilcode.util.ToastUtils
+import com.blankj.utilcode.util.*
 import com.google.gson.Gson
 import com.sina.weibo.sdk.auth.Oauth2AccessToken
 import com.sina.weibo.sdk.auth.WbAuthListener
@@ -43,6 +41,7 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerInd
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ClipPagerTitleView
+import org.greenrobot.eventbus.EventBus
 import org.json.JSONObject
 
 class LoginActivity : BaseActivity<AccountLoginPresenter>(), AccountContract.LoginView, View.OnClickListener, InterfaceUtils.OnClickResult {
@@ -84,7 +83,6 @@ class LoginActivity : BaseActivity<AccountLoginPresenter>(), AccountContract.Log
                     if (!granted) { // Always true pre-M
                         ToastUtils.showShort("权限拒绝，无法使用")
                         finish()
-
                     }
                 }
 
@@ -223,6 +221,7 @@ class LoginActivity : BaseActivity<AccountLoginPresenter>(), AccountContract.Log
 
 
     override fun loginSuccess() {
+         EventBus.getDefault().post(MessageEvent())
         if (jump) {
             startActivity(Intent(this, MainActivity::class.java))
         }

@@ -126,7 +126,7 @@ public class NewsMultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<News
                     helper.getView(R.id.llSuixiTvSecond).setVisibility(View.INVISIBLE);
                 }
 
-                helper.setText(R.id.tvModuleSecond, suixiTvModel.getModule_second());
+                helper.setText(R.id.tvModuleSecond, suixiTvModel.getModule_second().getNickname());
 
                 for (int i = 0; i < suixiTvModel.getData().size(); i++) {
                     if (i == 0) {
@@ -169,37 +169,54 @@ public class NewsMultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<News
                     tvGoodNum.setCompoundDrawables(grayGoodDrawable, drawables[1], drawables[2], drawables[3]);
                 }
 
-                if (!StringUtils.isEmpty(bean.getImage())) {
-                    //一张图片
-                    helper.getView(R.id.llMultiImage).setVisibility(View.GONE);
-                    helper.getView(R.id.ivImageOne).setVisibility(View.VISIBLE);
 
-                    GlideManager.loadRoundImg(bean.getImage(), helper.getView(R.id.ivImageOne));
+                if (!StringUtils.isEmpty(bean.getVideo())) {
+                    helper.setGone(R.id.videoLayout, true);
+                    helper.setGone(R.id.llMultiImage, false);
+                    helper.setGone(R.id.ivImageOne, false);
+                    helper.setText(R.id.tvVideoTime, formatTime(Double.valueOf(bean.getTime()).longValue()));
 
+                    // 加载网络图片
+                    Glide.with(mContext).load(bean.getImage()).into((ImageView) helper.getView(R.id.ivVideoBg));
+
+                    helper.addOnClickListener(R.id.ivStartPlayer);
                 } else {
-                    if (bean.getImages() == null || bean.getImages().size() == 0) {
-                        //没有图片
-                        helper.getView(R.id.llMultiImage).setVisibility(View.GONE);
-                        helper.getView(R.id.ivImageOne).setVisibility(View.GONE);
+                    helper.setGone(R.id.videoLayout, false);
+
+                    if (!StringUtils.isEmpty(bean.getImage())) {
+                        //一张图片
+                        helper.setGone(R.id.llMultiImage, false);
+                        helper.setGone(R.id.ivImageOne, true);
+
+                        GlideManager.loadRoundImg(bean.getImage(), helper.getView(R.id.ivImageOne));
 
                     } else {
-                        if (bean.getImages().size() < 3) {
-                            //一张图片
-                            helper.getView(R.id.llMultiImage).setVisibility(View.GONE);
-                            helper.getView(R.id.ivImageOne).setVisibility(View.VISIBLE);
 
-                            GlideManager.loadRoundImg(bean.getImages().get(0), helper.getView(R.id.ivImageOne));
+                        if (bean.getImages() == null || bean.getImages().size() == 0) {
+                            //没有图片
+                            helper.setGone(R.id.llMultiImage, false);
+                            helper.setGone(R.id.ivImageOne, false);
+
                         } else {
-                            //多张图片
-                            helper.getView(R.id.ivImageOne).setVisibility(View.GONE);
-                            helper.getView(R.id.llMultiImage).setVisibility(View.VISIBLE);
+                            if (bean.getImages().size() < 3) {
+                                //一张图片
+                                helper.setGone(R.id.llMultiImage, false);
+                                helper.setGone(R.id.ivImageOne, true);
 
-                            GlideManager.loadRoundImg(bean.getImages().get(0), helper.getView(R.id.ivImageFirst));
-                            GlideManager.loadRoundImg(bean.getImages().get(1), helper.getView(R.id.ivImageSecond));
-                            GlideManager.loadRoundImg(bean.getImages().get(2), helper.getView(R.id.ivImageThree));
+                                GlideManager.loadRoundImg(bean.getImages().get(0), helper.getView(R.id.ivImageOne));
+                            } else {
+                                //多张图片
+                                helper.setGone(R.id.llMultiImage, true);
+                                helper.setGone(R.id.ivImageOne, false);
+
+                                GlideManager.loadRoundImg(bean.getImages().get(0), helper.getView(R.id.ivImageFirst));
+                                GlideManager.loadRoundImg(bean.getImages().get(1), helper.getView(R.id.ivImageSecond));
+                                GlideManager.loadRoundImg(bean.getImages().get(2), helper.getView(R.id.ivImageThree));
+                            }
                         }
                     }
                 }
+
                 break;
             case NewsMultipleItem.SHI_XUN:
                 bean = (NewsBean) item.getDataBean();
@@ -287,131 +304,52 @@ public class NewsMultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<News
                     sparkButton.setChecked(false);
                 }
 
-                if (!StringUtils.isEmpty(bean.getImage())) {
-                    //一张图片
-                    helper.getView(R.id.llMultiImage).setVisibility(View.GONE);
-                    helper.getView(R.id.ivImageOne).setVisibility(View.VISIBLE);
+                if (!StringUtils.isEmpty(bean.getVideo())) {
+                    helper.setGone(R.id.videoLayout, true);
+                    helper.setGone(R.id.llMultiImage, false);
+                    helper.setGone(R.id.ivImageOne, false);
+                    helper.setText(R.id.tvVideoTime, formatTime(Double.valueOf(bean.getTime()).longValue()));
 
-                    GlideManager.loadRoundImg(bean.getImage(), helper.getView(R.id.ivImageOne));
+                    // 加载网络图片
+                    Glide.with(mContext).load(bean.getImage()).into((ImageView) helper.getView(R.id.ivVideoBg));
 
+                    helper.addOnClickListener(R.id.ivStartPlayer);
                 } else {
-                    if (bean.getImages() == null || bean.getImages().size() == 0) {
-                        //没有图片
-                        helper.getView(R.id.llMultiImage).setVisibility(View.GONE);
-                        helper.getView(R.id.ivImageOne).setVisibility(View.GONE);
+                    helper.setGone(R.id.videoLayout, false);
+
+                    if (!StringUtils.isEmpty(bean.getImage())) {
+                        //一张图片
+                        helper.setGone(R.id.llMultiImage, false);
+                        helper.setGone(R.id.ivImageOne, true);
+
+                        GlideManager.loadRoundImg(bean.getImage(), helper.getView(R.id.ivImageOne));
 
                     } else {
-                        if (bean.getImages().size() < 3) {
-                            //一张图片
-                            helper.getView(R.id.llMultiImage).setVisibility(View.GONE);
-                            helper.getView(R.id.ivImageOne).setVisibility(View.VISIBLE);
 
-                            GlideManager.loadRoundImg(bean.getImages().get(0), helper.getView(R.id.ivImageOne));
+                        if (bean.getImages() == null || bean.getImages().size() == 0) {
+                            //没有图片
+                            helper.setGone(R.id.llMultiImage, false);
+                            helper.setGone(R.id.ivImageOne, false);
+
                         } else {
-                            //多张图片
-                            helper.getView(R.id.ivImageOne).setVisibility(View.GONE);
-                            helper.getView(R.id.llMultiImage).setVisibility(View.VISIBLE);
+                            if (bean.getImages().size() < 3) {
+                                //一张图片
+                                helper.setGone(R.id.llMultiImage, false);
+                                helper.setGone(R.id.ivImageOne, true);
 
-                            GlideManager.loadRoundImg(bean.getImages().get(0), helper.getView(R.id.ivImageFirst));
-                            GlideManager.loadRoundImg(bean.getImages().get(1), helper.getView(R.id.ivImageSecond));
-                            GlideManager.loadRoundImg(bean.getImages().get(2), helper.getView(R.id.ivImageThree));
+                                GlideManager.loadRoundImg(bean.getImages().get(0), helper.getView(R.id.ivImageOne));
+                            } else {
+                                //多张图片
+                                helper.setGone(R.id.llMultiImage, true);
+                                helper.setGone(R.id.ivImageOne, false);
+
+                                GlideManager.loadRoundImg(bean.getImages().get(0), helper.getView(R.id.ivImageFirst));
+                                GlideManager.loadRoundImg(bean.getImages().get(1), helper.getView(R.id.ivImageSecond));
+                                GlideManager.loadRoundImg(bean.getImages().get(2), helper.getView(R.id.ivImageThree));
+                            }
                         }
                     }
                 }
-
-//                suixiTvModel = (HaveSecondModuleNewsModel) item.getDataBean();
-//
-//                //todo:矩阵头像
-////                GlideManager.loadRoundImg(suixiTvModel.getModule_second(), helper.getView(R.id.ivImageFirst));
-//                helper.setText(R.id.tvJuzhengModuleSecond, suixiTvModel.getModule_second());
-//                helper.addOnClickListener(R.id.tvJuzhengModuleSecond);
-//
-//                LinearLayout llNewsContainer = helper.getView(R.id.llNewsContainer);
-//                llNewsContainer.removeAllViews();
-//
-//                for (int i = 0; i < suixiTvModel.getData().size(); i++) {
-//                    View view = View.inflate(mContext, R.layout.item_news_news_layout, null);
-//
-//                    HaveSecondModuleNewsModel.DataBean dataBean = suixiTvModel.getData().get(i);
-//
-//                    TextView tvTitle = view.findViewById(R.id.tvTitle);
-//                    TextView tvTime = view.findViewById(R.id.tvTime);
-//                    TextView tvSeeNum = view.findViewById(R.id.tvSeeNum);
-//                    tvGoodNum = view.findViewById(R.id.tvGoodNum);
-//                    ImageView ivImageOne = view.findViewById(R.id.ivImageOne);
-//                    ImageView ivImageFirst = view.findViewById(R.id.ivImageFirst);
-//                    ImageView ivImageSecond = view.findViewById(R.id.ivImageSecond);
-//                    ImageView ivImageThree = view.findViewById(R.id.ivImageThree);
-//                    LinearLayout llMultiImage = view.findViewById(R.id.llMultiImage);
-//
-//                    tvTitle.setText(dataBean.getName());
-//                    tvTime.setText(dataBean.getBegintime());
-//                    tvSeeNum.setText(dataBean.getVisit_num());
-//                    tvGoodNum.setText(dataBean.getLike_num());
-//
-//                    drawables = tvGoodNum.getCompoundDrawables();
-//
-//                    if (dataBean.getLike_status() == 1) {
-//                        Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_red_good);
-//                        redGoodDrawable.setBounds(drawables[0].getBounds());
-//                        tvGoodNum.setCompoundDrawables(redGoodDrawable, drawables[1], drawables[2], drawables[3]);
-//                    } else {
-//                        Drawable grayGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_good);
-//                        grayGoodDrawable.setBounds(drawables[0].getBounds());
-//                        tvGoodNum.setCompoundDrawables(grayGoodDrawable, drawables[1], drawables[2], drawables[3]);
-//                    }
-//
-//                    if (!StringUtils.isEmpty(dataBean.getImage())) {
-//                        //一张图片
-//                        llMultiImage.setVisibility(View.GONE);
-//                        ivImageOne.setVisibility(View.VISIBLE);
-//
-//                        GlideManager.loadRoundImg(dataBean.getImage(), ivImageOne);
-//
-//                    } else {
-//                        if (dataBean.getImages() == null || dataBean.getImages().size() == 0) {
-//                            //没有图片
-//                            llMultiImage.setVisibility(View.GONE);
-//                            ivImageOne.setVisibility(View.GONE);
-//
-//                        } else {
-//
-//                            if (dataBean.getImages().size() < 3) {
-//                                //一张图片
-//                                llMultiImage.setVisibility(View.GONE);
-//                                ivImageOne.setVisibility(View.VISIBLE);
-//
-//                                GlideManager.loadRoundImg(dataBean.getImage(), ivImageOne);
-//                            } else {
-//                                //多张图片
-//                                ivImageOne.setVisibility(View.GONE);
-//                                llMultiImage.setVisibility(View.VISIBLE);
-//
-//                                GlideManager.loadRoundImg(dataBean.getImages().get(0), ivImageFirst);
-//                                GlideManager.loadRoundImg(dataBean.getImages().get(1), ivImageSecond);
-//                                GlideManager.loadRoundImg(dataBean.getImages().get(2), ivImageThree);
-//                            }
-//                        }
-//                    }
-//
-//                    llNewsContainer.addView(view);
-//                    view.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            int id = dataBean.getId();
-//                            String type = "文章";
-//                            NewsDetailActivity.Companion.startNewsDetailActivity(mContext, type, id);
-//                        }
-//                    });
-//
-//                    View dividerView = new View(mContext);
-//                    dividerView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1));
-//                    dividerView.setBackgroundColor(mContext.getResources().getColor(R.color.common_bg));
-//
-//                    llNewsContainer.addView(dividerView);
-//
-//                }
-
                 break;
             case NewsMultipleItem.WECHAT_MOMENTS:
                 bean = (NewsBean) item.getDataBean();
@@ -603,34 +541,49 @@ public class NewsMultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<News
                     tvGoodNum.setCompoundDrawables(grayGoodDrawable, drawables[1], drawables[2], drawables[3]);
                 }
 
-                if (!StringUtils.isEmpty(bean.getImage())) {
-                    //一张图片
-                    helper.getView(R.id.llMultiImage).setVisibility(View.GONE);
-                    helper.getView(R.id.ivImageOne).setVisibility(View.VISIBLE);
+                if (!StringUtils.isEmpty(bean.getVideo())) {
+                    helper.setGone(R.id.videoLayout, true);
+                    helper.setGone(R.id.llMultiImage, false);
+                    helper.setGone(R.id.ivImageOne, false);
+                    helper.setText(R.id.tvVideoTime, formatTime(Double.valueOf(bean.getTime()).longValue()));
 
-                    GlideManager.loadRoundImg(bean.getImage(), helper.getView(R.id.ivImageOne));
+                    // 加载网络图片
+                    Glide.with(mContext).load(bean.getImage()).into((ImageView) helper.getView(R.id.ivVideoBg));
 
+                    helper.addOnClickListener(R.id.ivStartPlayer);
                 } else {
-                    if (bean.getImages() == null || bean.getImages().size() == 0) {
-                        //没有图片
-                        helper.getView(R.id.llMultiImage).setVisibility(View.GONE);
-                        helper.getView(R.id.ivImageOne).setVisibility(View.GONE);
+                    helper.setGone(R.id.videoLayout, false);
+
+                    if (!StringUtils.isEmpty(bean.getImage())) {
+                        //一张图片
+                        helper.setGone(R.id.llMultiImage, false);
+                        helper.setGone(R.id.ivImageOne, true);
+
+                        GlideManager.loadRoundImg(bean.getImage(), helper.getView(R.id.ivImageOne));
 
                     } else {
-                        if (bean.getImages().size() < 3) {
-                            //一张图片
-                            helper.getView(R.id.llMultiImage).setVisibility(View.GONE);
-                            helper.getView(R.id.ivImageOne).setVisibility(View.VISIBLE);
 
-                            GlideManager.loadRoundImg(bean.getImages().get(0), helper.getView(R.id.ivImageOne));
+                        if (bean.getImages() == null || bean.getImages().size() == 0) {
+                            //没有图片
+                            helper.setGone(R.id.llMultiImage, false);
+                            helper.setGone(R.id.ivImageOne, false);
+
                         } else {
-                            //多张图片
-                            helper.getView(R.id.ivImageOne).setVisibility(View.GONE);
-                            helper.getView(R.id.llMultiImage).setVisibility(View.VISIBLE);
+                            if (bean.getImages().size() < 3) {
+                                //一张图片
+                                helper.setGone(R.id.llMultiImage, false);
+                                helper.setGone(R.id.ivImageOne, true);
 
-                            GlideManager.loadRoundImg(bean.getImages().get(0), helper.getView(R.id.ivImageFirst));
-                            GlideManager.loadRoundImg(bean.getImages().get(1), helper.getView(R.id.ivImageSecond));
-                            GlideManager.loadRoundImg(bean.getImages().get(2), helper.getView(R.id.ivImageThree));
+                                GlideManager.loadRoundImg(bean.getImages().get(0), helper.getView(R.id.ivImageOne));
+                            } else {
+                                //多张图片
+                                helper.setGone(R.id.llMultiImage, true);
+                                helper.setGone(R.id.ivImageOne, false);
+
+                                GlideManager.loadRoundImg(bean.getImages().get(0), helper.getView(R.id.ivImageFirst));
+                                GlideManager.loadRoundImg(bean.getImages().get(1), helper.getView(R.id.ivImageSecond));
+                                GlideManager.loadRoundImg(bean.getImages().get(2), helper.getView(R.id.ivImageThree));
+                            }
                         }
                     }
                 }
@@ -657,34 +610,49 @@ public class NewsMultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<News
                     tvGoodNum.setCompoundDrawables(grayGoodDrawable, drawables[1], drawables[2], drawables[3]);
                 }
 
-                if (!StringUtils.isEmpty(bean.getImage())) {
-                    //一张图片
-                    helper.getView(R.id.llMultiImage).setVisibility(View.GONE);
-                    helper.getView(R.id.ivImageOne).setVisibility(View.VISIBLE);
+                if (!StringUtils.isEmpty(bean.getVideo())) {
+                    helper.setGone(R.id.videoLayout, true);
+                    helper.setGone(R.id.llMultiImage, false);
+                    helper.setGone(R.id.ivImageOne, false);
+                    helper.setText(R.id.tvVideoTime, formatTime(Double.valueOf(bean.getTime()).longValue()));
 
-                    GlideManager.loadRoundImg(bean.getImage(), helper.getView(R.id.ivImageOne));
+                    // 加载网络图片
+                    Glide.with(mContext).load(bean.getImage()).into((ImageView) helper.getView(R.id.ivVideoBg));
 
+                    helper.addOnClickListener(R.id.ivStartPlayer);
                 } else {
-                    if (bean.getImages() == null || bean.getImages().size() == 0) {
-                        //没有图片
-                        helper.getView(R.id.llMultiImage).setVisibility(View.GONE);
-                        helper.getView(R.id.ivImageOne).setVisibility(View.GONE);
+                    helper.setGone(R.id.videoLayout, false);
+
+                    if (!StringUtils.isEmpty(bean.getImage())) {
+                        //一张图片
+                        helper.setGone(R.id.llMultiImage, false);
+                        helper.setGone(R.id.ivImageOne, true);
+
+                        GlideManager.loadRoundImg(bean.getImage(), helper.getView(R.id.ivImageOne));
 
                     } else {
-                        if (bean.getImages().size() < 3) {
-                            //一张图片
-                            helper.getView(R.id.llMultiImage).setVisibility(View.GONE);
-                            helper.getView(R.id.ivImageOne).setVisibility(View.VISIBLE);
 
-                            GlideManager.loadRoundImg(bean.getImages().get(0), helper.getView(R.id.ivImageOne));
+                        if (bean.getImages() == null || bean.getImages().size() == 0) {
+                            //没有图片
+                            helper.setGone(R.id.llMultiImage, false);
+                            helper.setGone(R.id.ivImageOne, false);
+
                         } else {
-                            //多张图片
-                            helper.getView(R.id.ivImageOne).setVisibility(View.GONE);
-                            helper.getView(R.id.llMultiImage).setVisibility(View.VISIBLE);
+                            if (bean.getImages().size() < 3) {
+                                //一张图片
+                                helper.setGone(R.id.llMultiImage, false);
+                                helper.setGone(R.id.ivImageOne, true);
 
-                            GlideManager.loadRoundImg(bean.getImages().get(0), helper.getView(R.id.ivImageFirst));
-                            GlideManager.loadRoundImg(bean.getImages().get(1), helper.getView(R.id.ivImageSecond));
-                            GlideManager.loadRoundImg(bean.getImages().get(2), helper.getView(R.id.ivImageThree));
+                                GlideManager.loadRoundImg(bean.getImages().get(0), helper.getView(R.id.ivImageOne));
+                            } else {
+                                //多张图片
+                                helper.setGone(R.id.llMultiImage, true);
+                                helper.setGone(R.id.ivImageOne, false);
+
+                                GlideManager.loadRoundImg(bean.getImages().get(0), helper.getView(R.id.ivImageFirst));
+                                GlideManager.loadRoundImg(bean.getImages().get(1), helper.getView(R.id.ivImageSecond));
+                                GlideManager.loadRoundImg(bean.getImages().get(2), helper.getView(R.id.ivImageThree));
+                            }
                         }
                     }
                 }
@@ -710,34 +678,49 @@ public class NewsMultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<News
                     tvGoodNum.setCompoundDrawables(grayGoodDrawable, drawables[1], drawables[2], drawables[3]);
                 }
 
-                if (!StringUtils.isEmpty(bean.getImage())) {
-                    //一张图片
-                    helper.getView(R.id.llMultiImage).setVisibility(View.GONE);
-                    helper.getView(R.id.ivImageOne).setVisibility(View.VISIBLE);
+                if (!StringUtils.isEmpty(bean.getVideo())) {
+                    helper.setGone(R.id.videoLayout, true);
+                    helper.setGone(R.id.llMultiImage, false);
+                    helper.setGone(R.id.ivImageOne, false);
+                    helper.setText(R.id.tvVideoTime, formatTime(Double.valueOf(bean.getTime()).longValue()));
 
-                    GlideManager.loadRoundImg(bean.getImage(), helper.getView(R.id.ivImageOne));
+                    // 加载网络图片
+                    Glide.with(mContext).load(bean.getImage()).into((ImageView) helper.getView(R.id.ivVideoBg));
 
+                    helper.addOnClickListener(R.id.ivStartPlayer);
                 } else {
-                    if (bean.getImages() == null || bean.getImages().size() == 0) {
-                        //没有图片
-                        helper.getView(R.id.llMultiImage).setVisibility(View.GONE);
-                        helper.getView(R.id.ivImageOne).setVisibility(View.GONE);
+                    helper.setGone(R.id.videoLayout, false);
+
+                    if (!StringUtils.isEmpty(bean.getImage())) {
+                        //一张图片
+                        helper.setGone(R.id.llMultiImage, false);
+                        helper.setGone(R.id.ivImageOne, true);
+
+                        GlideManager.loadRoundImg(bean.getImage(), helper.getView(R.id.ivImageOne));
 
                     } else {
-                        if (bean.getImages().size() < 3) {
-                            //一张图片
-                            helper.getView(R.id.llMultiImage).setVisibility(View.GONE);
-                            helper.getView(R.id.ivImageOne).setVisibility(View.VISIBLE);
 
-                            GlideManager.loadRoundImg(bean.getImages().get(0), helper.getView(R.id.ivImageOne));
+                        if (bean.getImages() == null || bean.getImages().size() == 0) {
+                            //没有图片
+                            helper.setGone(R.id.llMultiImage, false);
+                            helper.setGone(R.id.ivImageOne, false);
+
                         } else {
-                            //多张图片
-                            helper.getView(R.id.ivImageOne).setVisibility(View.GONE);
-                            helper.getView(R.id.llMultiImage).setVisibility(View.VISIBLE);
+                            if (bean.getImages().size() < 3) {
+                                //一张图片
+                                helper.setGone(R.id.llMultiImage, false);
+                                helper.setGone(R.id.ivImageOne, true);
 
-                            GlideManager.loadRoundImg(bean.getImages().get(0), helper.getView(R.id.ivImageFirst));
-                            GlideManager.loadRoundImg(bean.getImages().get(1), helper.getView(R.id.ivImageSecond));
-                            GlideManager.loadRoundImg(bean.getImages().get(2), helper.getView(R.id.ivImageThree));
+                                GlideManager.loadRoundImg(bean.getImages().get(0), helper.getView(R.id.ivImageOne));
+                            } else {
+                                //多张图片
+                                helper.setGone(R.id.llMultiImage, true);
+                                helper.setGone(R.id.ivImageOne, false);
+
+                                GlideManager.loadRoundImg(bean.getImages().get(0), helper.getView(R.id.ivImageFirst));
+                                GlideManager.loadRoundImg(bean.getImages().get(1), helper.getView(R.id.ivImageSecond));
+                                GlideManager.loadRoundImg(bean.getImages().get(2), helper.getView(R.id.ivImageThree));
+                            }
                         }
                     }
                 }
@@ -868,21 +851,6 @@ public class NewsMultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<News
                         sparkButton.setChecked(false);
                     }
 
-
-//                    tvGoodNum = helper.getView(R.id.tvGoodNum1);
-//
-//                    drawables = tvGoodNum.getCompoundDrawables();
-//
-//                    if (bean.getLike_status() == 1) {
-//                        Drawable redGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_mini_good);
-//                        redGoodDrawable.setBounds(drawables[0].getBounds());
-//                        tvGoodNum.setCompoundDrawables(redGoodDrawable, drawables[1], drawables[2], drawables[3]);
-//                    } else {
-//                        Drawable grayGoodDrawable = mContext.getResources().getDrawable(R.mipmap.icon_good);
-//                        grayGoodDrawable.setBounds(drawables[0].getBounds());
-//                        tvGoodNum.setCompoundDrawables(grayGoodDrawable, drawables[1], drawables[2], drawables[3]);
-//                    }
-
                     if (!StringUtils.isEmpty(bean.getVideo())) {
                         helper.setGone(R.id.videoLayout, true);
                         helper.setGone(R.id.llMultiImage, false);
@@ -951,34 +919,49 @@ public class NewsMultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<News
                     sparkButton.setChecked(false);
                 }
 
-                if (!StringUtils.isEmpty(bean.getImage())) {
-                    //一张图片
-                    helper.getView(R.id.llMultiImage).setVisibility(View.GONE);
-                    helper.getView(R.id.ivImageOne).setVisibility(View.VISIBLE);
+                if (!StringUtils.isEmpty(bean.getVideo())) {
+                    helper.setGone(R.id.videoLayout, true);
+                    helper.setGone(R.id.llMultiImage, false);
+                    helper.setGone(R.id.ivImageOne, false);
+                    helper.setText(R.id.tvVideoTime, formatTime(Double.valueOf(bean.getTime()).longValue()));
 
-                    GlideManager.loadRoundImg(bean.getImage(), helper.getView(R.id.ivImageOne));
+                    // 加载网络图片
+                    Glide.with(mContext).load(bean.getImage()).into((ImageView) helper.getView(R.id.ivVideoBg));
 
+                    helper.addOnClickListener(R.id.ivStartPlayer);
                 } else {
-                    if (bean.getImages() == null || bean.getImages().size() == 0) {
-                        //没有图片
-                        helper.getView(R.id.llMultiImage).setVisibility(View.GONE);
-                        helper.getView(R.id.ivImageOne).setVisibility(View.GONE);
+                    helper.setGone(R.id.videoLayout, false);
+
+                    if (!StringUtils.isEmpty(bean.getImage())) {
+                        //一张图片
+                        helper.setGone(R.id.llMultiImage, false);
+                        helper.setGone(R.id.ivImageOne, true);
+
+                        GlideManager.loadRoundImg(bean.getImage(), helper.getView(R.id.ivImageOne));
 
                     } else {
-                        if (bean.getImages().size() < 3) {
-                            //一张图片
-                            helper.getView(R.id.llMultiImage).setVisibility(View.GONE);
-                            helper.getView(R.id.ivImageOne).setVisibility(View.VISIBLE);
 
-                            GlideManager.loadRoundImg(bean.getImages().get(0), helper.getView(R.id.ivImageOne));
+                        if (bean.getImages() == null || bean.getImages().size() == 0) {
+                            //没有图片
+                            helper.setGone(R.id.llMultiImage, false);
+                            helper.setGone(R.id.ivImageOne, false);
+
                         } else {
-                            //多张图片
-                            helper.getView(R.id.ivImageOne).setVisibility(View.GONE);
-                            helper.getView(R.id.llMultiImage).setVisibility(View.VISIBLE);
+                            if (bean.getImages().size() < 3) {
+                                //一张图片
+                                helper.setGone(R.id.llMultiImage, false);
+                                helper.setGone(R.id.ivImageOne, true);
 
-                            GlideManager.loadRoundImg(bean.getImages().get(0), helper.getView(R.id.ivImageFirst));
-                            GlideManager.loadRoundImg(bean.getImages().get(1), helper.getView(R.id.ivImageSecond));
-                            GlideManager.loadRoundImg(bean.getImages().get(2), helper.getView(R.id.ivImageThree));
+                                GlideManager.loadRoundImg(bean.getImages().get(0), helper.getView(R.id.ivImageOne));
+                            } else {
+                                //多张图片
+                                helper.setGone(R.id.llMultiImage, true);
+                                helper.setGone(R.id.ivImageOne, false);
+
+                                GlideManager.loadRoundImg(bean.getImages().get(0), helper.getView(R.id.ivImageFirst));
+                                GlideManager.loadRoundImg(bean.getImages().get(1), helper.getView(R.id.ivImageSecond));
+                                GlideManager.loadRoundImg(bean.getImages().get(2), helper.getView(R.id.ivImageThree));
+                            }
                         }
                     }
                 }

@@ -66,6 +66,11 @@ public class NewsBean implements Serializable {
     private int collect_status;
     private List<String> images;
     private List<TelModel> tel_list;
+    private BannerModel top_ad;
+    private BannerModel bottom_ad;
+    private BannerModel under_ad;
+    private BannerModel page_ad;
+    private List<NewsBean> relation;
     private boolean isExpand;
     private boolean playStatus;
     private boolean isSelect;
@@ -357,5 +362,45 @@ public class NewsBean implements Serializable {
 
     public void setSelect(boolean select) {
         isSelect = select;
+    }
+
+    public List<NewsBean> getRelation() {
+        return relation;
+    }
+
+    public void setRelation(List<NewsBean> relation) {
+        this.relation = relation;
+    }
+
+    public BannerModel getTop_ad() {
+        return top_ad;
+    }
+
+    public void setTop_ad(BannerModel top_ad) {
+        this.top_ad = top_ad;
+    }
+
+    public BannerModel getBottom_ad() {
+        return bottom_ad;
+    }
+
+    public void setBottom_ad(BannerModel bottom_ad) {
+        this.bottom_ad = bottom_ad;
+    }
+
+    public BannerModel getUnder_ad() {
+        return under_ad;
+    }
+
+    public void setUnder_ad(BannerModel under_ad) {
+        this.under_ad = under_ad;
+    }
+
+    public BannerModel getPage_ad() {
+        return page_ad;
+    }
+
+    public void setPage_ad(BannerModel page_ad) {
+        this.page_ad = page_ad;
     }
 }

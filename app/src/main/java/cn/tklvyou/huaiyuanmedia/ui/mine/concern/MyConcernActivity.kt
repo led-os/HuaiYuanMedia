@@ -47,6 +47,8 @@ class MyConcernActivity : BaseActivity<NullPresenter>() {
 
         mFragments.add(getFragmentByType(1))
         mFragments.add(getFragmentByType(2))
+
+
         initMagicIndicator()
         mChannelPagerAdapter = ChannelPagerAdapter(mFragments, fragmentManager)
         articleViewPager.adapter = mChannelPagerAdapter
@@ -91,7 +93,6 @@ class MyConcernActivity : BaseActivity<NullPresenter>() {
         commonNavigator.isAdjustMode = true
         magicIndicator.navigator = commonNavigator
         ViewPagerHelper.bind(magicIndicator, articleViewPager)
-
     }
 
 

@@ -41,11 +41,11 @@ public class AccountPresenter extends BasePresenter<AccountContract.View> implem
                 .subscribe(result -> {
                     mView.showSuccess(result.getMsg());
                     if (result.getCode() == 1) {
-                        mView.loginSuccess();
                         AccountHelper.getInstance().setUserInfo(result.getData().getUserinfo());
                         SPUtils.getInstance().put("token", result.getData().getUserinfo().getToken());
                         SPUtils.getInstance().put("login", true);
                         SPUtils.getInstance().put("groupId", result.getData().getUserinfo().getGroup_id());
+                        mView.loginSuccess();
                     }
                 }, throwable -> {
                     mView.showSuccess("");

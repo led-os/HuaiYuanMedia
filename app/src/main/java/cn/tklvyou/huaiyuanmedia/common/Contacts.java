@@ -9,13 +9,15 @@ import cn.tklvyou.huaiyuanmedia.BuildConfig;
 public class Contacts {
     public static final String PACKAGE_NAME = BuildConfig.APPLICATION_ID;
 
-    public static final String WX_APPID = "wx3314443bcadc6e01";
+    public static final String WX_APPID = "wxc41e2383f813afc5";
 
     public static final String QQ_APPID = "101788396";
 
     public static final String SHARE_DOWNLOAD_URL = "http://huaiyuanweb.dashuiniu.com.cn/#/upload";
 
     public static final String SHARE_BASE_URL = "http://huaiyuanweb.dashuiniu.com.cn/#/articleDetail/";
+
+    public static final String SHARE_SELECTION_URL = "http://huaiyuanweb.dashuiniu.com.cn/#/selectionContent/";
 
     public static final String WB_APP_KEY = "4128160158";
     /**
@@ -27,7 +29,7 @@ public class Contacts {
      * 建议使用默认回调页：https://api.weibo.com/oauth2/default.html
      * </p>
      */
-    public static final String WB_REDIRECT_URL = Contacts.PRO_BASE_URL + "api/third/weibocallback";
+    public static final String WB_REDIRECT_URL = "http://huaiyuan.dashuiniu.com.cn/api/third/weibocallback";
 
     /**
      * Scope 是 OAuth2.0 授权机制中 authorize 接口的一个参数。通过 Scope，平台将开放更多的微博
@@ -50,8 +52,13 @@ public class Contacts {
     public static String DEV_BASE_URL = "http://huaiyuan.dashuiniu.com.cn/";
     public static String PRO_BASE_URL = "http://huaiyuan.dashuiniu.com.cn/";
 
+    public static String WEB_URL = "http://huaiyuanweb.dashuiniu.com.cn/";
+
+
+
     public static boolean cache = true;//开启缓存
     public static boolean preload = true;//开启预加载
 
+    public static final String SPLIT_TAG = "&###&";
 
 }

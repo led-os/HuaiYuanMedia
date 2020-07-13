@@ -30,11 +30,11 @@ public class PublishWenzhengPresenter extends BasePresenter<PublishWenzhengContr
                 .compose(RxSchedulers.applySchedulers())
                 .compose(mView.bindToLife())
                 .subscribe(result -> {
+                    mView.showSuccess(result.getMsg());
                     if (result.getCode() == 1) {
                         mView.setQiniuToken(result.getData().toString());
                     } else {
                         mView.showFailed("");
-                        ToastUtils.showShort(result.getMsg());
                     }
                 }, throwable -> {
                     throwable.printStackTrace();

@@ -63,7 +63,7 @@ public class NewsDetailPresenter extends BasePresenter<NewsDetailContract.View> 
                             mView.setDetails(result.getData());
                         }
                     }, throwable -> {
-                        mView.showFailed("");
+                        mView.showFailed(throwable.getMessage());
                     });
         }else {
             RetrofitHelper.getInstance().getServer()
@@ -76,7 +76,7 @@ public class NewsDetailPresenter extends BasePresenter<NewsDetailContract.View> 
                             mView.setDetails(result.getData());
                         }
                     }, throwable -> {
-                        mView.showFailed("");
+                        mView.showFailed(throwable.getMessage());
                     });
         }
 

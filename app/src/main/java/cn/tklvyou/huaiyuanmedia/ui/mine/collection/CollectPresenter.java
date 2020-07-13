@@ -27,7 +27,7 @@ public class CollectPresenter extends BasePresenter<CollectContract.View> implem
         RetrofitHelper.getInstance().getServer()
                 .getMyCollectList(page)
                 .compose(RxSchedulers.applySchedulers())
-//                .compose(mView.bindToLife())
+                .compose(mView.bindToLife())
                 .subscribe(result -> {
                             if (mView != null) {
                                 mView.showSuccess(result.getMsg());

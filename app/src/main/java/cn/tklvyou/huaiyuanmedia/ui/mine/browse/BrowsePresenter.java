@@ -24,7 +24,7 @@ public class BrowsePresenter extends BasePresenter<BrowseContract.View> implemen
         RetrofitHelper.getInstance().getServer()
                 .getRecentBrowseList(page)
                 .compose(RxSchedulers.applySchedulers())
-//                .compose(mView.bindToLife())
+                .compose(mView.bindToLife())
                 .subscribe(result -> {
                             if (mView != null) {
                                 mView.showSuccess(result.getMsg());

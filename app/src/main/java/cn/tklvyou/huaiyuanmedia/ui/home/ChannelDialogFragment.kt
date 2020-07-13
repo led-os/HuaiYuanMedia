@@ -69,7 +69,7 @@ class ChannelDialogFragment : BaseDialogFragment<HomeChannelPresenter>(), OnChan
         mTitleBar.setNavigationListener {
             if (mAdapter == null) {
                 showSuccess("")
-                dismiss()
+                ToastUtils.showShort("至少选择一个频道")
                 return@setNavigationListener
             }
 

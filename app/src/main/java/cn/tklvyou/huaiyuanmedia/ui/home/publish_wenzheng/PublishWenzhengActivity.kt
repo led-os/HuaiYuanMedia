@@ -9,6 +9,7 @@ import cn.tklvyou.huaiyuanmedia.R
 import cn.tklvyou.huaiyuanmedia.base.activity.BaseActivity
 import cn.tklvyou.huaiyuanmedia.helper.AccountHelper
 import cn.tklvyou.huaiyuanmedia.helper.GlideManager
+import cn.tklvyou.huaiyuanmedia.model.HaveSecondModuleNewsModel
 import cn.tklvyou.huaiyuanmedia.model.NewsBean
 import cn.tklvyou.huaiyuanmedia.ui.adapter.WenzhengGridImageAdapter
 import cn.tklvyou.huaiyuanmedia.utils.GridDividerItemDecoration
@@ -27,32 +28,6 @@ import java.lang.StringBuilder
 
 class PublishWenzhengActivity : BaseActivity<PublishWenzhengPresenter>(), PublishWenzhengContract.View {
 
-    override fun setJuZhengHeader(beans: MutableList<NewsBean>) {
-        this.wenzhengBeans = beans
-
-        tvModuleSecond.setOnClickListener {
-            val dialog = SelectListDialog(this)
-            dialog.setTitle("选择爆料对象")
-            dialog.setLayoutManager(GridLayoutManager(this, 4))
-            dialog.setAdapter(object : TBaseAdapter<NewsBean>(R.layout.item_juzheng_header_child_layout, wenzhengBeans) {
-                override fun onBind(holder: DialogBindViewHolder, position: Int, t: NewsBean) {
-                    holder.setText(R.id.tvNickName, t.nickname)
-                    GlideManager.loadRoundImg(t.avatar, holder.getView(R.id.ivAvatar))
-                }
-            })
-            dialog.setItemOnclickListener { holder, position, t, tDialog ->
-                tvModuleSecond.text = (t as NewsBean).nickname
-                dialog.dismiss()
-            }
-            dialog.show()
-        }
-
-    }
-
-    override fun setQiniuToken(token: String) {
-        this.qiniuToken = token
-        mPresenter.getJuZhengHeader("爆料")
-    }
 
     override fun initPresenter(): PublishWenzhengPresenter {
         return PublishWenzhengPresenter()
@@ -70,7 +45,7 @@ class PublishWenzhengActivity : BaseActivity<PublishWenzhengPresenter>(), Publis
     private var moduleSecond = ""
     private var name = ""
     private var content = ""
-    private var wenzhengBeans: MutableList<NewsBean> = ArrayList()
+    private var wenzhengBeans: MutableList<HaveSecondModuleNewsModel.ModuleSecondBean> = ArrayList()
     private var qiniuToken = ""
 
 
@@ -100,14 +75,14 @@ class PublishWenzhengActivity : BaseActivity<PublishWenzhengPresenter>(), Publis
 
 
         btnSubmit.setOnClickListener {
-            moduleSecond = tvModuleSecond.text.toString().trim()
+            //            moduleSecond = tvModuleSecond.text.toString().trim()
             name = etName.text.toString().trim()
             content = etContent.text.toString().trim()
 
-            if (moduleSecond.isEmpty()) {
-                ToastUtils.showShort("请选择爆料对象")
-                return@setOnClickListener
-            }
+//            if (moduleSecond.isEmpty()) {
+//                ToastUtils.showShort("请选择爆料对象")
+//                return@setOnClickListener
+//            }
 
             if (name.isEmpty()) {
                 ToastUtils.showShort("请输入标题")
@@ -144,6 +119,33 @@ class PublishWenzhengActivity : BaseActivity<PublishWenzhengPresenter>(), Publis
     override fun onRetry() {
         super.onRetry()
         mPresenter.getQiniuToken()
+    }
+
+    override fun setQiniuToken(token: String) {
+        this.qiniuToken = token
+//        mPresenter.getJuZhengHeader("爆料")
+    }
+
+    override fun setJuZhengHeader(beans: MutableList<HaveSecondModuleNewsModel.ModuleSecondBean>) {
+        this.wenzhengBeans = beans
+
+        tvModuleSecond.setOnClickListener {
+            val dialog = SelectListDialog(this)
+            dialog.setTitle("选择爆料对象")
+            dialog.setLayoutManager(GridLayoutManager(this, 4))
+            dialog.setAdapter(object : TBaseAdapter<HaveSecondModuleNewsModel.ModuleSecondBean>(R.layout.item_juzheng_header_child_layout, wenzhengBeans) {
+                override fun onBind(holder: DialogBindViewHolder, position: Int, t: HaveSecondModuleNewsModel.ModuleSecondBean) {
+                    holder.setText(R.id.tvNickName, t.nickname)
+                    GlideManager.loadRoundImg(t.avatar, holder.getView(R.id.ivAvatar))
+                }
+            })
+            dialog.setItemOnclickListener { holder, position, t, tDialog ->
+                tvModuleSecond.text = (t as NewsBean).nickname
+                dialog.dismiss()
+            }
+            dialog.show()
+        }
+
     }
 
     override fun uploadImagesSuccess(urls: MutableList<String>) {

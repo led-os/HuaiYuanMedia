@@ -14,6 +14,7 @@ import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.trello.rxlifecycle3.LifecycleTransformer;
+import com.trello.rxlifecycle3.android.FragmentEvent;
 import com.trello.rxlifecycle3.components.support.RxDialogFragment;
 
 import cn.tklvyou.huaiyuanmedia.base.BaseContract;
@@ -322,7 +323,7 @@ public abstract class BaseDialogFragment<T extends BaseContract.BasePresenter> e
 
     @Override
     public <T> LifecycleTransformer<T> bindToLife() {
-        return this.bindToLifecycle();
+        return this.bindUntilEvent(FragmentEvent.DESTROY);
     }
 
     @Override

@@ -31,7 +31,7 @@ class PingXuanPersionActivity : BaseX5WebViewActivity<PingXuanPersionPresenter>(
     private var id = 0
     private var count = 0
     override fun initView(savedInstanceState: Bundle?) {
-        setTitle("评选")
+        setTitle("", R.mipmap.home_title_logo)
         setNavigationImage()
         setNavigationOnClickListener { finish() }
 

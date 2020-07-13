@@ -26,6 +26,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.IdRes;
+
 import com.wuhenzhizao.titlebar.R;
 import com.wuhenzhizao.titlebar.statusbar.StatusBarUtils;
 import com.wuhenzhizao.titlebar.utils.ScreenUtils;
@@ -747,7 +749,7 @@ public class CommonTitleBar extends RelativeLayout implements View.OnClickListen
     private OnFocusChangeListener focusChangeListener = new OnFocusChangeListener() {
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
-            if(hasFocus) {
+            if (hasFocus) {
                 etSearchHint.setCursorVisible(true);
             }
             if (centerSearchRightType == TYPE_CENTER_SEARCH_RIGHT_DELETE) {
@@ -976,6 +978,16 @@ public class CommonTitleBar extends RelativeLayout implements View.OnClickListen
         }
 
         initMainCenterViews(mContext);
+    }
+
+    public void setCenterTextDrawable(@IdRes int centerDrawable) {
+        // 设置DrawableLeft及DrawablePadding
+        tvCenter.setCompoundDrawablePadding((int) centerDrawablePadding);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            tvCenter.setCompoundDrawablesRelativeWithIntrinsicBounds(centerDrawable, 0, 0, 0);
+        } else {
+            tvCenter.setCompoundDrawablesWithIntrinsicBounds(centerDrawable, 0, 0, 0);
+        }
     }
 
 

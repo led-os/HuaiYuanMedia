@@ -19,7 +19,7 @@ public class MyArticleListPresenter extends BasePresenter<MyArticleContract.View
         RetrofitHelper.getInstance().getServer()
                 .getMyArticleList(p, module)
                 .compose(RxSchedulers.applySchedulers())
-//                .compose(mView.bindToLife())
+                .compose(mView.bindToLife())
                 .subscribe(result -> {
                             if (mView != null) {
                                 mView.showSuccess(result.getMsg());
@@ -115,7 +115,7 @@ public class MyArticleListPresenter extends BasePresenter<MyArticleContract.View
     @Override
     public void cancelArticleAll() {
         RetrofitHelper.getInstance().getServer()
-                .cancelArticleAll()
+                .cancelArticleAll(null)
                 .compose(RxSchedulers.applySchedulers())
                 .compose(mView.bindToLife())
                 .subscribe(result -> {

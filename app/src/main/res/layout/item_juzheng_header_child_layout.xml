@@ -47,5 +47,4 @@
         android:button="@null"
         android:checked="false" />
 
-
 </FrameLayout>

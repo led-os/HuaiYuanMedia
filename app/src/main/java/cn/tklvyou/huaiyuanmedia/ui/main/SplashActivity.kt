@@ -1,38 +1,31 @@
 package cn.tklvyou.huaiyuanmedia.ui.main
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.os.AsyncTask
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.text.TextUtils
 import android.view.View
+import android.view.WindowManager
 import cn.tklvyou.huaiyuanmedia.R
-import cn.tklvyou.huaiyuanmedia.base.MyApplication
-import cn.tklvyou.huaiyuanmedia.base.NullPresenter
 import cn.tklvyou.huaiyuanmedia.base.activity.BaseActivity
-import cn.tklvyou.huaiyuanmedia.helper.GlideManager
+import cn.tklvyou.huaiyuanmedia.base.activity.BaseNoTitleActivity
+import cn.tklvyou.huaiyuanmedia.common.ModuleUtils
 import cn.tklvyou.huaiyuanmedia.model.AdModel
-import java.util.*
-import cn.tklvyou.huaiyuanmedia.ui.account.LoginActivity
+import cn.tklvyou.huaiyuanmedia.model.NewsBean
 import cn.tklvyou.huaiyuanmedia.ui.audio.ServiceWebviewActivity
+import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
 import cn.tklvyou.huaiyuanmedia.utils.YBitmapUtils
-import com.airbnb.lottie.L
 import com.blankj.utilcode.util.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.SimpleTarget
-import com.sina.weibo.sdk.net.NetUtils
 import kotlinx.android.synthetic.main.activity_splash.*
-import com.cjt2325.cameralibrary.util.FileUtil
-import com.bumptech.glide.request.target.Target.SIZE_ORIGINAL
 import com.bumptech.glide.request.transition.Transition
+import com.google.gson.Gson
 import java.io.File
 
 
-class SplashActivity : BaseActivity<AdPresenter>(), MainContract.AdView {
+class SplashActivity : BaseNoTitleActivity<AdPresenter>(), MainContract.AdView {
 
 
     override fun initPresenter(): AdPresenter {
@@ -62,7 +55,17 @@ class SplashActivity : BaseActivity<AdPresenter>(), MainContract.AdView {
     }
 
     override fun initView(savedInstanceState: Bundle?) {
-        hideTitleBar()
+//        hideTitleBar()
+
+        BarUtils.setStatusBarVisibility(this,false)
+        if(BarUtils.isSupportNavBar()){
+            BarUtils.setNavBarVisibility(this,false)
+        }
+
+        if (isSchemeIntentData()) {
+            layoutSkip.visibility = View.GONE
+            return
+        }
 
         initTimeCount = 6
         handler.sendMessageDelayed(handler.obtainMessage(-1), 1000)
@@ -77,7 +80,28 @@ class SplashActivity : BaseActivity<AdPresenter>(), MainContract.AdView {
             finish()
         }
 
+        initAdView()
 
+    }
+
+    private fun isSchemeIntentData(): Boolean {
+        val uri = intent.data
+        return if (uri != null) {
+            //访问路径
+            val path = uri.path
+            //获取参数值
+            val module = uri.getQueryParameter("json")
+            val bean = Gson().fromJson<NewsBean>(module, NewsBean::class.java)
+            LogUtils.e(path, ModuleUtils.getTypeByNewsBean(bean))
+            toNewsDetailsActivity(bean)
+            true
+        } else {
+            false
+        }
+    }
+
+
+    private fun initAdView() {
         if (SPStaticUtils.getBoolean("ad1", false)) {
             layoutSkip.visibility = View.VISIBLE
 
@@ -119,7 +143,7 @@ class SplashActivity : BaseActivity<AdPresenter>(), MainContract.AdView {
                             handler.removeMessages(0)
                             finish()
                         }
-                    }else {
+                    } else {
                         ivAdvertising.setOnClickListener {
                             jump = true
                         }
@@ -128,7 +152,7 @@ class SplashActivity : BaseActivity<AdPresenter>(), MainContract.AdView {
                 }
             }, 4500)
 
-        }else if(SPStaticUtils.getBoolean("ad2", false)){
+        } else if (SPStaticUtils.getBoolean("ad2", false)) {
             layoutSkip.visibility = View.VISIBLE
 
             val url = SPStaticUtils.getString("ad2_url", "")
@@ -151,8 +175,6 @@ class SplashActivity : BaseActivity<AdPresenter>(), MainContract.AdView {
                 }
             }
         }
-
-
     }
 
     override fun setAdView(data: MutableList<AdModel>) {
@@ -182,7 +204,6 @@ class SplashActivity : BaseActivity<AdPresenter>(), MainContract.AdView {
                                 }
                                 SPStaticUtils.put("ad1", true)
                                 SPStaticUtils.put("ad1_url", data[0].url)
-                                LogUtils.e("下载成功")
                             } else {
                                 ToastUtils.showShort("下载失败")
                             }
@@ -264,7 +285,7 @@ class SplashActivity : BaseActivity<AdPresenter>(), MainContract.AdView {
                                 handler.removeMessages(0)
                                 finish()
                             }
-                        }else{
+                        } else {
                             ivAdvertising.setOnClickListener {
                                 jump = true
                             }
@@ -309,5 +330,26 @@ class SplashActivity : BaseActivity<AdPresenter>(), MainContract.AdView {
         }
     }
 
+    private fun toNewsDetailsActivity(bean: NewsBean) {
+        val type = ModuleUtils.getTypeByNewsBean(bean)
+        if (bean.url.isNotEmpty()) {
+            val intent = Intent(this, ServiceWebviewActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            intent.putExtra("back", true)
+            intent.putExtra("url", bean.url)
+            intent.putExtra("other", true)
+            intent.putExtra("share_title", "")
+            startActivity(intent)
+        } else {
+            val intent = Intent(this, NewsDetailActivity::class.java)
+            intent.putExtra("back", true)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+
+            intent.putExtra(NewsDetailActivity.INTENT_ID, bean.id)
+            intent.putExtra(NewsDetailActivity.INTENT_TYPE, type)
+            startActivity(intent)
+        }
+        finish()
+    }
 
 }

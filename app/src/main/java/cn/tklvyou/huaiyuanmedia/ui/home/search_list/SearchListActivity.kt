@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import cn.tklvyou.huaiyuanmedia.R
 import cn.tklvyou.huaiyuanmedia.base.activity.BaseHttpRecyclerActivity
 import cn.tklvyou.huaiyuanmedia.base.interfaces.AdapterCallBack
+import cn.tklvyou.huaiyuanmedia.common.ModuleUtils
 import cn.tklvyou.huaiyuanmedia.model.BasePageModel
 import cn.tklvyou.huaiyuanmedia.model.NewsBean
 import cn.tklvyou.huaiyuanmedia.ui.adapter.MyCollectionAdapter
@@ -21,6 +22,7 @@ import cn.tklvyou.huaiyuanmedia.ui.adapter.SearchHistoryRvAdapter
 import cn.tklvyou.huaiyuanmedia.ui.audio.ServiceWebviewActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.tv_news_detail.TVNewsDetailActivity
+import cn.tklvyou.huaiyuanmedia.ui.video_player.VodActivity
 import cn.tklvyou.huaiyuanmedia.widget.dailog.CommonDialog
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.SPUtils
@@ -194,99 +196,12 @@ class SearchListActivity : BaseHttpRecyclerActivity<SearchPresenter, NewsBean, B
         val bean = (adapter as MySearchRvAdapter).data[position]
         val id = bean.id
 
-        when (bean.module) {
-            "V视频" -> {
-                val type = "视频"
-                if (bean.url.isNotEmpty()) {
-                    startDetailsActivity(this, bean.url)
-                } else {
-                    startNewsDetailActivity(this, type, id, position)
-                }
-            }
-            "濉溪TV" -> {
-                if (bean.module_second == "置顶频道") {
-                    val type = if (bean.type == "tv") "电视" else "广播"
-                    TVNewsDetailActivity.startTVNewsDetailActivity(this, type, id)
-                } else {
-                    val type = "电视"
-                    NewsDetailActivity.startNewsDetailActivity(this, type, id)
-                }
-            }
-            "新闻", "矩阵", "专栏", "党建", "专题" -> {
-                val type = "文章"
-                if (bean.url.isNotEmpty()) {
-                    startDetailsActivity(this, bean.url)
-                } else {
-                    startNewsDetailActivity(this, type, id, position)
-                }
-            }
-            "视讯" -> {
-                val type = "视讯"
-                if (bean.url.isNotEmpty()) {
-                    startDetailsActivity(this, bean.url)
-                } else {
-                    startNewsDetailActivity(this, type, id, position)
-                }
-            }
-            "爆料" -> {
-                val type = "爆料"
-                if (bean.url.isNotEmpty()) {
-                    startDetailsActivity(this, bean.url)
-                } else {
-                    startNewsDetailActivity(this, type, id, position)
-                }
-            }
+        val type = ModuleUtils.getTypeByNewsBean(bean)
 
-            "原创", "生活圈" -> {
-                val type = if (bean.images != null && bean.images.size > 0) "图文" else "视频"
-                if (bean.url.isNotEmpty()) {
-                    startDetailsActivity(this, bean.url)
-                } else {
-                    startNewsDetailActivity(this, type, id, position)
-                }
-            }
-            "悦读" -> {
-                val type = "悦读"
-                if (bean.url.isNotEmpty()) {
-                    startDetailsActivity(this, bean.url)
-                } else {
-                    startNewsDetailActivity(this, type, id, position)
-                }
-            }
-            "悦听" -> {
-                val type = "悦听"
-                if (bean.url.isNotEmpty()) {
-                    startDetailsActivity(this, bean.url)
-                } else {
-                    startNewsDetailActivity(this, type, id, position)
-                }
-            }
-            "公告" -> {
-                val type = "公告"
-                if (bean.url.isNotEmpty()) {
-                    startDetailsActivity(this, bean.url)
-                } else {
-                    startNewsDetailActivity(this, type, id, position)
-                }
-            }
-
-            "直播" -> {
-                val type = "直播"
-                if (bean.url.isNotEmpty()) {
-                    startDetailsActivity(this, bean.url)
-                } else {
-                    startNewsDetailActivity(this, type, id, position)
-                }
-            }
-
-            else -> {
-                val type = "文章"
-                if (bean.url.isNotEmpty()) {
-                    startDetailsActivity(this, bean.url)
-                } else {
-                    startNewsDetailActivity(this, type, id, position)
-                }
-            }
+        if (bean.url.isNotEmpty()) {
+            startDetailsActivity(this, bean.url)
+        } else {
+            startNewsDetailActivity(this, type, id, position)
         }
 
     }
@@ -316,6 +231,19 @@ class SearchListActivity : BaseHttpRecyclerActivity<SearchPresenter, NewsBean, B
                     mPresenter.cancelLikeNews(bean.id, position)
                 } else {
                     mPresenter.addLikeNews(bean.id, position)
+                }
+            }
+
+            //V视频 直播 播放按钮
+            R.id.ivStartPlayer -> {
+                val bean = adapter!!.data[position] as NewsBean
+                if (bean.url.isNotEmpty()) {
+                    startDetailsActivity(this, bean.url)
+                } else {
+                    //打开新的Activity
+                    val intent = Intent(this, VodActivity::class.java)
+                    intent.putExtra("videoPath", bean.video)
+                    startActivity(intent)
                 }
             }
         }

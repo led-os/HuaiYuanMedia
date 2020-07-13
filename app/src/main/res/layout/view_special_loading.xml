@@ -8,11 +8,6 @@
     android:orientation="vertical"
     tools:ignore="UseCompoundDrawables">
 
-    <!--<com.billy.android.loadingstatusview.wrapactivity.adapter.view.anim.LVFinePoiStar-->
-    <!--android:id="@+id/loading_anim"-->
-    <!--android:layout_width="50dp"-->
-    <!--android:layout_height="50dp" />-->
-
     <ImageView
         android:id="@+id/loading_anim"
         android:layout_width="50dp"

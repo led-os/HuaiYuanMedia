@@ -10,10 +10,10 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import cn.tklvyou.huaiyuanmedia.BuildConfig;
-import cn.tklvyou.huaiyuanmedia.base.BaseResult;
 import cn.tklvyou.huaiyuanmedia.base.MyApplication;
 import cn.tklvyou.huaiyuanmedia.common.Contacts;
 import cn.tklvyou.huaiyuanmedia.ui.account.LoginActivity;
@@ -125,11 +125,12 @@ public class RetrofitHelper {
             source.request(Long.MAX_VALUE);
             String respString = source.buffer().clone().readString(Charset.defaultCharset());
 
-            BaseResult<Object> result = new Gson().fromJson(respString, BaseResult.class);
+            BaseResult result = new Gson().fromJson(respString, BaseResult.class);
 
             if (result != null && result.getCode() == 401) {
                 ToastUtils.showShort(result.getMsg());
                 Log.d(TAG, "--->登录失效，自动重新登录");
+                SPUtils.getInstance().put("token","");
                 Intent intent = new Intent(MyApplication.getAppContext(), LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 MyApplication.getAppContext().startActivity(intent);
@@ -183,7 +184,7 @@ public class RetrofitHelper {
                 ResponseBody responseBody = response.peekBody(1024 * 1024);//关键代码
 
                 String responseString = JsonHandleUtils.jsonHandle(responseBody.string());
-                LogUtils.d(String.format("接收响应: [%s] %n返回json:【%s】 %.1fms %n%s",
+                LogUtils.d(String.format(Locale.CHINA,"接收响应: [%s] %n返回json:【%s】 %.1fms %n%s",
                         response.request().url(),
                         responseString,
                         (t2 - t1) / 1e6d,

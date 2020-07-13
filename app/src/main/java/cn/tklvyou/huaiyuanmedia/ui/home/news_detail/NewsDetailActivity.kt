@@ -3,41 +3,42 @@ package cn.tklvyou.huaiyuanmedia.ui.home.news_detail
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.ScrollView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import cn.tklvyou.huaiyuanmedia.R
 import cn.tklvyou.huaiyuanmedia.base.activity.BaseActivity
-import cn.tklvyou.huaiyuanmedia.base.activity.BaseWebViewActivity
 import cn.tklvyou.huaiyuanmedia.common.Contacts
+import cn.tklvyou.huaiyuanmedia.common.ModuleUtils
 import cn.tklvyou.huaiyuanmedia.helper.GlideManager
-import cn.tklvyou.huaiyuanmedia.model.CommentModel
-import cn.tklvyou.huaiyuanmedia.model.NewsBean
-import cn.tklvyou.huaiyuanmedia.model.VoteOptionModel
+import cn.tklvyou.huaiyuanmedia.model.*
+import cn.tklvyou.huaiyuanmedia.ui.account.LoginActivity
 import cn.tklvyou.huaiyuanmedia.ui.adapter.CommentRvAdapter
+import cn.tklvyou.huaiyuanmedia.ui.adapter.SectionMultipleItemAdapter
+import cn.tklvyou.huaiyuanmedia.ui.audio.ServiceWebviewActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.AudioController
+import cn.tklvyou.huaiyuanmedia.ui.home.BannerDetailsActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.ImagePagerActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.comment.CommentListActivity
+import cn.tklvyou.huaiyuanmedia.ui.main.MainActivity
 import cn.tklvyou.huaiyuanmedia.ui.video_player.VodActivity
-import cn.tklvyou.huaiyuanmedia.utils.GlideCircleTransform
-import cn.tklvyou.huaiyuanmedia.utils.InterfaceUtils
-import cn.tklvyou.huaiyuanmedia.utils.UrlUtils
-import cn.tklvyou.huaiyuanmedia.utils.YBitmapUtils
+import cn.tklvyou.huaiyuanmedia.utils.*
 import cn.tklvyou.huaiyuanmedia.widget.SharePopupWindow
 import cn.tklvyou.huaiyuanmedia.widget.VoteLoadButton
 import cn.tklvyou.huaiyuanmedia.widget.dailog.CommonDialog
 import cn.tklvyou.huaiyuanmedia.widget.rich_web_list.view.HeaderScrollHelper
 import com.blankj.utilcode.util.*
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.sina.weibo.sdk.api.WebpageObject
 import com.sina.weibo.sdk.api.WeiboMultiMessage
 import com.sina.weibo.sdk.share.WbShareCallback
@@ -60,7 +61,8 @@ import java.util.*
  */
 class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContract.View {
 
-    companion object {
+    companion
+    object {
         public val INTENT_TYPE = "type"
         public val INTENT_ID = "id"
         public val POSITION = "position"
@@ -76,7 +78,7 @@ class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContra
 
     private var id: Int = 0
     private var type: String = ""
-    private var shareTitle = ""
+    private var shareTitle = "榴乡怀远"
 
     private var seeNum = 0
     private var zanNum = 0
@@ -85,6 +87,7 @@ class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContra
     private var like_status = 0
     private var enableHideComment = true
 
+    private val JS_CALL_ANDROID_METHOD = "jsCallAndroid"
 
     override fun initPresenter(): NewsDetailPresenter {
         return NewsDetailPresenter()
@@ -110,25 +113,30 @@ class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContra
     private var timer: Timer? = null
     private var timerTask: TimerTask? = null
 
+    private var isBack = false
     override fun initView(savedInstanceState: Bundle?) {
         id = intent.getIntExtra(INTENT_ID, 0)
         type = intent.getStringExtra(INTENT_TYPE)
         item_position = intent.getIntExtra(POSITION, 0)
 
-        if (type == "电视") {
-            setTitle("视讯")
-        } else {
+        isBack = intent.getBooleanExtra("back", false)
+
+        if (type == "直播") {
             setTitle(type)
+        } else {
+            setTitle("", R.mipmap.home_title_logo)
         }
 
         setNavigationImage()
         setNavigationOnClickListener { v ->
             release()
             initResultData()
+            if (isBack) {
+                startActivity(Intent(this, MainActivity::class.java))
+            }
             finish()
         }
 
-//        initWebView(newsDetailWebView)
 
         when (type) {
             "视频", "图文" -> {
@@ -147,6 +155,8 @@ class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContra
             }
 
             "视讯" -> {
+                setPositiveImage(R.mipmap.icon_collect_normal)
+
                 llWXHeader.visibility = View.GONE
                 contentTv.visibility = View.GONE
                 llArticle.visibility = View.VISIBLE
@@ -192,7 +202,7 @@ class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContra
                 llWXHeader.visibility = View.GONE
                 contentTv.visibility = View.GONE
                 llArticle.visibility = View.VISIBLE
-                shareItem.visibility = View.GONE
+                shareItem.visibility = View.VISIBLE
                 tvTitle.visibility = View.GONE
                 tvGoodNum.visibility = View.INVISIBLE
                 tvBeginTime.visibility = View.GONE
@@ -210,6 +220,11 @@ class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContra
 
 
         commentLayout.setOnClickListener {
+            if (SPUtils.getInstance().getString("token", "").isEmpty()) {
+                ToastUtils.showShort("请登录后操作")
+                startActivity(Intent(this, LoginActivity::class.java))
+                return@setOnClickListener
+            }
             updateEditTextBodyVisible(View.VISIBLE)
         }
 
@@ -226,6 +241,11 @@ class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContra
         })
 
         dianzanLayout.setOnClickListener {
+            if (SPUtils.getInstance().getString("token", "").isEmpty()) {
+                ToastUtils.showShort("请登录后操作")
+                startActivity(Intent(this, LoginActivity::class.java))
+                return@setOnClickListener
+            }
             if (isLike) {
                 mPresenter.cancelLikeNews(id)
             } else {
@@ -314,12 +334,10 @@ class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContra
 
     }
 
-
     override fun onRetry() {
         super.onRetry()
         mPresenter.getDetailsById(id, false, isLife)
     }
-
 
     override fun addConcernSuccess() {
         isAttention = true
@@ -328,7 +346,6 @@ class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContra
         tvAttentionStatus.setTextColor(resources.getColor(R.color.default_gray_text_color))
     }
 
-
     override fun cancelSuccess() {
         isAttention = false
         tvAttentionStatus.text = "关注"
@@ -336,16 +353,116 @@ class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContra
         tvAttentionStatus.setTextColor(resources.getColor(R.color.white))
     }
 
+
     override fun setDetails(item: NewsBean) {
         commenNum = item.comment_num
         seeNum = item.visit_num
 
-        shareTitle = item.name
+        if (item.name.isNotEmpty()) {
+            shareTitle = item.name
+        }
+
         //收藏状态
         hasCollect = item.collect_status == 1
 
         newsDetailWebView.isFocusable = false
         newsDetailWebView.settings.setNeedInitialFocus(false)
+
+        if (item.top_ad != null) {
+            ivTopAD.visibility = View.VISIBLE
+            GlideManager.loadImg(item.top_ad.image, ivTopAD)
+
+            ivTopAD.setOnClickListener {
+                initAdSkipRule(item.top_ad)
+            }
+        }
+
+        if (item.bottom_ad != null) {
+            ivBottomAD.visibility = View.VISIBLE
+            GlideManager.loadImg(item.bottom_ad.image, ivBottomAD)
+
+            ivBottomAD.setOnClickListener {
+                initAdSkipRule(item.bottom_ad)
+            }
+        }
+
+        if (item.under_ad != null) {
+            ivUnderAD.visibility = View.VISIBLE
+            GlideManager.loadImg(item.under_ad.image, ivUnderAD)
+
+            ivUnderAD.setOnClickListener {
+                initAdSkipRule(item.under_ad)
+            }
+        }
+
+        if (item.page_ad != null) {
+            divider2.visibility = View.VISIBLE
+            ivFourAD.visibility = View.VISIBLE
+            GlideManager.loadImg(item.page_ad.image, ivFourAD)
+
+            ivFourAD.setOnClickListener {
+                initAdSkipRule(item.page_ad)
+            }
+        }
+
+        if (item.bottom_ad != null || item.under_ad != null || !item.relation.isNullOrEmpty()) {
+            divider.visibility = View.VISIBLE
+        }
+
+        if (!item.relation.isNullOrEmpty()) {
+            llRelationContainer.visibility = View.VISIBLE
+
+            val newList = ArrayList<SectionNewsMultipleItem<NewsBean>>()
+            item.relation.forEach {
+                newList.add(SectionNewsMultipleItem(it.module, it))
+            }
+            val adapter = SectionMultipleItemAdapter(newList)
+            relationRecyclerView.layoutManager = LinearLayoutManager(this)
+            relationRecyclerView.addItemDecoration(RecycleViewDivider(this, LinearLayout.VERTICAL))
+            relationRecyclerView.adapter = adapter
+            adapter.setOnItemClickListener { adap, view, posi ->
+                val bean = (adap as SectionMultipleItemAdapter).data[posi].dataBean as NewsBean
+                val id = bean.id
+
+                val type = ModuleUtils.getTypeByNewsBean(bean)
+
+                if (bean.url.isNotEmpty()) {
+                    val intent = Intent(this, ServiceWebviewActivity::class.java)
+                    intent.putExtra("url", bean.url)
+                    intent.putExtra("other", true)
+                    intent.putExtra("share_title", "")
+                    startActivity(intent)
+                } else {
+                    startNewsDetailActivity(this, type, id)
+                }
+            }
+
+            adapter.setOnItemChildClickListener { adap, view, posi ->
+                if (adap !is SectionMultipleItemAdapter) {
+                    return@setOnItemChildClickListener
+                }
+                when (view.id) {
+                    //播放按钮
+                    R.id.ivStartPlayer -> {
+                        val bean = adap.data[posi].dataBean as NewsBean
+                        if (bean.url.isNotEmpty()) {
+                            val intent = Intent(this, ServiceWebviewActivity::class.java)
+                            intent.putExtra("url", bean.url)
+                            intent.putExtra("other", true)
+                            intent.putExtra("share_title", "")
+                            startActivity(intent)
+                        } else {
+                            //打开新的Activity
+                            val intent = Intent(this, VodActivity::class.java)
+                            intent.putExtra("videoPath", bean.video)
+                            startActivity(intent)
+                        }
+                    }
+                }
+            }
+
+        }
+
 
         when (type) {
             "视频", "图文" -> {
@@ -431,7 +548,6 @@ class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContra
                     ivVideo.setBackgroundColor(Color.parseColor("#abb1b6"))
                     ivVideo.setOnClickListener {
                         val intent = Intent(this, VodActivity::class.java)
-                        //                    intent.putExtra("media_type", "livestream")
                         intent.putExtra("videoPath", item.video)
                         this.startActivity(intent)
                     }
@@ -471,6 +587,22 @@ class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContra
             }
 
             "视讯" -> {
+                setPositiveOnClickListener {
+                    if (hasCollect) {
+                        mPresenter.setCollectStatus(id, false)
+                    } else {
+                        mPresenter.setCollectStatus(id, true)
+                    }
+                }
+
+                if (hasCollect) {
+                    commonTitleBar.rightImageButton.setImageDrawable(resources.getDrawable(R.mipmap.icon_collect))
+                } else {
+                    commonTitleBar.rightImageButton.setImageDrawable(resources.getDrawable(R.mipmap.icon_collect_normal))
+                }
+
+
+
                 llVideo.visibility = View.VISIBLE
                 ivVideo.setBackgroundColor(Color.parseColor("#abb1b6"))
                 ivVideo.setOnClickListener {
@@ -537,7 +669,7 @@ class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContra
             "爆料" -> {
 
                 tvTitle.text = item.name
-                tvNickName.text = "爆料对象：${item.module_second}"
+//                tvNickName.text = "爆料对象：${item.module_second}"
                 tvBeginTime.text = item.begintime
                 tvSeeNum.text = "" + item.visit_num
 
@@ -725,6 +857,12 @@ class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContra
 
         tvCommentNum.text = "评论  ${item.comment_num}"
         tvCommentNum.setOnClickListener {
+            if (SPUtils.getInstance().getString("token", "").isEmpty()) {
+                ToastUtils.showShort("请登录后操作")
+                startActivity(Intent(this, LoginActivity::class.java))
+                return@setOnClickListener
+            }
+
             val intent = Intent(this, CommentListActivity::class.java)
             intent.putExtra("id", id)
             startActivity(intent)
@@ -741,23 +879,73 @@ class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContra
 
     }
 
+    /**
+     * 根据类型判断广告跳转规则
+     */
+    private fun initAdSkipRule(top_ad: BannerModel) {
+        when (top_ad.type) {
+            1 -> {
+                //不执行跳转
+            }
+
+            2 -> {
+                //富文本显示
+                val intent = Intent(this, BannerDetailsActivity::class.java)
+                intent.putExtra("title", top_ad.name)
+                intent.putExtra("content", top_ad.content)
+                startActivity(intent)
+            }
+
+            3 -> {
+                //指向文章
+                val bean = top_ad.article_info
+                val type = ModuleUtils.getTypeByNewsBean(bean)
+                if (bean.url.isNotEmpty()) {
+                    val intent = Intent(this, ServiceWebviewActivity::class.java)
+                    intent.putExtra("url", bean.url)
+                    intent.putExtra("other", true)
+                    intent.putExtra("share_title", bean.name)
+                    startActivity(intent)
+                } else {
+                    startNewsDetailActivity(this, type, bean.id)
+                }
+
+            }
+
+            4 -> {
+                //指向外链
+                val intent = Intent(this, ServiceWebviewActivity::class.java)
+                intent.putExtra("url", top_ad.url)
+                intent.putExtra("other", true)
+                intent.putExtra("share_title", top_ad.name)
+                startActivity(intent)
+            }
+
+        }
+    }
+
     private fun loadHtml(content: String) {
-        newsDetailWebView.setShow(content)
+        newsDetailWebView.addJavascriptInterface(AndroidInterface(this, HtmlUtils.returnImageUrlsFromHtml(content)), JS_CALL_ANDROID_METHOD)
+        newsDetailWebView.loadData(HtmlUtils.imageFillWidth(content), "text/html; charset=UTF-8", null)
     }
 
 
-    private fun loadCommentList(list: MutableList<CommentModel>?){
-        val adapter = CommentRvAdapter(R.layout.item_news_comment_view,list)
+    private fun loadCommentList(list: MutableList<CommentModel>?) {
+        val adapter = CommentRvAdapter(R.layout.item_news_comment_view, list)
         mCommentRecyclerView.layoutManager = LinearLayoutManager(this)
         mCommentRecyclerView.adapter = adapter
         adapter.bindToRecyclerView(mCommentRecyclerView)
-        adapter.setEmptyView(R.layout.common_empty_view)
+        val emptyView = View.inflate(this, R.layout.common_empty_view, null)
+        val empty_tip_tv = emptyView.findViewById<TextView>(R.id.empty_tip_tv)
+        empty_tip_tv.text = "暂无评论"
+        adapter.emptyView = emptyView
         //滚动绑定
         scrollableLayout.setCurrentScrollableContainer(object : HeaderScrollHelper.ScrollableContainer {
             override fun getScrollableView(): View {
                 return mCommentRecyclerView
             }
         })
+
     }
 
     override fun sendVoteSuccess(optionModelList: MutableList<VoteOptionModel>) {
@@ -953,8 +1141,7 @@ class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContra
         params.putString(QQShare.SHARE_TO_QQ_TITLE, shareTitle)
 //        params.putString(QQShare.SHARE_TO_QQ_SUMMARY, "摘要") //可选，最长40个字
         params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, Contacts.SHARE_BASE_URL + id) //必填 	这条分享消息被好友点击后的跳转URL。
-//        params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "http://avatar.csdn.net/C/3/D/1_u013451048.jpg") // 可选 分享图片的URL或者本地路径
-        params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "榴香怀远")
+        params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "榴乡怀远")
         mTencent!!.shareToQQ(this, params, object : IUiListener {
             override fun onComplete(p0: Any?) {
                 if (SPUtils.getInstance().getString("token", "").isNotEmpty()) {
@@ -985,11 +1172,11 @@ class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContra
         }
 
         val webpage = WXWebpageObject()
-        webpage.webpageUrl = Contacts.SHARE_BASE_URL + id
+        webpage.webpageUrl = Contacts.SHARE_BASE_URL + id + "?date=" + System.currentTimeMillis()
         val msg = WXMediaMessage(webpage)
         msg.title = shareTitle
-        msg.description = "榴香怀远"
-        val bmp = BitmapFactory.decodeResource(resources, R.drawable.share_icon)
+        msg.description = "榴乡怀远"
+        val bmp = BitmapFactory.decodeResource(resources, R.mipmap.img_logo)
         val thumbBmp = Bitmap.createScaledBitmap(bmp, 100, 100, true)
         bmp.recycle()
         msg.thumbData = ImageUtils.bitmap2Bytes(YBitmapUtils.changeColor(thumbBmp), Bitmap.CompressFormat.JPEG)
@@ -1025,11 +1212,11 @@ class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContra
         }
 
         val webpage = WXWebpageObject()
-        webpage.webpageUrl = Contacts.SHARE_BASE_URL + id
+        webpage.webpageUrl = Contacts.SHARE_BASE_URL + id + "?date=" + System.currentTimeMillis()
         val msg = WXMediaMessage(webpage)
         msg.title = shareTitle
-        msg.description = "榴香怀远"
-        val bmp = BitmapFactory.decodeResource(resources, R.drawable.share_icon)
+        msg.description = "榴乡怀远"
+        val bmp = BitmapFactory.decodeResource(resources, R.mipmap.img_logo)
         val thumbBmp = Bitmap.createScaledBitmap(bmp, 100, 100, true)
         bmp.recycle()
         msg.thumbData = ImageUtils.bitmap2Bytes(YBitmapUtils.changeColor(thumbBmp), Bitmap.CompressFormat.JPEG)
@@ -1066,7 +1253,7 @@ class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContra
             val mediaObject = WebpageObject()
             mediaObject.identify = Utility.generateGUID()
             mediaObject.title = shareTitle
-            mediaObject.description = "榴香怀远"
+            mediaObject.description = "榴乡怀远"
             val bitmap = BitmapFactory.decodeResource(resources, R.mipmap.default_avatar)
             mediaObject.setThumbImage(YBitmapUtils.changeColor(bitmap))
             mediaObject.actionUrl = Contacts.SHARE_BASE_URL + id
@@ -1109,6 +1296,9 @@ class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContra
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             release()
             initResultData()
+            if (isBack) {
+                startActivity(Intent(this, MainActivity::class.java))
+            }
             finish()
             return true
         }
@@ -1146,7 +1336,7 @@ class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContra
 
 
     private fun formatTime(position: Long): String {
-        val totalSeconds = (position!! + 0.5).toInt()
+        val totalSeconds = (position + 0.5).toInt()
         val seconds = totalSeconds % 60
         val minutes = totalSeconds / 60 % 60
         return String.format(Locale.US, "%02d:%02d", minutes, seconds)

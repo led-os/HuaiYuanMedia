@@ -19,13 +19,11 @@ public class CameraPresenter extends BasePresenter<CameraContract.View> implemen
                 .compose(RxSchedulers.applySchedulers())
                 .compose(mView.bindToLife())
                 .subscribe(result -> {
-                            mView.showSuccess("");
+                            mView.showSuccess(result.getMsg());
                             if (result.getCode() == 1) {
                                 if (mView != null) {
                                     mView.setLifeHotList(p, result.getData());
                                 }
-                            } else {
-                                ToastUtils.showShort(result.getMsg());
                             }
                         }, throwable -> {
                             if (mView != null) {

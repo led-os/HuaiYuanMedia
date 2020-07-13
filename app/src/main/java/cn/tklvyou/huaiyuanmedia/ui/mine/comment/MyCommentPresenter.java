@@ -20,9 +20,8 @@ public class MyCommentPresenter extends BasePresenter<MyCommentContract.View> im
         RetrofitHelper.getInstance().getServer()
                 .getMyCommentList(page)
                 .compose(RxSchedulers.applySchedulers())
-//                .compose(mView.bindToLife())
+                .compose(mView.bindToLife())
                 .subscribe(result -> {
-                            LogUtils.e(new Gson().toJson(result));
                             if (mView != null) {
                                 mView.showSuccess(result.getMsg());
                                 if (result.getCode() == RequestConstant.CODE_REQUEST_SUCCESS) {

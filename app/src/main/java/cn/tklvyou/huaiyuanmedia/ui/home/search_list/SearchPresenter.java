@@ -31,6 +31,7 @@ public class SearchPresenter extends BasePresenter<SearchContract.View> implemen
                                 mView.setNewList(p, result.getData());
                             }
                         }, throwable -> {
+                            mView.setNewList(p,null);
                             mView.showFailed("");
                         }
                 );

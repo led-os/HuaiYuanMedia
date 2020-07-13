@@ -83,7 +83,8 @@ public class DataPresenter extends BasePresenter<IDataContract.DataView> impleme
             @Override
             public void onUploadFailed(String key, String err) {
                 Log.e(TAG, "onUploadFailed:" + err);
-                mView.showSuccess("");
+                if (mView != null)
+                    mView.showSuccess("");
             }
 
             @Override
@@ -93,7 +94,8 @@ public class DataPresenter extends BasePresenter<IDataContract.DataView> impleme
 
             @Override
             public void onUploadCompleted() {
-                mView.uploadSuccess(key);
+                if (mView != null)
+                    mView.uploadSuccess(key);
             }
 
             @Override

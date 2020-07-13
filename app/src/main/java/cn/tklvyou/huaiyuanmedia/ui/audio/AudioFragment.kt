@@ -6,11 +6,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
-import android.graphics.Rect
 import android.os.Handler
 import android.os.Message
 import android.text.TextUtils
-import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -24,16 +22,13 @@ import cn.tklvyou.huaiyuanmedia.helper.GlideManager
 import cn.tklvyou.huaiyuanmedia.model.BasePageModel
 import cn.tklvyou.huaiyuanmedia.model.NewsBean
 import cn.tklvyou.huaiyuanmedia.model.TelModel
+import cn.tklvyou.huaiyuanmedia.ui.account.LoginActivity
 import cn.tklvyou.huaiyuanmedia.ui.adapter.AudioListRvAdapter
 import cn.tklvyou.huaiyuanmedia.ui.adapter.TVNewsDetailsRvAdapter
 import cn.tklvyou.huaiyuanmedia.ui.home.comment.CommentListActivity
-import cn.tklvyou.huaiyuanmedia.ui.video_player.MediaController
 import cn.tklvyou.huaiyuanmedia.utils.RecycleViewDivider
-import cn.tklvyou.huaiyuanmedia.widget.DYLoadingView
-import com.blankj.utilcode.util.ConvertUtils
-import com.blankj.utilcode.util.LogUtils
-import com.blankj.utilcode.util.SpanUtils
-import com.blankj.utilcode.util.ToastUtils
+import cn.tklvyou.huaiyuanmedia.widget.dailog.InputDialog
+import com.blankj.utilcode.util.*
 import com.chad.library.adapter.base.BaseViewHolder
 import com.pili.pldroid.player.widget.PLVideoView
 import kotlinx.android.synthetic.main.fragment_audio.*
@@ -90,11 +85,25 @@ class AudioFragment : BaseRecyclerFragment<AudioPresenter, TelModel.ListBean, Ba
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
-        if (hidden && !isFirstResume) {
+        isUserVisibility = !hidden
+
+        if (isFirstResume) {
+            return
+        }
+
+        if (hidden) {
+            mVideoView.surfaceView.visibility = View.INVISIBLE
             if (mVideoView.isPlaying) {
                 mVideoView.pause()
                 mMediaActions.setImageResource(R.mipmap.ic_start_play)
             }
+
+            if (KeyboardUtils.isSoftInputVisible(mActivity)) {
+                KeyboardUtils.hideSoftInput(mActivity)
+            }
+        } else {
+            mVideoView.surfaceView.visibility = View.VISIBLE
+            mMediaActions.performClick()
         }
     }
 
@@ -135,10 +144,12 @@ class AudioFragment : BaseRecyclerFragment<AudioPresenter, TelModel.ListBean, Ba
         mPresenter.getNewList("视听", "", 1, true)
     }
 
+
     override fun setNewList(p: Int, model: BasePageModel<NewsBean>?) {
 
         if (model != null) {
             var id = model.data[0].id
+
             type = if (model.data[0].type == "tv") "电视" else "广播"
 
             if (type == "广播") {
@@ -194,7 +205,13 @@ class AudioFragment : BaseRecyclerFragment<AudioPresenter, TelModel.ListBean, Ba
 
 
             commentLayout.setOnClickListener {
-                updateEditTextBodyVisible(View.VISIBLE)
+                if (SPUtils.getInstance().getString("token", "").isEmpty()) {
+                    ToastUtils.showShort("请登录后操作")
+                    startActivity(Intent(context, LoginActivity::class.java))
+                    return@setOnClickListener
+                }
+                showInputDialog(id)
+//                updateEditTextBodyVisible(View.VISIBLE)
             }
 
             //发表评论
@@ -210,6 +227,12 @@ class AudioFragment : BaseRecyclerFragment<AudioPresenter, TelModel.ListBean, Ba
             })
 
             dianzanLayout.setOnClickListener {
+                if (SPUtils.getInstance().getString("token", "").isEmpty()) {
+                    ToastUtils.showShort("请登录后操作")
+                    startActivity(Intent(context, LoginActivity::class.java))
+                    return@setOnClickListener
+                }
+
                 if (isLike) {
                     mPresenter.cancelLikeNews(id)
                 } else {
@@ -221,6 +244,8 @@ class AudioFragment : BaseRecyclerFragment<AudioPresenter, TelModel.ListBean, Ba
         }
     }
 
+    private var isFirst = true
+    private var isUserVisibility = true
     override fun setDetails(item: NewsBean) {
         ivCover.visibility = View.VISIBLE
 
@@ -244,6 +269,7 @@ class AudioFragment : BaseRecyclerFragment<AudioPresenter, TelModel.ListBean, Ba
         mVideoView.setVideoPath(item.video)
         mMediaActions.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View) {
+
                 if (mVideoView.isPlaying) {
                     mMediaActions.setImageResource(R.mipmap.ic_start_play)
                     mVideoView.pause()
@@ -280,7 +306,9 @@ class AudioFragment : BaseRecyclerFragment<AudioPresenter, TelModel.ListBean, Ba
                     rbToday.text = SpanUtils().appendLine("今天").append(item.tel_list[1].date).create()
                     rbTomorrow.text = SpanUtils().appendLine("明天").append(item.tel_list[2].date).create()
 
+                    rbToday.isChecked = true
                     onLoadSucceed(1, item.tel_list[1].list)
+
 
                     rgTime.setOnCheckedChangeListener { group, checkedId ->
                         when (checkedId) {
@@ -358,10 +386,13 @@ class AudioFragment : BaseRecyclerFragment<AudioPresenter, TelModel.ListBean, Ba
                     commentContainer.addView(commentView)
                 }
 
-
             }
-
         }
+
+        if (isUserVisibility) {
+            mMediaActions.performClick()
+        }
+
     }
 
     override fun updateLikeStatus(isLike: Boolean) {
@@ -391,8 +422,7 @@ class AudioFragment : BaseRecyclerFragment<AudioPresenter, TelModel.ListBean, Ba
     }
 
     override fun addCommentSuccess(id: Int) {
-        updateEditTextBodyVisible(View.GONE)
-
+//        updateEditTextBodyVisible(View.GONE)
         mPresenter.getDetailsById(id)
     }
 
@@ -400,8 +430,7 @@ class AudioFragment : BaseRecyclerFragment<AudioPresenter, TelModel.ListBean, Ba
         mPresenter.getNewList("视听", "", page, false)
     }
 
-
-    override fun setList(list: MutableList<TelModel.ListBean>?) {
+    override fun setList(list: MutableList<TelModel.ListBean>) {
         setList(object : AdapterCallBack<TVNewsDetailsRvAdapter> {
 
             override fun createAdapter(): TVNewsDetailsRvAdapter {
@@ -412,6 +441,8 @@ class AudioFragment : BaseRecyclerFragment<AudioPresenter, TelModel.ListBean, Ba
                 adapter.setNewData(list)
             }
         })
+
+        adapter.notifyDataSetChanged()
     }
 
     private fun setFullScreen() {
@@ -496,38 +527,23 @@ class AudioFragment : BaseRecyclerFragment<AudioPresenter, TelModel.ListBean, Ba
     }
 
 
-//    override fun onItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
-//        super.onItemClick(adapter, view, position)
-//        val bean = (adapter as AudioRvAdapter).data[position]
-//        val id = bean.id
-//        val type = if (bean.type == "tv") "电视" else "广播"
-//        startTVNewsDetailActivity(type, id, position)
-//
-//    }
-//
-//    private fun startTVNewsDetailActivity(type: String, id: Int, position: Int) {
-//        val intent = Intent(context, TVNewsDetailActivity::class.java)
-//        intent.putExtra(TVNewsDetailActivity.INTENT_ID, id)
-//        intent.putExtra(TVNewsDetailActivity.INTENT_TYPE, type)
-//        intent.putExtra(TVNewsDetailActivity.POSITION, position)
-//        startActivityForResult(intent, 11)
-//    }
-//
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//
-//        if (resultCode == Activity.RESULT_OK && data != null) {
-//            val position = data.getIntExtra("position", 0)
-//            val seeNum = data.getIntExtra("seeNum", 0)
-//
-//            if (adapter != null) {
-//                val bean = (adapter as AudioRvAdapter).data[position] as NewsBean
-//                bean.visit_num = seeNum
-//                adapter.notifyItemChanged(position)
-//            }
-//        }
-//
-//    }
+
+    private fun showInputDialog(id: Int) {
+        val dialog = InputDialog(mActivity, "输入评论", true)
+        dialog.setConfirmListerner {
+            val content = dialog.content.trim { it <= ' ' }
+            if (TextUtils.isEmpty(content)) {
+                ToastUtils.showShort("评论内容不能为空...")
+                return@setConfirmListerner
+            }
+            mPresenter.addComment(id, content)
+            ToastUtils.showShort(content)
+            dialog.dismiss()
+        }
+        dialog.setCancelListerner { dialog.dismiss() }
+        dialog.show()
+    }
+
 
     private fun updateEditTextBodyVisible(visibility: Int) {
         editTextBodyLl.visibility = visibility

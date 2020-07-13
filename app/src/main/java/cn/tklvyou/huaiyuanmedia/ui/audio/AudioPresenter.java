@@ -26,8 +26,6 @@ public class AudioPresenter extends BasePresenter<AudioContract.View> implements
                                 if (mView != null) {
                                     mView.setNewList(p, result.getData());
                                 }
-                            } else {
-                                ToastUtils.showShort(result.getMsg());
                             }
                         }, throwable -> {
                             if (mView != null) {

@@ -35,16 +35,13 @@ class WXEntryActivity : Activity(), IWXAPIEventHandler {
 
     //微信发送的请求将回调到onReq方法
     override fun onReq(req: BaseReq) {
-        LogUtils.d("onReq")
         finish()
     }
 
     //发送到微信请求的响应结果
     override fun onResp(resp: BaseResp) {
-        LogUtils.d("onResp")
         when (resp.errCode) {
             BaseResp.ErrCode.ERR_OK -> {
-                LogUtils.d("ERR_OK")
                 if (resp is SendAuth.Resp) {
                     //发送成功
                     val sendResp = resp
@@ -53,7 +50,6 @@ class WXEntryActivity : Activity(), IWXAPIEventHandler {
                 } else if (resp is SendMessageToWX.Resp) {
                     InterfaceUtils.getInstance().onClick("")
                 }
-                finish()
             }
             BaseResp.ErrCode.ERR_USER_CANCEL -> {
                 if (resp.type == RETURN_MSG_TYPE_SHARE) {
@@ -62,23 +58,27 @@ class WXEntryActivity : Activity(), IWXAPIEventHandler {
                     ToastUtils.showShort("登录失败")
                 }
                 LogUtils.e("ERR_USER_CANCEL")
-                finish()
             }
 
             BaseResp.ErrCode.ERR_AUTH_DENIED ->{
-
                 LogUtils.e("ERR_AUTH_DENIED")
-                finish()
             }
 
             else -> {
                 ToastUtils.showShort("微信登录错误")
                 LogUtils.d("微信登录错误" + " " + resp.errCode + resp.errStr)
-                finish()
+
             }
         }//发送取消
         //发送被拒绝
         //发送返回
+        finish()
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        InterfaceUtils.getInstance().clear()
     }
 
 }

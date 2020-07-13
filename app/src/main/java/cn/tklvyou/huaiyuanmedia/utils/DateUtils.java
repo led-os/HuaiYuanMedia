@@ -785,6 +785,12 @@ public class DateUtils {
         return getDateIncludeWeek(endTimeCalendar);
     }
 
+
+    public static void main(String[] args){
+        System.out.println(DateUtils.compareToDate("2020-04-08","2020-04-09"));
+        System.out.println(DateUtils.getNowDate(0));
+    }
+
     /**
      * 时间大小比较
      *
@@ -793,15 +799,15 @@ public class DateUtils {
      * @return oldDate小于defDate
      */
     public static boolean compareToDate(String oldDate, String defDate) {
-        if (TextUtils.isEmpty(oldDate) || TextUtils.isEmpty(defDate)) {
-            return true;
-        }
+//        if (TextUtils.isEmpty(oldDate) || TextUtils.isEmpty(defDate)) {
+//            return true;
+//        }
 
         final Calendar c1 = Calendar.getInstance();
         final Calendar c2 = Calendar.getInstance();
 
         try {
-            final DateFormat df = new SimpleDateFormat(DATE_FORMAT_8);
+            final DateFormat df = new SimpleDateFormat(DATE_FORMAT_4);
             c1.setTime(df.parse(oldDate));
             c2.setTime(df.parse(defDate));
         } catch (Exception e) {

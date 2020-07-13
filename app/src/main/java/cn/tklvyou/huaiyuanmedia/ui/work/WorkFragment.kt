@@ -24,7 +24,6 @@ class WorkFragment : BaseX5WebViewFragment<NullPresenter>(){
     }
 
     override fun setTitleContent(title: String) {
-//        mTitleBar.centerTextView.text = title
     }
 
 

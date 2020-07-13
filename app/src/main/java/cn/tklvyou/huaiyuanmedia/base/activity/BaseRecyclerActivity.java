@@ -327,7 +327,6 @@ public abstract class BaseRecyclerActivity<P extends BaseContract.BasePresenter,
     public synchronized void onLoadFailed(int page, Exception e) {
         LogUtils.e("onLoadFailed page = " + page + "; e = " + (e == null ? null : e.getMessage()));
         stopLoadData(page);
-        ToastUtils.showShort("加载失败");
     }
 
 

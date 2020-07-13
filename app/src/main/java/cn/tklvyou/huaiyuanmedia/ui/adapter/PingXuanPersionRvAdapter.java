@@ -34,18 +34,18 @@ public class PingXuanPersionRvAdapter extends BaseQuickAdapter<PingXuanPersionMo
             helper.setText(R.id.tvRecordNum, item.getCount() + "票");
             helper.addOnClickListener(R.id.btnSubmit);
         } else {
-            switch (helper.getLayoutPosition()) {
-                case 0:
+            switch (item.getRank()) {
+                case 1:
                     helper.setGone(R.id.tvTag, false);
                     helper.setGone(R.id.ivTag, true);
                     helper.setImageResource(R.id.ivTag,R.mipmap.ic_number_one);
                     break;
-                case 1:
+                case 2:
                     helper.setGone(R.id.tvTag, false);
                     helper.setGone(R.id.ivTag, true);
                     helper.setImageResource(R.id.ivTag,R.mipmap.ic_number_two);
                     break;
-                case 2:
+                case 3:
                     helper.setGone(R.id.tvTag, false);
                     helper.setGone(R.id.ivTag, true);
                     helper.setImageResource(R.id.ivTag,R.mipmap.ic_number_three);
@@ -53,7 +53,7 @@ public class PingXuanPersionRvAdapter extends BaseQuickAdapter<PingXuanPersionMo
                 default:
                     helper.setGone(R.id.tvTag, true);
                     helper.setGone(R.id.ivTag, false);
-                    helper.setText(R.id.tvTag, "" + (helper.getLayoutPosition() + 1));
+                    helper.setText(R.id.tvTag, "" + item.getRank());
                     break;
             }
 

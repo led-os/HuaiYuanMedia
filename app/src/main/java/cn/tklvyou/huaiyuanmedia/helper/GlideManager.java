@@ -26,6 +26,7 @@ import com.bumptech.glide.load.engine.Resource;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapResource;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
@@ -34,14 +35,6 @@ import java.security.MessageDigest;
 
 import cn.tklvyou.huaiyuanmedia.R;
 
-
-/**
- * @author :JenkinsZhou
- * @description :图片加载
- * @company :途酷科技
- * @date 2019年06月27日10:20
- * @Email: 971613168@qq.com
- */
 public class GlideManager {
 
     private static int sCommonPlaceholder = -1;
@@ -216,7 +209,7 @@ public class GlideManager {
     }
 
     public static void loadRoundImg(Object obj, ImageView iv, float dp) {
-        loadRoundImg(obj, iv, dp, true);
+        loadRoundImg(obj, iv, dp, false);
     }
 
     public static void loadRoundImg(Object obj, ImageView iv, boolean isOfficial) {
@@ -240,14 +233,13 @@ public class GlideManager {
     }
 
     private static RequestOptions getRequestOptions() {
-        RequestOptions requestOptions = new RequestOptions()
+        return new RequestOptions()
                 // 填充方式
                 .centerCrop()
                 //优先级
                 .priority(Priority.HIGH)
                 //缓存策略
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
-        return requestOptions;
     }
 
 
@@ -276,7 +268,7 @@ public class GlideManager {
         return drawable;
     }
 
-    private static class GlideRoundTransform extends BitmapTransformation {
+    private static class GlideRoundTransform extends CenterCrop {
         int radius;
 
         public GlideRoundTransform(int dp) {
@@ -286,10 +278,13 @@ public class GlideManager {
 
         @Override
         protected Bitmap transform(BitmapPool pool, Bitmap toTransform, int outWidth, int outHeight) {
-            return roundCrop(pool, toTransform);
+            Bitmap transform = super.transform(pool, toTransform, outWidth, outHeight);
+            return roundCrop(pool, transform);
         }
 
         private Bitmap roundCrop(BitmapPool pool, Bitmap source) {
+            if (source == null)
+                return null;
             Bitmap result = pool.get(source.getWidth(), source.getHeight(), Bitmap.Config.ARGB_8888);
             if (result == null) {
                 result = Bitmap.createBitmap(source.getWidth(), source.getHeight(), Bitmap.Config.ARGB_8888);
@@ -302,11 +297,6 @@ public class GlideManager {
             RectF rectF = new RectF(0f, 0f, source.getWidth(), source.getHeight());
             canvas.drawRoundRect(rectF, radius, radius, paint);
             return result;
-        }
-
-        @Override
-        public void updateDiskCacheKey(MessageDigest messageDigest) {
-
         }
     }
 

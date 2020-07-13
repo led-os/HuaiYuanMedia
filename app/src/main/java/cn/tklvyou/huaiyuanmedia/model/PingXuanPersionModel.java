@@ -26,7 +26,7 @@ public class PingXuanPersionModel {
     private List<String> images;
     private String content;
     private int count;
-    private String rank;
+    private int rank;
     private int weigh;
     private String status;
     private int createtime;
@@ -49,11 +49,11 @@ public class PingXuanPersionModel {
     }
 
 
-    public String getRank() {
+    public int getRank() {
         return rank;
     }
 
-    public void setRank(String rank) {
+    public void setRank(int rank) {
         this.rank = rank;
     }
 

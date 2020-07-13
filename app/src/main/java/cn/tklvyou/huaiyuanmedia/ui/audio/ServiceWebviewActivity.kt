@@ -4,13 +4,14 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.KeyEvent
 import android.view.View
 import cn.tklvyou.huaiyuanmedia.R
 import cn.tklvyou.huaiyuanmedia.base.NullPresenter
 import cn.tklvyou.huaiyuanmedia.base.activity.BaseActivity
+import cn.tklvyou.huaiyuanmedia.base.fix_webview_bug.VideoImpl
 import cn.tklvyou.huaiyuanmedia.common.Contacts
+import cn.tklvyou.huaiyuanmedia.ui.main.MainActivity
 import cn.tklvyou.huaiyuanmedia.utils.InterfaceUtils
 import cn.tklvyou.huaiyuanmedia.utils.YBitmapUtils
 import cn.tklvyou.huaiyuanmedia.widget.SharePopupWindow
@@ -27,6 +28,7 @@ import com.tencent.mm.opensdk.modelmsg.WXMediaMessage
 import com.tencent.mm.opensdk.modelmsg.WXWebpageObject
 import com.tencent.mm.opensdk.openapi.IWXAPI
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
+import com.tencent.smtt.export.external.interfaces.IX5WebChromeClient
 import kotlinx.android.synthetic.main.activity_service_webview.*
 import com.tencent.smtt.sdk.*
 import com.tencent.tauth.IUiListener
@@ -47,18 +49,19 @@ class ServiceWebviewActivity : BaseActivity<NullPresenter>() {
 
     private var url = ""
     private var shareTitle = ""
-    private var other = false
     private var shareHandler: WbShareHandler? = null
     private var wxapi: IWXAPI? = null
 
+    private var isBack = false
     override fun initView(savedInstanceState: Bundle?) {
         url = intent.getStringExtra("url")
         val other = intent.getBooleanExtra("other", false)
 
+        isBack = intent.getBooleanExtra("back", false)
         shareTitle = intent.getStringExtra("share_title")
 
         if (other) {
-            setTitle("文章")
+            setTitle("", R.mipmap.home_title_logo)
         } else {
             setTitle("服务")
         }
@@ -73,7 +76,12 @@ class ServiceWebviewActivity : BaseActivity<NullPresenter>() {
 
 
         setNavigationImage()
-        setNavigationOnClickListener { finish() }
+        setNavigationOnClickListener {
+            if (isBack) {
+                startActivity(Intent(this, MainActivity::class.java))
+            }
+            finish()
+        }
 
         mPageLoadingProgressBar.progressDrawable = this.resources
                 .getDrawable(R.drawable.color_progressbar)
@@ -88,7 +96,10 @@ class ServiceWebviewActivity : BaseActivity<NullPresenter>() {
             }
         }
 
+
         mWebView.webChromeClient = object : WebChromeClient() {
+
+            val mIVideo = VideoImpl(this@ServiceWebviewActivity, mWebView)
 
             override fun onProgressChanged(p0: WebView?, p1: Int) {
                 if (p1 >= 95) {
@@ -104,7 +115,16 @@ class ServiceWebviewActivity : BaseActivity<NullPresenter>() {
 
             override fun onReceivedTitle(p0: WebView?, p1: String?) {
                 super.onReceivedTitle(p0, p1)
-                setTitle(p1)
+                setTitle(p1,0)
+            }
+
+            override fun onShowCustomView(p0: View?, p1: IX5WebChromeClient.CustomViewCallback) {
+                mIVideo.onShowCustomView(p0, p1)
+            }
+
+            override fun onHideCustomView() {
+                super.onHideCustomView()
+                mIVideo.onHideCustomView()
             }
 
         }
@@ -152,8 +172,13 @@ class ServiceWebviewActivity : BaseActivity<NullPresenter>() {
             if (mWebView != null && mWebView.canGoBack()) {
                 mWebView.goBack()
                 return true
-            } else
-                return super.onKeyDown(keyCode, event)
+            } else {
+                if (isBack) {
+                    startActivity(Intent(this, MainActivity::class.java))
+                }
+                finish()
+                return true
+            }
         }
         return super.onKeyDown(keyCode, event)
     }
@@ -223,8 +248,8 @@ class ServiceWebviewActivity : BaseActivity<NullPresenter>() {
         webpage.webpageUrl = url
         val msg = WXMediaMessage(webpage)
         msg.title = shareTitle
-        msg.description = "榴香怀远"
-        val bmp = BitmapFactory.decodeResource(resources, R.drawable.share_icon)
+        msg.description = "榴乡怀远"
+        val bmp = BitmapFactory.decodeResource(resources, R.mipmap.img_logo)
         val thumbBmp = Bitmap.createScaledBitmap(bmp, 100, 100, true)
         bmp.recycle()
         msg.thumbData = ImageUtils.bitmap2Bytes(YBitmapUtils.changeColor(thumbBmp), Bitmap.CompressFormat.JPEG)
@@ -263,13 +288,10 @@ class ServiceWebviewActivity : BaseActivity<NullPresenter>() {
         val params = Bundle()
         params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT)
         params.putString(QQShare.SHARE_TO_QQ_TITLE, shareTitle)
-//        params.putString(QQShare.SHARE_TO_QQ_SUMMARY, "摘要") //可选，最长40个字
         params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, url) //必填 	这条分享消息被好友点击后的跳转URL。
-        params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "http://medium2.tklvyou.cn/qiniu/20190812/FiYgpZ32gNGMbRGxesypz9sSWUbI.png") // 可选 分享图片的URL或者本地路径
-        params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "榴香怀远")
+        params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "榴乡怀远")
         mTencent!!.shareToQQ(this, params, object : IUiListener {
             override fun onComplete(p0: Any?) {
-//                mPresenter.getScoreByShare(id)
                 ToastUtils.showShort("分享成功")
             }
 
@@ -299,8 +321,8 @@ class ServiceWebviewActivity : BaseActivity<NullPresenter>() {
         webpage.webpageUrl = url
         val msg = WXMediaMessage(webpage)
         msg.title = shareTitle
-        msg.description = "榴香怀远"
-        val bmp = BitmapFactory.decodeResource(resources, R.drawable.share_icon)
+        msg.description = "榴乡怀远"
+        val bmp = BitmapFactory.decodeResource(resources, R.mipmap.img_logo)
         val thumbBmp = Bitmap.createScaledBitmap(bmp, 100, 100, true)
         bmp.recycle()
         msg.thumbData = ImageUtils.bitmap2Bytes(YBitmapUtils.changeColor(thumbBmp), Bitmap.CompressFormat.JPEG)
@@ -337,7 +359,7 @@ class ServiceWebviewActivity : BaseActivity<NullPresenter>() {
             val mediaObject = WebpageObject()
             mediaObject.identify = Utility.generateGUID()
             mediaObject.title = shareTitle
-            mediaObject.description = "榴香怀远"
+            mediaObject.description = "榴乡怀远"
             val bitmap = BitmapFactory.decodeResource(resources, R.mipmap.default_avatar)
             mediaObject.setThumbImage(YBitmapUtils.changeColor(bitmap))
             mediaObject.actionUrl = url

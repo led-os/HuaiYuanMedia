@@ -50,6 +50,7 @@ public class NewsMultipleItem<T> implements MultiItemEntity {
                 itemType = JU_ZHENG;
                 break;
             case "原创":
+            case "生活圈":
                 itemType = WECHAT_MOMENTS;
                 break;
             case "悦读":

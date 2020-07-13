@@ -17,6 +17,7 @@ public class BannerModel {
 
     private int id;
     private String name;
+    private int type;
     private String image;
     private String content;
     private String status;
@@ -34,6 +35,14 @@ public class BannerModel {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     public String getName() {

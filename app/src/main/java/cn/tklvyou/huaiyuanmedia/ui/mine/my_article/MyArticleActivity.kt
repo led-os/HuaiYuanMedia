@@ -48,6 +48,9 @@ class MyArticleActivity : BaseHttpRecyclerActivity<MyArticleListPresenter, NewsB
 
 
     override fun initView(savedInstanceState: Bundle?) {
+        initSmartRefreshLayout(smartLayoutRoot)
+        initRecyclerView(recyclerViewRoot)
+
         setTitle("我的帖子")
         setNavigationImage()
         setNavigationOnClickListener { finish() }
@@ -74,8 +77,6 @@ class MyArticleActivity : BaseHttpRecyclerActivity<MyArticleListPresenter, NewsB
         }
 
 
-        initSmartRefreshLayout(smartLayoutRoot)
-        initRecyclerView(recyclerViewRoot)
 
         recyclerViewRoot.addItemDecoration(RecycleViewDivider(this, LinearLayout.VERTICAL, 1, resources.getColor(R.color.common_bg)))
 

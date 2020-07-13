@@ -2,8 +2,8 @@ package cn.tklvyou.huaiyuanmedia.api;
 
 import java.util.List;
 
-import cn.tklvyou.huaiyuanmedia.base.BaseResult;
 import cn.tklvyou.huaiyuanmedia.model.AdModel;
+import cn.tklvyou.huaiyuanmedia.model.ArticleMessageModel;
 import cn.tklvyou.huaiyuanmedia.model.AttentionModel;
 import cn.tklvyou.huaiyuanmedia.model.BannerModel;
 import cn.tklvyou.huaiyuanmedia.model.BasePageModel;
@@ -12,6 +12,7 @@ import cn.tklvyou.huaiyuanmedia.model.CommentModel;
 import cn.tklvyou.huaiyuanmedia.model.ConcernModel;
 import cn.tklvyou.huaiyuanmedia.model.ExchangeModel;
 import cn.tklvyou.huaiyuanmedia.model.HaveSecondModuleNewsModel;
+import cn.tklvyou.huaiyuanmedia.model.LifeInfo;
 import cn.tklvyou.huaiyuanmedia.model.LotteryModel;
 import cn.tklvyou.huaiyuanmedia.model.LotteryResultModel;
 import cn.tklvyou.huaiyuanmedia.model.MessageModel;
@@ -41,6 +42,7 @@ public interface ApiService {
 
     /**
      * 下载网络图片
+     *
      * @param fileUrl
      * @return
      */
@@ -143,6 +145,12 @@ public interface ApiService {
     Observable<BaseResult<SystemConfigModel>> getSystemConfig();
 
     /**
+     * 生活圈被点赞评论记录
+     */
+    @POST("api/life/interaction")
+    Observable<BaseResult<LifeInfo>> getLifeInfo();
+
+    /**
      * 重置密码
      */
     @POST("api/user/resetpwd")
@@ -205,6 +213,23 @@ public interface ApiService {
     @POST("api/goods/receive")
     Observable<BaseResult<BasePageModel<Object>>> receiveGoods(@Query("id") int id);
 
+    /**
+     * 矩阵,专题
+     */
+    @POST("api/article/index")
+    Observable<BaseResult<List<HaveSecondModuleNewsModel>>> getHaveSecondModuleNews(@Query("module") String module, @Query("p") int p);
+
+    /**
+     * 生活圈被点赞评论列表
+     */
+    @POST("api/life/interaction_list")
+    Observable<BaseResult<BasePageModel<ArticleMessageModel>>> getArticleMessage(@Query("p") int p);
+
+    /**
+     * 删除生活圈被点赞评论列表
+     */
+    @POST("api/life/clear")
+    Observable<BaseResult<Object>> clearArticleMessage();
 
     /**
      * 内容列表
@@ -249,12 +274,6 @@ public interface ApiService {
     @POST("api/goods/record")
     Observable<BaseResult<BasePageModel<ExchangeModel>>> getExchangeList(@Query("p") int p);
 
-    /**
-     * 濉溪TV,矩阵
-     */
-    @POST("api/article/index")
-    Observable<BaseResult<List<HaveSecondModuleNewsModel>>> getHaveSecondModuleNews(@Query("module") String module, @Query("p") int p);
-
 
     /**
      * 顶部banner
@@ -262,12 +281,11 @@ public interface ApiService {
     @POST("api/banner/index")
     Observable<BaseResult<List<BannerModel>>> getBanner(@Query("module") String module);
 
-
     /**
      * 获取矩阵号数据
      */
     @POST("api/article/admin")
-    Observable<BaseResult<List<NewsBean>>> getJuZhengHeader(@Query("module") String module);
+    Observable<BaseResult<List<HaveSecondModuleNewsModel.ModuleSecondBean>>> getJuZhengHeader(@Query("module") String module);
 
     /**
      * 获取摘要数据
@@ -547,13 +565,14 @@ public interface ApiService {
     @POST("api/article/multi")
     Observable<BaseResult<BasePageModel<Object>>> cancelArticleList(@Query("id") String id);
 
+
     /**
      * 一键清空我的帖子
      *
      * @return
      */
     @POST("api/article/all")
-    Observable<BaseResult<BasePageModel<Object>>> cancelArticleAll();
+    Observable<BaseResult<BasePageModel<Object>>> cancelArticleAll(@Query("module") String module);
 
 
     /**

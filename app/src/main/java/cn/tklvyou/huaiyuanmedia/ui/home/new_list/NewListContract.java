@@ -19,7 +19,7 @@ public interface NewListContract {
 
         void deleteSuccess(int position);
 
-        void setJuZhengHeader(List<NewsBean> beans);
+        void setJuZhengHeader(List<HaveSecondModuleNewsModel.ModuleSecondBean> beans);
 
         void setVerticalHeader(List<NewsBean> beans);
 

@@ -5,16 +5,19 @@ import android.content.Context
 import android.content.Intent
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.TextView
 import cn.tklvyou.huaiyuanmedia.R
 import cn.tklvyou.huaiyuanmedia.base.fragment.BaseHttpRecyclerFragment
 import cn.tklvyou.huaiyuanmedia.base.interfaces.AdapterCallBack
 import cn.tklvyou.huaiyuanmedia.model.BasePageModel
 import cn.tklvyou.huaiyuanmedia.model.NewsBean
 import cn.tklvyou.huaiyuanmedia.ui.adapter.WxCircleAdapter
+import cn.tklvyou.huaiyuanmedia.ui.camera.message.ArticleMessageActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
 import cn.tklvyou.huaiyuanmedia.utils.RecycleViewDivider
 import cn.tklvyou.huaiyuanmedia.widget.dailog.CommonDialog
 import com.blankj.utilcode.util.LogUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import kotlinx.android.synthetic.main.fragment_history_updates.*
@@ -37,6 +40,7 @@ class HistoryUpdatesFragment : BaseHttpRecyclerFragment<HistoryUpdatesPresenter,
         return mRecyclerView
     }
 
+    private lateinit var headerView: View
     override fun initView() {
         isMine = mBundle.getBoolean("isMine", true)
         initSmartRefreshLayout(mSmartRefreshLayout)
@@ -45,6 +49,8 @@ class HistoryUpdatesFragment : BaseHttpRecyclerFragment<HistoryUpdatesPresenter,
         mSmartRefreshLayout.setEnableRefresh(false)
 
         mRecyclerView.addItemDecoration(RecycleViewDivider(context, LinearLayout.VERTICAL, 1, resources.getColor(R.color.common_bg)))
+
+        headerView = View.inflate(mActivity, R.layout.header_camera_message, null)
 
         mPresenter.getNewList(isMine, 1)
     }
@@ -61,6 +67,28 @@ class HistoryUpdatesFragment : BaseHttpRecyclerFragment<HistoryUpdatesPresenter,
         mPresenter.getNewList(isMine, page)
     }
 
+    private var message: String? = null
+    public fun flushHeaderView(message: String = "") {
+        if (adapter != null) {
+            if (message.isEmpty()) {
+                adapter.removeHeaderView(headerView)
+            } else {
+                val tvTip = headerView.findViewById<TextView>(R.id.tvTip)
+                if(adapter.headerLayoutCount == 0){
+                    tvTip.text = message
+                    tvTip.setOnClickListener {
+                        startActivity(Intent(mActivity, ArticleMessageActivity::class.java))
+                    }
+                    adapter.addHeaderView(headerView)
+                }else{
+                    tvTip.text = message
+                }
+                mRecyclerView.scrollToPosition(0)
+            }
+        } else {
+            this.message = message
+        }
+    }
 
     override fun setNewList(p: Int, model: BasePageModel<NewsBean>?) {
         if (model != null) {
@@ -75,7 +103,16 @@ class HistoryUpdatesFragment : BaseHttpRecyclerFragment<HistoryUpdatesPresenter,
 
             override fun createAdapter(): WxCircleAdapter {
                 val adapter = WxCircleAdapter(R.layout.item_winxin_circle, list)
-//                adapter.setEnableDelete()
+                if (!message.isNullOrEmpty()) {
+                    val tvTip = headerView.findViewById<TextView>(R.id.tvTip)
+                    tvTip.text = message
+                    tvTip.setOnClickListener {
+                        startActivity(Intent(mActivity, ArticleMessageActivity::class.java))
+                    }
+
+                    adapter.addHeaderView(headerView)
+                    message = ""
+                }
                 return adapter
             }
 
@@ -136,7 +173,11 @@ class HistoryUpdatesFragment : BaseHttpRecyclerFragment<HistoryUpdatesPresenter,
             adapter.data[position].like_num = adapter.data[position].like_num - 1
         }
 
-        adapter.notifyItemChangedAnimal(position)
+        if (adapter.headerLayoutCount == 0) {
+            adapter.notifyItemChangedAnimal(position)
+        } else {
+            adapter.notifyItemChangedAnimal(position + 1)
+        }
 
     }
 
@@ -160,7 +201,12 @@ class HistoryUpdatesFragment : BaseHttpRecyclerFragment<HistoryUpdatesPresenter,
             bean.like_num = zanNum
             bean.visit_num = seeNum
             bean.like_status = like_status
-            adapter.notifyItemChanged(position)
+
+            if (adapter.headerLayoutCount == 0) {
+                adapter.notifyItemChangedAnimal(position)
+            } else {
+                adapter.notifyItemChangedAnimal(position + 1)
+            }
 
         }
     }

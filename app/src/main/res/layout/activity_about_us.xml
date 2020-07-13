@@ -80,7 +80,7 @@
     <TextView
         style="@style/TextGrayColor99999Sp12Style"
         android:layout_gravity="center_horizontal"
-        android:text="怀远发布 版权所有" />
+        android:text="怀远县融媒体中心 版权所有" />
 
     <TextView
         style="@style/TextGrayColor99999Sp12Style"

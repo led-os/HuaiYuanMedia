@@ -23,7 +23,7 @@ public class MessagePresenter extends BasePresenter<MessageContract.View> implem
         RetrofitHelper.getInstance().getServer()
                 .getSystemMsgList(page)
                 .compose(RxSchedulers.applySchedulers())
-//                .compose(mView.bindToLife())
+                .compose(mView.bindToLife())
                 .subscribe(result -> {
                             if (mView != null) {
                                 mView.showSuccess(result.getMsg());

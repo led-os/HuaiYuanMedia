@@ -38,6 +38,10 @@
   {
     "name": "关于我们",
     "localImage": "icon_mine_about"
+  },
+  {
+    "name": "软件分享",
+    "localImage": "ic_software_share"
   }
 ]
 

@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.List;
 
 import cn.tklvyou.huaiyuanmedia.base.BaseContract;
+import cn.tklvyou.huaiyuanmedia.model.HaveSecondModuleNewsModel;
 import cn.tklvyou.huaiyuanmedia.model.NewsBean;
 import cn.tklvyou.huaiyuanmedia.utils.QiniuUploadManager;
 
@@ -11,7 +12,7 @@ import cn.tklvyou.huaiyuanmedia.utils.QiniuUploadManager;
 public interface PublishWenzhengContract {
     interface View extends BaseContract.BaseView{
         void setQiniuToken(String token);
-        void setJuZhengHeader(List<NewsBean> beans);
+        void setJuZhengHeader(List<HaveSecondModuleNewsModel.ModuleSecondBean> beans);
         void publishSuccess();
         void uploadImagesSuccess(List<String> urls);
     }

@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import cn.tklvyou.huaiyuanmedia.R
 import cn.tklvyou.huaiyuanmedia.base.fragment.BaseRecyclerFragment
 import cn.tklvyou.huaiyuanmedia.base.interfaces.AdapterCallBack
@@ -24,6 +25,7 @@ import cn.tklvyou.huaiyuanmedia.ui.camera.point.PointActivity
 import cn.tklvyou.huaiyuanmedia.ui.camera.history_updates.HistoryUpdatesFragment
 import cn.tklvyou.huaiyuanmedia.ui.camera.today_hot.TodayHotActivity
 import cn.tklvyou.huaiyuanmedia.ui.video_edit.CameraActivity
+import cn.tklvyou.huaiyuanmedia.ui.video_edit.VideoOptionActivity
 import cn.tklvyou.huaiyuanmedia.utils.RecycleViewDivider
 import com.adorkable.iosdialog.BottomSheetDialog
 import com.blankj.utilcode.util.ConvertUtils
@@ -74,7 +76,7 @@ class CameraFragment : BaseRecyclerFragment<CameraPresenter, NewsBean, BaseViewH
     override fun initView() {
         cameraTitleBar.setBackgroundResource(R.drawable.shape_gradient_common_titlebar)
         cameraTitleBar.rightCustomView.setOnClickListener {
-            if(SPUtils.getInstance().getString("token","").isNotEmpty()) {
+            if (SPUtils.getInstance().getString("token", "").isNotEmpty()) {
                 RxPermissions(this)
                         .request(Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA)
                         .subscribe { granted ->
@@ -93,7 +95,7 @@ class CameraFragment : BaseRecyclerFragment<CameraPresenter, NewsBean, BaseViewH
                                             startActivity(intent)
                                             isRefresh = true
                                         }
-                                        .addSheetItem("从手机相册选择") { which ->
+                                        .addSheetItem("从手机相册选择图片") { which ->
                                             isChoose = true
                                             // 进入相册 以下是例子：不需要的api可以不写
                                             PictureSelector.create(this@CameraFragment)
@@ -103,6 +105,9 @@ class CameraFragment : BaseRecyclerFragment<CameraPresenter, NewsBean, BaseViewH
                                                     .minSelectNum(1)
                                                     .selectionMode(PictureConfig.MULTIPLE)
                                                     .previewImage(true)
+                                                    .previewVideo(true)
+                                                    .videoMaxSecond(90)
+                                                    .videoMinSecond(3)
                                                     .isCamera(true)
                                                     .enableCrop(false)
                                                     .compress(true)
@@ -110,12 +115,29 @@ class CameraFragment : BaseRecyclerFragment<CameraPresenter, NewsBean, BaseViewH
                                                     .openClickSound(false)
                                                     .forResult(PictureConfig.CHOOSE_REQUEST)
                                         }
+                                        .addSheetItem("从手机相册选择视频") { which ->
+                                            isChoose = true
+                                            // 进入相册 以下是例子：不需要的api可以不写
+                                            PictureSelector.create(this@CameraFragment)
+                                                    .openGallery(PictureMimeType.ofVideo())
+                                                    .theme(R.style.picture_default_style)
+                                                    .selectionMode(PictureConfig.SINGLE)
+                                                    .previewVideo(true)
+                                                    .videoMaxSecond(90)
+                                                    .videoMinSecond(3)
+                                                    .enableCrop(false)
+                                                    .compress(true)
+                                                    .recordVideoSecond(90)
+                                                    .previewEggs(true)
+                                                    .openClickSound(false)
+                                                    .forResult(200)
+                                        }
                                         .show()
                             } else {
                                 ToastUtils.showShort("权限拒绝，无法使用")
                             }
                         }
-            }else{
+            } else {
                 ToastUtils.showShort("请登录后操作")
                 startActivity(Intent(context, LoginActivity::class.java))
             }
@@ -124,9 +146,9 @@ class CameraFragment : BaseRecyclerFragment<CameraPresenter, NewsBean, BaseViewH
         }
 
         headerView.setOnClickListener {
-            if(SPUtils.getInstance().getString("token","").isNotEmpty()) {
+            if (SPUtils.getInstance().getString("token", "").isNotEmpty()) {
                 startActivity(Intent(context, PointActivity::class.java))
-            }else{
+            } else {
                 ToastUtils.showShort("请登录后操作")
                 startActivity(Intent(context, LoginActivity::class.java))
             }
@@ -150,7 +172,7 @@ class CameraFragment : BaseRecyclerFragment<CameraPresenter, NewsBean, BaseViewH
 
         })
         initRecyclerView(mRecyclerView)
-        mRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayout.HORIZONTAL, false)
+        mRecyclerView.layoutManager = LinearLayoutManager(context,RecyclerView.HORIZONTAL, false)
         mRecyclerView.addItemDecoration(RecycleViewDivider(context, LinearLayout.HORIZONTAL, ConvertUtils.dp2px(10f), Color.WHITE, true))
 
         btnTodayHot.setOnClickListener {
@@ -247,8 +269,15 @@ class CameraFragment : BaseRecyclerFragment<CameraPresenter, NewsBean, BaseViewH
             isRefresh = false
             (mFragments[mViewPager.currentItem] as HistoryUpdatesFragment).onRetry()
         }
-
     }
+
+    public fun flushHeaderView(message: String) {
+        if (mFragments.size == 2) {
+            (mFragments[0] as HistoryUpdatesFragment).flushHeaderView(message)
+            (mFragments[1] as HistoryUpdatesFragment).flushHeaderView(message)
+        }
+    }
+
 
     override fun setList(list: MutableList<NewsBean>?) {
         setList(object : AdapterCallBack<CameraHotListAdapter> {
@@ -317,6 +346,24 @@ class CameraFragment : BaseRecyclerFragment<CameraPresenter, NewsBean, BaseViewH
         if (resultCode == Activity.RESULT_OK && data != null) {
 
             when (requestCode) {
+                200 -> {
+                    // 图片、视频、音频选择结果回调
+                    val selectList = PictureSelector.obtainMultipleResult(data)
+                    // 例如 LocalMedia 里面返回三种path
+                    // 1.media.getPath(); 为原图path
+                    // 2.media.getCutPath();为裁剪后path，需判断media.isCut();是否为true  注意：音视频除外
+                    // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true  注意：音视频除外
+                    // 如果裁剪并压缩了，以取压缩路径为准，因为是先裁剪后压缩的
+
+                    if (selectList == null || selectList.size < 1) {
+                        ToastUtils.showShort("选取视频异常，请重试")
+                        return
+                    }
+
+                    VideoOptionActivity.launch(mActivity, selectList[0].path, "随手拍")
+                }
+
+
                 PictureConfig.CHOOSE_REQUEST -> {
                     // 图片、视频、音频选择结果回调
                     val selectList = PictureSelector.obtainMultipleResult(data)
@@ -325,6 +372,7 @@ class CameraFragment : BaseRecyclerFragment<CameraPresenter, NewsBean, BaseViewH
                     // 2.media.getCutPath();为裁剪后path，需判断media.isCut();是否为true  注意：音视频除外
                     // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true  注意：音视频除外
                     // 如果裁剪并压缩了，以取压缩路径为准，因为是先裁剪后压缩的
+
                     val intent = Intent(context, PublishNewsActivity::class.java)
                     intent.putExtra("page", "随手拍")
                     intent.putExtra("isVideo", false)

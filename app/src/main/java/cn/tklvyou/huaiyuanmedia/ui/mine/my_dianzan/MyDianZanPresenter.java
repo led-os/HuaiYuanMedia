@@ -19,7 +19,7 @@ public class MyDianZanPresenter extends BasePresenter<MyDianZanContract.View> im
         RetrofitHelper.getInstance().getServer()
                 .getMyLikeList(page)
                 .compose(RxSchedulers.applySchedulers())
-//                .compose(mView.bindToLife())
+                .compose(mView.bindToLife())
                 .subscribe(result -> {
                             LogUtils.e(new Gson().toJson(result));
                             if (mView != null) {

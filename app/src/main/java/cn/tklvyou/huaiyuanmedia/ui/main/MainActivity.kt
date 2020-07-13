@@ -2,39 +2,31 @@ package cn.tklvyou.huaiyuanmedia.ui.main
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
-import android.os.Environment
 import android.os.Handler
 import android.os.Message
 import android.view.KeyEvent
+import androidx.fragment.app.Fragment
 import cn.tklvyou.huaiyuanmedia.BuildConfig
 import cn.tklvyou.huaiyuanmedia.R
-import cn.tklvyou.huaiyuanmedia.base.MyApplication
+import cn.tklvyou.huaiyuanmedia.base.activity.BaseBottomTab2Activity
 import cn.tklvyou.huaiyuanmedia.base.activity.BaseBottomTabActivity
 import cn.tklvyou.huaiyuanmedia.base.fragment.BaseX5WebViewFragment
 import cn.tklvyou.huaiyuanmedia.base.interfaces.BackHandledInterface
-import cn.tklvyou.huaiyuanmedia.common.Contacts
+import cn.tklvyou.huaiyuanmedia.model.LifeInfo
 import cn.tklvyou.huaiyuanmedia.model.SystemConfigModel
-import cn.tklvyou.huaiyuanmedia.ui.home.HomeFragment
-import cn.tklvyou.huaiyuanmedia.ui.account.LoginActivity
-import cn.tklvyou.huaiyuanmedia.ui.camera.CameraFragment
-import cn.tklvyou.huaiyuanmedia.ui.mine.MineFragment
 import cn.tklvyou.huaiyuanmedia.ui.audio.AudioFragment
-import cn.tklvyou.huaiyuanmedia.ui.home.new_list.BlankFragment
+import cn.tklvyou.huaiyuanmedia.ui.camera.CameraFragment
+import cn.tklvyou.huaiyuanmedia.ui.home.HomeFragment
+import cn.tklvyou.huaiyuanmedia.ui.mine.MineFragment
 import cn.tklvyou.huaiyuanmedia.ui.work.WorkFragment
 import cn.tklvyou.huaiyuanmedia.utils.AndroidBug5497Workaround
-import cn.tklvyou.huaiyuanmedia.utils.UpdateAppHttpUtil
-import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.SPUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.trello.rxlifecycle3.components.support.RxFragment
+import com.vector.update_app_kotlin.updateApp
 import kotlinx.android.synthetic.main.activity_main.*
-import com.google.gson.Gson
-import com.vector.update_app.UpdateAppBean
-import com.vector.update_app.UpdateAppManager
-import com.vector.update_app.UpdateCallback
-import org.json.JSONException
-import org.json.JSONObject
 
 
 class MainActivity : BaseBottomTabActivity<MainPresenter>(), MainContract.View, BackHandledInterface {
@@ -43,10 +35,6 @@ class MainActivity : BaseBottomTabActivity<MainPresenter>(), MainContract.View, 
 
     override fun setSelectedFragment(selectedFragment: BaseX5WebViewFragment<*>) {
         this.mBackHandedFragment = selectedFragment
-    }
-
-    override fun setSystemConfig(model: SystemConfigModel) {
-        SPUtils.getInstance().put("search", model.default_search)
     }
 
     override fun getFragments(): MutableList<RxFragment> {
@@ -66,7 +54,6 @@ class MainActivity : BaseBottomTabActivity<MainPresenter>(), MainContract.View, 
         return R.layout.activity_main
     }
 
-    private var isLogin = false
     private var mFragments: MutableList<RxFragment>? = null
 
     private var homeFragment: HomeFragment? = null
@@ -82,9 +69,7 @@ class MainActivity : BaseBottomTabActivity<MainPresenter>(), MainContract.View, 
 
     override fun initView(savedInstanceState: Bundle?) {
         hideTitleBar()
-        AndroidBug5497Workaround.assistActivity(this)
-
-        getVersionInfo()
+//        AndroidBug5497Workaround.assistActivity(this)
 
         mFragments = ArrayList()
 
@@ -113,104 +98,14 @@ class MainActivity : BaseBottomTabActivity<MainPresenter>(), MainContract.View, 
                 R.id.navigation_service -> selectFragment(3)
                 R.id.navigation_mine -> selectFragment(4)
             }
+
+            mPresenter.getLifeInfo()
+
             return@setOnNavigationItemSelectedListener true
         }
 
         selectFragment(0)
-
         mPresenter.getSystemConfig()
-    }
-
-    private fun getVersionInfo() {
-
-        val params = HashMap<String, String>()
-
-        UpdateAppManager.Builder()
-                //必须设置，当前Activity
-                .setActivity(this)
-                //必须设置实现httpManager接口的对象
-                .setHttpManager(UpdateAppHttpUtil())
-                //必须设置，更新地址
-                .setUpdateUrl(Contacts.PRO_BASE_URL + "api/index/sysconfig")
-                //以下设置，都是可选
-                //设置请求方式，默认get
-                .setPost(true)
-                //添加自定义参数，默认version=1.0.0（app的versionName）；apkKey=唯一表示（在AndroidManifest.xml配置）
-                .setParams(params)
-                //设置点击升级后，消失对话框，默认点击升级后，对话框显示下载进度
-                //.hideDialogOnDownloading()
-                //设置头部，不设置显示默认的图片，设置图片后自动识别主色调，然后为按钮，进度条设置颜色
-                .setTopPic(R.mipmap.top_3)
-                //为按钮，进度条设置颜色，默认从顶部图片自动识别。
-                .setThemeColor(resources.getColor(R.color.colorAccent))
-                //设置apk下砸路径，默认是在下载到sd卡下/Download/1.0.0/test.apk
-                .setTargetPath(Environment.getExternalStorageDirectory().absolutePath)
-                //设置appKey，默认从AndroidManifest.xml获取，如果，使用自定义参数，则此项无效
-                //.setAppKey("ab55ce55Ac4bcP408cPb8c1Aaeac179c5f6f")
-                //不显示通知栏进度条
-                //.dismissNotificationProgress()
-                //是否忽略版本
-                //.showIgnoreVersion()
-
-                .build()
-                //检测是否有新版本
-                .checkNewApp(object : UpdateCallback() {
-                    /**
-                     * 解析json,自定义协议
-                     *
-                     * @param json 服务器返回的json
-                     * @return UpdateAppBean
-                     */
-                    override fun parseJson(json: String): UpdateAppBean {
-
-                        val updateAppBean = UpdateAppBean()
-
-                        try {
-                            val `object` = JSONObject(json)
-                            val code = `object`.getInt("code")
-                            if (code == 1) {
-                                val model = Gson().fromJson(`object`.getString("data"), SystemConfigModel::class.java)
-
-                                val localVersionCode = Integer.parseInt(BuildConfig.VERSION_NAME.replace(".", ""))
-                                val serviceVersionCode = Integer.parseInt(model.android_version.replace(".", ""))
-
-                                updateAppBean
-                                        //（必须）是否更新Yes,No
-                                        .setUpdate(if (localVersionCode < serviceVersionCode) "Yes" else "No")
-                                        //（必须）新版本号，
-                                        .setNewVersion(model.android_version)
-                                        //（必须）下载地址
-                                        .setApkFileUrl(model.android_download)
-                                        //（必须）更新内容
-                                        .setUpdateLog(model.android_info)
-                                        .isConstraint = model.android_update == 1
-                                //设置md5，可以不设置
-                                //.setNewMd5(jsonObject.optString("new_md51"));
-
-                            }
-
-                        } catch (e: JSONException) {
-                            e.printStackTrace()
-                        }
-
-                        return updateAppBean
-                    }
-
-                    /**
-                     * 网络请求之前
-                     */
-                    public override fun onBefore() {
-
-                    }
-
-                    /**
-                     * 网路请求之后
-                     */
-                    public override fun onAfter() {
-
-                    }
-
-                })
     }
 
 
@@ -221,6 +116,51 @@ class MainActivity : BaseBottomTabActivity<MainPresenter>(), MainContract.View, 
         }
 
     }
+
+    private var isNeed = false
+    override fun onResume() {
+        super.onResume()
+        if (isNeed) {
+            mPresenter.getLifeInfo()
+        }
+    }
+
+    override fun setSystemConfig(model: SystemConfigModel?, life_info: LifeInfo?) {
+        isNeed = true
+        if (model != null) {
+            SPUtils.getInstance().put("search", model.default_search)
+
+            val localVersionCode = Integer.parseInt(BuildConfig.VERSION_NAME.replace(".", ""))
+            val serviceVersionCode = Integer.parseInt(model.android_version.replace(".", ""))
+
+            updateApp(init = {
+                topPic = R.mipmap.top_3
+                themeColor = resources.getColor(R.color.colorAccent)
+            }).update(localVersionCode < serviceVersionCode, model.android_version,
+                    model.android_download, model.android_info,
+                    model.android_update == 1)
+
+        }
+
+        if (life_info != null) {
+            initBadgeView(life_info.count, life_info.interaction)
+        } else {
+            initBadgeView(0, "")
+        }
+
+    }
+
+    private fun initBadgeView(number: Int, message: String) {
+        val badgeDrawable = bottomNavigationView.getOrCreateBadge(R.id.navigation_camera)
+        badgeDrawable.backgroundColor = Color.RED
+        badgeDrawable.badgeTextColor = Color.WHITE
+//        badgeDrawable.maxCharacterCount = 99
+//        badgeDrawable.number = number
+        badgeDrawable.isVisible = number != 0
+
+        cameraFragment?.flushHeaderView(message)
+    }
+
 
     override fun onDestroy() {
         super.onDestroy()

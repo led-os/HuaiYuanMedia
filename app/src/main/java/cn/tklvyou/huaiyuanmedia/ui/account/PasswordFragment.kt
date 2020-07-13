@@ -10,9 +10,16 @@ import cn.tklvyou.huaiyuanmedia.R
 import cn.tklvyou.huaiyuanmedia.base.MyApplication
 import cn.tklvyou.huaiyuanmedia.base.fragment.BaseFragment
 import cn.tklvyou.huaiyuanmedia.ui.main.MainActivity
+import com.blankj.utilcode.util.BusUtils
 import com.blankj.utilcode.util.KeyboardUtils.hideSoftInput
 import com.blankj.utilcode.util.ToastUtils
 import kotlinx.android.synthetic.main.fragment_password.*
+import cn.tklvyou.huaiyuanmedia.model.MessageEvent
+import org.greenrobot.eventbus.EventBus
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import com.trello.rxlifecycle3.RxLifecycle.bindUntilEvent
+
+
 
 class PasswordFragment : BaseFragment<AccountPresenter>(), AccountContract.View, View.OnClickListener {
 
@@ -63,6 +70,7 @@ class PasswordFragment : BaseFragment<AccountPresenter>(), AccountContract.View,
     }
 
     override fun loginSuccess() {
+        EventBus.getDefault().post(MessageEvent())
         if (jump) {
             startActivity(Intent(context, MainActivity::class.java))
         }

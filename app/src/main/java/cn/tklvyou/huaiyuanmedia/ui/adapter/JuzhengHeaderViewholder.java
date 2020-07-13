@@ -16,6 +16,17 @@ public class JuzhengHeaderViewholder extends RecyclerView.ViewHolder {
     public TextView tvNickName;
     public RadioButton radioButton;
 
+
+    public JuzhengHeaderViewholder(@NonNull View itemView,boolean hideButton) {
+        super(itemView);
+        ivAvatar = itemView.findViewById(R.id.ivAvatar);
+        tvNickName = itemView.findViewById(R.id.tvNickName);
+        radioButton = itemView.findViewById(R.id.rbButton);
+        if(hideButton){
+            radioButton.setVisibility(View.GONE);
+        }
+    }
+
     public JuzhengHeaderViewholder(@NonNull View itemView) {
         super(itemView);
         ivAvatar = itemView.findViewById(R.id.ivAvatar);

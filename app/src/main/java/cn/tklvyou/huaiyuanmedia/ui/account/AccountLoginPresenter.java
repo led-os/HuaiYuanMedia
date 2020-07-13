@@ -17,25 +17,31 @@ public class AccountLoginPresenter extends BasePresenter<AccountContract.LoginVi
 
     @Override
     public void thirdLogin(String platform, String code) {
-        mView.showLoading();
+        if (mView != null) {
+            mView.showLoading();
+        }
         RetrofitHelper.getInstance().getServer()
                 .thirdLogin(platform, code)
                 .compose(RxSchedulers.applySchedulers())
                 .subscribe(result -> {
-                            mView.showSuccess(result.getMsg());
-                            if (result.getCode() == 1) {
-                                ToastUtils.showShort(result.getMsg());
-                                mView.loginSuccess();
-                                AccountHelper.getInstance().setUserInfo(result.getData().getUserinfo());
-                                SPUtils.getInstance().put("token", result.getData().getUserinfo().getToken());
-                                SPUtils.getInstance().put("login", true);
-                                SPUtils.getInstance().put("groupId", result.getData().getUserinfo().getGroup_id());
-                            } else if (result.getCode() == 5) {
-                                mView.bindMobile(result.getData().getThird_id());
+                            if (mView != null) {
+                                mView.showSuccess(result.getMsg());
+                                if (result.getCode() == 1) {
+                                    ToastUtils.showShort(result.getMsg());
+                                    AccountHelper.getInstance().setUserInfo(result.getData().getUserinfo());
+                                    SPUtils.getInstance().put("token", result.getData().getUserinfo().getToken());
+                                    SPUtils.getInstance().put("login", true);
+                                    SPUtils.getInstance().put("groupId", result.getData().getUserinfo().getGroup_id());
+                                    mView.loginSuccess();
+                                } else if (result.getCode() == 5) {
+                                    mView.bindMobile(result.getData().getThird_id());
+                                }
                             }
                         }, throwable -> {
-                            mView.showSuccess("");
-                            mView.loginError();
+                            if (mView != null) {
+                                mView.showSuccess("");
+                                mView.loginError();
+                            }
                         }
                 );
     }

@@ -198,7 +198,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="《榴香怀远注册协议》"
+                android:text="《榴乡怀远注册协议》"
                 android:textColor="#3D8FEA"
                 android:textSize="@dimen/sp_12" />
 

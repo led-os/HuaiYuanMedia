@@ -5,11 +5,14 @@ import android.view.KeyEvent
 import android.webkit.*
 import android.webkit.WebSettings.*
 import cn.tklvyou.huaiyuanmedia.base.BaseContract
+import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.AndroidInterface
+import cn.tklvyou.huaiyuanmedia.utils.HtmlUtils
 import org.jsoup.Jsoup
 
 abstract class BaseWebViewActivity<P : BaseContract.BasePresenter<*>> : BaseActivity<P>(){
 
     private lateinit var webView: WebView
+    private val JS_CALL_ANDROID_METHOD = "jsCallAndroid"
 
     public fun initWebView(webView: WebView) {
         this.webView = webView
@@ -48,6 +51,7 @@ abstract class BaseWebViewActivity<P : BaseContract.BasePresenter<*>> : BaseActi
                 //为webView 添加Padding
                 webView.loadUrl("javascript:document.body.style.padding=\"3%\"; void 0")
                 super.onPageFinished(view, url)
+                HtmlUtils.setWebImageClick(view, JS_CALL_ANDROID_METHOD)
             }
 
         }
@@ -105,6 +109,7 @@ abstract class BaseWebViewActivity<P : BaseContract.BasePresenter<*>> : BaseActi
 
         //加载使用 jsoup 处理过的 html 文本
 //        webView.loadDataWithBaseURL(Contacts.DEV_BASE_URL, doc.toString(), "text/html", "UTF-8", null)
+        webView.addJavascriptInterface(AndroidInterface(this, HtmlUtils.returnImageUrlsFromHtml(data)),JS_CALL_ANDROID_METHOD)
         webView.loadData(data, "text/html; charset=UTF-8", null)
     }
 

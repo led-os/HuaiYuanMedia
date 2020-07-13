@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.LinearLayout
 import cn.tklvyou.huaiyuanmedia.R
 import cn.tklvyou.huaiyuanmedia.base.activity.BaseHttpRecyclerActivity
 import cn.tklvyou.huaiyuanmedia.base.interfaces.AdapterCallBack
@@ -13,18 +14,13 @@ import cn.tklvyou.huaiyuanmedia.model.NewsBean
 import cn.tklvyou.huaiyuanmedia.ui.adapter.WenZhenAdapter
 import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
 import cn.tklvyou.huaiyuanmedia.ui.audio.ServiceWebviewActivity
+import cn.tklvyou.huaiyuanmedia.utils.RecycleViewDivider
 import cn.tklvyou.huaiyuanmedia.widget.dailog.CommonDialog
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import kotlinx.android.synthetic.main.activity_my_wenzheng.*
 
-/**
- *@description :爆料记录
- *@company :途酷科技
- * @author :JenkinsZhou
- * @date 2019年08月02日11:04
- * @Email: 971613168@qq.com
- */
+
 class MyWenZhenActivity : BaseHttpRecyclerActivity<WenZhenPresenter, NewsBean, BaseViewHolder, WenZhenAdapter>(), WenZhenContract.View {
 
     override fun initPresenter(): WenZhenPresenter {
@@ -45,6 +41,9 @@ class MyWenZhenActivity : BaseHttpRecyclerActivity<WenZhenPresenter, NewsBean, B
     private var selectIds = ArrayList<Int>()
 
     override fun initView(savedInstanceState: Bundle?) {
+        initSmartRefreshLayout(smartLayoutRoot)
+        initRecyclerView(recyclerViewRoot)
+
         setTitle("爆料")
         setNavigationImage()
         setNavigationOnClickListener { finish() }
@@ -69,15 +68,6 @@ class MyWenZhenActivity : BaseHttpRecyclerActivity<WenZhenPresenter, NewsBean, B
                 }
             }
         }
-
-
-
-
-        initSmartRefreshLayout(smartLayoutRoot)
-        initRecyclerView(recyclerViewRoot)
-        smartLayoutRoot.autoRefresh()
-
-
 
         tvClearAll.setOnClickListener {
             val dialog = CommonDialog(this)
@@ -108,6 +98,9 @@ class MyWenZhenActivity : BaseHttpRecyclerActivity<WenZhenPresenter, NewsBean, B
             dialog.show()
 
         }
+
+        recyclerViewRoot.addItemDecoration(RecycleViewDivider(this, LinearLayout.VERTICAL))
+        smartLayoutRoot.autoRefresh()
 
     }
 

@@ -226,8 +226,8 @@ class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.Vie
         webpage.webpageUrl = SHARE_DOWNLOAD_URL
         val msg = WXMediaMessage(webpage)
         msg.title = shareTitle
-        msg.description = "榴香怀远"
-        val bmp = BitmapFactory.decodeResource(resources, R.drawable.share_icon)
+        msg.description = "榴乡怀远"
+        val bmp = BitmapFactory.decodeResource(resources, R.mipmap.img_logo)
         val thumbBmp = Bitmap.createScaledBitmap(bmp, 100, 100, true)
         bmp.recycle()
         msg.thumbData = ImageUtils.bitmap2Bytes(YBitmapUtils.changeColor(thumbBmp), Bitmap.CompressFormat.JPEG)
@@ -268,8 +268,7 @@ class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.Vie
         params.putString(QQShare.SHARE_TO_QQ_TITLE, shareTitle)
 //        params.putString(QQShare.SHARE_TO_QQ_SUMMARY, "摘要") //可选，最长40个字
         params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, SHARE_DOWNLOAD_URL) //必填 	这条分享消息被好友点击后的跳转URL。
-        params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "http://medium2.tklvyou.cn/qiniu/20190812/FiYgpZ32gNGMbRGxesypz9sSWUbI.png") // 可选 分享图片的URL或者本地路径
-        params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "榴香怀远")
+        params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "榴乡怀远")
         mTencent!!.shareToQQ(this, params, object : IUiListener {
             override fun onComplete(p0: Any?) {
                 mPresenter.shareAward()
@@ -302,8 +301,8 @@ class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.Vie
         webpage.webpageUrl = SHARE_DOWNLOAD_URL
         val msg = WXMediaMessage(webpage)
         msg.title = shareTitle
-        msg.description = "榴香怀远"
-        val bmp = BitmapFactory.decodeResource(resources, R.drawable.share_icon)
+        msg.description = "榴乡怀远"
+        val bmp = BitmapFactory.decodeResource(resources, R.mipmap.img_logo)
         val thumbBmp = Bitmap.createScaledBitmap(bmp, 100, 100, true)
         bmp.recycle()
         msg.thumbData = ImageUtils.bitmap2Bytes(YBitmapUtils.changeColor(thumbBmp), Bitmap.CompressFormat.JPEG)
@@ -340,7 +339,7 @@ class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.Vie
             val mediaObject = WebpageObject()
             mediaObject.identify = Utility.generateGUID()
             mediaObject.title = shareTitle
-            mediaObject.description = "榴香怀远"
+            mediaObject.description = "榴乡怀远"
             val bitmap = BitmapFactory.decodeResource(resources, R.mipmap.default_avatar)
             mediaObject.setThumbImage(YBitmapUtils.changeColor(bitmap))
             mediaObject.actionUrl = SHARE_DOWNLOAD_URL

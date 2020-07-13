@@ -61,7 +61,7 @@ public class JavaScriptLog {
     }
 
     /**
-     * 点击图片
+     * 点击富文本
      */
     public interface JavaScriptCallBack{
         public void clickWebView();

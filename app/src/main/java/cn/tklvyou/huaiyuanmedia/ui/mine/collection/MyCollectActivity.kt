@@ -11,6 +11,7 @@ import android.widget.LinearLayout
 import cn.tklvyou.huaiyuanmedia.R
 import cn.tklvyou.huaiyuanmedia.base.activity.BaseHttpRecyclerActivity
 import cn.tklvyou.huaiyuanmedia.base.interfaces.AdapterCallBack
+import cn.tklvyou.huaiyuanmedia.common.ModuleUtils
 import cn.tklvyou.huaiyuanmedia.model.BasePageModel
 import cn.tklvyou.huaiyuanmedia.model.NewsBean
 import cn.tklvyou.huaiyuanmedia.model.NewsMultipleItem
@@ -48,6 +49,9 @@ class MyCollectActivity : BaseHttpRecyclerActivity<CollectPresenter, NewsMultipl
 
     private var isEdit = false
     override fun initView(savedInstanceState: Bundle?) {
+        initSmartRefreshLayout(smartLayoutRoot)
+        initRecyclerView(recyclerViewRoot)
+
         setTitle("我的收藏")
         setNavigationImage()
         setNavigationOnClickListener { finish() }
@@ -73,9 +77,6 @@ class MyCollectActivity : BaseHttpRecyclerActivity<CollectPresenter, NewsMultipl
             }
         }
 
-
-        initSmartRefreshLayout(smartLayoutRoot)
-        initRecyclerView(recyclerViewRoot)
         recyclerViewRoot.addItemDecoration(RecycleViewDivider(this, LinearLayout.VERTICAL))
 
         smartLayoutRoot.autoRefresh()
@@ -178,98 +179,12 @@ class MyCollectActivity : BaseHttpRecyclerActivity<CollectPresenter, NewsMultipl
 
             when (view!!.id) {
                 R.id.itemLayout -> {
-                    when (bean.module) {
-                        "V视频" -> {
-                            val type = "视频"
-                            if (bean.url.isNotEmpty()) {
-                                startDetailsActivity(this, bean.url)
-                            } else {
-                                startNewsDetailActivity(this, type, id, position)
-                            }
-                        }
-                        "濉溪TV" -> {
-                            if (bean.module_second == "置顶频道") {
-                                val type = if (bean.type == "tv") "电视" else "广播"
-                                TVNewsDetailActivity.startTVNewsDetailActivity(this, type, id)
-                            } else {
-                                val type = "电视"
-                                NewsDetailActivity.startNewsDetailActivity(this, type, id)
-                            }
-                        }
-                        "新闻", "矩阵", "专栏", "党建", "专题" -> {
-                            val type = "文章"
-                            if (bean.url.isNotEmpty()) {
-                                startDetailsActivity(this, bean.url)
-                            } else {
-                                startNewsDetailActivity(this, type, id, position)
-                            }
-                        }
-                        "视讯" -> {
-                            val type = "视讯"
-                            if (bean.url.isNotEmpty()) {
-                                startDetailsActivity(this, bean.url)
-                            } else {
-                                startNewsDetailActivity(this, type, id, position)
-                            }
-                        }
-                        "爆料" -> {
-                            val type = "爆料"
-                            if (bean.url.isNotEmpty()) {
-                                startDetailsActivity(this, bean.url)
-                            } else {
-                                startNewsDetailActivity(this, type, id, position)
-                            }
-                        }
+                    val type = ModuleUtils.getTypeByNewsBean(bean)
 
-                        "原创", "随手拍" -> {
-                            val type = if (bean.images != null && bean.images.size > 0) "图文" else "视频"
-                            if (bean.url.isNotEmpty()) {
-                                startDetailsActivity(this, bean.url)
-                            } else {
-                                startNewsDetailActivity(this, type, id, position)
-                            }
-                        }
-                        "悦读" -> {
-                            val type = "悦读"
-                            if (bean.url.isNotEmpty()) {
-                                startDetailsActivity(this, bean.url)
-                            } else {
-                                startNewsDetailActivity(this, type, id, position)
-                            }
-                        }
-                        "悦听" -> {
-                            val type = "悦听"
-                            if (bean.url.isNotEmpty()) {
-                                startDetailsActivity(this, bean.url)
-                            } else {
-                                startNewsDetailActivity(this, type, id, position)
-                            }
-                        }
-                        "公告" -> {
-                            val type = "公告"
-                            if (bean.url.isNotEmpty()) {
-                                startDetailsActivity(this, bean.url)
-                            } else {
-                                startNewsDetailActivity(this, type, id, position)
-                            }
-                        }
-                        "直播" -> {
-                            val type = "直播"
-                            if (bean.url.isNotEmpty()) {
-                                startDetailsActivity(this, bean.url)
-                            } else {
-                                startNewsDetailActivity(this, type, id, position)
-                            }
-                        }
-                        else -> {
-                            val type = "文章"
-                            if (bean.url.isNotEmpty()) {
-                                startDetailsActivity(this, bean.url)
-                            } else {
-                                startNewsDetailActivity(this, type, id, position)
-                            }
-                        }
-
+                    if (bean.url.isNotEmpty()) {
+                        startDetailsActivity(this, bean.url)
+                    } else {
+                        startNewsDetailActivity(this, type, id, position)
                     }
                 }
 

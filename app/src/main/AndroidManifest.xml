@@ -35,8 +35,10 @@
         android:supportsRtl="true"
         android:theme="@style/CustomAppTheme"
         tools:replace="android:theme">
-        <activity android:name=".ui.home.ping_xuan.PingXuanPersionActivity"></activity>
-        <activity android:name=".ui.home.ping_xuan.PingXuanDetailsActivity"></activity>
+        <activity android:name=".ui.camera.message.ArticleMessageActivity"></activity>
+        <activity android:name=".ui.home.juzheng_details.JuZhengDetailsActivity" />
+        <activity android:name=".ui.home.ping_xuan.PingXuanPersionActivity" />
+        <activity android:name=".ui.home.ping_xuan.PingXuanDetailsActivity" />
         <activity android:name=".ui.video_edit.PicturePreviewActivity" />
         <activity android:name=".ui.video_edit.selCover.SelCoverTimeActivity" />
         <activity android:name=".ui.video_edit.CameraActivity" />
@@ -49,11 +51,27 @@
         <activity
             android:name=".ui.main.SplashActivity"
             android:theme="@style/SplashActivityTheme">
+            <meta-data
+                android:name="android.notch_support"
+                android:value="true" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+
+                <!-- 下面这几个必须要设置 -->
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- 协议部分 -->
+                <data
+                    android:host="huaiyuan"
+                    android:path="/news"
+                    android:scheme="hyapp" />
             </intent-filter>
         </activity>
         <activity android:name=".ui.home.comment.CommentListActivity" />
@@ -61,8 +79,7 @@
             android:name=".ui.main.WebviewActivity"
             android:launchMode="singleTop" />
         <activity android:name=".ui.home.ping_xuan.search.PingXuanSearchListActivity" />
-        <activity android:name=".ui.home.search_list.SearchListActivity"/>
-
+        <activity android:name=".ui.home.search_list.SearchListActivity" />
         <activity android:name=".ui.account.AgreementActivity" />
         <activity android:name=".ui.home.all_tv.AllTvActivity" />
         <activity android:name=".ui.home.all_juzheng.AllJuZhengActivity" />
@@ -70,7 +87,12 @@
         <activity android:name=".ui.camera.goods_detail.GoodsDetailsActivity" />
         <activity android:name=".ui.camera.point.PointActivity" />
         <activity android:name=".ui.camera.zhuan_pan.ZhuanPanActivity" />
-        <activity android:name=".ui.audio.ServiceWebviewActivity" />
+
+        <activity
+            android:name=".ui.audio.ServiceWebviewActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:hardwareAccelerated="true" />
+
         <activity android:name=".ui.home.publish_news.PublishNewsActivity" />
         <activity android:name=".ui.home.publish_wenzheng.PublishWenzhengActivity" />
         <activity android:name=".ui.home.BannerDetailsActivity" />
@@ -124,8 +146,7 @@
         <activity
             android:name=".ui.home.news_detail.NewsDetailActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:launchMode="singleTask"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
+            android:windowSoftInputMode="stateHidden|adjustResize"></activity>
         <activity android:name=".ui.home.ImagePagerActivity" />
         <activity android:name=".crash.CrashErrorActivity" />
         <activity android:name=".ui.account.BindPhoneActivity" />

@@ -3,6 +3,7 @@ package cn.tklvyou.huaiyuanmedia.widget.dailog;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.text.InputFilter;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Gravity;
@@ -27,10 +28,17 @@ public class InputDialog {
 
     private Dialog dialog;
     private Context context;
+    private boolean cancelLimitContentLength;
     private AppCompatTextView titleTextView;
     private AppCompatTextView cancelTextView;
     private AppCompatTextView confirmTextView;
     private AppCompatEditText contentEditText;
+
+    public InputDialog(Context context, String title, boolean cancelLimitContentLength) {
+        this.context = context;
+        this.cancelLimitContentLength = cancelLimitContentLength;
+        init(title, "");
+    }
 
     public InputDialog(Context context, String title, String content) {
         this.context = context;
@@ -85,9 +93,7 @@ public class InputDialog {
     }
 
     public void setContent(String content) {
-
         contentEditText.setText(content);
-
     }
 
     public void dismiss() {
@@ -97,7 +103,6 @@ public class InputDialog {
     }
 
     private void init(String title, String content) {
-
         this.dialog = new Dialog(context, R.style.BaseDialog);
         dialog.setContentView(R.layout.dialog_input_layput);
         dialog.getWindow().getDecorView().setPadding(0, 0, 0, 0);
@@ -112,6 +117,9 @@ public class InputDialog {
         contentEditText = dialog.findViewById(R.id.contentEditText);
         cancelTextView = dialog.findViewById(R.id.cancelTextView);
         confirmTextView = dialog.findViewById(R.id.confirmTextView);
+        if(cancelLimitContentLength){
+            contentEditText.setFilters(new InputFilter[] { new InputFilter.LengthFilter(500) });
+        }
         titleTextView.setText(title);
         contentEditText.setText(content);
         contentEditText.setSelection(content.length());

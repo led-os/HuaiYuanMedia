@@ -20,6 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.blankj.utilcode.util.ScreenUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -199,8 +200,9 @@ public class ImagePagerActivity extends BaseActivity<NullPresenter> {
                 Glide.with(context)
                         .load(imgurl)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)//缓存多个尺寸
+                        .override(ScreenUtils.getScreenWidth(), ScreenUtils.getScreenHeight())
                         .thumbnail(0.1f)//先显示缩略图  缩略图为原图的1/10
-//                        .error(R.drawable.ic_launcher)
+                        .error(R.mipmap.img_logo)
                         .into(new SimpleTarget<Drawable>() {
                             @Override
                             public void onLoadStarted(@Nullable Drawable placeholder) {
