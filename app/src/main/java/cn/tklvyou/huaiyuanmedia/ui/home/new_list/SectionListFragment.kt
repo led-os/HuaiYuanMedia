@@ -47,6 +47,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.chad.library.adapter.base.entity.SectionMultiEntity
 import com.google.gson.Gson
+import com.tencent.liteav.demo.player.activity.SuperPlayerActivity
 import com.youth.banner.Banner
 import com.youth.banner.BannerConfig
 import com.youth.banner.listener.OnBannerListener
@@ -313,6 +314,10 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                     intent.putExtra("title", bannerModelList[position].name)
                     intent.putExtra("content", bannerModelList[position].content)
                     startActivity(intent)
+                }else{
+                    val intent = Intent(context, SuperPlayerActivity::class.java)
+                    startActivity(intent)
+
                 }
 
             }

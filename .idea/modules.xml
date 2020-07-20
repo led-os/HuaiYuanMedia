@@ -2,13 +2,22 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/HuaiYuanMedia.iml" filepath="$PROJECT_DIR$/HuaiYuanMedia.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/HuaiYuanMedia.iml" filepath="$PROJECT_DIR$/.idea/HuaiYuanMedia.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/HuaiYuanMedia.app.iml" filepath="$PROJECT_DIR$/app/HuaiYuanMedia.app.iml" group="HuaiYuanMedia/app" />
+      <module fileurl="file://$PROJECT_DIR$/lib-ios-dialog/HuaiYuanMedia.lib-ios-dialog.iml" filepath="$PROJECT_DIR$/lib-ios-dialog/HuaiYuanMedia.lib-ios-dialog.iml" group="HuaiYuanMedia/lib-ios-dialog" />
+      <module fileurl="file://$PROJECT_DIR$/libtitlebar/HuaiYuanMedia.libtitlebar.iml" filepath="$PROJECT_DIR$/libtitlebar/HuaiYuanMedia.libtitlebar.iml" group="HuaiYuanMedia/libtitlebar" />
+      <module fileurl="file://$PROJECT_DIR$/libzhuanpan/HuaiYuanMedia.libzhuanpan.iml" filepath="$PROJECT_DIR$/libzhuanpan/HuaiYuanMedia.libzhuanpan.iml" group="HuaiYuanMedia/libzhuanpan" />
+      <module fileurl="file://$PROJECT_DIR$/picture_library/HuaiYuanMedia.picture_library.iml" filepath="$PROJECT_DIR$/picture_library/HuaiYuanMedia.picture_library.iml" group="HuaiYuanMedia/picture_library" />
+      <module fileurl="file://$PROJECT_DIR$/ucrop/HuaiYuanMedia.ucrop.iml" filepath="$PROJECT_DIR$/ucrop/HuaiYuanMedia.ucrop.iml" group="HuaiYuanMedia/ucrop" />
+      <module fileurl="file://$PROJECT_DIR$/wxcamera/HuaiYuanMedia.wxcamera.iml" filepath="$PROJECT_DIR$/wxcamera/HuaiYuanMedia.wxcamera.iml" group="HuaiYuanMedia/wxcamera" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/code.HuaiYuanMedia.iml" filepath="$PROJECT_DIR$/code.HuaiYuanMedia.iml" group="HuaiYuanMedia" />
       <module fileurl="file://$PROJECT_DIR$/lib-ios-dialog/lib-ios-dialog.iml" filepath="$PROJECT_DIR$/lib-ios-dialog/lib-ios-dialog.iml" />
       <module fileurl="file://$PROJECT_DIR$/libtitlebar/libtitlebar.iml" filepath="$PROJECT_DIR$/libtitlebar/libtitlebar.iml" />
       <module fileurl="file://$PROJECT_DIR$/libzhuanpan/libzhuanpan.iml" filepath="$PROJECT_DIR$/libzhuanpan/libzhuanpan.iml" />
       <module fileurl="file://$PROJECT_DIR$/picture_library/picture_library.iml" filepath="$PROJECT_DIR$/picture_library/picture_library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/superplayerdemo/superplayerdemo.iml" filepath="$PROJECT_DIR$/superplayerdemo/superplayerdemo.iml" group="HuaiYuanMedia/superplayerdemo" />
+      <module fileurl="file://$PROJECT_DIR$/superplayerkit/superplayerkit.iml" filepath="$PROJECT_DIR$/superplayerkit/superplayerkit.iml" group="HuaiYuanMedia/superplayerkit" />
       <module fileurl="file://$PROJECT_DIR$/ucrop/ucrop.iml" filepath="$PROJECT_DIR$/ucrop/ucrop.iml" />
       <module fileurl="file://$PROJECT_DIR$/wxcamera/wxcamera.iml" filepath="$PROJECT_DIR$/wxcamera/wxcamera.iml" />
     </modules>

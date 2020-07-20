@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
+        <option name="testRunner" value="PLATFORM" />
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
@@ -13,6 +15,8 @@
             <option value="$PROJECT_DIR$/libtitlebar" />
             <option value="$PROJECT_DIR$/libzhuanpan" />
             <option value="$PROJECT_DIR$/picture_library" />
+            <option value="$PROJECT_DIR$/superplayerdemo" />
+            <option value="$PROJECT_DIR$/superplayerkit" />
             <option value="$PROJECT_DIR$/ucrop" />
             <option value="$PROJECT_DIR$/wxcamera" />
           </set>

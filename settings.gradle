@@ -1,1 +1,1 @@
-include ':app', ':libtitlebar', ':picture_library', ':ucrop', ':lib-ios-dialog', ':wxcamera', ':libzhuanpan'
+include ':app', ':libtitlebar', ':picture_library', ':ucrop', ':lib-ios-dialog', ':wxcamera', ':libzhuanpan',':superplayerkit',':superplayerdemo'
