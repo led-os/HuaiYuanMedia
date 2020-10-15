@@ -1,51 +1,53 @@
 package cn.tklvyou.huaiyuanmedia.ui.home.new_list
 
+
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
+import android.content.pm.ActivityInfo
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
-import androidx.recyclerview.widget.LinearLayoutManager
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-
-
 import cn.tklvyou.huaiyuanmedia.R
 import cn.tklvyou.huaiyuanmedia.base.fragment.BaseHttpRecyclerFragment
 import cn.tklvyou.huaiyuanmedia.base.interfaces.AdapterCallBack
-import cn.tklvyou.huaiyuanmedia.common.Contacts.SPLIT_TAG
 import cn.tklvyou.huaiyuanmedia.common.ModuleUtils
 import cn.tklvyou.huaiyuanmedia.helper.GlideManager
 import cn.tklvyou.huaiyuanmedia.model.*
 import cn.tklvyou.huaiyuanmedia.ui.account.LoginActivity
 import cn.tklvyou.huaiyuanmedia.ui.adapter.JuzhengHeaderViewholder
-import cn.tklvyou.huaiyuanmedia.ui.adapter.NewsMultipleItemQuickAdapter
 import cn.tklvyou.huaiyuanmedia.ui.adapter.SectionMultipleItemAdapter
-import cn.tklvyou.huaiyuanmedia.ui.adapter.SuixiHeaderRvAdapter
+import cn.tklvyou.huaiyuanmedia.ui.audio.ServiceWebviewActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.AudioController
 import cn.tklvyou.huaiyuanmedia.ui.home.BannerDetailsActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.all_juzheng.AllJuZhengActivity
-import cn.tklvyou.huaiyuanmedia.ui.home.all_tv.AllTvActivity
-import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
-import cn.tklvyou.huaiyuanmedia.ui.home.publish_wenzheng.PublishWenzhengActivity
-import cn.tklvyou.huaiyuanmedia.ui.home.tv_news_detail.TVNewsDetailActivity
-import cn.tklvyou.huaiyuanmedia.ui.audio.ServiceWebviewActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.juzheng_details.JuZhengDetailsActivity
+import cn.tklvyou.huaiyuanmedia.ui.home.new_list.NewsTypeConstant.NEWS_TYPE_SHI_XUN
+import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.ping_xuan.PingXuanDetailsActivity
-import cn.tklvyou.huaiyuanmedia.ui.home.search_list.SearchListActivity
-import cn.tklvyou.huaiyuanmedia.ui.video_player.VodActivity
+import cn.tklvyou.huaiyuanmedia.ui.home.publish_wenzheng.PublishWenzhengActivity
 import cn.tklvyou.huaiyuanmedia.utils.BannerGlideImageLoader
 import cn.tklvyou.huaiyuanmedia.utils.GridDividerItemDecoration
 import cn.tklvyou.huaiyuanmedia.utils.RecycleViewDivider
+import cn.tklvyou.huaiyuanmedia.utils.dkplayer.util.Tag
+import cn.tklvyou.huaiyuanmedia.utils.dkplayer.util.Utils
 import cn.tklvyou.huaiyuanmedia.widget.page_recycler.PageRecyclerView
+import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.SPUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
-import com.chad.library.adapter.base.entity.SectionMultiEntity
+import com.dueeeke.videocontroller.StandardVideoController
+import com.dueeeke.videocontroller.component.*
+import com.dueeeke.videoplayer.ijk.IjkPlayer
+import com.dueeeke.videoplayer.player.VideoView
+import com.dueeeke.videoplayer.player.VideoView.SimpleOnStateChangeListener
+import com.dueeeke.videoplayer.player.VideoViewManager
 import com.google.gson.Gson
 import com.tencent.liteav.demo.player.activity.SuperPlayerActivity
 import com.youth.banner.Banner
@@ -53,15 +55,31 @@ import com.youth.banner.BannerConfig
 import com.youth.banner.listener.OnBannerListener
 import kotlinx.android.synthetic.main.fragment_news_list.*
 import java.io.Serializable
-import kotlin.collections.ArrayList
 
 /**
  * 分组布局类型的列表
  * 例：专题，矩阵
  */
 class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNewsMultipleItem<Any>, BaseViewHolder, SectionMultipleItemAdapter>(), NewListContract.View {
+    private var mController: StandardVideoController? = null
+    private var mPlayerContainer: FrameLayout? = null
+    private var mIvVideoBg: ImageView? = null
+    private var ivStartPlayer: ImageView? = null
 
+    private var mVideoView: VideoView<IjkPlayer>? = null
+    private var mErrorView: ErrorView? = null
+    private var mCompleteView: CompleteView? = null
+    private var mTitleView: TitleView? = null
 
+    /**
+     * 当前播放的位置
+     */
+    private var mCurPos = -1
+
+    /**
+     * 上次播放的位置，用于页面切回来之后恢复播放
+     */
+    private var mLastPos = mCurPos
     override fun deleteSuccess(position: Int) {
     }
 
@@ -84,10 +102,28 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
     private var audioController: AudioController? = null
 
     override fun initView() {
+        param = mBundle.getString("param", "")
         initSmartRefreshLayout(refreshLayout)
         initRecyclerView(recyclerView)
+        if (NEWS_TYPE_SHI_XUN == param) {
+            initVideoView()
+            recyclerView.addOnChildAttachStateChangeListener(object : RecyclerView.OnChildAttachStateChangeListener {
+                override fun onChildViewAttachedToWindow(view: View) {}
+                override fun onChildViewDetachedFromWindow(view: View) {
+                    mPlayerContainer = view.findViewById(R.id.player_container)
+                    if (mPlayerContainer != null) {
+                        val v = mPlayerContainer!!.getChildAt(0)
+                        if (v != null && v === mVideoView && !mVideoView!!.isFullScreen) {
+                            releaseVideoView()
+                            mPlayerContainer?.visibility = View.GONE
+                            mIvVideoBg?.visibility = View.VISIBLE
+                        }
+                    }
 
-        param = mBundle.getString("param", "")
+                }
+            })
+        }
+
 
         val firstPage = mBundle.getBoolean("is_first", false)
 
@@ -199,7 +235,10 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                     refreshLayout.autoRefresh()
                 }
             }
-
+            NEWS_TYPE_SHI_XUN ->{
+                //恢复上次播放的位置
+                startPlay(mLastPos)
+            }
         }
     }
 
@@ -314,7 +353,7 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                     intent.putExtra("title", bannerModelList[position].name)
                     intent.putExtra("content", bannerModelList[position].content)
                     startActivity(intent)
-                }else{
+                } else {
                     val intent = Intent(context, SuperPlayerActivity::class.java)
                     startActivity(intent)
 
@@ -400,98 +439,98 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
 
     }
 
-    private fun initVerticalHeaderView(view: View, verticalHeaderList: MutableList<NewsBean>) {
-        val vf = view.findViewById<ViewFlipper>(R.id.mViewFlipper)
-        verticalHeaderList.forEach { bean ->
-            val id = bean.id
+    /*   private fun initVerticalHeaderView(view: View, verticalHeaderList: MutableList<NewsBean>) {
+           val vf = view.findViewById<ViewFlipper>(R.id.mViewFlipper)
+           verticalHeaderList.forEach { bean ->
+               val id = bean.id
 
-            val itemView = View.inflate(context, R.layout.item_view_filper_layout, null)
-            val tvTitle = itemView.findViewById<TextView>(R.id.tvTitle)
-            tvTitle.text = bean.name
-            itemView.setOnClickListener {
-                when (bean.module) {
-                    "V视频" -> {
-                        val type = "视频"
-                        if (bean.url.isNotEmpty()) {
-                            startDetailsActivity(context!!, bean.url)
-                        } else {
-                            startNewsDetailActivity(context!!, type, id)
-                        }
-                    }
-                    "濉溪TV" -> {
-                        if (bean.module_second == "置顶频道") {
-                            val type = if (bean.type == "tv") "电视" else "广播"
-                            TVNewsDetailActivity.startTVNewsDetailActivity(context!!, type, id)
-                        } else {
-                            val type = "电视"
-                            NewsDetailActivity.startNewsDetailActivity(context!!, type, id)
-                        }
-                    }
-                    "新闻", "矩阵", "专栏", "党建", "专题" -> {
-                        val type = if (bean.video.isEmpty()) "文章" else "视讯"
-                        if (bean.url.isNotEmpty()) {
-                            startDetailsActivity(context!!, bean.url)
-                        } else {
-                            startNewsDetailActivity(context!!, type, id)
-                        }
-                    }
-                    "视讯" -> {
-                        val type = "视讯"
-                        if (bean.url.isNotEmpty()) {
-                            startDetailsActivity(context!!, bean.url)
-                        } else {
-                            startNewsDetailActivity(context!!, type, id)
-                        }
-                    }
-                    "爆料" -> {
-                        val type = "爆料"
-                        if (bean.url.isNotEmpty()) {
-                            startDetailsActivity(context!!, bean.url)
-                        } else {
-                            startNewsDetailActivity(context!!, type, id)
-                        }
-                    }
+               val itemView = View.inflate(context, R.layout.item_view_filper_layout, null)
+               val tvTitle = itemView.findViewById<TextView>(R.id.tvTitle)
+               tvTitle.text = bean.name
+               itemView.setOnClickListener {
+                   when (bean.module) {
+                       "V视频" -> {
+                           val type = "视频"
+                           if (bean.url.isNotEmpty()) {
+                               startDetailsActivity(context!!, bean.url)
+                           } else {
+                               startNewsDetailActivity(context!!, type, id)
+                           }
+                       }
+                       "濉溪TV" -> {
+                           if (bean.module_second == "置顶频道") {
+                               val type = if (bean.type == "tv") "电视" else "广播"
+                               TVNewsDetailActivity.startTVNewsDetailActivity(context!!, type, id)
+                           } else {
+                               val type = "电视"
+                               NewsDetailActivity.startNewsDetailActivity(context!!, type, id)
+                           }
+                       }
+                       "新闻", "矩阵", "专栏", "党建", "专题" -> {
+                           val type = if (bean.video.isEmpty()) "文章" else "视讯"
+                           if (bean.url.isNotEmpty()) {
+                               startDetailsActivity(context!!, bean.url)
+                           } else {
+                               startNewsDetailActivity(context!!, type, id)
+                           }
+                       }
+                       "视讯" -> {
+                           val type = "视讯"
+                           if (bean.url.isNotEmpty()) {
+                               startDetailsActivity(context!!, bean.url)
+                           } else {
+                               startNewsDetailActivity(context!!, type, id)
+                           }
+                       }
+                       "爆料" -> {
+                           val type = "爆料"
+                           if (bean.url.isNotEmpty()) {
+                               startDetailsActivity(context!!, bean.url)
+                           } else {
+                               startNewsDetailActivity(context!!, type, id)
+                           }
+                       }
 
-                    "原创", "随手拍" -> {
-                        val type = if (bean.images != null && bean.images.size > 0) "图文" else "视频"
-                        if (bean.url.isNotEmpty()) {
-                            startDetailsActivity(context!!, bean.url)
-                        } else {
-                            startNewsDetailActivity(context!!, type, id)
-                        }
-                    }
-                    "悦读" -> {
-                        val type = "悦读"
-                        if (bean.url.isNotEmpty()) {
-                            startDetailsActivity(context!!, bean.url)
-                        } else {
-                            startNewsDetailActivity(context!!, type, id)
-                        }
-                    }
-                    "悦听" -> {
-                        val type = "悦听"
-                        if (bean.url.isNotEmpty()) {
-                            startDetailsActivity(context!!, bean.url)
-                        } else {
-                            startNewsDetailActivity(context!!, type, id)
-                        }
-                    }
-                    "公告" -> {
-                        val type = "公告"
-                        if (bean.url.isNotEmpty()) {
-                            startDetailsActivity(context!!, bean.url)
-                        } else {
-                            startNewsDetailActivity(context!!, type, id)
-                        }
-                    }
+                       "原创", "随手拍" -> {
+                           val type = if (bean.images != null && bean.images.size > 0) "图文" else "视频"
+                           if (bean.url.isNotEmpty()) {
+                               startDetailsActivity(context!!, bean.url)
+                           } else {
+                               startNewsDetailActivity(context!!, type, id)
+                           }
+                       }
+                       "悦读" -> {
+                           val type = "悦读"
+                           if (bean.url.isNotEmpty()) {
+                               startDetailsActivity(context!!, bean.url)
+                           } else {
+                               startNewsDetailActivity(context!!, type, id)
+                           }
+                       }
+                       "悦听" -> {
+                           val type = "悦听"
+                           if (bean.url.isNotEmpty()) {
+                               startDetailsActivity(context!!, bean.url)
+                           } else {
+                               startNewsDetailActivity(context!!, type, id)
+                           }
+                       }
+                       "公告" -> {
+                           val type = "公告"
+                           if (bean.url.isNotEmpty()) {
+                               startDetailsActivity(context!!, bean.url)
+                           } else {
+                               startNewsDetailActivity(context!!, type, id)
+                           }
+                       }
 
-                }
-            }
-            vf.addView(itemView)
-        }
-    }
+                   }
+               }
+               vf.addView(itemView)
+           }
+       }*/
 
-    private fun initSearchView(view: View) {
+    /*private fun initSearchView(view: View) {
         val searchLayout = view.findViewById<LinearLayout>(R.id.searchLayout)
         val etSearch = view.findViewById<TextView>(R.id.etSearch)
         etSearch.hint = SPUtils.getInstance().getString("search", "")
@@ -500,7 +539,7 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
             intent.putExtra("search", etSearch.hint.toString())
             startActivity(intent)
         }
-    }
+    }*/
 
     private var juzhengSecondModule = ""
     private fun initJuzhengHeaderView(view: View, juzhengHeaderList: MutableList<HaveSecondModuleNewsModel.ModuleSecondBean>) {
@@ -563,51 +602,51 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
 
     }
 
-    private fun initZhuanLanHeaderView(view: View, juzhengHeaderList: MutableList<NewsBean>) {
-        val mRecyclerView = view.findViewById<PageRecyclerView>(R.id.customSwipeView)
-        // 设置指示器
-        mRecyclerView.setIndicator(view.findViewById(R.id.indicator))
-        // 设置行数和列数
-        mRecyclerView.setPageSize(2, 4)
-        mRecyclerView.adapter = mRecyclerView.PageAdapter(juzhengHeaderList, object : PageRecyclerView.CallBack {
-            //记录选中的RadioButton的位置
-            private var mSelectedItem = -1
+    /* private fun initZhuanLanHeaderView(view: View, juzhengHeaderList: MutableList<NewsBean>) {
+         val mRecyclerView = view.findViewById<PageRecyclerView>(R.id.customSwipeView)
+         // 设置指示器
+         mRecyclerView.setIndicator(view.findViewById(R.id.indicator))
+         // 设置行数和列数
+         mRecyclerView.setPageSize(2, 4)
+         mRecyclerView.adapter = mRecyclerView.PageAdapter(juzhengHeaderList, object : PageRecyclerView.CallBack {
+             //记录选中的RadioButton的位置
+             private var mSelectedItem = -1
 
-            override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
-                return JuzhengHeaderViewholder(LayoutInflater.from(context).inflate(R.layout.item_juzheng_header_child_layout, parent, false))
-            }
+             override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
+                 return JuzhengHeaderViewholder(LayoutInflater.from(context).inflate(R.layout.item_juzheng_header_child_layout, parent, false))
+             }
 
-            override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
-                val bean = juzhengHeaderList[position]
-                GlideManager.loadCircleImg(bean.avatar, (holder as JuzhengHeaderViewholder).ivAvatar)
-                holder.tvNickName.text = bean.nickname
-                holder.radioButton.isChecked = position == mSelectedItem
-            }
+             override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
+                 val bean = juzhengHeaderList[position]
+                 GlideManager.loadCircleImg(bean.avatar, (holder as JuzhengHeaderViewholder).ivAvatar)
+                 holder.tvNickName.text = bean.nickname
+                 holder.radioButton.isChecked = position == mSelectedItem
+             }
 
-            override fun onItemClickListener(view: View?, position: Int) {
-                if (position != mSelectedItem) {
-                    if (juzhengHeaderList[position].url.isNullOrEmpty()) {
-                        mSelectedItem = position
-                        juzhengSecondModule = if (juzhengHeaderList[position].nickname == "全部") "" else juzhengHeaderList[position].nickname
-                        mRecyclerView.adapter!!.notifyDataSetChanged()
-                        showLoading()
-                        mPresenter.getNewList(param, juzhengSecondModule, 1, false)
-                    } else {
-                        startDetailsActivity(context!!, juzhengHeaderList[position].url)
-                    }
-                } else {
-                    //重复点击同一个，不执行任何操作
-                }
+             override fun onItemClickListener(view: View?, position: Int) {
+                 if (position != mSelectedItem) {
+                     if (juzhengHeaderList[position].url.isNullOrEmpty()) {
+                         mSelectedItem = position
+                         juzhengSecondModule = if (juzhengHeaderList[position].nickname == "全部") "" else juzhengHeaderList[position].nickname
+                         mRecyclerView.adapter!!.notifyDataSetChanged()
+                         showLoading()
+                         mPresenter.getNewList(param, juzhengSecondModule, 1, false)
+                     } else {
+                         startDetailsActivity(context!!, juzhengHeaderList[position].url)
+                     }
+                 } else {
+                     //重复点击同一个，不执行任何操作
+                 }
 
-            }
+             }
 
-            override fun onItemLongClickListener(view: View?, position: Int) {
-            }
+             override fun onItemLongClickListener(view: View?, position: Int) {
+             }
 
 
-        })
+         })
 
-    }
+     }*/
 
 
     /**
@@ -797,9 +836,10 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                     startDetailsActivity(context!!, bean.url)
                 } else {
                     //打开新的Activity
-                    val intent = Intent(context, VodActivity::class.java)
-                    intent.putExtra("videoPath", bean.video)
-                    startActivity(intent)
+                    /*      val intent = Intent(context, VodActivity::class.java)
+                          intent.putExtra("videoPath", bean.video)
+                          startActivity(intent)*/
+                    startPlay(position)
                 }
 
             }
@@ -913,4 +953,109 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
         audioController?.release()
     }
 
+
+    private fun initVideoView() {
+        mVideoView = VideoView(mActivity!!)
+        mVideoView!!.setOnStateChangeListener(object : SimpleOnStateChangeListener() {
+            override fun onPlayStateChanged(playState: Int) {
+                //监听VideoViewManager释放，重置状态
+                if (playState == VideoView.STATE_IDLE) {
+                    Utils.removeViewFormParent(mVideoView)
+                    mLastPos = mCurPos
+                    mCurPos = -1
+                }
+            }
+        })
+        mController = StandardVideoController(mActivity!!)
+        mErrorView = ErrorView(mActivity)
+        mController!!.addControlComponent(mErrorView)
+        mCompleteView = CompleteView(mActivity!!)
+        mController!!.addControlComponent(mCompleteView)
+        mTitleView = TitleView(mActivity!!)
+        mController!!.addControlComponent(mTitleView)
+        mController!!.addControlComponent(VodControlView(mActivity!!))
+        mController!!.addControlComponent(GestureView(mActivity!!))
+        mController!!.setEnableOrientation(true)
+        mVideoView?.setVideoController(mController)
+    }
+
+
+    private fun releaseVideoView() {
+        mVideoView!!.release()
+        controlPlayUiShow(false)
+        if (mVideoView!!.isFullScreen) {
+            mVideoView!!.stopFullScreen()
+        }
+        if (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT !== mActivity?.requestedOrientation) {
+            mActivity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
+        mCurPos = -1
+    }
+
+
+    /**
+     * 开始播放
+     * @param position 列表位置
+     */
+    private fun startPlay(position: Int) {
+        if (mCurPos == position) {
+            LogUtils.i("播放器", "已被拦截")
+            return
+        }
+
+        if (mCurPos != -1) {
+            releaseVideoView()
+        }
+        val bean = adapter.data[position].dataBean as NewsBean
+        mVideoView!!.setUrl(bean.video)
+        mTitleView!!.setTitle(bean.name)
+        mPlayerContainer = adapter?.getViewByPosition(position, R.id.player_container) as FrameLayout
+        mIvVideoBg =  adapter?.getViewByPosition(position, R.id.ivVideoBg) as ImageView
+        ivStartPlayer = adapter?.getViewByPosition(position, R.id.ivStartPlayer) as ImageView
+        val prepareView = adapter?.getViewByPosition(position, R.id.prepare_view) as PrepareView
+        controlPlayUiShow(true)
+        //把列表中预置的PrepareView添加到控制器中，注意isPrivate此处只能为true。
+        mController!!.addControlComponent(prepareView, true)
+        Utils.removeViewFormParent(mVideoView)
+        mPlayerContainer?.addView(mVideoView, 0)
+        //播放之前将VideoView添加到VideoViewManager以便在别的页面也能操作它
+        getVideoViewManager()?.add(mVideoView, Tag.LIST)
+        mVideoView?.start()
+        mCurPos = position
+    }
+
+
+    /**
+     * 子类可通过此方法直接拿到VideoViewManager
+     */
+    private fun getVideoViewManager(): VideoViewManager? {
+        return VideoViewManager.instance()
+    }
+
+
+    /**
+     * 由于onResume必须调用super。故增加此方法，
+     * 子类将会重写此方法，改变onResume的逻辑
+     */
+    private fun resumePlay() {
+      /*  if (mLastPos == -1) return
+        if (MainActivity.mCurrentIndex !== 1) return
+        //恢复上次播放的位置
+        startPlay(mLastPos)*/
+    }
+
+
+
+    private fun controlPlayUiShow(isShow : Boolean){
+        if(isShow){
+            mIvVideoBg?.visibility = View.GONE
+            mPlayerContainer?.visibility = View.VISIBLE
+            ivStartPlayer?.visibility = View.GONE
+        }else{
+            mIvVideoBg?.visibility = View.VISIBLE
+            mPlayerContainer?.visibility = View.GONE
+            ivStartPlayer?.visibility = View.VISIBLE
+        }
+
+    }
 }

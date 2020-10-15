@@ -36,8 +36,6 @@ import cn.tklvyou.huaiyuanmedia.utils.UrlUtils;
 import cn.tklvyou.huaiyuanmedia.widget.ExpandTextView;
 import cn.tklvyou.huaiyuanmedia.widget.MultiImageView;
 
-import static cn.tklvyou.huaiyuanmedia.common.Contacts.SPLIT_TAG;
-
 public class SectionMultipleItemAdapter extends BaseSectionMultiItemQuickAdapter<SectionNewsMultipleItem, BaseViewHolder> implements AudioController.AudioControlListener {
 
     private boolean showAnimal = false;
@@ -46,7 +44,8 @@ public class SectionMultipleItemAdapter extends BaseSectionMultiItemQuickAdapter
     public SectionMultipleItemAdapter(List data) {
         super(R.layout.item_section_head_view, data);
         addItemType(SectionNewsMultipleItem.VIDEO_IN_TITLE, R.layout.item_news_zhi_bo_layout);
-        addItemType(SectionNewsMultipleItem.VIDEO_OUT_TITLE, R.layout.item_news_shi_xun);
+//        addItemType(SectionNewsMultipleItem.VIDEO_OUT_TITLE, R.layout.item_news_shi_xun);
+        addItemType(SectionNewsMultipleItem.VIDEO_OUT_TITLE, R.layout.item_news_shi_xun_new);
         addItemType(SectionNewsMultipleItem.NEWS_NO_IMAGE, R.layout.item_news_no_image_view);
         addItemType(SectionNewsMultipleItem.NEWS_LEFT_ONE_IMAGE, R.layout.item_news_left_one_image_view);
         addItemType(SectionNewsMultipleItem.NEWS_RIGHT_ONE_IMAGE, R.layout.item_news_right_one_image_view);
@@ -104,7 +103,7 @@ public class SectionMultipleItemAdapter extends BaseSectionMultiItemQuickAdapter
                 helper.setText(R.id.tvTime, "" + bean.getBegintime());
                 helper.setText(R.id.tvGoodNum, "" + bean.getLike_num());
                 helper.setText(R.id.tvVideoTime, formatTime(Double.valueOf(bean.getTime()).longValue()));
-
+                helper.itemView.setTag(this);
                 Glide.with(mContext).load(bean.getImage()).into((ImageView) helper.getView(R.id.ivVideoBg));
 
                 helper.addOnClickListener(R.id.ivStartPlayer);

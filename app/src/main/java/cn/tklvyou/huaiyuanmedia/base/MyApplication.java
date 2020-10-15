@@ -14,6 +14,10 @@ import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.Utils;
+import com.dueeeke.videoplayer.BuildConfig;
+import com.dueeeke.videoplayer.ijk.IjkPlayerFactory;
+import com.dueeeke.videoplayer.player.VideoViewConfig;
+import com.dueeeke.videoplayer.player.VideoViewManager;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshFooterCreator;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshHeaderCreator;
@@ -103,7 +107,18 @@ public class MyApplication extends MultiDexApplication {
         Gloading.initDefault(new GlobalAdapter());
 
         initTencentTBS();
-
+        VideoViewManager.setConfig(VideoViewConfig.newBuilder()
+                .setLogEnabled(BuildConfig.DEBUG)//调试的时候请打开日志，方便排错
+                .setPlayerFactory(IjkPlayerFactory.create())
+//                .setPlayerFactory(ExoMediaPlayerFactory.create())
+//                .setRenderViewFactory(SurfaceRenderViewFactory.create())
+//                .setEnableOrientation(true)
+//                .setEnableAudioFocus(false)
+//                .setScreenScaleType(VideoView.SCREEN_SCALE_MATCH_PARENT)
+//                .setAdaptCutout(false)
+//                .setPlayOnMobileNetwork(true)
+//                .setProgressManager(new ProgressManagerImpl())
+                .build());
 //        initSkinManager();
     }
 

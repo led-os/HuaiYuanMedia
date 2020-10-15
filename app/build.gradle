@@ -148,7 +148,7 @@ dependencies {
     implementation 'com.github.zyyoona7:EasyPopup:1.1.2'
     //视频编辑操作
     implementation 'com.github.yangjie10930:EpMedia:v0.9.5'
-    implementation 'com.danikula:videocache:2.7.0'
+//    implementation 'com.danikula:videocache:2.7.0'
     //==================mp4parser====================
     implementation 'com.googlecode.mp4parser:isoparser:1.1.21'
     implementation files('libs/pldroid-player-2.1.9.jar')
@@ -159,4 +159,11 @@ dependencies {
     implementation 'skin.support:skin-support:4.0.4'
     implementation 'skin.support:skin-support-appcompat:4.0.4'
     implementation 'skin.support:skin-support-design:4.0.4'
+
+    implementation project(':dkplayer-java')
+    implementation project(':dkplayer-ui')
+    implementation project(path: ':dkplayer-players:ijk')
+    implementation project(path: ':dkplayer-players:exo')
+    //缓存
+    implementation project(':dkplayer-videocache')
 }
