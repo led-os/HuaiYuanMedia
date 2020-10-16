@@ -48,6 +48,8 @@ public class LotteryModel {
         private int updatetime;
         private int admin_id;
 
+        private int type;
+
         public int getId() {
             return id;
         }
@@ -102,6 +104,14 @@ public class LotteryModel {
 
         public void setAdmin_id(int admin_id) {
             this.admin_id = admin_id;
+        }
+
+        public int getType() {
+            return type;
+        }
+
+        public void setType(int type) {
+            this.type = type;
         }
     }
 }

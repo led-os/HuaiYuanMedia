@@ -14,6 +14,7 @@ import cn.tklvyou.huaiyuanmedia.common.Contacts
 import cn.tklvyou.huaiyuanmedia.common.Contacts.SHARE_DOWNLOAD_URL
 import cn.tklvyou.huaiyuanmedia.model.LotteryModel
 import cn.tklvyou.huaiyuanmedia.model.LotteryResultModel
+import cn.tklvyou.huaiyuanmedia.ui.account.BindPhoneActivity
 import cn.tklvyou.huaiyuanmedia.utils.InterfaceUtils
 import cn.tklvyou.huaiyuanmedia.utils.JSON
 import cn.tklvyou.huaiyuanmedia.utils.YBitmapUtils
@@ -58,7 +59,8 @@ class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.Vie
 
     private lateinit var idList: MutableList<Int>
     private lateinit var scoreStr: String
-
+    private var mRecordId : Int =0
+    private var rewardType = 0
     private var num = 0
     private var shareHandler: WbShareHandler? = null
     private var wxapi: IWXAPI? = null
@@ -81,7 +83,6 @@ class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.Vie
     override fun setLotteryModel(model: LotteryModel) {
         num = model.num
         tvNum.text = "剩余转盘次数：" + model.num
-
         //颜色
         val colors = arrayOf<Int>(Color.parseColor("#FFC6B1"),
                 Color.parseColor("#FCB195"),
@@ -121,18 +122,19 @@ class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.Vie
         wheelSurfView.setRotateListener(object : RotateListener {
             override fun rotateEnd(position: Int, des: String) {
                 wheelSurfView.goBtn.isEnabled = true
-                val dialog = ConfirmDialog(this@ZhuanPanActivity)
-                dialog.setTitle("新增石榴籽")
+                when (rewardType) {
+                    1 -> {
+                        showRewardType1()
+                    }
+                    2 -> {
+                        showRewardType2(mRecordId)
+                    }
 
-                dialog.setStyleMessage(SpanUtils().appendLine("恭喜您").setHorizontalAlign(Layout.Alignment.ALIGN_CENTER).setFontSize(17, true).setForegroundColor(Color.parseColor("#FF3C44"))
-                        .append("获得$scoreStr").setHorizontalAlign(Layout.Alignment.ALIGN_CENTER).setForegroundColor(Color.parseColor("#FF3C44"))
-                        .create())
-
-                dialog.setYesOnclickListener("知道了") {
-                    dialog.dismiss()
+                    else -> {
+                        ToastUtils.showShort("抱歉 您未中奖")
+                    }
                 }
 
-                dialog.show()
             }
 
             override fun rotating(valueAnimator: ValueAnimator) {
@@ -156,6 +158,8 @@ class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.Vie
             num--
             tvNum.text = "剩余转盘次数：$num"
             scoreStr = model.name
+            rewardType = model.type
+            mRecordId = model.recordId
             wheelSurfView.startRotate(idList.size - idList.indexOf(model.id) + 1)
         } else {
             wheelSurfView.goBtn.isEnabled = true
@@ -389,4 +393,37 @@ class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.Vie
     }
 
 
+    private fun showRewardType1() {
+        val dialog = ConfirmDialog(this@ZhuanPanActivity)
+        dialog.setTitle("新增石榴籽")
+
+        dialog.setStyleMessage(SpanUtils().appendLine("恭喜您").setHorizontalAlign(Layout.Alignment.ALIGN_CENTER).setFontSize(17, true).setForegroundColor(Color.parseColor("#FF3C44"))
+                .append("获得$scoreStr").setHorizontalAlign(Layout.Alignment.ALIGN_CENTER).setForegroundColor(Color.parseColor("#FF3C44"))
+                .create())
+
+        dialog.setYesOnclickListener("知道了") {
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
+    private fun showRewardType2(recordId :Int) {
+        val dialog = ConfirmDialog(this@ZhuanPanActivity)
+        dialog.setTitle("恭喜中奖")
+        dialog.setStyleMessage(SpanUtils().appendLine("恭喜您").setHorizontalAlign(Layout.Alignment.ALIGN_CENTER).setFontSize(17, true).setForegroundColor(Color.parseColor("#FF3C44"))
+                .append("快去申请发货吧").setHorizontalAlign(Layout.Alignment.ALIGN_CENTER).setForegroundColor(Color.parseColor("#FF3C44"))
+                .create())
+        dialog.setBackground(R.mipmap.ic_reward_dialog_bg)
+        dialog.setYesOnclickListener("申请发货") {
+            dialog.dismiss()
+            applySendGoods(recordId)
+        }
+        dialog.show()
+    }
+
+    private fun applySendGoods(recordId : Int){
+        val intent = Intent(this, FillAddressActivity::class.java)
+        intent.putExtra("recordId", recordId)
+        startActivity(intent)
+    }
 }

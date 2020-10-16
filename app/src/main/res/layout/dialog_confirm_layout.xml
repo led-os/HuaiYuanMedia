@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="@dimen/dp_214"
     android:layout_height="@dimen/dp_263"
+    android:id="@+id/confirmDialogBg"
     android:background="@mipmap/custom_confirm_dialog_bg">
 
     <ImageView

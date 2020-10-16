@@ -676,4 +676,10 @@ public interface ApiService {
     @POST("api/selection/option_list")
     Observable<BaseResult<BasePageModel<PingXuanPersionModel>>> getPingXuanPersionList(@Query("id") int id, @Query("p") int p, @Query("search") String search, @Query("sort") String sort);
 
+
+    /**
+     * 补充获奖信息
+     */
+    @POST("api/award/updateInfo")
+    Observable<BaseResult<Object>> updateInfo(@Query("recordId") int recordId, @Query("mobile") String  mobile, @Query("name") String name, @Query("address") String address);
 }

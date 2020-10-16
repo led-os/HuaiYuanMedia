@@ -2,14 +2,25 @@ package cn.tklvyou.huaiyuanmedia.widget.dailog;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import androidx.core.content.ContextCompat;
+
+import com.blankj.utilcode.util.ImageUtils;
+import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ToastUtils;
+import com.google.android.material.drawable.DrawableUtils;
+import com.vector.update_app.utils.DrawableUtil;
+
 import cn.tklvyou.huaiyuanmedia.R;
+import cn.tklvyou.huaiyuanmedia.base.MyApplication;
 
 public class ConfirmDialog extends Dialog {
 
@@ -19,9 +30,13 @@ public class ConfirmDialog extends Dialog {
     private TextView messageTv;//消息提示文本
     private String titleStr;//从外界设置的title文本
     private String messageStr;//从外界设置的消息文本
+    private int backgroundResourceId = -1;
     private SpannableStringBuilder styleMessage;//从外界设置的带样式消息文本
     //确定文本的显示内容
     private String yesStr;
+    private Context mContext;
+
+    private FrameLayout confirmDialogBg;
 
     private onNoOnclickListener noOnclickListener;//取消按钮被点击了的监听器
     private onYesOnclickListener yesOnclickListener;//确定按钮被点击了的监听器
@@ -50,6 +65,7 @@ public class ConfirmDialog extends Dialog {
 
     public ConfirmDialog(Context context) {
         super(context, R.style.ConfirmDialog);
+        mContext = context;
     }
 
     @Override
@@ -88,7 +104,7 @@ public class ConfirmDialog extends Dialog {
             public void onClick(View v) {
                 if (noOnclickListener != null) {
                     noOnclickListener.onNoClick();
-                }else {
+                } else {
                     dismiss();
                 }
             }
@@ -115,6 +131,11 @@ public class ConfirmDialog extends Dialog {
         if (yesStr != null) {
             yes.setText(yesStr);
         }
+        if (confirmDialogBg != null && backgroundResourceId != -1) {
+            confirmDialogBg.setBackground(ContextCompat.getDrawable(mContext, backgroundResourceId));
+        } else {
+            LogUtils.eTag("confirmDialogBg", "confirmDialogBg==null");
+        }
 
     }
 
@@ -126,6 +147,7 @@ public class ConfirmDialog extends Dialog {
         no = findViewById(R.id.btnNo);
         titleTv = findViewById(R.id.tvTitle);
         messageTv = findViewById(R.id.tvMessage);
+        confirmDialogBg = findViewById(R.id.confirmDialogBg);
     }
 
     /**
@@ -135,6 +157,10 @@ public class ConfirmDialog extends Dialog {
      */
     public void setTitle(String title) {
         titleStr = title;
+    }
+
+    public void setBackground(int resourceId) {
+        this.backgroundResourceId = resourceId;
     }
 
     /**

@@ -87,6 +87,7 @@
         <activity android:name=".ui.camera.goods_detail.GoodsDetailsActivity" />
         <activity android:name=".ui.camera.point.PointActivity" />
         <activity android:name=".ui.camera.zhuan_pan.ZhuanPanActivity" />
+        <activity android:name=".ui.camera.zhuan_pan.FillAddressActivity" />
 
         <activity
             android:name=".ui.audio.ServiceWebviewActivity"

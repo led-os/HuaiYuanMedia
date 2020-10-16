@@ -166,4 +166,6 @@ dependencies {
     implementation project(path: ':dkplayer-players:exo')
     //缓存
     implementation project(':dkplayer-videocache')
+
+    implementation 'liji.library.dev:citypickerview:5.2.2'
 }

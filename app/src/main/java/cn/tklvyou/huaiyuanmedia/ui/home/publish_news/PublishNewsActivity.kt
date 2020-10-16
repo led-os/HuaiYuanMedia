@@ -147,7 +147,7 @@ class PublishNewsActivity : BaseActivity<PublishNewsPresenter>(), PublishNewsCon
                 return@setOnClickListener
             }
 
-            if (selectList.isNullOrEmpty()) {
+         /*   if (selectList.isNullOrEmpty()) {
 
                 if (isVideo) {
                     ToastUtils.showShort("请上传拍摄视频")
@@ -156,7 +156,7 @@ class PublishNewsActivity : BaseActivity<PublishNewsPresenter>(), PublishNewsCon
                 }
 
                 return@setOnClickListener
-            }
+            }*/
 
             btnSubmit.isEnabled = false
             showLoading()

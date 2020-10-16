@@ -11,10 +11,12 @@ public class LotteryResultModel {
      */
 
     private int id;
+    private int recordId;
     private String name;
     private int score;
     private int start;
     private int end;
+    private int type;
 
     public int getId() {
         return id;
@@ -54,5 +56,21 @@ public class LotteryResultModel {
 
     public void setEnd(int end) {
         this.end = end;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public int getRecordId() {
+        return recordId;
+    }
+
+    public void setRecordId(int recordId) {
+        this.recordId = recordId;
     }
 }

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F6F6F6"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:background="@drawable/bg_radius_10_white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_15"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_marginTop="@dimen/dp_20"
+                android:layout_marginBottom="@dimen/dp_20"
+                android:layout_marginStart="@dimen/dp_15"
+                android:layout_marginEnd="@dimen/dp_15"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_weight="0.5"
+                    android:layout_width="0dp"
+                    android:textColor="#333333"
+                    android:text="收货人"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="@dimen/sp_14"
+                    android:layout_height="wrap_content"/>
+
+                <EditText
+                    android:id="@+id/etReceiverName"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="请填写收货人姓名"
+                    android:textSize="@dimen/sp_14"
+                    android:textColorHint="#AAAAAA"
+                    android:layout_gravity="center_vertical"
+                    android:minHeight="@dimen/dp_15"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="@dimen/dp_20"
+                android:layout_marginBottom="@dimen/dp_20"
+                android:layout_marginStart="@dimen/dp_15"
+                android:layout_marginEnd="@dimen/dp_15"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_weight="0.5"
+                    android:layout_width="0dp"
+                    android:textColor="#333333"
+                    android:text="联系方式"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="@dimen/sp_14"
+                    android:layout_height="wrap_content"/>
+
+                <EditText
+                    android:id="@+id/etReceiverMobile"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="请填写收货人手机号"
+                    android:textSize="@dimen/sp_14"
+                    android:textColorHint="#AAAAAA"
+                    android:layout_gravity="center_vertical"
+                    android:minHeight="@dimen/dp_15"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+            <!--所在区域-->
+            <LinearLayout
+                android:layout_marginStart="@dimen/dp_15"
+                android:layout_marginEnd="@dimen/dp_15"
+                android:layout_marginTop="@dimen/dp_20"
+                android:layout_marginBottom="@dimen/dp_20"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_weight="0.5"
+                    android:layout_width="0dp"
+                    android:textColor="#333333"
+                    android:text="所在区域"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="@dimen/sp_14"
+                    android:layout_height="wrap_content"/>
+
+                <EditText
+                    android:id="@+id/etArea"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="省－市－县"
+                    android:textSize="@dimen/sp_14"
+                    android:textColorHint="#AAAAAA"
+                    android:layout_gravity="center_vertical"
+                    android:minHeight="@dimen/dp_15"
+                    android:layout_height="wrap_content"/>
+                        <ImageView
+                            android:padding="@dimen/dp_5"
+                            android:src="@mipmap/ic_locate_small"
+                            android:layout_gravity="center_vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <!--详细地址-->
+            <LinearLayout
+                android:layout_marginStart="@dimen/dp_15"
+                android:layout_marginEnd="@dimen/dp_15"
+                android:layout_marginTop="@dimen/dp_20"
+                android:layout_marginBottom="@dimen/dp_20"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_weight="0.5"
+                    android:layout_width="0dp"
+                    android:textColor="#333333"
+                    android:text="详细地址"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="@dimen/sp_14"
+                    android:layout_height="wrap_content"/>
+
+                <EditText
+                    android:id="@+id/etAddress"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="详细地址"
+                    android:textSize="@dimen/sp_14"
+                    android:textColorHint="#AAAAAA"
+                    android:layout_gravity="center_vertical"
+                    android:minHeight="@dimen/dp_15"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvCommit"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_48"
+        android:background="#3D90EA"
+        android:gravity="center"
+        android:text="确认提交"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_16" />
+</LinearLayout>
