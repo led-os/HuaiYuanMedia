@@ -26,6 +26,7 @@ import cn.tklvyou.huaiyuanmedia.ui.mine.message.MyMessageActivity
 import cn.tklvyou.huaiyuanmedia.ui.mine.my_article.MyArticleActivity
 import cn.tklvyou.huaiyuanmedia.ui.mine.my_dianzan.MyDianZanActivity
 import cn.tklvyou.huaiyuanmedia.ui.mine.point.MyPointDetailActivity
+import cn.tklvyou.huaiyuanmedia.ui.mine.reward.RewardRewardRecordActivity
 import cn.tklvyou.huaiyuanmedia.ui.mine.wenzhen.MyWenZhenActivity
 import cn.tklvyou.huaiyuanmedia.ui.setting.AboutUsActivity
 import cn.tklvyou.huaiyuanmedia.ui.setting.SettingActivity
@@ -34,13 +35,14 @@ import cn.tklvyou.huaiyuanmedia.utils.InterfaceUtils
 import cn.tklvyou.huaiyuanmedia.utils.JSON
 import cn.tklvyou.huaiyuanmedia.utils.YBitmapUtils
 import cn.tklvyou.huaiyuanmedia.widget.SharePopupWindow
-import com.blankj.utilcode.util.*
+import com.blankj.utilcode.util.ImageUtils
+import com.blankj.utilcode.util.ResourceUtils
+import com.blankj.utilcode.util.SPUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
-import com.google.gson.Gson
 import com.sina.weibo.sdk.api.WebpageObject
 import com.sina.weibo.sdk.api.WeiboMultiMessage
-import com.sina.weibo.sdk.share.WbShareCallback
 import com.sina.weibo.sdk.share.WbShareHandler
 import com.sina.weibo.sdk.utils.Utility
 import com.tencent.connect.share.QQShare
@@ -267,12 +269,17 @@ class MineFragment : BaseRecyclerFragment<MinePresenter, MineRvModel, BaseViewHo
                 startActivity(Intent(context, MyExchangeRecordActivity::class.java))
             }
             //关于我们
-            9 -> {
+            10 -> {
                 startActivity(Intent(context, AboutUsActivity::class.java))
             }
             //软件分享
-            10 ->{
+            11 ->{
                 doShare()
+            }
+            //中奖纪录
+            9->{
+
+                startActivity(Intent(context, RewardRewardRecordActivity::class.java))
             }
             else -> {
             }

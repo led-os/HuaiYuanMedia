@@ -36,6 +36,10 @@
     "localImage": "icon_mine_duihuan"
   },
   {
+    "name": "中奖纪录",
+    "localImage": "icon_mine_reward_record"
+  },
+  {
     "name": "关于我们",
     "localImage": "icon_mine_about"
   },

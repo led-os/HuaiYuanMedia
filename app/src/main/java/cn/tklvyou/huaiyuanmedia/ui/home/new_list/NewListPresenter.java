@@ -1,13 +1,16 @@
 package cn.tklvyou.huaiyuanmedia.ui.home.new_list;
 
 
+import android.annotation.SuppressLint;
+
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 
 import cn.tklvyou.huaiyuanmedia.api.RetrofitHelper;
 import cn.tklvyou.huaiyuanmedia.api.RxSchedulers;
 import cn.tklvyou.huaiyuanmedia.base.BasePresenter;
 
-
+@SuppressLint("CheckResult")
 public class NewListPresenter extends BasePresenter<NewListContract.View> implements NewListContract.Presenter {
 
     @Override
@@ -126,6 +129,7 @@ public class NewListPresenter extends BasePresenter<NewListContract.View> implem
                 );
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void getBanner(String module) {
         RetrofitHelper.getInstance().getServer()
@@ -141,6 +145,7 @@ public class NewListPresenter extends BasePresenter<NewListContract.View> implem
                 }, throwable -> {
                     mView.setBanner(null);
                     mView.showFailed("");
+                    LogUtils.eTag("getBanner", throwable.toString());
                 });
     }
 
@@ -196,6 +201,29 @@ public class NewListPresenter extends BasePresenter<NewListContract.View> implem
                         }, throwable -> {
                             if (mView != null) {
                                 mView.setNewList(p, null);
+                                mView.showFailed("");
+                            }
+                        }
+                );
+    }
+
+
+    @Override
+    public void getTownDept() {
+        RetrofitHelper.getInstance().getServer().getTownData().compose(RxSchedulers.applySchedulers())
+//                .compose(mView.bindToLife())
+                .subscribe(result -> {
+                            mView.showSuccess("");
+                            if (result.getCode() == 1) {
+                                if (mView != null) {
+                                    mView.setTownDeptList(result.getData());
+                                }
+                            } else {
+                                ToastUtils.showShort(result.getMsg());
+                            }
+                        }, throwable -> {
+                            if (mView != null) {
+//                                mView.setNewList(p, null);
                                 mView.showFailed("");
                             }
                         }

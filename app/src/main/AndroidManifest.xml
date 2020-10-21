@@ -43,6 +43,8 @@
         <activity android:name=".ui.video_edit.selCover.SelCoverTimeActivity" />
         <activity android:name=".ui.video_edit.CameraActivity" />
         <activity android:name=".ui.mine.comment.MyCommentActivity" />
+        <activity android:name=".ui.home.town_dept.TownDeptActivity"/>
+        <activity android:name=".ui.mine.reward.RewardRewardRecordActivity"/>
 
         <uses-library
             android:name="org.apache.http.legacy"

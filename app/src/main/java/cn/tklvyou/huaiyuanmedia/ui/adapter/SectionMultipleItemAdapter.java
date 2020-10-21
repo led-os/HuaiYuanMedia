@@ -29,6 +29,7 @@ import cn.tklvyou.huaiyuanmedia.model.HaveSecondModuleNewsModel;
 import cn.tklvyou.huaiyuanmedia.model.NewsBean;
 import cn.tklvyou.huaiyuanmedia.model.PingXuanModel;
 import cn.tklvyou.huaiyuanmedia.model.SectionNewsMultipleItem;
+import cn.tklvyou.huaiyuanmedia.model.TownDataModel;
 import cn.tklvyou.huaiyuanmedia.ui.home.AudioController;
 import cn.tklvyou.huaiyuanmedia.ui.home.ImagePagerActivity;
 import cn.tklvyou.huaiyuanmedia.ui.video_player.VodActivity;
@@ -54,6 +55,7 @@ public class SectionMultipleItemAdapter extends BaseSectionMultiItemQuickAdapter
         addItemType(SectionNewsMultipleItem.READING, R.layout.item_news_reading);
         addItemType(SectionNewsMultipleItem.LISTEN, R.layout.item_news_listen);
         addItemType(SectionNewsMultipleItem.PING_XUAN, R.layout.item_news_ping_xuan_layout);
+        addItemType(SectionNewsMultipleItem.TOWN_DEPT, R.layout.item_town_dept_layout);
     }
 
     private AudioController mAudioControl;
@@ -411,6 +413,12 @@ public class SectionMultipleItemAdapter extends BaseSectionMultiItemQuickAdapter
                 helper.setText(R.id.tvContent, "简介：" + pingXuanModel.getDetail());
                 helper.setText(R.id.tvAddress, "发起单位：" + pingXuanModel.getCompany());
 
+                break;
+            case SectionNewsMultipleItem.TOWN_DEPT:
+                TownDataModel townDataModel = (TownDataModel) item.getDataBean();
+                helper.getView(R.id.ivTown).getLayoutParams().height = ConvertUtils.dp2px(115);
+                helper.setText(R.id.tvTownName, townDataModel.getModule_second());
+                GlideManager.loadRoundImg(townDataModel.getAvatar(), helper.getView(R.id.ivTown),5);
                 break;
         }
     }

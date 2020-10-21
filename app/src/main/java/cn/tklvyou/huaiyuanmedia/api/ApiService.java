@@ -23,7 +23,9 @@ import cn.tklvyou.huaiyuanmedia.model.PingXuanPersionModel;
 import cn.tklvyou.huaiyuanmedia.model.PointDetailModel;
 import cn.tklvyou.huaiyuanmedia.model.PointModel;
 import cn.tklvyou.huaiyuanmedia.model.PointRuleModel;
+import cn.tklvyou.huaiyuanmedia.model.RewardModel;
 import cn.tklvyou.huaiyuanmedia.model.SystemConfigModel;
+import cn.tklvyou.huaiyuanmedia.model.TownDataModel;
 import cn.tklvyou.huaiyuanmedia.model.UploadModel;
 import cn.tklvyou.huaiyuanmedia.model.User;
 import cn.tklvyou.huaiyuanmedia.model.VoteOptionModel;
@@ -280,6 +282,12 @@ public interface ApiService {
      */
     @POST("api/banner/index")
     Observable<BaseResult<List<BannerModel>>> getBanner(@Query("module") String module);
+
+    /**
+     * 二级banner
+     */
+    @POST("api/banner/index")
+    Observable<BaseResult<List<BannerModel>>> getSecondBanner(@Query("module") String module,@Query("module_second")String secondModule);
 
     /**
      * 获取矩阵号数据
@@ -682,4 +690,21 @@ public interface ApiService {
      */
     @POST("api/award/updateInfo")
     Observable<BaseResult<Object>> updateInfo(@Query("recordId") int recordId, @Query("mobile") String  mobile, @Query("name") String name, @Query("address") String address);
+
+
+    /**
+     * 乡镇部门首页数据
+     */
+    @POST("api/township/index")
+    Observable<BaseResult<List<TownDataModel>>> getTownData();
+
+    /**
+     * 中奖纪录
+     * @param page
+     * @param listRows
+     * @return
+     */
+    @POST("api/award/awardList")
+    Observable<BaseResult<BasePageModel<RewardModel>>> getAwardList(@Query("p") int page, @Query("listrows") int listRows);
+
 }

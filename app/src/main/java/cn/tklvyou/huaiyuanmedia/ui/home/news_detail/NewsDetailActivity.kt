@@ -361,7 +361,7 @@ class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContra
         if (item.name.isNotEmpty()) {
             shareTitle = item.name
         }
-
+        item.nickname = "昵称"
         //收藏状态
         hasCollect = item.collect_status == 1
 
@@ -543,19 +543,23 @@ class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContra
                     //上传的是视频
 
                     multiImagView.visibility = View.GONE
+                    if (StringUtils.isEmpty(item.video)) {
+                        llVideo.visibility = View.GONE
+                    } else {
+                        llVideo.visibility = View.VISIBLE
+                        ivVideo.setBackgroundColor(Color.parseColor("#abb1b6"))
+                        ivVideo.setOnClickListener {
+                            val intent = Intent(this, VodActivity::class.java)
+                            intent.putExtra("videoPath", item.video)
+                            this.startActivity(intent)
+                        }
 
-                    llVideo.visibility = View.VISIBLE
-                    ivVideo.setBackgroundColor(Color.parseColor("#abb1b6"))
-                    ivVideo.setOnClickListener {
-                        val intent = Intent(this, VodActivity::class.java)
-                        intent.putExtra("videoPath", item.video)
-                        this.startActivity(intent)
+                        Glide.with(this).load(item.image)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .placeholder(R.color.bg_no_photo)
+                                .into(ivVideo)
                     }
 
-                    Glide.with(this).load(item.image)
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .placeholder(R.color.bg_no_photo)
-                            .into(ivVideo)
 
                 }
 
@@ -579,7 +583,7 @@ class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContra
                 tvNickName.text = item.nickname
                 tvBeginTime.text = item.begintime
                 tvSeeNum.text = "" + item.visit_num
-
+                GlideManager.loadCircleImg(item.avatar,ivPublishAvatar)
                 if (item.content.isNotEmpty()) {
                     newsDetailWebView.visibility = View.VISIBLE
                     loadHtml(item.content)
@@ -620,7 +624,7 @@ class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContra
                 tvNickName.text = item.nickname
                 tvBeginTime.text = item.begintime
                 tvSeeNum.text = "" + item.visit_num
-
+                GlideManager.loadCircleImg(item.avatar,ivPublishAvatar)
                 if (item.content.isNotEmpty()) {
                     newsDetailWebView.visibility = View.VISIBLE
                     loadHtml(item.content)
@@ -633,7 +637,7 @@ class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContra
                 tvNickName.text = item.nickname
                 tvBeginTime.text = item.begintime
                 tvSeeNum.text = "" + item.visit_num
-
+                GlideManager.loadCircleImg(item.avatar,ivPublishAvatar)
                 if (item.content.isNotEmpty()) {
                     newsDetailWebView.visibility = View.VISIBLE
                     loadHtml(item.content)
@@ -659,7 +663,7 @@ class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContra
                 tvNickName.text = item.nickname
                 tvBeginTime.text = item.begintime
                 tvSeeNum.text = "" + item.visit_num
-
+                GlideManager.loadCircleImg(item.avatar,ivPublishAvatar)
                 if (item.content.isNotEmpty()) {
                     newsDetailWebView.visibility = View.VISIBLE
                     loadHtml(item.content)
@@ -672,7 +676,7 @@ class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContra
 //                tvNickName.text = "爆料对象：${item.module_second}"
                 tvBeginTime.text = item.begintime
                 tvSeeNum.text = "" + item.visit_num
-
+                GlideManager.loadCircleImg(item.avatar,ivPublishAvatar)
                 if (item.content.isNotEmpty()) {
                     newsDetailWebView.visibility = View.VISIBLE
                     loadHtml(item.content)
@@ -710,7 +714,7 @@ class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContra
                 tvBeginTime.text = item.begintime
                 tvSeeNum.text = "" + item.visit_num
                 tvYueTingTime.text = formatTime(item.time.toDouble().toLong())
-
+                GlideManager.loadCircleImg(item.avatar,ivPublishAvatar)
                 mAudioControl!!.setOnAudioControlListener(object : AudioController.AudioControlListener {
                     override fun setCurPositionTime(position: Int, curPositionTime: Long) {
                     }
@@ -1266,6 +1270,7 @@ class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContra
 
 
     private var wxapi: IWXAPI? = null
+
     /**
      * 判断是否安装微信
      */

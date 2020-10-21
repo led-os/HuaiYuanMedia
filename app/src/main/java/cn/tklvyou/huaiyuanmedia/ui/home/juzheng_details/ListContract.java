@@ -1,6 +1,9 @@
 package cn.tklvyou.huaiyuanmedia.ui.home.juzheng_details;
 
+import java.util.List;
+
 import cn.tklvyou.huaiyuanmedia.base.BaseContract;
+import cn.tklvyou.huaiyuanmedia.model.BannerModel;
 import cn.tklvyou.huaiyuanmedia.model.BasePageModel;
 import cn.tklvyou.huaiyuanmedia.model.NewsBean;
 
@@ -17,6 +20,7 @@ public interface ListContract {
     interface View extends BaseContract.BaseView {
         void setNewList(int p, BasePageModel<NewsBean> model);
         void updateLikeStatus(boolean isLike, int position);
+        void setBanner(List<BannerModel> bannerModelList);
     }
 
     interface Presenter extends BaseContract.BasePresenter<ListContract.View> {
@@ -24,6 +28,6 @@ public interface ListContract {
         void addLikeNews(int id, int position);
 
         void cancelLikeNews(int id, int position);
-
+        void getSecondBanner(String module,String moduleSecond);
     }
 }

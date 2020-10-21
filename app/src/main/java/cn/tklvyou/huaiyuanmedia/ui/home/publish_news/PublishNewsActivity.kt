@@ -147,6 +147,26 @@ class PublishNewsActivity : BaseActivity<PublishNewsPresenter>(), PublishNewsCon
                 return@setOnClickListener
             }
 
+            if(selectList.isNullOrEmpty()){
+                mPresenter.publishLifeMsg(etContent.text.toString().trim(), "", "", "", "")
+            }else{
+                btnSubmit.isEnabled = false
+                showLoading()
+
+                if (isVideo) {
+                    mPresenter.qiniuUploadFile(File(selectList!![0].path), true, qiniuToken, "" + AccountHelper.getInstance().uid, qiniuManager)
+                } else {
+                    selectList = adapter!!.list
+                    selectList!!.forEach {
+                        if (it.isCompressed || (it.isCut && it.isCompressed)) {
+                            imageFiles.add(File(it.compressPath))
+                        } else {
+                            imageFiles.add(File(it.path))
+                        }
+                    }
+                    mPresenter.qiniuUploadMultiImage(imageFiles, qiniuToken, "" + AccountHelper.getInstance().uid, qiniuManager)
+                }
+            }
          /*   if (selectList.isNullOrEmpty()) {
 
                 if (isVideo) {
@@ -158,22 +178,7 @@ class PublishNewsActivity : BaseActivity<PublishNewsPresenter>(), PublishNewsCon
                 return@setOnClickListener
             }*/
 
-            btnSubmit.isEnabled = false
-            showLoading()
 
-            if (isVideo) {
-                mPresenter.qiniuUploadFile(File(selectList!![0].path), true, qiniuToken, "" + AccountHelper.getInstance().uid, qiniuManager)
-            } else {
-                selectList = adapter!!.list
-                selectList!!.forEach {
-                    if (it.isCompressed || (it.isCut && it.isCompressed)) {
-                        imageFiles.add(File(it.compressPath))
-                    } else {
-                        imageFiles.add(File(it.path))
-                    }
-                }
-                mPresenter.qiniuUploadMultiImage(imageFiles, qiniuToken, "" + AccountHelper.getInstance().uid, qiniuManager)
-            }
 
         }
 

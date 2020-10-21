@@ -4,6 +4,9 @@ import com.blankj.utilcode.util.StringUtils;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.chad.library.adapter.base.entity.SectionMultiEntity;
 
+import static cn.tklvyou.huaiyuanmedia.ui.home.ChannelConstant.CHANNEL_TYPE_TOWN;
+import static cn.tklvyou.huaiyuanmedia.ui.home.ChannelConstant.CHANNEL_TYPE_TOWN_SECOND;
+
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
@@ -19,7 +22,8 @@ public class SectionNewsMultipleItem<T> extends SectionMultiEntity<T> implements
     public static final int READING = 8;                    //悦读（瀑布流卡片）
     public static final int LISTEN = 9;                     //悦听
     public static final int PING_XUAN = 10;                 //评选
-
+    //乡镇部门
+    public static final int TOWN_DEPT = 11;
     private int itemType;
     private T dataBean;
 
@@ -36,6 +40,9 @@ public class SectionNewsMultipleItem<T> extends SectionMultiEntity<T> implements
             case "矩阵":
             case "专题":
                 itemType = getNewsItemType((NewsBean) dataBean);
+                break;
+            case CHANNEL_TYPE_TOWN_SECOND:
+                itemType = getTownNewsItemType((NewsBean) dataBean);
                 break;
             case "视讯":
                 itemType = VIDEO_OUT_TITLE;
@@ -54,6 +61,10 @@ public class SectionNewsMultipleItem<T> extends SectionMultiEntity<T> implements
                 break;
             case "评选":
                 itemType = PING_XUAN;
+                break;
+            //乡镇部门
+            case CHANNEL_TYPE_TOWN:
+                itemType = TOWN_DEPT;
                 break;
             default:
                 itemType = getNewsItemType((NewsBean) dataBean);
@@ -95,6 +106,32 @@ public class SectionNewsMultipleItem<T> extends SectionMultiEntity<T> implements
         return itemType;
     }
 
+    private int getTownNewsItemType(NewsBean bean) {
+        int itemType;
+        //视频
+        if (!StringUtils.isEmpty(bean.getVideo())) {
+            itemType = VIDEO_OUT_TITLE;
+        } else {
+            //一张图片
+            if (!StringUtils.isEmpty(bean.getImage())) {
+                itemType = NEWS_RIGHT_ONE_IMAGE;
+            } else {
+                if (bean.getImages() == null || bean.getImages().size() == 0) {
+                    //没有图片
+                    itemType = NEWS_NO_IMAGE;
+                } else {
+                    if (bean.getImages().size() < 3) {
+                        //一张图片
+                        itemType = NEWS_RIGHT_ONE_IMAGE;
+                    } else {
+                        //多张图片
+                        itemType = NEWS_THREE_IMAGE;
+                    }
+                }
+            }
+        }
+        return itemType;
+    }
 
     public T getDataBean() {
         return dataBean;

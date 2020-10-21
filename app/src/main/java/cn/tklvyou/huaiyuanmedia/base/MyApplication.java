@@ -35,7 +35,6 @@ import com.tencent.smtt.sdk.QbSdk;
 import cn.tklvyou.huaiyuanmedia.R;
 import cn.tklvyou.huaiyuanmedia.common.Contacts;
 import cn.tklvyou.huaiyuanmedia.crash.CrashManager;
-import cn.tklvyou.huaiyuanmedia.manager.FrameLifecycleCallbacks;
 import cn.tklvyou.huaiyuanmedia.utils.DateUtils;
 import skin.support.SkinCompatManager;
 import skin.support.app.SkinAppCompatViewInflater;

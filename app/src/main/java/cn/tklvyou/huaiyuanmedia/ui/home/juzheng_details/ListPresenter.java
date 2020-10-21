@@ -30,7 +30,7 @@ public class ListPresenter extends BasePresenter<ListContract.View> implements L
                                 mView.setNewList(p, result.getData());
                             }
                         }, throwable -> {
-                            mView.setNewList(p,null);
+                            mView.setNewList(p, null);
                             mView.showFailed("");
                         }
                 );
@@ -64,6 +64,24 @@ public class ListPresenter extends BasePresenter<ListContract.View> implements L
                         ToastUtils.showShort(result.getMsg());
                     }
                 }, throwable -> throwable.printStackTrace());
+    }
+
+    @Override
+    public void getSecondBanner(String module, String moduleSecond) {
+        RetrofitHelper.getInstance().getServer()
+                .getSecondBanner(module, moduleSecond)
+                .compose(RxSchedulers.applySchedulers())
+                .compose(mView.bindToLife())
+                .subscribe(result -> {
+                            mView.showSuccess(result.getMsg());
+                            if (result.getCode() == 1) {
+                                mView.setBanner(result.getData());
+                            }
+                        }, throwable -> {
+                            mView.setNewList(1, null);
+                            mView.showFailed("");
+                        }
+                );
     }
 
 }

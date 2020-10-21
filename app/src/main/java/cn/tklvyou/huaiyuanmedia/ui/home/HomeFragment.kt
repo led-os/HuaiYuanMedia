@@ -22,7 +22,9 @@ import cn.tklvyou.huaiyuanmedia.ui.home.search_list.SearchListActivity
 import cn.tklvyou.huaiyuanmedia.ui.listener.OnChannelListener
 import cn.tklvyou.huaiyuanmedia.ui.video_edit.CameraActivity
 import com.adorkable.iosdialog.BottomSheetDialog
-import com.blankj.utilcode.util.*
+import com.blankj.utilcode.util.LogUtils
+import com.blankj.utilcode.util.SPUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.luck.picture.lib.PictureSelector
 import com.luck.picture.lib.config.PictureConfig
 import com.luck.picture.lib.config.PictureMimeType
@@ -286,7 +288,6 @@ class HomeFragment : BaseFragment<HomePresenter>(), HomeContract.View {
 
     override fun setHomeChannel(channelList: MutableList<String>?) {
         mSelectedChannels = channelList as ArrayList<String>
-
         commonNavigator!!.notifyDataSetChanged()
 
         initChannelFragments()

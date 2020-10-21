@@ -8,6 +8,7 @@ import cn.tklvyou.huaiyuanmedia.model.BasePageModel;
 import cn.tklvyou.huaiyuanmedia.model.NewsBean;
 import cn.tklvyou.huaiyuanmedia.model.HaveSecondModuleNewsModel;
 import cn.tklvyou.huaiyuanmedia.model.PingXuanModel;
+import cn.tklvyou.huaiyuanmedia.model.TownDataModel;
 
 public interface NewListContract {
     interface View extends BaseContract.BaseView {
@@ -26,6 +27,8 @@ public interface NewListContract {
         void updateLikeStatus(boolean isLike, int position);
 
         void setPingXuanList(int p, BasePageModel<PingXuanModel> model);
+
+        void setTownDeptList(List<TownDataModel> townDataModelList);
 
     }
 
@@ -50,6 +53,8 @@ public interface NewListContract {
         void cancelLikeNews(int id, int position);
 
         void getPingXuanList(int p,boolean showLoading);
+
+        void getTownDept();
 
     }
 }

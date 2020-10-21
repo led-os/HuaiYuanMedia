@@ -11,6 +11,8 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import cn.tklvyou.huaiyuanmedia.R
@@ -25,12 +27,13 @@ import cn.tklvyou.huaiyuanmedia.ui.adapter.SectionMultipleItemAdapter
 import cn.tklvyou.huaiyuanmedia.ui.audio.ServiceWebviewActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.AudioController
 import cn.tklvyou.huaiyuanmedia.ui.home.BannerDetailsActivity
+import cn.tklvyou.huaiyuanmedia.ui.home.ChannelConstant.*
 import cn.tklvyou.huaiyuanmedia.ui.home.all_juzheng.AllJuZhengActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.juzheng_details.JuZhengDetailsActivity
-import cn.tklvyou.huaiyuanmedia.ui.home.new_list.NewsTypeConstant.NEWS_TYPE_SHI_XUN
 import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.ping_xuan.PingXuanDetailsActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.publish_wenzheng.PublishWenzhengActivity
+import cn.tklvyou.huaiyuanmedia.ui.home.town_dept.TownDeptActivity
 import cn.tklvyou.huaiyuanmedia.utils.BannerGlideImageLoader
 import cn.tklvyou.huaiyuanmedia.utils.GridDividerItemDecoration
 import cn.tklvyou.huaiyuanmedia.utils.RecycleViewDivider
@@ -49,7 +52,6 @@ import com.dueeeke.videoplayer.player.VideoView
 import com.dueeeke.videoplayer.player.VideoView.SimpleOnStateChangeListener
 import com.dueeeke.videoplayer.player.VideoViewManager
 import com.google.gson.Gson
-import com.tencent.liteav.demo.player.activity.SuperPlayerActivity
 import com.youth.banner.Banner
 import com.youth.banner.BannerConfig
 import com.youth.banner.listener.OnBannerListener
@@ -60,6 +62,7 @@ import java.io.Serializable
  * 分组布局类型的列表
  * 例：专题，矩阵
  */
+@Suppress("DUPLICATE_LABEL_IN_WHEN")
 class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNewsMultipleItem<Any>, BaseViewHolder, SectionMultipleItemAdapter>(), NewListContract.View {
     private var mController: StandardVideoController? = null
     private var mPlayerContainer: FrameLayout? = null
@@ -100,12 +103,14 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
     private var param = ""
     private var isRefresh = false
     private var audioController: AudioController? = null
+    private val townDataList: MutableList<TownDataModel> = ArrayList()
 
     override fun initView() {
         param = mBundle.getString("param", "")
+
         initSmartRefreshLayout(refreshLayout)
         initRecyclerView(recyclerView)
-        if (NEWS_TYPE_SHI_XUN == param) {
+        if (CHANNEL_TYPE_SHI_XUN == param) {
             initVideoView()
             recyclerView.addOnChildAttachStateChangeListener(object : RecyclerView.OnChildAttachStateChangeListener {
                 override fun onChildViewAttachedToWindow(view: View) {}
@@ -144,6 +149,10 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                 recyclerView.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
                 recyclerView.addItemDecoration(GridDividerItemDecoration(30, resources.getColor(R.color.common_bg), true))
             }
+            CHANNEL_TYPE_TOWN -> {
+                recyclerView.layoutManager = GridLayoutManager(recyclerView.context, 2)
+                recyclerView.addItemDecoration(GridDividerItemDecoration(30, ContextCompat.getColor(recyclerView.context, R.color.common_bg), false))
+            }
 
             "悦听", "评选" -> {
                 recyclerView.addItemDecoration(RecycleViewDivider(context, LinearLayout.VERTICAL, 30, resources.getColor(R.color.common_bg), true))
@@ -168,7 +177,7 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                 mPresenter.getPingXuanList(1, showLoading)
             }
 
-            "矩阵", "专题", "推荐" -> {
+            CHANNEL_TYPE_TOWN, "矩阵", "专题", "推荐" -> {
                 mPresenter.getBanner(param)
             }
 
@@ -219,6 +228,9 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                     mPresenter.getJuZhengHeader(param)
                 }
             }
+            CHANNEL_TYPE_TOWN -> {
+                mPresenter.getTownDept()
+            }
 
             else -> {
                 refreshLayout.autoRefresh()
@@ -235,7 +247,7 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                     refreshLayout.autoRefresh()
                 }
             }
-            NEWS_TYPE_SHI_XUN ->{
+            CHANNEL_TYPE_SHI_XUN -> {
                 //恢复上次播放的位置
                 startPlay(mLastPos)
             }
@@ -255,6 +267,21 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
     }
 
     private lateinit var juzhengHeaderList: MutableList<HaveSecondModuleNewsModel.ModuleSecondBean>
+    override fun setTownDeptList(townDataModelList: MutableList<TownDataModel>?) {
+        if (townDataModelList != null) {
+            townDataList.clear()
+            townDataList.addAll(townDataModelList)
+            val itemList = ArrayList<SectionNewsMultipleItem<Any>>()
+            townDataList.forEach {
+                itemList.add(SectionNewsMultipleItem(param, it))
+            }
+            onLoadSucceed(1, itemList)
+        } else {
+            onLoadFailed(1, null)
+        }
+
+    }
+
     override fun setJuZhengHeader(beans: MutableList<HaveSecondModuleNewsModel.ModuleSecondBean>?) {
         if (beans != null) {
             refreshLayout.setEnableRefresh(true)
@@ -263,6 +290,7 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                 "矩阵", "专题" -> {
                     mPresenter.getHaveSecondModuleNews(1, param, showLoading)
                 }
+
             }
         } else {
             refreshLayout.setEnableRefresh(false)
@@ -300,6 +328,10 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
 
                 "矩阵", "专题" -> {
                     mPresenter.getJuZhengHeader(param)
+                }
+                //乡镇部门
+                CHANNEL_TYPE_TOWN -> {
+                    mPresenter.getTownDept()
                 }
 
 //                "专题" -> {
@@ -353,10 +385,6 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                     intent.putExtra("title", bannerModelList[position].name)
                     intent.putExtra("content", bannerModelList[position].content)
                     startActivity(intent)
-                } else {
-                    val intent = Intent(context, SuperPlayerActivity::class.java)
-                    startActivity(intent)
-
                 }
 
             }
@@ -385,6 +413,13 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                         adapter.addHeaderView(bannerView)
                         adapter.addHeaderView(view)
                         adapter.loadMoreEnd()
+                    }
+
+                    CHANNEL_TYPE_TOWN -> {
+                        //乡镇部门banner
+                        val bannerView = View.inflate(context, R.layout.item_normal_banner, null)
+                        initBannerView(bannerView, bannerModelList)
+                        adapter.addHeaderView(bannerView)
                     }
 
                     "悦听" -> {
@@ -422,6 +457,9 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                     "矩阵", "专题" -> {
                         adapter.setNewData(list)
                         adapter.loadMoreEnd()
+                    }
+                    CHANNEL_TYPE_TOWN -> {
+                        //todo 刷新逻辑
                     }
 
 
@@ -743,6 +781,13 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
         }
 
         when (param) {
+            CHANNEL_TYPE_TOWN -> {
+                val bean = adapter.data[position].dataBean as TownDataModel
+                val intent = Intent(context, TownDeptActivity::class.java)
+                intent.putExtra(EXTRA_TOWN_DATA, bean)
+                intent.putExtra(EXTRA_HOME_CHANNEL,param)
+                startActivity(intent)
+            }
             "评选" -> {
                 val bean = adapter.data[position].dataBean as PingXuanModel
                 val id = bean.id
@@ -879,7 +924,7 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
         }
 
         when (param) {
-            "矩阵", "专题", "推荐" -> {
+            CHANNEL_TYPE_TOWN, "矩阵", "专题", "推荐" -> {
                 adapter.notifyItemChangedAnimal(position + 1)
             }
             else -> {
@@ -912,7 +957,7 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                 }
 
 
-                "矩阵", "推荐", "专题" -> {
+                CHANNEL_TYPE_TOWN, "矩阵", "推荐", "专题" -> {
                     val bean = (adapter as SectionMultipleItemAdapter).data[position].dataBean as NewsBean
                     bean.comment_num = commenNum
                     bean.like_num = zanNum
@@ -1006,11 +1051,14 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
         if (mCurPos != -1) {
             releaseVideoView()
         }
+        if (position >= adapter.data.size) {
+            return
+        }
         val bean = adapter.data[position].dataBean as NewsBean
         mVideoView!!.setUrl(bean.video)
         mTitleView!!.setTitle(bean.name)
         mPlayerContainer = adapter?.getViewByPosition(position, R.id.player_container) as FrameLayout
-        mIvVideoBg =  adapter?.getViewByPosition(position, R.id.ivVideoBg) as ImageView
+        mIvVideoBg = adapter?.getViewByPosition(position, R.id.ivVideoBg) as ImageView
         ivStartPlayer = adapter?.getViewByPosition(position, R.id.ivStartPlayer) as ImageView
         val prepareView = adapter?.getViewByPosition(position, R.id.prepare_view) as PrepareView
         controlPlayUiShow(true)
@@ -1038,20 +1086,19 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
      * 子类将会重写此方法，改变onResume的逻辑
      */
     private fun resumePlay() {
-      /*  if (mLastPos == -1) return
-        if (MainActivity.mCurrentIndex !== 1) return
-        //恢复上次播放的位置
-        startPlay(mLastPos)*/
+        /*  if (mLastPos == -1) return
+          if (MainActivity.mCurrentIndex !== 1) return
+          //恢复上次播放的位置
+          startPlay(mLastPos)*/
     }
 
 
-
-    private fun controlPlayUiShow(isShow : Boolean){
-        if(isShow){
+    private fun controlPlayUiShow(isShow: Boolean) {
+        if (isShow) {
             mIvVideoBg?.visibility = View.GONE
             mPlayerContainer?.visibility = View.VISIBLE
             ivStartPlayer?.visibility = View.GONE
-        }else{
+        } else {
             mIvVideoBg?.visibility = View.VISIBLE
             mPlayerContainer?.visibility = View.GONE
             ivStartPlayer?.visibility = View.VISIBLE

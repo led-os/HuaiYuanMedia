@@ -126,29 +126,36 @@ public class WxCircleAdapter extends BaseQuickAdapter<NewsBean, BaseViewHolder> 
             });
 
         } else {
-            //上传的是视频
+
 
             MultiImageView multiImageView = helper.getView(R.id.multiImagView);
             multiImageView.setVisibility(View.GONE);
-
             FrameLayout llVideo = helper.getView(R.id.llVideo);
-            llVideo.setVisibility(View.VISIBLE);
+            if(StringUtils.isEmpty(item.getVideo())){
+                //说明是纯文本
+                llVideo.setVisibility(View.GONE);
+            }else {
+                //上传的是视频
+                llVideo.setVisibility(View.VISIBLE);
 
-            ImageView ivVideo = helper.getView(R.id.ivVideo);
-            ivVideo.setBackgroundColor(Color.parseColor("#abb1b6"));
-            ivVideo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, VodActivity.class);
-                    intent.putExtra("videoPath", item.getVideo());
-                    mContext.startActivity(intent);
-                }
-            });
+                ImageView ivVideo = helper.getView(R.id.ivVideo);
+                ivVideo.setBackgroundColor(Color.parseColor("#abb1b6"));
+                ivVideo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext, VodActivity.class);
+                        intent.putExtra("videoPath", item.getVideo());
+                        mContext.startActivity(intent);
+                    }
+                });
 
-            Glide.with(mContext).load(item.getImage())
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .placeholder(R.color.bg_no_photo)
-                    .into(ivVideo);
+                Glide.with(mContext).load(item.getImage())
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .placeholder(R.color.bg_no_photo)
+                        .into(ivVideo);
+            }
+
+
 
         }
 
