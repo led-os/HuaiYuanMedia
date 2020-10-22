@@ -12,6 +12,15 @@ public class LotteryModel {
 
     private int num;
     private List<DataBean> data;
+    private int exchange;
+
+    public int getExchange() {
+        return exchange;
+    }
+
+    public void setExchange(int exchange) {
+        this.exchange = exchange;
+    }
 
     public int getNum() {
         return num;
@@ -47,7 +56,6 @@ public class LotteryModel {
         private int createtime;
         private int updatetime;
         private int admin_id;
-
         private int type;
 
         public int getId() {
@@ -113,5 +121,7 @@ public class LotteryModel {
         public void setType(int type) {
             this.type = type;
         }
+
+
     }
 }

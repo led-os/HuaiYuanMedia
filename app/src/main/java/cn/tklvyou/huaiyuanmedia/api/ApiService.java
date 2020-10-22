@@ -689,7 +689,7 @@ public interface ApiService {
      * 补充获奖信息
      */
     @POST("api/award/updateInfo")
-    Observable<BaseResult<Object>> updateInfo(@Query("recordId") int recordId, @Query("mobile") String  mobile, @Query("name") String name, @Query("address") String address);
+    Observable<BaseResult<Object>> updateInfo(@Query("recordId") long recordId, @Query("mobile") String  mobile, @Query("name") String name, @Query("address") String address);
 
 
     /**
@@ -706,5 +706,9 @@ public interface ApiService {
      */
     @POST("api/award/awardList")
     Observable<BaseResult<BasePageModel<RewardModel>>> getAwardList(@Query("p") int page, @Query("listrows") int listRows);
+
+    @POST("api/award/awardInfo")
+    Observable<BaseResult<RewardModel>> getAwardInfo(@Query("recordId") long recordId);
+
 
 }

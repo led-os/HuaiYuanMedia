@@ -104,11 +104,23 @@
                 android:layout_weight="1" />
 
             <TextView
+                android:id="@+id/tvReadNum"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:drawableLeft="@mipmap/icon_msg"
+                android:drawablePadding="@dimen/dp_8"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="#ff999999"
+                android:textSize="@dimen/sp_13" />
+
+            <TextView
                 android:id="@+id/tvCommentNum"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:drawableLeft="@mipmap/icon_msg"
                 android:drawablePadding="@dimen/dp_8"
+                android:layout_marginStart="@dimen/dp_25"
                 android:gravity="center"
                 android:text="0"
                 android:textColor="#ff999999"

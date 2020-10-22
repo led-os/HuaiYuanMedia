@@ -2,12 +2,10 @@ package cn.tklvyou.huaiyuanmedia.ui.adapter;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -69,7 +67,7 @@ public class WxCircleAdapter extends BaseQuickAdapter<NewsBean, BaseViewHolder> 
 
         helper.setText(R.id.tvCommentNum, "" + item.getComment_num());
         helper.setText(R.id.tvGoodNum, "" + item.getLike_num());
-
+        helper.setText(R.id.tvReadNum, "" + item.getVisit_num());
         SparkButton sparkButton = helper.getView(R.id.sparkButton);
         if (item.getLike_status() == 1) {
             sparkButton.setChecked(true);

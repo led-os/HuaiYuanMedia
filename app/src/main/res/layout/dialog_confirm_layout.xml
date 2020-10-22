@@ -26,7 +26,7 @@
 
     <TextView
         android:id="@+id/tvMessage"
-        android:layout_width="@dimen/dp_120"
+        android:layout_width="@dimen/dp_160"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/dp_40"

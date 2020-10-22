@@ -10,20 +10,17 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.varunest.sparkbutton.SparkButton;
 
 import java.util.List;
 
 import cn.tklvyou.huaiyuanmedia.R;
 import cn.tklvyou.huaiyuanmedia.helper.GlideManager;
 import cn.tklvyou.huaiyuanmedia.model.ArticleMessageModel;
-import cn.tklvyou.huaiyuanmedia.model.NewsBean;
 import cn.tklvyou.huaiyuanmedia.ui.home.ImagePagerActivity;
 import cn.tklvyou.huaiyuanmedia.ui.video_player.VodActivity;
 import cn.tklvyou.huaiyuanmedia.utils.UrlUtils;
@@ -96,29 +93,38 @@ public class ArticleMessageAdapter extends BaseQuickAdapter<ArticleMessageModel,
             });
 
         } else {
-            //上传的是视频
+            if(!StringUtils.isEmpty(item.getVideo())){
+                //上传的是视频
+                MultiImageView multiImageView = helper.getView(R.id.multiImagView);
+                multiImageView.setVisibility(View.GONE);
 
-            MultiImageView multiImageView = helper.getView(R.id.multiImagView);
-            multiImageView.setVisibility(View.GONE);
+                FrameLayout llVideo = helper.getView(R.id.llVideo);
+                llVideo.setVisibility(View.VISIBLE);
 
-            FrameLayout llVideo = helper.getView(R.id.llVideo);
-            llVideo.setVisibility(View.VISIBLE);
+                ImageView ivVideo = helper.getView(R.id.ivVideo);
+                ivVideo.setBackgroundColor(Color.parseColor("#abb1b6"));
+                ivVideo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext, VodActivity.class);
+                        intent.putExtra("videoPath", item.getVideo());
+                        mContext.startActivity(intent);
+                    }
+                });
 
-            ImageView ivVideo = helper.getView(R.id.ivVideo);
-            ivVideo.setBackgroundColor(Color.parseColor("#abb1b6"));
-            ivVideo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, VodActivity.class);
-                    intent.putExtra("videoPath", item.getVideo());
-                    mContext.startActivity(intent);
-                }
-            });
+                Glide.with(mContext).load(item.getImage())
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .placeholder(R.color.bg_no_photo)
+                        .into(ivVideo);
 
-            Glide.with(mContext).load(item.getImage())
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .placeholder(R.color.bg_no_photo)
-                    .into(ivVideo);
+            }else {
+                //上传的是纯文本
+                MultiImageView multiImageView = helper.getView(R.id.multiImagView);
+                multiImageView.setVisibility(View.GONE);
+                FrameLayout llVideo = helper.getView(R.id.llVideo);
+                llVideo.setVisibility(View.GONE);
+            }
+
 
         }
 

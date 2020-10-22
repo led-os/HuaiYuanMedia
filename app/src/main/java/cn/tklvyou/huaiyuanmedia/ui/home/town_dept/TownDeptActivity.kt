@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import android.widget.LinearLayout
 import cn.tklvyou.huaiyuanmedia.R
@@ -23,6 +24,7 @@ import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
 import cn.tklvyou.huaiyuanmedia.ui.video_player.VodActivity
 import cn.tklvyou.huaiyuanmedia.utils.BannerGlideImageLoader
 import cn.tklvyou.huaiyuanmedia.utils.RecycleViewDivider
+import com.blankj.utilcode.util.AppUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.tencent.liteav.demo.player.activity.SuperPlayerActivity
@@ -252,7 +254,11 @@ class TownDeptActivity : BaseHttpRecyclerActivity<ListPresenter, SectionNewsMult
                     startWebDetailsActivity(mContext!!, bannerModelList[position].url)
                 } else if (bannerModelList[position].content.trim().isNotEmpty()) {
                     val intent = Intent(mContext, BannerDetailsActivity::class.java)
-                    intent.putExtra("title", bannerModelList[position].name)
+                    if(TextUtils.isEmpty(bannerModelList[position].name)){
+                        intent.putExtra("title", AppUtils.getAppName())
+                    }else{
+                        intent.putExtra("title", bannerModelList[position].name)
+                    }
                     intent.putExtra("content", bannerModelList[position].content)
                     startActivity(intent)
                 } else {

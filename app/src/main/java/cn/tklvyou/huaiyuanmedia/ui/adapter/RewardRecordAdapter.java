@@ -20,12 +20,14 @@ import cn.tklvyou.huaiyuanmedia.model.RewardModel;
 public class RewardRecordAdapter extends BaseQuickAdapter<RewardModel, BaseViewHolder> {
 
     public RewardRecordAdapter(List<RewardModel> dataList) {
-        super(R.layout.item_reward_layout,dataList);
+        super(R.layout.item_reward_layout, dataList);
     }
 
     @Override
     protected void convert(@NonNull BaseViewHolder helper, RewardModel item) {
-        helper.setText(R.id.tvRewardName,item.getAward());
-        helper.setText(R.id.tvRewardDate,item.getCreatetime());
+        helper.setText(R.id.tvRewardName, item.getAward());
+        helper.setText(R.id.tvRewardDate, item.getCreatetime());
+        helper.setVisible(R.id.ivArrowRight, item.getType() == 2);
+
     }
 }

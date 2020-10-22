@@ -8,18 +8,30 @@ package cn.tklvyou.huaiyuanmedia.model;
  * @Email: 971613168@qq.com
  */
 public class RewardModel {
+    /**
+     *  {
+     *         "id": 175,
+     *         "createtime": 1603093816,
+     *         "updatetime": 1603093816,
+     *         "award": "纸巾一盒",
+     *         "type": 2,
+     *         "mobile": "18556070563",
+     *         "name": "图",
+     *         "address": "厕所",
+     *         "area": "安徽省合肥市瑶海区"
+     *     }
+     */
     private long id;
     private String createtime;
     private String award;
     private int type;
+    /**
+     * 收货人
+     */
     private String name;
-
-    /*{
-        "id": 177.0,
-            "createtime": "2020-10-20 09:36",
-            "award": "纸巾一盒",
-            "type": 2.0
-    }*/
+    private String mobile;
+    private String area;
+    private String address;
 
     public long getId() {
         return id;
@@ -59,5 +71,29 @@ public class RewardModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

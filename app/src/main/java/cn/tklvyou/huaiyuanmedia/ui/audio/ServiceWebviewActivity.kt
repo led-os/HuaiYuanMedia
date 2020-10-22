@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.KeyEvent
 import android.view.View
 import cn.tklvyou.huaiyuanmedia.R
@@ -15,6 +16,7 @@ import cn.tklvyou.huaiyuanmedia.ui.main.MainActivity
 import cn.tklvyou.huaiyuanmedia.utils.InterfaceUtils
 import cn.tklvyou.huaiyuanmedia.utils.YBitmapUtils
 import cn.tklvyou.huaiyuanmedia.widget.SharePopupWindow
+import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.ImageUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.sina.weibo.sdk.api.WebpageObject
@@ -29,11 +31,11 @@ import com.tencent.mm.opensdk.modelmsg.WXWebpageObject
 import com.tencent.mm.opensdk.openapi.IWXAPI
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
 import com.tencent.smtt.export.external.interfaces.IX5WebChromeClient
-import kotlinx.android.synthetic.main.activity_service_webview.*
 import com.tencent.smtt.sdk.*
 import com.tencent.tauth.IUiListener
 import com.tencent.tauth.Tencent
 import com.tencent.tauth.UiError
+import kotlinx.android.synthetic.main.activity_service_webview.*
 
 
 class ServiceWebviewActivity : BaseActivity<NullPresenter>() {
@@ -64,6 +66,9 @@ class ServiceWebviewActivity : BaseActivity<NullPresenter>() {
             setTitle("", R.mipmap.home_title_logo)
         } else {
             setTitle("服务")
+        }
+        if(TextUtils.isEmpty(shareTitle)){
+            shareTitle = AppUtils.getAppName()
         }
 
         val sharedEnable = intent.getBooleanExtra("share_enable", true) && url.isNotEmpty() && shareTitle.isNotEmpty()

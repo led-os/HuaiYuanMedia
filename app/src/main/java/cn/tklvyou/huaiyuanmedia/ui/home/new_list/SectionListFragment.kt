@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,12 +35,14 @@ import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.ping_xuan.PingXuanDetailsActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.publish_wenzheng.PublishWenzhengActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.town_dept.TownDeptActivity
+import cn.tklvyou.huaiyuanmedia.ui.video_player.VodActivity
 import cn.tklvyou.huaiyuanmedia.utils.BannerGlideImageLoader
 import cn.tklvyou.huaiyuanmedia.utils.GridDividerItemDecoration
 import cn.tklvyou.huaiyuanmedia.utils.RecycleViewDivider
 import cn.tklvyou.huaiyuanmedia.utils.dkplayer.util.Tag
 import cn.tklvyou.huaiyuanmedia.utils.dkplayer.util.Utils
 import cn.tklvyou.huaiyuanmedia.widget.page_recycler.PageRecyclerView
+import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.SPUtils
 import com.blankj.utilcode.util.ToastUtils
@@ -249,7 +252,10 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
             }
             CHANNEL_TYPE_SHI_XUN -> {
                 //恢复上次播放的位置
-                startPlay(mLastPos)
+                if(mLastPos<0 || mLastPos >=adapter.data.size){
+                    return
+                }
+                mVideoView!!.resume()
             }
         }
     }
@@ -257,6 +263,12 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
     override fun onUserInvisible() {
         super.onUserInvisible()
         closeAudioController()
+        if(mVideoView != null && mCurPos >-1){
+            mVideoView!!.pause()
+        }else{
+            releaseVideoView()
+        }
+
     }
 
 
@@ -382,7 +394,11 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                     startWebDetailsActivity(context!!, bannerModelList[position].url)
                 } else if (bannerModelList[position].content.trim().isNotEmpty()) {
                     val intent = Intent(context, BannerDetailsActivity::class.java)
-                    intent.putExtra("title", bannerModelList[position].name)
+                    if(TextUtils.isEmpty(bannerModelList[position].name)){
+                        intent.putExtra("title",AppUtils.getAppName() )
+                    }else{
+                        intent.putExtra("title",bannerModelList[position].name )
+                    }
                     intent.putExtra("content", bannerModelList[position].content)
                     startActivity(intent)
                 }
@@ -880,11 +896,18 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                 if (bean.url.isNotEmpty()) {
                     startDetailsActivity(context!!, bean.url)
                 } else {
-                    //打开新的Activity
-                    /*      val intent = Intent(context, VodActivity::class.java)
-                          intent.putExtra("videoPath", bean.video)
-                          startActivity(intent)*/
-                    startPlay(position)
+                    when (param) {
+                        CHANNEL_TYPE_SHI_XUN -> {
+                            startPlay(position)
+                        }
+                        else -> {
+                            //打开新的Activity
+                            val intent = Intent(context, VodActivity::class.java)
+                            intent.putExtra("videoPath", bean.video)
+                            startActivity(intent)
+                        }
+                    }
+
                 }
 
             }
@@ -1022,10 +1045,14 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
         mController!!.addControlComponent(GestureView(mActivity!!))
         mController!!.setEnableOrientation(true)
         mVideoView?.setVideoController(mController)
+
     }
 
 
     private fun releaseVideoView() {
+        if(mVideoView==null){
+           return
+        }
         mVideoView!!.release()
         controlPlayUiShow(false)
         if (mVideoView!!.isFullScreen) {

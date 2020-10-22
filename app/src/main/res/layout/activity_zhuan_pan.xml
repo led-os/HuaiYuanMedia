@@ -79,6 +79,7 @@
         android:textSize="@dimen/sp_14" />
 
     <TextView
+        android:id="@+id/tvRewardRule"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tvNum"
@@ -89,7 +90,7 @@
         android:shadowDy="2"
         android:textStyle="bold"
         android:shadowRadius="3.0"
-        android:text="分享APP下载链接 获得1次额外抽奖机会"
+        android:text=""
         android:textColor="#ffff4a5c"
         android:textSize="@dimen/sp_12" />
 

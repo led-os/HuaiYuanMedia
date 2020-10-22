@@ -146,8 +146,8 @@
 
                         <ImageView
                             android:id="@+id/ivPublishAvatar"
-                            android:layout_width="@dimen/dp_30"
-                            android:layout_height="@dimen/dp_30"/>
+                            android:layout_width="@dimen/dp_25"
+                            android:layout_height="@dimen/dp_25"/>
                         <TextView
                             android:id="@+id/tvNickName"
                             android:layout_width="0dp"

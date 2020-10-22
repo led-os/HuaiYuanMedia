@@ -11,7 +11,7 @@ public class LotteryResultModel {
      */
 
     private int id;
-    private int recordId;
+    private long recordId;
     private String name;
     private int score;
     private int start;
@@ -66,7 +66,7 @@ public class LotteryResultModel {
         this.type = type;
     }
 
-    public int getRecordId() {
+    public long getRecordId() {
         return recordId;
     }
 

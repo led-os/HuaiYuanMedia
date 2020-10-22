@@ -14,7 +14,7 @@ import cn.tklvyou.huaiyuanmedia.common.Contacts
 import cn.tklvyou.huaiyuanmedia.common.Contacts.SHARE_DOWNLOAD_URL
 import cn.tklvyou.huaiyuanmedia.model.LotteryModel
 import cn.tklvyou.huaiyuanmedia.model.LotteryResultModel
-import cn.tklvyou.huaiyuanmedia.ui.account.BindPhoneActivity
+import cn.tklvyou.huaiyuanmedia.ui.mine.reward.RewardConstant
 import cn.tklvyou.huaiyuanmedia.utils.InterfaceUtils
 import cn.tklvyou.huaiyuanmedia.utils.JSON
 import cn.tklvyou.huaiyuanmedia.utils.YBitmapUtils
@@ -59,7 +59,7 @@ class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.Vie
 
     private lateinit var idList: MutableList<Int>
     private lateinit var scoreStr: String
-    private var mRecordId : Int =0
+    private var mRecordId: Long = 0
     private var rewardType = 0
     private var num = 0
     private var shareHandler: WbShareHandler? = null
@@ -83,6 +83,9 @@ class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.Vie
     override fun setLotteryModel(model: LotteryModel) {
         num = model.num
         tvNum.text = "剩余转盘次数：" + model.num
+        if (model.data != null && model.data.isNotEmpty()) {
+                tvRewardRule.text = "抽奖规则:" + model.exchange+"积分兑换1次抽奖次数,抽完即止"
+        }
         //颜色
         val colors = arrayOf<Int>(Color.parseColor("#FFC6B1"),
                 Color.parseColor("#FCB195"),
@@ -110,7 +113,7 @@ class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.Vie
         //获取第三个视图
         val build = WheelSurfView.Builder()
                 .setmColors(colors)
-                .setmHuanImgRes(R.mipmap.zhuan_pan_yuan_bg)
+                .setmHuanImgRes(R.mipmap.zhan_pan_huan)
                 .setmGoImgRes(R.mipmap.zhuan_pan_go)
                 .setmDeses(des)
                 .setmTypeModel(1)
@@ -397,7 +400,7 @@ class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.Vie
         val dialog = ConfirmDialog(this@ZhuanPanActivity)
         dialog.setTitle("新增石榴籽")
 
-        dialog.setStyleMessage(SpanUtils().appendLine("恭喜您").setHorizontalAlign(Layout.Alignment.ALIGN_CENTER).setFontSize(17, true).setForegroundColor(Color.parseColor("#FF3C44"))
+        dialog.setStyleMessage(SpanUtils().appendLine("恭喜您").setHorizontalAlign(Layout.Alignment.ALIGN_CENTER).setFontSize(15, true).setForegroundColor(Color.parseColor("#FF3C44"))
                 .append("获得$scoreStr").setHorizontalAlign(Layout.Alignment.ALIGN_CENTER).setForegroundColor(Color.parseColor("#FF3C44"))
                 .create())
 
@@ -407,11 +410,11 @@ class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.Vie
         dialog.show()
     }
 
-    private fun showRewardType2(recordId :Int) {
+    private fun showRewardType2(recordId: Long) {
         val dialog = ConfirmDialog(this@ZhuanPanActivity)
         dialog.setTitle("恭喜中奖")
-        dialog.setStyleMessage(SpanUtils().appendLine("恭喜您").setHorizontalAlign(Layout.Alignment.ALIGN_CENTER).setFontSize(17, true).setForegroundColor(Color.parseColor("#FF3C44"))
-                .append("快去申请发货吧").setHorizontalAlign(Layout.Alignment.ALIGN_CENTER).setForegroundColor(Color.parseColor("#FF3C44"))
+        dialog.setStyleMessage(SpanUtils().append("恭喜您抽中").append("$scoreStr*1").setHorizontalAlign(Layout.Alignment.ALIGN_CENTER).setFontSize(17, true).setForegroundColor(Color.parseColor("#FF3C44"))
+                .appendLine("快去申请发货吧").setHorizontalAlign(Layout.Alignment.ALIGN_CENTER).setForegroundColor(Color.parseColor("#ff666666"))
                 .create())
         dialog.setBackground(R.mipmap.ic_reward_dialog_bg)
         dialog.setYesOnclickListener("申请发货") {
@@ -421,9 +424,9 @@ class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.Vie
         dialog.show()
     }
 
-    private fun applySendGoods(recordId : Int){
+    private fun applySendGoods(recordId: Long) {
         val intent = Intent(this, FillAddressActivity::class.java)
-        intent.putExtra("recordId", recordId)
+        intent.putExtra(RewardConstant.EXTRA_RECORD_ID, recordId)
         startActivity(intent)
     }
 }
