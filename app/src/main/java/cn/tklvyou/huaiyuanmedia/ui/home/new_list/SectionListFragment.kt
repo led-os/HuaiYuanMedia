@@ -14,6 +14,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import cn.tklvyou.huaiyuanmedia.R
@@ -25,6 +26,7 @@ import cn.tklvyou.huaiyuanmedia.model.*
 import cn.tklvyou.huaiyuanmedia.ui.account.LoginActivity
 import cn.tklvyou.huaiyuanmedia.ui.adapter.JuzhengHeaderViewholder
 import cn.tklvyou.huaiyuanmedia.ui.adapter.SectionMultipleItemAdapter
+import cn.tklvyou.huaiyuanmedia.ui.adapter.ZhuanTiAdapter
 import cn.tklvyou.huaiyuanmedia.ui.audio.ServiceWebviewActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.AudioController
 import cn.tklvyou.huaiyuanmedia.ui.home.BannerDetailsActivity
@@ -252,7 +254,7 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
             }
             CHANNEL_TYPE_SHI_XUN -> {
                 //恢复上次播放的位置
-                if(mLastPos<0 || mLastPos >=adapter.data.size){
+                if (mLastPos < 0 || mLastPos >= adapter.data.size) {
                     return
                 }
                 mVideoView!!.resume()
@@ -263,9 +265,9 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
     override fun onUserInvisible() {
         super.onUserInvisible()
         closeAudioController()
-        if(mVideoView != null && mCurPos >-1){
+        if (mVideoView != null && mCurPos > -1) {
             mVideoView!!.pause()
-        }else{
+        } else {
             releaseVideoView()
         }
 
@@ -394,10 +396,10 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                     startWebDetailsActivity(context!!, bannerModelList[position].url)
                 } else if (bannerModelList[position].content.trim().isNotEmpty()) {
                     val intent = Intent(context, BannerDetailsActivity::class.java)
-                    if(TextUtils.isEmpty(bannerModelList[position].name)){
-                        intent.putExtra("title",AppUtils.getAppName() )
-                    }else{
-                        intent.putExtra("title",bannerModelList[position].name )
+                    if (TextUtils.isEmpty(bannerModelList[position].name)) {
+                        intent.putExtra("title", AppUtils.getAppName())
+                    } else {
+                        intent.putExtra("title", bannerModelList[position].name)
                     }
                     intent.putExtra("content", bannerModelList[position].content)
                     startActivity(intent)
@@ -417,18 +419,26 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
 
             override fun createAdapter(): SectionMultipleItemAdapter {
                 val adapter = SectionMultipleItemAdapter(list)
-
                 when (param) {
-                    "矩阵", "专题" -> {
+                    "矩阵" -> {
                         val bannerView = View.inflate(context, R.layout.item_normal_banner, null)
                         initBannerView(bannerView, bannerModelList)
 
                         val view = View.inflate(context, R.layout.item_juzheng_header_layout, null)
                         initJuzhengHeaderView(view, juzhengHeaderList)
-
                         adapter.addHeaderView(bannerView)
                         adapter.addHeaderView(view)
                         adapter.loadMoreEnd()
+                    }
+                    "专题" -> {
+                        list.clear()
+                       setNeedEmptyView(false)
+                        val bannerView = View.inflate(context, R.layout.item_normal_banner, null)
+                        initBannerView(bannerView, bannerModelList)
+                        val view = View.inflate(context, R.layout.item_zhuan_ti_header_layout, null)
+                        initZhuanTiHeaderView(view, juzhengHeaderList)
+                        adapter.addHeaderView(bannerView)
+                        adapter.addHeaderView(view)
                     }
 
                     CHANNEL_TYPE_TOWN -> {
@@ -461,6 +471,7 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                     }
 
                 }
+
                 return adapter
             }
 
@@ -470,15 +481,19 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                         adapter.setNewData(list)
                     }
 
-                    "矩阵", "专题" -> {
+                    "矩阵" -> {
+                        adapter.setNewData(list)
+                        adapter.loadMoreEnd()
+                    }
+                    "专题" -> {
+                        list.clear()
                         adapter.setNewData(list)
                         adapter.loadMoreEnd()
                     }
                     CHANNEL_TYPE_TOWN -> {
-                        //todo 刷新逻辑
+                        adapter.setNewData(list)
+                        adapter.loadMoreEnd()
                     }
-
-
                     "悦听" -> {
                         audioController!!.onPause()
                         adapter.setNewData(list)
@@ -656,6 +671,19 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
 
     }
 
+    private fun initZhuanTiHeaderView(view: View, zhuantiHeaderList: MutableList<HaveSecondModuleNewsModel.ModuleSecondBean>) {
+        val mRecyclerView = view.findViewById<RecyclerView>(R.id.zhuanTiRecyclerView)
+        mRecyclerView.layoutManager = LinearLayoutManager(context)
+        val adapter = ZhuanTiAdapter(zhuantiHeaderList)
+        adapter.bindToRecyclerView(mRecyclerView)
+        adapter.setOnItemClickListener { adapter, view, position ->
+            val bean = juzhengHeaderList[position]
+            bean.pname = param
+            val intent = Intent(mActivity, JuZhengDetailsActivity::class.java)
+            intent.putExtra("model", Gson().toJson(bean))
+            startActivity(intent)
+        }
+    }
     /* private fun initZhuanLanHeaderView(view: View, juzhengHeaderList: MutableList<NewsBean>) {
          val mRecyclerView = view.findViewById<PageRecyclerView>(R.id.customSwipeView)
          // 设置指示器
@@ -723,6 +751,9 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                 mPresenter.getHaveSecondModuleNews(page, param, false)
             }
 
+            CHANNEL_TYPE_TOWN->{
+                mPresenter.getBanner(param)
+            }
             else -> {
                 mPresenter.getNewList(param, null, page, false)
             }
@@ -801,7 +832,7 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                 val bean = adapter.data[position].dataBean as TownDataModel
                 val intent = Intent(context, TownDeptActivity::class.java)
                 intent.putExtra(EXTRA_TOWN_DATA, bean)
-                intent.putExtra(EXTRA_HOME_CHANNEL,param)
+                intent.putExtra(EXTRA_HOME_CHANNEL, param)
                 startActivity(intent)
             }
             "评选" -> {
@@ -1050,8 +1081,8 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
 
 
     private fun releaseVideoView() {
-        if(mVideoView==null){
-           return
+        if (mVideoView == null) {
+            return
         }
         mVideoView!!.release()
         controlPlayUiShow(false)
@@ -1130,6 +1161,7 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
             mPlayerContainer?.visibility = View.GONE
             ivStartPlayer?.visibility = View.VISIBLE
         }
-
     }
+
+
 }

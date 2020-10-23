@@ -65,6 +65,10 @@ public abstract class BaseRecyclerFragment<P extends BaseContract.BasePresenter,
      */
     protected A adapter;
 
+    protected View emptyView;
+
+    protected boolean needEmptyView = true;
+
     public void initRecyclerView(RecyclerView recyclerView) {
         rvBaseRecycler = recyclerView;
         rvBaseRecycler.setLayoutManager(new LinearLayoutManager(mActivity));
@@ -86,9 +90,18 @@ public abstract class BaseRecyclerFragment<P extends BaseContract.BasePresenter,
         adapter.setOnItemLongClickListener(this);
         this.adapter = adapter;
         rvBaseRecycler.setAdapter(this.adapter);
-        this.adapter.setEmptyView(R.layout.common_empty_view,rvBaseRecycler);
+        if (emptyView != null && needEmptyView) {
+            this.adapter.setEmptyView(emptyView);
+        } else {
+            if(needEmptyView){
+                this.adapter.setEmptyView(R.layout.common_empty_view, rvBaseRecycler);
+            }
+        }
+
         this.adapter.setHeaderAndEmpty(true);
     }
+
+
 
     /**
      * 刷新列表数据（已在UI线程中），一般需求建议直接调用setList(List<T> l, AdapterCallBack<A> callBack)
@@ -105,7 +118,7 @@ public abstract class BaseRecyclerFragment<P extends BaseContract.BasePresenter,
     public void setList(AdapterCallBack<A> callBack) {
         if (adapter == null) {
             setAdapter(callBack.createAdapter());
-        }else {
+        } else {
             callBack.refreshAdapter();
         }
     }
@@ -200,7 +213,7 @@ public abstract class BaseRecyclerFragment<P extends BaseContract.BasePresenter,
     }
 
 
-    public synchronized void loadDataFail(int page){
+    public synchronized void loadDataFail(int page) {
         isLoading = false;
 
         if (onStopLoadListener == null) {
@@ -484,4 +497,14 @@ public abstract class BaseRecyclerFragment<P extends BaseContract.BasePresenter,
 
     //生命周期、onActivityResult>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+    protected void setRecycleEmptyView(View emptyView) {
+        if (emptyView == null) {
+            return;
+        }
+        needEmptyView = true;
+        this.emptyView = emptyView;
+    }
+    protected void setNeedEmptyView(boolean needEmptyView){
+        this.needEmptyView = needEmptyView;
+    }
 }

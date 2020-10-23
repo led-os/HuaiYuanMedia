@@ -278,7 +278,7 @@ class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.Vie
         params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "榴乡怀远")
         mTencent!!.shareToQQ(this, params, object : IUiListener {
             override fun onComplete(p0: Any?) {
-                mPresenter.shareAward()
+//                mPresenter.shareAward()
                 ToastUtils.showShort("分享成功")
             }
 
@@ -370,7 +370,7 @@ class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.Vie
                 }
 
                 override fun onWbShareSuccess() {
-                    mPresenter.shareAward()
+//                    mPresenter.shareAward()
                     ToastUtils.showShort("分享成功")
                 }
 
@@ -389,7 +389,7 @@ class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.Vie
     private var onClickResult = object : InterfaceUtils.OnClickResult {
         override fun onResult(msg: String?) {
             ToastUtils.showShort("分享成功")
-            mPresenter.shareAward()
+//            mPresenter.shareAward()
             InterfaceUtils.getInstance().remove(this)
         }
 

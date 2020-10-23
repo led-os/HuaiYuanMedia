@@ -50,7 +50,9 @@ public class Contacts {
 
 
 //    public static String DEV_BASE_URL = "http://huaiyuan.dashuiniu.com.cn/";
-public static String DEV_BASE_URL = "http://192.168.0.198:8003/";
+//public static String DEV_BASE_URL = "http://192.168.0.198:8003/";
+public static String DEV_BASE_URL = "http://testhuaiyuan.tklvyou.cn/";
+
     public static String PRO_BASE_URL = "http://huaiyuan.dashuiniu.com.cn/";
 
     public static String WEB_URL = "http://huaiyuanweb.dashuiniu.com.cn/";
