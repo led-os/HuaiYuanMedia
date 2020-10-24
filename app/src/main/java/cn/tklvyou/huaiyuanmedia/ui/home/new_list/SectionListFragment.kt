@@ -1088,6 +1088,7 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
             }
         })
         mController = StandardVideoController(mActivity!!)
+        mController!!.setEnableOrientation(false)
         mErrorView = ErrorView(mActivity)
         mController!!.addControlComponent(mErrorView)
         mCompleteView = CompleteView(mActivity!!)
