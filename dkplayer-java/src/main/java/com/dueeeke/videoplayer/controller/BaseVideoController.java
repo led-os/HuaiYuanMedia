@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -447,7 +446,7 @@ public abstract class BaseVideoController extends FrameLayout
         //记录用户手机上一次放置的位置
         int lastOrientation = mOrientation;
 
-        if (orientation == OrientationEventListener.ORIENTATION_UNKNOWN) {
+      /*  if (orientation == OrientationEventListener.ORIENTATION_UNKNOWN) {
             //手机平放时，检测不到有效的角度
             //重置为原始位置 -1
             mOrientation = -1;
@@ -479,7 +478,7 @@ public abstract class BaseVideoController extends FrameLayout
             //270度，用户左侧横屏拿着手机
             mOrientation = 270;
             onOrientationLandscape(mActivity);
-        }
+        }*/
     }
 
     /**

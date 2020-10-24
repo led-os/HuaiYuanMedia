@@ -411,4 +411,16 @@ class HomeFragment : BaseFragment<HomePresenter>(), HomeContract.View {
         datas.add(endPos, o)
     }
 
+    fun  clickTabCallback(position : Int){
+        for (mChannelFragment in mChannelFragments) {
+            if(mChannelFragment is SectionListFragment ){
+                if(position == 0){
+                    mChannelFragment.onUserVisible()
+                }else{
+                    mChannelFragment.onUserInvisible()
+                }
+
+            }
+        }
+    }
 }

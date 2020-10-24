@@ -12,9 +12,7 @@ import cn.tklvyou.huaiyuanmedia.R
 import cn.tklvyou.huaiyuanmedia.base.activity.BaseActivity
 import cn.tklvyou.huaiyuanmedia.helper.AccountHelper
 import cn.tklvyou.huaiyuanmedia.ui.adapter.GridImageAdapter
-import cn.tklvyou.huaiyuanmedia.ui.camera.TakePhotoActivity
 import cn.tklvyou.huaiyuanmedia.ui.video_edit.CameraActivity
-import cn.tklvyou.huaiyuanmedia.ui.video_edit.VideoOptionActivity
 import cn.tklvyou.huaiyuanmedia.utils.QiniuUploadManager
 import com.blankj.utilcode.util.ToastUtils
 import com.luck.picture.lib.PictureSelector
@@ -23,8 +21,6 @@ import com.luck.picture.lib.config.PictureMimeType
 import com.luck.picture.lib.entity.LocalMedia
 import kotlinx.android.synthetic.main.activity_publish_news.*
 import java.io.File
-import java.io.Serializable
-import java.lang.StringBuilder
 
 class PublishNewsActivity : BaseActivity<PublishNewsPresenter>(), PublishNewsContract.View {
 
@@ -136,10 +132,10 @@ class PublishNewsActivity : BaseActivity<PublishNewsPresenter>(), PublishNewsCon
         btnSubmit.setOnClickListener {
             hideSoftInput(etContent.windowToken)
 
-            if (etContent.text.toString().trim().isEmpty()) {
+           /* if (etContent.text.toString().trim().isEmpty()) {
                 ToastUtils.showShort("请输入内容")
                 return@setOnClickListener
-            }
+            }*/
 
             if (qiniuToken.isEmpty()) {
                 mPresenter.getQiniuToken()

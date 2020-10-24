@@ -54,6 +54,7 @@ import com.dueeeke.videocontroller.StandardVideoController
 import com.dueeeke.videocontroller.component.*
 import com.dueeeke.videoplayer.ijk.IjkPlayer
 import com.dueeeke.videoplayer.player.VideoView
+import com.dueeeke.videoplayer.player.VideoView.STATE_PLAYING
 import com.dueeeke.videoplayer.player.VideoView.SimpleOnStateChangeListener
 import com.dueeeke.videoplayer.player.VideoViewManager
 import com.google.gson.Gson
@@ -109,7 +110,7 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
     private var isRefresh = false
     private var audioController: AudioController? = null
     private val townDataList: MutableList<TownDataModel> = ArrayList()
-
+    private var lastPlayState = -1
     override fun initView() {
         param = mBundle.getString("param", "")
 
@@ -245,6 +246,7 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
 
     override fun onUserVisible() {
         super.onUserVisible()
+        LogUtils.iTag("执行了---", "onUserInvisible")
         when (param) {
             "爆料" -> {
                 if (isRefresh) {
@@ -255,9 +257,22 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
             CHANNEL_TYPE_SHI_XUN -> {
                 //恢复上次播放的位置
                 if (mLastPos < 0 || mLastPos >= adapter.data.size) {
+                    LogUtils.dTag("列表播放器", "不满足条件 直接拦截")
                     return
                 }
-                mVideoView!!.resume()
+                if (mVideoView?.currentPlayState == STATE_PLAYING) {
+                    LogUtils.dTag("列表播放器", "当前正在播放 不需要暂停")
+                    return
+                }
+                LogUtils.iTag("列表播放器", "需要恢复播放")
+                if (lastPlayState == STATE_PLAYING) {
+                    LogUtils.iTag("列表播放器", "已经可见 播放器之前是播放状态 需要恢复播放")
+                    mVideoView?.resume()
+
+                } else {
+                    LogUtils.iTag("列表播放器", "已经可见 但是播放器之前不是播放状态")
+                }
+
             }
         }
     }
@@ -265,9 +280,16 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
     override fun onUserInvisible() {
         super.onUserInvisible()
         closeAudioController()
-        if (mVideoView != null && mCurPos > -1) {
+        LogUtils.dTag("执行了---", "onUserInvisible")
+        if (mVideoView == null) {
+            return
+        }
+        if (mCurPos > -1) {
+            LogUtils.dTag("列表播放器", "已经不可见 需要暂停播放")
+            lastPlayState = mVideoView!!.currentPlayState
             mVideoView!!.pause()
         } else {
+            LogUtils.dTag("列表播放器", "已经不可见 直接releaseVideoView()---mCurPos=" + mCurPos + "lastPos=" + mLastPos)
             releaseVideoView()
         }
 
@@ -432,7 +454,7 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                     }
                     "专题" -> {
                         list.clear()
-                       setNeedEmptyView(false)
+                        setNeedEmptyView(false)
                         val bannerView = View.inflate(context, R.layout.item_normal_banner, null)
                         initBannerView(bannerView, bannerModelList)
                         val view = View.inflate(context, R.layout.item_zhuan_ti_header_layout, null)
@@ -751,7 +773,7 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                 mPresenter.getHaveSecondModuleNews(page, param, false)
             }
 
-            CHANNEL_TYPE_TOWN->{
+            CHANNEL_TYPE_TOWN -> {
                 mPresenter.getBanner(param)
             }
             else -> {
@@ -1128,6 +1150,7 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
         getVideoViewManager()?.add(mVideoView, Tag.LIST)
         mVideoView?.start()
         mCurPos = position
+        LogUtils.dTag("列表播放器", "已经记录播放位置=" + mCurPos)
     }
 
 

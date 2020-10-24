@@ -7,10 +7,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.view.KeyEvent
-import androidx.fragment.app.Fragment
 import cn.tklvyou.huaiyuanmedia.BuildConfig
 import cn.tklvyou.huaiyuanmedia.R
-import cn.tklvyou.huaiyuanmedia.base.activity.BaseBottomTab2Activity
 import cn.tklvyou.huaiyuanmedia.base.activity.BaseBottomTabActivity
 import cn.tklvyou.huaiyuanmedia.base.fragment.BaseX5WebViewFragment
 import cn.tklvyou.huaiyuanmedia.base.interfaces.BackHandledInterface
@@ -21,7 +19,6 @@ import cn.tklvyou.huaiyuanmedia.ui.camera.CameraFragment
 import cn.tklvyou.huaiyuanmedia.ui.home.HomeFragment
 import cn.tklvyou.huaiyuanmedia.ui.mine.MineFragment
 import cn.tklvyou.huaiyuanmedia.ui.work.WorkFragment
-import cn.tklvyou.huaiyuanmedia.utils.AndroidBug5497Workaround
 import com.blankj.utilcode.util.SPUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.trello.rxlifecycle3.components.support.RxFragment
@@ -92,11 +89,27 @@ class MainActivity : BaseBottomTabActivity<MainPresenter>(), MainContract.View, 
 
         bottomNavigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.navigation_home -> selectFragment(0)
-                R.id.navigation_audio_visual -> selectFragment(1)
-                R.id.navigation_camera -> selectFragment(2)
-                R.id.navigation_service -> selectFragment(3)
-                R.id.navigation_mine -> selectFragment(4)
+                R.id.navigation_home -> {
+                    selectFragment(0)
+                    homeFragment?.clickTabCallback(0)
+                }
+                R.id.navigation_audio_visual -> {
+                    selectFragment(1)
+                    homeFragment?.clickTabCallback(1)
+                }
+                R.id.navigation_camera -> {
+                    selectFragment(2)
+                    homeFragment?.clickTabCallback(2)
+                }
+                R.id.navigation_service -> {
+                    selectFragment(3)
+                    homeFragment?.clickTabCallback(3)
+                }
+
+                R.id.navigation_mine -> {
+                    selectFragment(4)
+                    homeFragment?.clickTabCallback(4)
+                }
             }
 
             mPresenter.getLifeInfo()
