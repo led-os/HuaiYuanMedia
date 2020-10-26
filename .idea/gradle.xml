@@ -21,13 +21,12 @@
             <option value="$PROJECT_DIR$/libtitlebar" />
             <option value="$PROJECT_DIR$/libzhuanpan" />
             <option value="$PROJECT_DIR$/picture_library" />
-            <option value="$PROJECT_DIR$/superplayerdemo" />
-            <option value="$PROJECT_DIR$/superplayerkit" />
             <option value="$PROJECT_DIR$/ucrop" />
             <option value="$PROJECT_DIR$/wxcamera" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
+        <option name="useQualifiedModuleNames" value="true" />
       </GradleProjectSettings>
     </option>
   </component>

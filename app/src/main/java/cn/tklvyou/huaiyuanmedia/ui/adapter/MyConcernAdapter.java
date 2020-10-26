@@ -1,26 +1,19 @@
 package cn.tklvyou.huaiyuanmedia.ui.adapter;
 
-import android.graphics.Color;
-import android.view.Gravity;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.cjt2325.cameralibrary.util.LogUtil;
 
 import java.util.List;
 
 import cn.tklvyou.huaiyuanmedia.R;
 import cn.tklvyou.huaiyuanmedia.helper.GlideManager;
 import cn.tklvyou.huaiyuanmedia.model.ConcernModel;
-import cn.tklvyou.huaiyuanmedia.model.MineRvModel;
-import cn.tklvyou.huaiyuanmedia.utils.YResourceUtils;
-import q.rorbin.badgeview.Badge;
-import q.rorbin.badgeview.QBadgeView;
 
 /**
  * 我的关注
@@ -36,7 +29,9 @@ public class MyConcernAdapter extends BaseQuickAdapter<ConcernModel, BaseViewHol
     @Override
     protected void convert(@NonNull BaseViewHolder helper, ConcernModel item) {
         helper.setText(R.id.tvNickName, item.getNickname());
-        GlideManager.loadCircleImg(item.getAvatar(),helper.getView(R.id.ivAvatar));
+        ImageView imageView = helper.getView(R.id.ivAvatar);
+        GlideManager.setCirclePlaceholder(ContextCompat.getDrawable(imageView.getContext(),R.mipmap.default_avatar));
+        GlideManager.loadCircleImg(item.getAvatar(),imageView);
         helper.addOnClickListener(R.id.cbCheck);
 
         if(!item.isNoConcern()){

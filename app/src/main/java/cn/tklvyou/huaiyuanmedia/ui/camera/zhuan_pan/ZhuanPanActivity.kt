@@ -14,7 +14,6 @@ import cn.tklvyou.huaiyuanmedia.common.Contacts
 import cn.tklvyou.huaiyuanmedia.common.Contacts.SHARE_DOWNLOAD_URL
 import cn.tklvyou.huaiyuanmedia.model.LotteryModel
 import cn.tklvyou.huaiyuanmedia.model.LotteryResultModel
-import cn.tklvyou.huaiyuanmedia.ui.camera.zhuan_pan.ZhuanPanContract.REWARD_NOTHING
 import cn.tklvyou.huaiyuanmedia.ui.mine.reward.RewardConstant
 import cn.tklvyou.huaiyuanmedia.utils.InterfaceUtils
 import cn.tklvyou.huaiyuanmedia.utils.JSON
@@ -61,6 +60,7 @@ class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.Vie
 
     private lateinit var idList: MutableList<Int>
     private lateinit var scoreStr: String
+    private var score = 0
     private var mRecordId: Long = 0
     private var rewardType = 0
     private var num = 0
@@ -131,8 +131,9 @@ class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.Vie
                 tvNum.text = "剩余转盘次数：$num"
                 when (rewardType) {
                     1 -> {
-                        if (REWARD_NOTHING == scoreStr) {
-                            ToastUtils.showShort("抱歉 您未中奖")
+                        LogUtils.iTag("中奖记录","------>"+scoreStr)
+                        if (0 == score) {
+//                            ToastUtils.showShort("抱歉 您未中奖")
                         } else {
                             showRewardType1()
                         }
@@ -142,7 +143,7 @@ class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.Vie
                     }
 
                     else -> {
-                        ToastUtils.showShort("抱歉 您未中奖")
+//                        ToastUtils.showShort("抱歉 您未中奖")
                     }
                 }
 
@@ -174,6 +175,7 @@ class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.Vie
         if (model != null) {
 //            tvNum.text = "剩余转盘次数：$num"
             scoreStr = model.name
+            score = model.score
             rewardType = model.type
             mRecordId = model.recordId
             wheelSurfView.startRotate(idList.size - idList.indexOf(model.id) + 1)

@@ -2,40 +2,20 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/HuaiYuanMedia.iml" filepath="$PROJECT_DIR$/.idea/HuaiYuanMedia.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/HuaiYuanMedia-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/HuaiYuanMedia-app.iml" group="HuaiYuanMedia/app" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lib-ios-dialog/HuaiYuanMedia-lib-ios-dialog.iml" filepath="$PROJECT_DIR$/.idea/modules/lib-ios-dialog/HuaiYuanMedia-lib-ios-dialog.iml" group="HuaiYuanMedia/lib-ios-dialog" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/libtitlebar/HuaiYuanMedia-libtitlebar.iml" filepath="$PROJECT_DIR$/.idea/modules/libtitlebar/HuaiYuanMedia-libtitlebar.iml" group="HuaiYuanMedia/libtitlebar" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/libzhuanpan/HuaiYuanMedia-libzhuanpan.iml" filepath="$PROJECT_DIR$/.idea/modules/libzhuanpan/HuaiYuanMedia-libzhuanpan.iml" group="HuaiYuanMedia/libzhuanpan" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/picture_library/HuaiYuanMedia-picture_library.iml" filepath="$PROJECT_DIR$/.idea/modules/picture_library/HuaiYuanMedia-picture_library.iml" group="HuaiYuanMedia/picture_library" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/superplayerdemo/HuaiYuanMedia-superplayerdemo.iml" filepath="$PROJECT_DIR$/.idea/modules/superplayerdemo/HuaiYuanMedia-superplayerdemo.iml" group="HuaiYuanMedia/superplayerdemo" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/superplayerkit/HuaiYuanMedia-superplayerkit.iml" filepath="$PROJECT_DIR$/.idea/modules/superplayerkit/HuaiYuanMedia-superplayerkit.iml" group="HuaiYuanMedia/superplayerkit" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ucrop/HuaiYuanMedia-ucrop.iml" filepath="$PROJECT_DIR$/.idea/modules/ucrop/HuaiYuanMedia-ucrop.iml" group="HuaiYuanMedia/ucrop" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/wxcamera/HuaiYuanMedia-wxcamera.iml" filepath="$PROJECT_DIR$/.idea/modules/wxcamera/HuaiYuanMedia-wxcamera.iml" group="HuaiYuanMedia/wxcamera" />
-      <module fileurl="file://$PROJECT_DIR$/app/HuaiYuanMedia.app.iml" filepath="$PROJECT_DIR$/app/HuaiYuanMedia.app.iml" group="HuaiYuanMedia/app" />
-      <module fileurl="file://$PROJECT_DIR$/lib-ios-dialog/HuaiYuanMedia.lib-ios-dialog.iml" filepath="$PROJECT_DIR$/lib-ios-dialog/HuaiYuanMedia.lib-ios-dialog.iml" group="HuaiYuanMedia/lib-ios-dialog" />
-      <module fileurl="file://$PROJECT_DIR$/libtitlebar/HuaiYuanMedia.libtitlebar.iml" filepath="$PROJECT_DIR$/libtitlebar/HuaiYuanMedia.libtitlebar.iml" group="HuaiYuanMedia/libtitlebar" />
-      <module fileurl="file://$PROJECT_DIR$/libzhuanpan/HuaiYuanMedia.libzhuanpan.iml" filepath="$PROJECT_DIR$/libzhuanpan/HuaiYuanMedia.libzhuanpan.iml" group="HuaiYuanMedia/libzhuanpan" />
-      <module fileurl="file://$PROJECT_DIR$/picture_library/HuaiYuanMedia.picture_library.iml" filepath="$PROJECT_DIR$/picture_library/HuaiYuanMedia.picture_library.iml" group="HuaiYuanMedia/picture_library" />
-      <module fileurl="file://$PROJECT_DIR$/ucrop/HuaiYuanMedia.ucrop.iml" filepath="$PROJECT_DIR$/ucrop/HuaiYuanMedia.ucrop.iml" group="HuaiYuanMedia/ucrop" />
-      <module fileurl="file://$PROJECT_DIR$/wxcamera/HuaiYuanMedia.wxcamera.iml" filepath="$PROJECT_DIR$/wxcamera/HuaiYuanMedia.wxcamera.iml" group="HuaiYuanMedia/wxcamera" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/JenkinsZhou-HuaiYuanMedia.iml" filepath="$PROJECT_DIR$/.idea/modules/JenkinsZhou-HuaiYuanMedia.iml" group="HuaiYuanMedia" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/code.HuaiYuanMedia.iml" filepath="$PROJECT_DIR$/code.HuaiYuanMedia.iml" group="HuaiYuanMedia" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dkplayer-java/dkplayer-java.iml" filepath="$PROJECT_DIR$/.idea/modules/dkplayer-java/dkplayer-java.iml" group="HuaiYuanMedia/dkplayer-java" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dkplayer-players/dkplayer-players.iml" filepath="$PROJECT_DIR$/.idea/modules/dkplayer-players/dkplayer-players.iml" group="HuaiYuanMedia/dkplayer-players" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dkplayer-ui/dkplayer-ui.iml" filepath="$PROJECT_DIR$/.idea/modules/dkplayer-ui/dkplayer-ui.iml" group="HuaiYuanMedia/dkplayer-ui" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dkplayer-videocache/dkplayer-videocache.iml" filepath="$PROJECT_DIR$/.idea/modules/dkplayer-videocache/dkplayer-videocache.iml" group="HuaiYuanMedia/dkplayer-videocache" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dkplayer-players/exo/exo.iml" filepath="$PROJECT_DIR$/.idea/modules/dkplayer-players/exo/exo.iml" group="HuaiYuanMedia/dkplayer-players/exo" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dkplayer-players/ijk/ijk.iml" filepath="$PROJECT_DIR$/.idea/modules/dkplayer-players/ijk/ijk.iml" group="HuaiYuanMedia/dkplayer-players/ijk" />
-      <module fileurl="file://$PROJECT_DIR$/lib-ios-dialog/lib-ios-dialog.iml" filepath="$PROJECT_DIR$/lib-ios-dialog/lib-ios-dialog.iml" />
-      <module fileurl="file://$PROJECT_DIR$/libtitlebar/libtitlebar.iml" filepath="$PROJECT_DIR$/libtitlebar/libtitlebar.iml" />
-      <module fileurl="file://$PROJECT_DIR$/libzhuanpan/libzhuanpan.iml" filepath="$PROJECT_DIR$/libzhuanpan/libzhuanpan.iml" />
-      <module fileurl="file://$PROJECT_DIR$/picture_library/picture_library.iml" filepath="$PROJECT_DIR$/picture_library/picture_library.iml" />
-      <module fileurl="file://$PROJECT_DIR$/superplayerdemo/superplayerdemo.iml" filepath="$PROJECT_DIR$/superplayerdemo/superplayerdemo.iml" group="HuaiYuanMedia/superplayerdemo" />
-      <module fileurl="file://$PROJECT_DIR$/superplayerkit/superplayerkit.iml" filepath="$PROJECT_DIR$/superplayerkit/superplayerkit.iml" group="HuaiYuanMedia/superplayerkit" />
-      <module fileurl="file://$PROJECT_DIR$/ucrop/ucrop.iml" filepath="$PROJECT_DIR$/ucrop/ucrop.iml" />
-      <module fileurl="file://$PROJECT_DIR$/wxcamera/wxcamera.iml" filepath="$PROJECT_DIR$/wxcamera/wxcamera.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dkplayer-java/HuaiYuanMedia.dkplayer-java.iml" filepath="$PROJECT_DIR$/.idea/modules/dkplayer-java/HuaiYuanMedia.dkplayer-java.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dkplayer-players/HuaiYuanMedia.dkplayer-players.iml" filepath="$PROJECT_DIR$/.idea/modules/dkplayer-players/HuaiYuanMedia.dkplayer-players.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dkplayer-players/exo/HuaiYuanMedia.dkplayer-players.exo.iml" filepath="$PROJECT_DIR$/.idea/modules/dkplayer-players/exo/HuaiYuanMedia.dkplayer-players.exo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dkplayer-players/ijk/HuaiYuanMedia.dkplayer-players.ijk.iml" filepath="$PROJECT_DIR$/.idea/modules/dkplayer-players/ijk/HuaiYuanMedia.dkplayer-players.ijk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dkplayer-ui/HuaiYuanMedia.dkplayer-ui.iml" filepath="$PROJECT_DIR$/.idea/modules/dkplayer-ui/HuaiYuanMedia.dkplayer-ui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dkplayer-videocache/HuaiYuanMedia.dkplayer-videocache.iml" filepath="$PROJECT_DIR$/.idea/modules/dkplayer-videocache/HuaiYuanMedia.dkplayer-videocache.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/JenkinsZhou.HuaiYuanMedia.iml" filepath="$PROJECT_DIR$/.idea/modules/JenkinsZhou.HuaiYuanMedia.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/JenkinsZhou.HuaiYuanMedia.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/JenkinsZhou.HuaiYuanMedia.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lib-ios-dialog/JenkinsZhou.HuaiYuanMedia.lib-ios-dialog.iml" filepath="$PROJECT_DIR$/.idea/modules/lib-ios-dialog/JenkinsZhou.HuaiYuanMedia.lib-ios-dialog.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/libtitlebar/JenkinsZhou.HuaiYuanMedia.libtitlebar.iml" filepath="$PROJECT_DIR$/.idea/modules/libtitlebar/JenkinsZhou.HuaiYuanMedia.libtitlebar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/libzhuanpan/JenkinsZhou.HuaiYuanMedia.libzhuanpan.iml" filepath="$PROJECT_DIR$/.idea/modules/libzhuanpan/JenkinsZhou.HuaiYuanMedia.libzhuanpan.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/picture_library/JenkinsZhou.HuaiYuanMedia.picture_library.iml" filepath="$PROJECT_DIR$/.idea/modules/picture_library/JenkinsZhou.HuaiYuanMedia.picture_library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ucrop/JenkinsZhou.HuaiYuanMedia.ucrop.iml" filepath="$PROJECT_DIR$/.idea/modules/ucrop/JenkinsZhou.HuaiYuanMedia.ucrop.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/wxcamera/JenkinsZhou.HuaiYuanMedia.wxcamera.iml" filepath="$PROJECT_DIR$/.idea/modules/wxcamera/JenkinsZhou.HuaiYuanMedia.wxcamera.iml" />
     </modules>
   </component>
 </project>
