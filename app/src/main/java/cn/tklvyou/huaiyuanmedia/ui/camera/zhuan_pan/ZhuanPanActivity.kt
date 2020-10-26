@@ -84,8 +84,9 @@ class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.Vie
         num = model.num
         tvNum.text = "剩余转盘次数：" + model.num
         if (model.data != null && model.data.isNotEmpty()) {
-                tvRewardRule.text = "抽奖规则:" + model.exchange+"积分兑换1次抽奖次数,抽完即止"
+            tvRewardRule.text = "抽奖规则:" + model.exchange + "积分兑换1次抽奖次数,抽完即止"
         }
+
         //颜色
         val colors = arrayOf<Int>(Color.parseColor("#FFC6B1"),
                 Color.parseColor("#FCB195"),
@@ -125,6 +126,7 @@ class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.Vie
         wheelSurfView.setRotateListener(object : RotateListener {
             override fun rotateEnd(position: Int, des: String) {
                 wheelSurfView.goBtn.isEnabled = true
+                tvNum.text = "剩余转盘次数：$num"
                 when (rewardType) {
                     1 -> {
                         showRewardType1()
@@ -156,14 +158,20 @@ class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.Vie
         })
     }
 
+    override fun setLotteryNum(model: LotteryModel?) {
+      if(model != null){
+          num = model.num
+      }
+    }
+
     override fun setLotteryResult(model: LotteryResultModel?) {
         if (model != null) {
-            num--
-            tvNum.text = "剩余转盘次数：$num"
+//            tvNum.text = "剩余转盘次数：$num"
             scoreStr = model.name
             rewardType = model.type
             mRecordId = model.recordId
             wheelSurfView.startRotate(idList.size - idList.indexOf(model.id) + 1)
+            mPresenter.getLotteryNum()
         } else {
             wheelSurfView.goBtn.isEnabled = true
         }

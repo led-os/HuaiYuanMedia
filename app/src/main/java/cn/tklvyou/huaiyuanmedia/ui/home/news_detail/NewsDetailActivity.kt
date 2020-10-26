@@ -361,7 +361,6 @@ class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContra
         if (item.name.isNotEmpty()) {
             shareTitle = item.name
         }
-        item.nickname = ""
         //收藏状态
         hasCollect = item.collect_status == 1
 

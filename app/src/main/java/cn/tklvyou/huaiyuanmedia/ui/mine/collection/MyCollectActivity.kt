@@ -3,8 +3,6 @@ package cn.tklvyou.huaiyuanmedia.ui.mine.collection
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.LinearGradient
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
@@ -16,16 +14,12 @@ import cn.tklvyou.huaiyuanmedia.model.BasePageModel
 import cn.tklvyou.huaiyuanmedia.model.NewsBean
 import cn.tklvyou.huaiyuanmedia.model.NewsMultipleItem
 import cn.tklvyou.huaiyuanmedia.ui.adapter.MyCollectionAdapter
-import cn.tklvyou.huaiyuanmedia.ui.adapter.NewsMultipleItemQuickAdapter
-import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
-import cn.tklvyou.huaiyuanmedia.ui.home.tv_news_detail.TVNewsDetailActivity
 import cn.tklvyou.huaiyuanmedia.ui.audio.ServiceWebviewActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.AudioController
+import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
 import cn.tklvyou.huaiyuanmedia.ui.video_player.VodActivity
 import cn.tklvyou.huaiyuanmedia.utils.RecycleViewDivider
 import cn.tklvyou.huaiyuanmedia.widget.dailog.CommonDialog
-import com.blankj.utilcode.util.LogUtils
-import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import kotlinx.android.synthetic.main.activity_my_collect.*
@@ -211,6 +205,9 @@ class MyCollectActivity : BaseHttpRecyclerActivity<CollectPresenter, NewsMultipl
                         mPresenter.addLikeNews(bean.id, position)
                     }
                 }
+                R.id.contentText,R.id.textPlus->{
+                    skipNewsDetailByCondition(bean, id, position)
+                }
 
             }
 
@@ -298,4 +295,12 @@ class MyCollectActivity : BaseHttpRecyclerActivity<CollectPresenter, NewsMultipl
     }
 
 
+    private fun skipNewsDetailByCondition(bean :NewsBean,id: Int, position: Int){
+        val type = ModuleUtils.getTypeByNewsBean(bean)
+        if (bean.url.isNotEmpty()) {
+            startDetailsActivity(this, bean.url)
+        } else {
+            startNewsDetailActivity(this, type, id, position)
+        }
+    }
 }

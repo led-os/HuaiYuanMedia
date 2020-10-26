@@ -2,7 +2,6 @@ package cn.tklvyou.huaiyuanmedia.ui.adapter;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -12,11 +11,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.blankj.utilcode.util.ConvertUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.google.android.exoplayer2.ui.DefaultTimeBar;
 import com.varunest.sparkbutton.SparkButton;
@@ -27,7 +24,6 @@ import java.util.Locale;
 
 import cn.tklvyou.huaiyuanmedia.R;
 import cn.tklvyou.huaiyuanmedia.helper.GlideManager;
-import cn.tklvyou.huaiyuanmedia.model.HaveSecondModuleNewsModel;
 import cn.tklvyou.huaiyuanmedia.model.NewsBean;
 import cn.tklvyou.huaiyuanmedia.model.NewsMultipleItem;
 import cn.tklvyou.huaiyuanmedia.ui.home.AudioController;
@@ -388,7 +384,8 @@ public class MyCollectionAdapter extends BaseMultiItemQuickAdapter<NewsMultipleI
                 bean = (NewsBean) item.getDataBean();
 
                 helper.addOnClickListener(R.id.sparkButton, R.id.tvGoodNum);
-
+                helper.addOnClickListener(R.id.contentTv);
+                helper.addOnClickListener(R.id.contentText,R.id.textPlus);
                 helper.setVisible(R.id.deleteBtn, false);
                 helper.setText(R.id.nameTv, bean.getNickname());
                 helper.setText(R.id.timeTv, bean.getBegintime());
@@ -457,24 +454,32 @@ public class MyCollectionAdapter extends BaseMultiItemQuickAdapter<NewsMultipleI
 
                 } else {
                     //上传的是视频
+                        if(!StringUtils.isEmpty(bean.getVideo())){
+                            MultiImageView multiImageView = helper.getView(R.id.multiImagView);
+                            multiImageView.setVisibility(View.GONE);
+                            FrameLayout llVideo = helper.getView(R.id.llVideo);
+                            llVideo.setVisibility(View.VISIBLE);
 
-                    MultiImageView multiImageView = helper.getView(R.id.multiImagView);
-                    multiImageView.setVisibility(View.GONE);
-                    FrameLayout llVideo = helper.getView(R.id.llVideo);
-                    llVideo.setVisibility(View.VISIBLE);
+                            ImageView ivVideo = helper.getView(R.id.ivVideo);
+                            ivVideo.setBackgroundColor(Color.parseColor("#abb1b6"));
+                            ivVideo.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(mContext, VodActivity.class);
+                                    intent.putExtra("videoPath", bean.getVideo());
+                                    mContext.startActivity(intent);
+                                }
+                            });
 
-                    ImageView ivVideo = helper.getView(R.id.ivVideo);
-                    ivVideo.setBackgroundColor(Color.parseColor("#abb1b6"));
-                    ivVideo.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(mContext, VodActivity.class);
-                            intent.putExtra("videoPath", bean.getVideo());
-                            mContext.startActivity(intent);
+                            GlideManager.loadImg(bean.getImage(), ivVideo);
+                        }else {
+                            //上传的纯文本
+                            MultiImageView multiImageView = helper.getView(R.id.multiImagView);
+                            multiImageView.setVisibility(View.GONE);
+                            FrameLayout llVideo = helper.getView(R.id.llVideo);
+                            llVideo.setVisibility(View.GONE);
                         }
-                    });
 
-                    GlideManager.loadImg(bean.getImage(), ivVideo);
 
                 }
                 break;

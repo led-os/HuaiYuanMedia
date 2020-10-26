@@ -61,7 +61,8 @@ public class WxCircleAdapter extends BaseQuickAdapter<NewsBean, BaseViewHolder> 
             helper.setVisible(R.id.deleteBtn, false);
         }
         helper.addOnClickListener(R.id.deleteBtn, R.id.sparkButton, R.id.tvGoodNum);
-
+        helper.addOnClickListener(R.id.contentTv);
+        helper.addOnClickListener(R.id.contentText,R.id.textPlus);
         helper.setText(R.id.nameTv, item.getNickname());
         helper.setText(R.id.timeTv, item.getBegintime());
 
@@ -90,6 +91,7 @@ public class WxCircleAdapter extends BaseQuickAdapter<NewsBean, BaseViewHolder> 
         }
 
         ExpandTextView expandTextView = helper.getView(R.id.contentTv);
+
         if (!TextUtils.isEmpty(item.getName())) {
             expandTextView.setExpand(item.isExpand());
             expandTextView.setExpandStatusListener(new ExpandTextView.ExpandStatusListener() {

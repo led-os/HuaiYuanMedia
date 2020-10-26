@@ -53,7 +53,7 @@ class RewardRewardRecordActivity : BaseHttpRecyclerActivity<RewardPresenter, Rew
     }
 
     override fun initView(savedInstanceState: Bundle?) {
-        setTitle("中奖纪录")
+        setTitle("中奖记录")
         setNavigationImage()
         setNavigationOnClickListener { finish() }
         initSmartRefreshLayout(mSmartRefreshLayout)

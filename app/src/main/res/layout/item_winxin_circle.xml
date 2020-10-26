@@ -107,7 +107,7 @@
                 android:id="@+id/tvReadNum"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:drawableLeft="@mipmap/icon_msg"
+                android:drawableLeft="@mipmap/icon_eye"
                 android:drawablePadding="@dimen/dp_8"
                 android:gravity="center"
                 android:text="0"

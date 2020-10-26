@@ -170,7 +170,7 @@ class MyDianZanActivity : BaseHttpRecyclerActivity<MyDianZanPresenter, NewsMulti
         val id = bean.id
         if (!isEdit) {
             when (view!!.id) {
-                R.id.itemLayout -> {
+                R.id.itemLayout,R.id.contentText,R.id.textPlus -> {
                     val type = ModuleUtils.getTypeByNewsBean(bean)
 
                     if (bean.url.isNotEmpty()) {
@@ -179,6 +179,7 @@ class MyDianZanActivity : BaseHttpRecyclerActivity<MyDianZanPresenter, NewsMulti
                         startNewsDetailActivity(this, type, id, position)
                     }
                 }
+
 
                 //V视频 直播 播放按钮
                 R.id.ivStartPlayer -> {

@@ -16,8 +16,6 @@ import cn.tklvyou.huaiyuanmedia.ui.camera.message.ArticleMessageActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
 import cn.tklvyou.huaiyuanmedia.utils.RecycleViewDivider
 import cn.tklvyou.huaiyuanmedia.widget.dailog.CommonDialog
-import com.blankj.utilcode.util.LogUtils
-import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import kotlinx.android.synthetic.main.fragment_history_updates.*
@@ -126,11 +124,11 @@ class HistoryUpdatesFragment : BaseHttpRecyclerFragment<HistoryUpdatesPresenter,
 
     override fun onItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
         super.onItemClick(adapter, view, position)
-
-        val bean = (adapter as WxCircleAdapter).data[position]
+        skipNewsDetail(position)
+        /*val bean = (adapter as WxCircleAdapter).data[position]
         val id = bean.id
         val type = if (bean.images != null && bean.images.size > 0) "图文" else "视频"
-        startNewsDetailActivity(context!!, type, id, position)
+        startNewsDetailActivity(context!!, type, id, position)*/
 
     }
 
@@ -150,7 +148,15 @@ class HistoryUpdatesFragment : BaseHttpRecyclerFragment<HistoryUpdatesPresenter,
                 }
                 dialog.show()
             }
-
+        R.id.contentTv->{
+            skipNewsDetail(position)
+        }
+            R.id.textPlus->{
+                skipNewsDetail(position)
+            }
+            R.id.contentText->{
+                skipNewsDetail(position)
+            }
             R.id.sparkButton, R.id.tvGoodNum -> {
                 val bean = (adapter as WxCircleAdapter).data[position] as NewsBean
                 if (bean.like_status == 1) {
@@ -220,4 +226,10 @@ class HistoryUpdatesFragment : BaseHttpRecyclerFragment<HistoryUpdatesPresenter,
     }
 
 
+    private fun skipNewsDetail(position: Int){
+        val bean = (adapter as WxCircleAdapter).data[position]
+        val id = bean.id
+        val type = if (bean.images != null && bean.images.size > 0) "图文" else "视频"
+        startNewsDetailActivity(context!!, type, id, position)
+    }
 }

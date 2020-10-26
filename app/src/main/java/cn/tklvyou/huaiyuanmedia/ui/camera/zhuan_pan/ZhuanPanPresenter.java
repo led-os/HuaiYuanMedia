@@ -24,6 +24,21 @@ public class ZhuanPanPresenter extends BasePresenter<ZhuanPanContract.View> impl
     }
 
     @Override
+    public void getLotteryNum() {
+        RetrofitHelper.getInstance().getServer()
+                .getLotteryModel()
+                .compose(RxSchedulers.applySchedulers())
+                .compose(mView.bindToLife())
+                .subscribe(result -> {
+                    if (result.getCode() == 1) {
+                        mView.setLotteryNum(result.getData());
+                    } else {
+                        ToastUtils.showShort(result.getMsg());
+                    }
+                }, throwable -> throwable.printStackTrace());
+    }
+
+    @Override
     public void startLottery() {
         RetrofitHelper.getInstance().getServer()
                 .startLottery()
