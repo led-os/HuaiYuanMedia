@@ -14,6 +14,7 @@ import cn.tklvyou.huaiyuanmedia.common.Contacts
 import cn.tklvyou.huaiyuanmedia.common.Contacts.SHARE_DOWNLOAD_URL
 import cn.tklvyou.huaiyuanmedia.model.LotteryModel
 import cn.tklvyou.huaiyuanmedia.model.LotteryResultModel
+import cn.tklvyou.huaiyuanmedia.ui.camera.zhuan_pan.ZhuanPanContract.REWARD_NOTHING
 import cn.tklvyou.huaiyuanmedia.ui.mine.reward.RewardConstant
 import cn.tklvyou.huaiyuanmedia.utils.InterfaceUtils
 import cn.tklvyou.huaiyuanmedia.utils.JSON
@@ -44,6 +45,7 @@ import kotlinx.android.synthetic.main.activity_zhuan_pan.*
 
 
 class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.View {
+
     override fun addNum() {
         num++
         tvNum.text = "剩余转盘次数：$num"
@@ -129,7 +131,11 @@ class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.Vie
                 tvNum.text = "剩余转盘次数：$num"
                 when (rewardType) {
                     1 -> {
-                        showRewardType1()
+                        if (REWARD_NOTHING == scoreStr) {
+                            ToastUtils.showShort("抱歉 您未中奖")
+                        } else {
+                            showRewardType1()
+                        }
                     }
                     2 -> {
                         showRewardType2(mRecordId)
@@ -159,9 +165,9 @@ class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.Vie
     }
 
     override fun setLotteryNum(model: LotteryModel?) {
-      if(model != null){
-          num = model.num
-      }
+        if (model != null) {
+            num = model.num
+        }
     }
 
     override fun setLotteryResult(model: LotteryResultModel?) {

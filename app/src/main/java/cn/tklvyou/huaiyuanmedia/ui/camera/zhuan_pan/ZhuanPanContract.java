@@ -6,6 +6,7 @@ import cn.tklvyou.huaiyuanmedia.model.LotteryResultModel;
 
 
 public interface ZhuanPanContract {
+ String REWARD_NOTHING = "0";
     interface View extends BaseContract.BaseView {
         void addNum();
         void setLotteryModel(LotteryModel model);

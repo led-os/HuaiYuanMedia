@@ -38,6 +38,7 @@ public class NewsBean implements Serializable {
     private int user_id;
     private int admin_id;
     private String module;
+    private String original_module;
     private String module_second;
     private String name;
     private String image;
@@ -402,5 +403,17 @@ public class NewsBean implements Serializable {
 
     public void setPage_ad(BannerModel page_ad) {
         this.page_ad = page_ad;
+    }
+
+    public String getOriginal_module() {
+        return original_module;
+    }
+
+    public void setOriginal_module(String original_module) {
+        this.original_module = original_module;
+    }
+
+    public boolean isPlayStatus() {
+        return playStatus;
     }
 }

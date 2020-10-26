@@ -44,10 +44,8 @@ import cn.tklvyou.huaiyuanmedia.utils.RecycleViewDivider
 import cn.tklvyou.huaiyuanmedia.utils.dkplayer.util.Tag
 import cn.tklvyou.huaiyuanmedia.utils.dkplayer.util.Utils
 import cn.tklvyou.huaiyuanmedia.widget.page_recycler.PageRecyclerView
-import com.blankj.utilcode.util.AppUtils
-import com.blankj.utilcode.util.LogUtils
-import com.blankj.utilcode.util.SPUtils
-import com.blankj.utilcode.util.ToastUtils
+import com.alibaba.fastjson.JSON
+import com.blankj.utilcode.util.*
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.dueeeke.videocontroller.StandardVideoController
@@ -116,7 +114,7 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
 
         initSmartRefreshLayout(refreshLayout)
         initRecyclerView(recyclerView)
-        if (CHANNEL_TYPE_SHI_XUN == param) {
+        if (CHANNEL_TYPE_SHI_XUN == param  ) {
             initVideoView()
             recyclerView.addOnChildAttachStateChangeListener(object : RecyclerView.OnChildAttachStateChangeListener {
                 override fun onChildViewAttachedToWindow(view: View) {}
@@ -437,6 +435,7 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
     private var juzhengList: MutableList<String> = ArrayList<String>()
 
     override fun setList(list: MutableList<SectionNewsMultipleItem<Any>>) {
+        LogUtils.iTag("返回的列表数据", JSON.toJSONString(list))
         setList(object : AdapterCallBack<SectionMultipleItemAdapter> {
 
             override fun createAdapter(): SectionMultipleItemAdapter {
@@ -885,8 +884,18 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                         audioController?.onPause()
                     }
 
-                    "矩阵", "专题", "推荐" -> {
+                    "矩阵", "专题" -> {
                         type = if (bean.video.isEmpty()) "文章" else "视讯"
+                    }
+
+                    "推荐" -> {
+//
+                        type = if (StringUtils.isEmpty(bean.original_module)) {
+                            if (bean.video.isEmpty()) "文章" else "视讯"
+                        } else {
+                            getRecommendType(bean.original_module, bean)
+                        }
+
                     }
 
                     else -> {
@@ -954,10 +963,15 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                             startPlay(position)
                         }
                         else -> {
-                            //打开新的Activity
-                            val intent = Intent(context, VodActivity::class.java)
-                            intent.putExtra("videoPath", bean.video)
-                            startActivity(intent)
+                            if (CHANNEL_TYPE_SHI_XUN == bean.original_module) {
+                                startPlay(position)
+                            } else {
+                                //打开新的Activity
+                                val intent = Intent(context, VodActivity::class.java)
+                                intent.putExtra("videoPath", bean.video)
+                                startActivity(intent)
+                            }
+
                         }
                     }
 
@@ -1187,5 +1201,31 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
         }
     }
 
+    private fun getRecommendType(originModule: String, bean: NewsBean): String {
+        when (originModule) {
+            "生活圈" -> {
+                return if (bean.images != null && bean.images.size > 0) "图文" else "视频"
+            }
+
+            "视讯", "爆料", "悦读", "直播" -> {
+                return originModule
+            }
+
+            "悦听" -> {
+//                type = param
+                audioController?.onPause()
+                return "悦听"
+            }
+
+            "矩阵", "专题" -> {
+                return if (bean.video.isEmpty()) "文章" else "视讯"
+            }
+
+            else -> {
+                return if (bean.video.isEmpty()) "文章" else "视讯"
+            }
+
+        }
+    }
 
 }
