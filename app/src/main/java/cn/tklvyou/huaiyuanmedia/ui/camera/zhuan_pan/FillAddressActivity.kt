@@ -13,6 +13,7 @@ import cn.tklvyou.huaiyuanmedia.base.NullPresenter
 import cn.tklvyou.huaiyuanmedia.base.activity.BaseActivity
 import cn.tklvyou.huaiyuanmedia.model.RewardModel
 import cn.tklvyou.huaiyuanmedia.ui.mine.reward.RewardConstant.EXTRA_RECORD_ID
+import cn.tklvyou.huaiyuanmedia.utils.CommonUtil
 import com.blankj.utilcode.util.StringUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.lljjcoder.Interface.OnCityItemClickListener
@@ -37,7 +38,7 @@ class FillAddressActivity : BaseActivity<NullPresenter>() {
     private val mPicker = CityPickerView()
     private var recordId = 0L
     private var finalAddress = ""
-    private val separateStr = "^_^"
+    private val separateStr = "〥"
     override fun initView(savedInstanceState: Bundle?) {
         recordId = intent.getLongExtra(EXTRA_RECORD_ID, -1L)
         setNavigationImage()
@@ -67,6 +68,9 @@ class FillAddressActivity : BaseActivity<NullPresenter>() {
         if (StringUtils.isEmpty(mobile)) {
             ToastUtils.showShort("请填写收货人联系方式")
             return
+        }
+        if(!CommonUtil.isMobileNumber(mobile)){
+            ToastUtils.showShort("请填写正确的联系方式")
         }
         if (StringUtils.isEmpty(address)) {
             ToastUtils.showShort("请填写收货人地址")
