@@ -1,4 +1,4 @@
-include ':app', ':libtitlebar', ':picture_library', ':ucrop', ':lib-ios-dialog', ':wxcamera', ':libzhuanpan',':superplayerkit',':superplayerdemo'
+include ':app', ':libtitlebar', ':picture_library', ':ucrop', ':lib-ios-dialog', ':wxcamera', ':libzhuanpan'
 include ':dkplayer-java'
 include ':dkplayer-ui'
 include 'dkplayer-players:ijk'

@@ -96,6 +96,7 @@
                     android:inputType="number"
                     android:hint="请填写收货人手机号"
                     android:textSize="@dimen/sp_14"
+                    android:maxLength="11"
                     android:textColorHint="#AAAAAA"
                     android:layout_gravity="center_vertical"
                     android:minHeight="@dimen/dp_15"

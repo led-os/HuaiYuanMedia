@@ -174,7 +174,7 @@ class MyArticleActivity : BaseHttpRecyclerActivity<MyArticleListPresenter, NewsB
 
         if (!isEdit) {
             when (view!!.id) {
-                R.id.itemLayout -> {
+                R.id.itemLayout,R.id.contentTv,R.id.textPlus,R.id.contentText -> {
                     val id = bean.id
                     val type = if (bean.images != null && bean.images.size > 0) "图文" else "视频"
                     startNewsDetailActivity(this, type, id, position)

@@ -71,11 +71,17 @@ class FillAddressActivity : BaseActivity<NullPresenter>() {
         }
         if(!CommonUtil.isMobileNumber(mobile)){
             ToastUtils.showShort("请填写正确的联系方式")
+            return
         }
         if (StringUtils.isEmpty(address)) {
             ToastUtils.showShort("请填写收货人地址")
             return
         }
+        if (StringUtils.isEmpty(etArea.text.toString())) {
+            ToastUtils.showShort("请填写收货人地址")
+            return
+        }
+
         showLoading()
         RetrofitHelper.getInstance().server
                 .updateInfo(recordId, mobile, name, address)

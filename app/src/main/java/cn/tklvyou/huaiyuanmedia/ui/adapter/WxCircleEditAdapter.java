@@ -10,10 +10,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.StringUtils;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.varunest.sparkbutton.SparkButton;
@@ -90,7 +87,7 @@ public class WxCircleEditAdapter extends BaseQuickAdapter<NewsBean, BaseViewHold
         }
 
         helper.addOnClickListener(R.id.deleteBtn, R.id.sparkButton, R.id.tvGoodNum);
-
+        helper.addOnClickListener(R.id.contentTv, R.id.contentText, R.id.textPlus);
         helper.setText(R.id.nameTv, item.getNickname());
         helper.setText(R.id.timeTv, item.getBegintime());
 
@@ -162,25 +159,27 @@ public class WxCircleEditAdapter extends BaseQuickAdapter<NewsBean, BaseViewHold
             multiImageView.setVisibility(View.GONE);
 
             FrameLayout llVideo = helper.getView(R.id.llVideo);
-            llVideo.setVisibility(View.VISIBLE);
-
-            ImageView ivVideo = helper.getView(R.id.ivVideo);
-            ivVideo.setBackgroundColor(Color.parseColor("#abb1b6"));
-            ivVideo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (isEdit) {
-                        helper.getView(R.id.itemLayout).performClick();
-                    } else {
-                        Intent intent = new Intent(mContext, VodActivity.class);
-                        intent.putExtra("videoPath", item.getVideo());
-                        mContext.startActivity(intent);
+            if (!StringUtils.isEmpty(item.getVideo())) {
+                llVideo.setVisibility(View.VISIBLE);
+                ImageView ivVideo = helper.getView(R.id.ivVideo);
+                ivVideo.setBackgroundColor(Color.parseColor("#abb1b6"));
+                ivVideo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (isEdit) {
+                            helper.getView(R.id.itemLayout).performClick();
+                        } else {
+                            Intent intent = new Intent(mContext, VodActivity.class);
+                            intent.putExtra("videoPath", item.getVideo());
+                            mContext.startActivity(intent);
+                        }
                     }
-                }
-            });
-
-            GlideManager.loadImg(item.getImage(), ivVideo);
-
+                });
+                GlideManager.loadImg(item.getImage(), ivVideo);
+            } else {
+                //发的是纯文本
+                llVideo.setVisibility(View.GONE);
+            }
         }
 
     }

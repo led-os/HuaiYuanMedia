@@ -27,7 +27,6 @@ import cn.tklvyou.huaiyuanmedia.utils.RecycleViewDivider
 import com.blankj.utilcode.util.AppUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
-import com.tencent.liteav.demo.player.activity.SuperPlayerActivity
 import com.youth.banner.Banner
 import com.youth.banner.BannerConfig
 import com.youth.banner.listener.OnBannerListener
@@ -45,8 +44,8 @@ class TownDeptActivity : BaseHttpRecyclerActivity<ListPresenter, SectionNewsMult
     private lateinit var param: String
     private lateinit var bannerModelList: MutableList<BannerModel>
     private val mTag = "TownDeptActivity"
-    private var newList :ArrayList<SectionNewsMultipleItem<Any>>? =null
-    private var mPage : Int = 1
+    private var newList: ArrayList<SectionNewsMultipleItem<Any>>? = null
+    private var mPage: Int = 1
     override fun initPresenter(): ListPresenter {
         return ListPresenter()
     }
@@ -71,8 +70,8 @@ class TownDeptActivity : BaseHttpRecyclerActivity<ListPresenter, SectionNewsMult
         loadData()
     }
 
-    private fun loadData(){
-        mPresenter.getSecondBanner(param,townModel.module_second)
+    private fun loadData() {
+        mPresenter.getSecondBanner(param, townModel.module_second)
     }
 
     override fun onRetry() {
@@ -84,7 +83,7 @@ class TownDeptActivity : BaseHttpRecyclerActivity<ListPresenter, SectionNewsMult
         if (bannerModelList != null) {
             this.bannerModelList = bannerModelList
             mPresenter.getNewList(param, townModel.module_second, 1)
-        }else{
+        } else {
             onLoadFailed(1, null)
         }
     }
@@ -95,11 +94,11 @@ class TownDeptActivity : BaseHttpRecyclerActivity<ListPresenter, SectionNewsMult
 
     override fun setNewList(p: Int, model: BasePageModel<NewsBean>?) {
         if (model != null) {
-             newList = ArrayList<SectionNewsMultipleItem<Any>>()
+            newList = ArrayList<SectionNewsMultipleItem<Any>>()
             model.data.forEach {
                 newList!!.add(SectionNewsMultipleItem(CHANNEL_TYPE_TOWN_SECOND, it))
             }
-          onLoadSucceed(p,newList)
+            onLoadSucceed(p, newList)
         } else {
             onLoadFailed(p, null)
         }
@@ -178,7 +177,9 @@ class TownDeptActivity : BaseHttpRecyclerActivity<ListPresenter, SectionNewsMult
             val zanNum = data.getIntExtra("zanNum", 0)
             val commenNum = data.getIntExtra("commentNum", 0)
             val like_status = data.getIntExtra("like_status", 0)
-
+            if (position < 0) {
+                return
+            }
             val bean = adapter!!.data[position].dataBean as NewsBean
             bean.comment_num = commenNum
             bean.like_num = zanNum
@@ -254,17 +255,13 @@ class TownDeptActivity : BaseHttpRecyclerActivity<ListPresenter, SectionNewsMult
                     startWebDetailsActivity(mContext!!, bannerModelList[position].url)
                 } else if (bannerModelList[position].content.trim().isNotEmpty()) {
                     val intent = Intent(mContext, BannerDetailsActivity::class.java)
-                    if(TextUtils.isEmpty(bannerModelList[position].name)){
+                    if (TextUtils.isEmpty(bannerModelList[position].name)) {
                         intent.putExtra("title", AppUtils.getAppName())
-                    }else{
+                    } else {
                         intent.putExtra("title", bannerModelList[position].name)
                     }
                     intent.putExtra("content", bannerModelList[position].content)
                     startActivity(intent)
-                } else {
-                    val intent = Intent(mContext, SuperPlayerActivity::class.java)
-                    startActivity(intent)
-
                 }
 
             }
@@ -283,7 +280,7 @@ class TownDeptActivity : BaseHttpRecyclerActivity<ListPresenter, SectionNewsMult
             startWebDetailsActivity(mContext!!, bean.url)
         } else {
             val type = ModuleUtils.getTypeByNewsBean(bean)
-            startNewsDetailActivity(mContext!!, type, bean.id,-1)
+            startNewsDetailActivity(mContext!!, type, bean.id, -1)
         }
     }
 
@@ -294,8 +291,6 @@ class TownDeptActivity : BaseHttpRecyclerActivity<ListPresenter, SectionNewsMult
         intent.putExtra("share_title", title)
         startActivity(intent)
     }
-
-
 
 
 }

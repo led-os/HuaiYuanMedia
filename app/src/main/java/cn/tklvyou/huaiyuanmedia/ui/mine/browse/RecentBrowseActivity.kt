@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
-import androidx.recyclerview.widget.LinearLayoutManager
 import cn.tklvyou.huaiyuanmedia.R
 import cn.tklvyou.huaiyuanmedia.base.activity.BaseHttpRecyclerActivity
 import cn.tklvyou.huaiyuanmedia.base.interfaces.AdapterCallBack
@@ -15,10 +14,9 @@ import cn.tklvyou.huaiyuanmedia.model.BasePageModel
 import cn.tklvyou.huaiyuanmedia.model.NewsBean
 import cn.tklvyou.huaiyuanmedia.model.NewsMultipleItem
 import cn.tklvyou.huaiyuanmedia.ui.adapter.MyCollectionAdapter
-import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
-import cn.tklvyou.huaiyuanmedia.ui.home.tv_news_detail.TVNewsDetailActivity
 import cn.tklvyou.huaiyuanmedia.ui.audio.ServiceWebviewActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.AudioController
+import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
 import cn.tklvyou.huaiyuanmedia.ui.video_player.VodActivity
 import cn.tklvyou.huaiyuanmedia.utils.RecycleViewDivider
 import cn.tklvyou.huaiyuanmedia.widget.dailog.CommonDialog
@@ -173,7 +171,7 @@ class RecentBrowseActivity : BaseHttpRecyclerActivity<BrowsePresenter, NewsMulti
         val id = bean.id
         if (!isEdit) {
             when (view!!.id) {
-                R.id.itemLayout -> {
+                R.id.itemLayout,R.id.contentText,R.id.textPlus,R.id.contentTv -> {
                     val type = ModuleUtils.getTypeByNewsBean(bean)
 
                     if (bean.url.isNotEmpty()) {

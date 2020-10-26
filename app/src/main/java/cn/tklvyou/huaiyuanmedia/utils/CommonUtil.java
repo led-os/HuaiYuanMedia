@@ -85,8 +85,7 @@ public class CommonUtil {
         if (TextUtils.isEmpty(mobileNums)) {
             return false;
         } else {
-            String startValue = "1";
-            return mobileNums.length() == LENGTH_PHONE && mobileNums.startsWith(startValue);
+            return mobileNums.length() <= LENGTH_PHONE;
         }
     }
 
