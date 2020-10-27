@@ -26,7 +26,7 @@ import cn.tklvyou.huaiyuanmedia.ui.mine.message.MyMessageActivity
 import cn.tklvyou.huaiyuanmedia.ui.mine.my_article.MyArticleActivity
 import cn.tklvyou.huaiyuanmedia.ui.mine.my_dianzan.MyDianZanActivity
 import cn.tklvyou.huaiyuanmedia.ui.mine.point.MyPointDetailActivity
-import cn.tklvyou.huaiyuanmedia.ui.mine.reward.RewardRewardRecordActivity
+import cn.tklvyou.huaiyuanmedia.ui.mine.reward.RewardRecordActivity
 import cn.tklvyou.huaiyuanmedia.ui.mine.wenzhen.MyWenZhenActivity
 import cn.tklvyou.huaiyuanmedia.ui.setting.AboutUsActivity
 import cn.tklvyou.huaiyuanmedia.ui.setting.SettingActivity
@@ -278,8 +278,12 @@ class MineFragment : BaseRecyclerFragment<MinePresenter, MineRvModel, BaseViewHo
             }
             //中奖纪录
             9->{
-
-                startActivity(Intent(context, RewardRewardRecordActivity::class.java))
+                if (SPUtils.getInstance().getString("token", "").isEmpty()) {
+                    ToastUtils.showShort("请登录后操作")
+                    startActivity(Intent(context, LoginActivity::class.java))
+                    return
+                }
+                startActivity(Intent(context, RewardRecordActivity::class.java))
             }
             else -> {
             }

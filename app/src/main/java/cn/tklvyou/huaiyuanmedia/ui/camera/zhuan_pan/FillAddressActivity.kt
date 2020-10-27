@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
-import androidx.core.content.ContextCompat
 import cn.tklvyou.huaiyuanmedia.R
 import cn.tklvyou.huaiyuanmedia.api.BaseResult
 import cn.tklvyou.huaiyuanmedia.api.RetrofitHelper
@@ -137,7 +136,8 @@ class FillAddressActivity : BaseActivity<NullPresenter>() {
             tvCommit.setOnClickListener {
                 doCommit()
             }
-
+        tvCommit.visibility = View.VISIBLE
+        tvCommit.isEnabled = true
     }
 
 
@@ -176,7 +176,7 @@ class FillAddressActivity : BaseActivity<NullPresenter>() {
           etAddress.setText(data.address)
           etAddress.isEnabled = false
           llGoods.visibility = View.VISIBLE
-          tvCommit.setBackgroundColor(ContextCompat.getColor(mContext, R.color.color_454545))
+          tvCommit.visibility = View.GONE
           tvCommit.isEnabled = false
       }
 

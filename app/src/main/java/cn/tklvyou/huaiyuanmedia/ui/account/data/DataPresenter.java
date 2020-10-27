@@ -2,8 +2,8 @@ package cn.tklvyou.huaiyuanmedia.ui.account.data;
 
 
 import android.annotation.SuppressLint;
-import android.util.Log;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 
 import org.apache.commons.lang.RandomStringUtils;
@@ -55,17 +55,18 @@ public class DataPresenter extends BasePresenter<IDataContract.DataView> impleme
                 .compose(RxSchedulers.applySchedulers())
                 .compose(mView.bindToLife())
                 .subscribe(result -> {
-                    mView.showSuccess(result.getMsg());
                     if (result.getCode() == RequestConstant.CODE_REQUEST_SUCCESS) {
                         mView.editSuccess();
+                    } else {
+                        mView.showSuccess(result.getMsg());
                     }
                 }, throwable -> mView.showFailed(""));
     }
 
     @Override
     public void doUploadImage(File file, String token, String uid, QiniuUploadManager manager) {
+        mView.showLoading();
         String currentTim = String.valueOf(System.currentTimeMillis());
-
         String key = "qiniu/" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + "/" + uid + "_" + currentTim + "_" + RandomStringUtils.randomAlphanumeric(6) + ".jpg";
         String mimeType = "image/jpeg";
 
@@ -73,7 +74,7 @@ public class DataPresenter extends BasePresenter<IDataContract.DataView> impleme
         manager.upload(param, new QiniuUploadManager.OnUploadListener() {
             @Override
             public void onStartUpload() {
-                Log.e(TAG, "onStartUpload");
+                LogUtils.dTag(TAG, "onStartUpload");
             }
 
             @Override
@@ -82,14 +83,16 @@ public class DataPresenter extends BasePresenter<IDataContract.DataView> impleme
 
             @Override
             public void onUploadFailed(String key, String err) {
-                Log.e(TAG, "onUploadFailed:" + err);
-                if (mView != null)
+                LogUtils.eTag(TAG, "onUploadFailed:" + err);
+                if (mView != null){
                     mView.showSuccess("");
+                }
+
             }
 
             @Override
             public void onUploadBlockComplete(String key) {
-                Log.e(TAG, "onUploadBlockComplete");
+                LogUtils.iTag(TAG, "onUploadBlockComplete" );
             }
 
             @Override
@@ -100,7 +103,7 @@ public class DataPresenter extends BasePresenter<IDataContract.DataView> impleme
 
             @Override
             public void onUploadCancel() {
-                Log.e(TAG, "onUploadCancel");
+                LogUtils.iTag(TAG, "onUploadCancel" );
             }
         });
 

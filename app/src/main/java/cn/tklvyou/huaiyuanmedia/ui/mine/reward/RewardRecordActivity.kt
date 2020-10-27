@@ -26,7 +26,7 @@ import kotlinx.android.synthetic.main.activity_ju_zheng_details.*
  * @date 2020年10月21日16:18
  * @Email: 971613168@qq.com
  */
-class RewardRewardRecordActivity : BaseHttpRecyclerActivity<RewardPresenter, RewardModel, BaseViewHolder, RewardRecordAdapter>(), RewardContract.View {
+class RewardRecordActivity : BaseHttpRecyclerActivity<RewardPresenter, RewardModel, BaseViewHolder, RewardRecordAdapter>(), RewardContract.View {
     override fun initPresenter(): RewardPresenter {
         return RewardPresenter()
     }

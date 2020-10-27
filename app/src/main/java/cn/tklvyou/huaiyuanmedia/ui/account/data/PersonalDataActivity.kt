@@ -198,14 +198,19 @@ class PersonalDataActivity : BaseActivity<DataPresenter>(), IDataContract.DataVi
 
     private fun doEdit() {
         val avatarPath = parsePath(imageList)
-        if (avatarPath.isEmpty()) {
+        if (StringUtils.isEmpty(avatarPath)) {
             //用户没有重置头像 则上传原头像
             imageList.add(AccountHelper.getInstance().avatar)
             edit(AccountHelper.getInstance().avatar)
         } else {
             //需要先上传头像
             val file = File(avatarPath)
-            mPresenter.doUploadImage(file, qiniuToken, "" + AccountHelper.getInstance().uid, QiniuUploadManager.getInstance(this))
+            if(file.isFile){
+                mPresenter.doUploadImage(file, qiniuToken, "" + AccountHelper.getInstance().uid, QiniuUploadManager.getInstance(this))
+            }else{
+                imageList.add(AccountHelper.getInstance().avatar)
+                edit(AccountHelper.getInstance().avatar)
+            }
         }
     }
 

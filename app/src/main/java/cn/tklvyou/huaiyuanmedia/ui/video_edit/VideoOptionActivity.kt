@@ -1,5 +1,7 @@
 package cn.tklvyou.huaiyuanmedia.ui.video_edit
 
+import VideoHandle.EpEditor
+import VideoHandle.OnEditorListener
 import android.app.Activity
 import android.content.Intent
 import android.media.MediaMetadataRetriever
@@ -7,29 +9,25 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
+import android.view.View
 import cn.tklvyou.huaiyuanmedia.R
 import cn.tklvyou.huaiyuanmedia.base.NullPresenter
 import cn.tklvyou.huaiyuanmedia.base.activity.BaseActivity
 import cn.tklvyou.huaiyuanmedia.common.StaticFinalValues
 import cn.tklvyou.huaiyuanmedia.common.StaticFinalValues.COMR_FROM_SEL_COVER_TIME_ACTIVITY
-import cn.tklvyou.huaiyuanmedia.ui.video_edit.localEdit.MediaPlayerWrapper
-import cn.tklvyou.huaiyuanmedia.ui.video_edit.localEdit.VideoInfo
-import cn.tklvyou.huaiyuanmedia.ui.video_edit.selCover.SelCoverTimeActivity
-import com.blankj.utilcode.util.ScreenUtils
-import kotlinx.android.synthetic.main.activity_video_option.*
-import java.util.ArrayList
-import VideoHandle.OnEditorListener
-import VideoHandle.EpEditor
-import android.view.View
 import cn.tklvyou.huaiyuanmedia.common.StaticFinalValues.COMR_FROM_VIDEO_EDIT_TIME_ACTIVITY
 import cn.tklvyou.huaiyuanmedia.ui.home.publish_news.PublishNewsActivity
 import cn.tklvyou.huaiyuanmedia.ui.video_edit.localEdit.LocalVideoActivity
+import cn.tklvyou.huaiyuanmedia.ui.video_edit.localEdit.MediaPlayerWrapper
+import cn.tklvyou.huaiyuanmedia.ui.video_edit.localEdit.VideoInfo
+import cn.tklvyou.huaiyuanmedia.ui.video_edit.selCover.SelCoverTimeActivity
 import cn.tklvyou.huaiyuanmedia.utils.YFileUtils
-import com.blankj.utilcode.util.LogUtils
+import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.luck.picture.lib.entity.LocalMedia
+import kotlinx.android.synthetic.main.activity_video_option.*
 import kotlinx.android.synthetic.main.pop_video_loading.*
+import java.util.*
 
 
 class VideoOptionActivity : BaseActivity<NullPresenter>(), MediaPlayerWrapper.IMediaCallback {
@@ -61,7 +59,7 @@ class VideoOptionActivity : BaseActivity<NullPresenter>(), MediaPlayerWrapper.IM
     private var resumed: Boolean = false
     var mVideoHeight: Int = 0
     var mVideoWidth: Int = 0
-    var mVideoRotation: String = ""
+    private var mVideoRotation: String? = ""
     private var mInitRotation: Int = 0//视频初始旋转角度，竖屏为90，横屏为0
     private var isLocalPortrait = false
 
@@ -76,12 +74,16 @@ class VideoOptionActivity : BaseActivity<NullPresenter>(), MediaPlayerWrapper.IM
         val mediaMetadata = MediaMetadataRetriever()
         mediaMetadata.setDataSource(mContext, Uri.parse(file_path))
         mVideoRotation = mediaMetadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION)
-        mVideoWidth = Integer.parseInt(mediaMetadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH))
-        mVideoHeight = Integer.parseInt(mediaMetadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT))
-
-        val time = Integer.parseInt(mediaMetadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION))
-
-
+        if (mVideoRotation == null) {
+            mVideoRotation = ""
+        }
+        var time = 0
+        try {
+            mVideoWidth = Integer.parseInt(mediaMetadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH))
+            mVideoHeight = Integer.parseInt(mediaMetadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT))
+            time = Integer.parseInt(mediaMetadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION))
+        } catch (e: Exception) {
+        }
         mBtnBack.setOnClickListener {
             finish()
         }
@@ -116,7 +118,7 @@ class VideoOptionActivity : BaseActivity<NullPresenter>(), MediaPlayerWrapper.IM
                 launchPublishNewsActivity()
             }
         }
-
+        mediaMetadata.release()
     }
 
     private fun launchPublishNewsActivity() {
