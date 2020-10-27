@@ -8,7 +8,7 @@ import cn.tklvyou.huaiyuanmedia.R
 import cn.tklvyou.huaiyuanmedia.base.NullPresenter
 import cn.tklvyou.huaiyuanmedia.base.activity.BaseWebViewActivity
 import cn.tklvyou.huaiyuanmedia.common.Contacts
-import cn.tklvyou.huaiyuanmedia.common.Contacts.SHARE_BASE_URL
+import cn.tklvyou.huaiyuanmedia.common.Contacts.SHARE_RICH_TEXT_BASE_URL
 import cn.tklvyou.huaiyuanmedia.utils.InterfaceUtils
 import cn.tklvyou.huaiyuanmedia.utils.YBitmapUtils
 import cn.tklvyou.huaiyuanmedia.widget.SharePopupWindow
@@ -47,9 +47,9 @@ class BannerDetailsActivity : BaseWebViewActivity<NullPresenter>() {
     override fun initView(savedInstanceState: Bundle?) {
         val title = intent.getStringExtra("title")
         val html = intent.getStringExtra("content")
-        articleId = intent.getIntExtra("article_id",-1)
-        url = SHARE_BASE_URL+"api/banner/detail?id="+articleId
-        shareTitle =title
+        articleId = intent.getIntExtra("banner_id", -1)
+        url = SHARE_RICH_TEXT_BASE_URL + "single_page/liuxianghuaiyuan/pages/index.html?id=" + articleId
+        shareTitle = title
         setTitle(title)
         setNavigationImage()
         setNavigationOnClickListener {
@@ -59,7 +59,7 @@ class BannerDetailsActivity : BaseWebViewActivity<NullPresenter>() {
         initWebView(webView = webView)
 
         loadHtml(html)
-        val sharedEnable =  url.isNotEmpty() && shareTitle.isNotEmpty()
+        val sharedEnable = url.isNotEmpty() && shareTitle.isNotEmpty()
         if (sharedEnable) {
             setPositiveImage(R.mipmap.icon_title_bar_share)
             setPositiveOnClickListener {

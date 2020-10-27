@@ -16,7 +16,7 @@ public class Contacts {
     public static final String SHARE_DOWNLOAD_URL = "http://huaiyuanweb.dashuiniu.com.cn/#/upload";
 
     public static final String SHARE_BASE_URL = "http://huaiyuanweb.dashuiniu.com.cn/#/articleDetail/";
-
+    public static final String SHARE_RICH_TEXT_BASE_URL = "http://huaiyuanweb.dashuiniu.com.cn/share/";
     public static final String SHARE_SELECTION_URL = "http://huaiyuanweb.dashuiniu.com.cn/#/selectionContent/";
 
     public static final String WB_APP_KEY = "4128160158";

@@ -1,7 +1,6 @@
 package cn.tklvyou.huaiyuanmedia.ui.home.news_detail;
 
 
-import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
 
@@ -123,14 +122,8 @@ public class NewsDetailPresenter extends BasePresenter<NewsDetailContract.View> 
                     ToastUtils.showShort(result.getMsg());
                     if (result.getCode() == 1) {
                         mView.addCommentSuccess();
-                    }else {
-                        mView.showSuccess(result.getMsg());
                     }
-                }, throwable ->{
-                    throwable.printStackTrace();
-                    mView.showSuccess(throwable.toString());
-                    LogUtils.eTag("addComment",throwable.toString());
-                } );
+                }, throwable -> throwable.printStackTrace());
     }
 
     @Override

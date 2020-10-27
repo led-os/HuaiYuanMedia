@@ -261,7 +261,7 @@ class TownDeptActivity : BaseHttpRecyclerActivity<ListPresenter, SectionNewsMult
                         intent.putExtra("title", bannerModelList[position].name)
                     }
                     intent.putExtra("content", bannerModelList[position].content)
-                    intent.putExtra("article_id", bannerModelList[position].article_id)
+                    intent.putExtra("banner_id", bannerModelList[position].id)
                     startActivity(intent)
                 }
 

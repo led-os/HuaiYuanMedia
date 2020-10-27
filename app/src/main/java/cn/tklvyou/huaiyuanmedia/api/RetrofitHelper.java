@@ -102,6 +102,7 @@ public class RetrofitHelper {
                     .newBuilder()
                     .addHeader("token", SPUtils.getInstance().getString("token"))
                     .addHeader("X-APP-TYPE", "android")
+                    .addHeader("Content-Type", "application/json")
                     .build();
             Response response = chain.proceed(request);
             LogUtils.e(SPUtils.getInstance().getString("token"));
@@ -130,7 +131,7 @@ public class RetrofitHelper {
             if (result != null && result.getCode() == 401) {
                 ToastUtils.showShort(result.getMsg());
                 Log.d(TAG, "--->登录失效，自动重新登录");
-                SPUtils.getInstance().put("token","");
+                SPUtils.getInstance().put("token", "");
                 Intent intent = new Intent(MyApplication.getAppContext(), LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 MyApplication.getAppContext().startActivity(intent);
@@ -184,7 +185,7 @@ public class RetrofitHelper {
                 ResponseBody responseBody = response.peekBody(1024 * 1024);//关键代码
 
                 String responseString = JsonHandleUtils.jsonHandle(responseBody.string());
-                LogUtils.d(String.format(Locale.CHINA,"接收响应: [%s] %n返回json:【%s】 %.1fms %n%s",
+                LogUtils.d(String.format(Locale.CHINA, "接收响应: [%s] %n返回json:【%s】 %.1fms %n%s",
                         response.request().url(),
                         responseString,
                         (t2 - t1) / 1e6d,
