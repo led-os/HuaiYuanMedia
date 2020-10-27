@@ -91,7 +91,7 @@ class FillAddressActivity : BaseActivity<NullPresenter>() {
                         showSuccess("提交成功")
                         Handler().postDelayed(Runnable {
                             finish()
-                        }, 1500)
+                        }, 800)
                     } else {
                         showFailed("提交失败")
                     }

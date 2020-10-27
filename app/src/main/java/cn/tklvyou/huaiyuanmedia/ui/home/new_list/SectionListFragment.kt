@@ -422,6 +422,7 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                         intent.putExtra("title", bannerModelList[position].name)
                     }
                     intent.putExtra("content", bannerModelList[position].content)
+                    intent.putExtra("article_id",bannerModelList[position].article_id)
                     startActivity(intent)
                 }
 

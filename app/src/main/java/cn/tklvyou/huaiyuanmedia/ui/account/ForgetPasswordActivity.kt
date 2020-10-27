@@ -11,8 +11,8 @@ import android.view.KeyEvent
 import android.view.View
 import cn.tklvyou.huaiyuanmedia.R
 import cn.tklvyou.huaiyuanmedia.base.activity.BaseActivity
-import cn.tklvyou.huaiyuanmedia.widget.dailog.CommonDialog
 import cn.tklvyou.huaiyuanmedia.widget.TimeCount
+import cn.tklvyou.huaiyuanmedia.widget.dailog.CommonDialog
 import com.blankj.utilcode.util.ToastUtils
 import kotlinx.android.synthetic.main.activity_forget_password.*
 
@@ -84,7 +84,7 @@ class ForgetPasswordActivity : BaseActivity<AccountForgetPresenter>(), AccountCo
     override fun getCaptchaSuccess() {
         timeCount = TimeCount(60000, 1000, object : TimeCount.ITimeCountListener {
             override fun onTick(millisUntilFinished: Long) {
-                btnGetCaptcha.setTextColor(Color.parseColor("#999999"))
+                btnGetCaptcha.setTextColor(Color.parseColor("#FFFFFF"))
                 btnGetCaptcha.isClickable = false
                 btnGetCaptcha.text = "${millisUntilFinished / 1000}秒"
             }

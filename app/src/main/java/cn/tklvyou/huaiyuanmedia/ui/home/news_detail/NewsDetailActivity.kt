@@ -896,6 +896,7 @@ class NewsDetailActivity : BaseActivity<NewsDetailPresenter>(), NewsDetailContra
                 val intent = Intent(this, BannerDetailsActivity::class.java)
                 intent.putExtra("title", top_ad.name)
                 intent.putExtra("content", top_ad.content)
+                intent.putExtra("article_id",top_ad.article_id)
                 startActivity(intent)
             }
 

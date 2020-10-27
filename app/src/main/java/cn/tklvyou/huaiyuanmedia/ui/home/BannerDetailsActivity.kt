@@ -8,6 +8,7 @@ import cn.tklvyou.huaiyuanmedia.R
 import cn.tklvyou.huaiyuanmedia.base.NullPresenter
 import cn.tklvyou.huaiyuanmedia.base.activity.BaseWebViewActivity
 import cn.tklvyou.huaiyuanmedia.common.Contacts
+import cn.tklvyou.huaiyuanmedia.common.Contacts.SHARE_BASE_URL
 import cn.tklvyou.huaiyuanmedia.utils.InterfaceUtils
 import cn.tklvyou.huaiyuanmedia.utils.YBitmapUtils
 import cn.tklvyou.huaiyuanmedia.widget.SharePopupWindow
@@ -34,6 +35,7 @@ class BannerDetailsActivity : BaseWebViewActivity<NullPresenter>() {
     private var wxapi: IWXAPI? = null
     private var mTencent: Tencent? = null
     private var url = "https://www.baidu.com/"
+    private var articleId = -1
     override fun initPresenter(): NullPresenter {
         return NullPresenter()
     }
@@ -45,8 +47,9 @@ class BannerDetailsActivity : BaseWebViewActivity<NullPresenter>() {
     override fun initView(savedInstanceState: Bundle?) {
         val title = intent.getStringExtra("title")
         val html = intent.getStringExtra("content")
+        articleId = intent.getIntExtra("article_id",-1)
+        url = SHARE_BASE_URL+"api/banner/detail?id="+articleId
         shareTitle =title
-        // todo url需要传递或拼接
         setTitle(title)
         setNavigationImage()
         setNavigationOnClickListener {

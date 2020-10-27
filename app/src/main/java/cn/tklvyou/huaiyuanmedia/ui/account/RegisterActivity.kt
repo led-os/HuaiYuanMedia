@@ -77,7 +77,7 @@ class RegisterActivity : BaseActivity<AccountRegisterPresenter>(), AccountContra
     override fun getCaptchaSuccess() {
         val timeCount = TimeCount(60000, 1000, object : TimeCount.ITimeCountListener {
             override fun onTick(millisUntilFinished: Long) {
-                btnGetCaptcha.setTextColor(Color.parseColor("#999999"))
+                btnGetCaptcha.setTextColor(Color.parseColor("#FFFFFF"))
                 btnGetCaptcha.isClickable = false
                 btnGetCaptcha.text = "${millisUntilFinished / 1000}秒"
             }

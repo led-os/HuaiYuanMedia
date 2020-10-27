@@ -6,20 +6,15 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
-
 import cn.tklvyou.huaiyuanmedia.R
-import cn.tklvyou.huaiyuanmedia.base.MyApplication
 import cn.tklvyou.huaiyuanmedia.base.fragment.BaseFragment
+import cn.tklvyou.huaiyuanmedia.model.MessageEvent
 import cn.tklvyou.huaiyuanmedia.ui.main.MainActivity
 import cn.tklvyou.huaiyuanmedia.widget.TimeCount
-import com.blankj.utilcode.util.BusUtils
 import com.blankj.utilcode.util.KeyboardUtils.hideSoftInput
 import com.blankj.utilcode.util.ToastUtils
 import kotlinx.android.synthetic.main.fragment_mobile_code_login.*
-import cn.tklvyou.huaiyuanmedia.model.MessageEvent
 import org.greenrobot.eventbus.EventBus
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import com.trello.rxlifecycle3.RxLifecycle.bindUntilEvent
 
 
 
@@ -77,7 +72,7 @@ class MobileCodeFragment : BaseFragment<AccountPresenter>(), AccountContract.Vie
     override fun getCaptchaSuccess() {
         timeCount = TimeCount(60000, 1000, object : TimeCount.ITimeCountListener {
             override fun onTick(millisUntilFinished: Long) {
-                btnGetCaptcha.setTextColor(Color.parseColor("#999999"))
+                btnGetCaptcha.setTextColor(Color.parseColor("#FFFFFF"))
                 btnGetCaptcha.isClickable = false
                 btnGetCaptcha.text = "${millisUntilFinished / 1000}秒"
             }

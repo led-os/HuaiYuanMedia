@@ -47,11 +47,13 @@ public class IjkPlayer extends AbstractPlayer {
                 return true;
             }
         });
+
     }
 
 
     @Override
     public void setOptions() {
+        mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "enable-accurate-seek", 1);
     }
 
     @Override
