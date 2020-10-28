@@ -117,12 +117,16 @@ public class InputDialog {
         contentEditText = dialog.findViewById(R.id.contentEditText);
         cancelTextView = dialog.findViewById(R.id.cancelTextView);
         confirmTextView = dialog.findViewById(R.id.confirmTextView);
-        if(cancelLimitContentLength){
-            contentEditText.setFilters(new InputFilter[] { new InputFilter.LengthFilter(500) });
+        if (cancelLimitContentLength) {
+            contentEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(500)});
         }
         titleTextView.setText(title);
         contentEditText.setText(content);
-        contentEditText.setSelection(content.length());
+        try {
+            contentEditText.setSelection(content.length());
+        } catch (IndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
         contentEditText.post(new Runnable() {
             @Override
             public void run() {

@@ -42,14 +42,14 @@ public class MediaPlayerWrapper implements MediaPlayer.OnCompletionListener, Med
         MediaMetadataRetriever retr = new MediaMetadataRetriever();
         for (int i = 0; i < dataSource.size(); i++) {
             VideoInfo info = new VideoInfo();
-            String path=dataSource.get(i);
+            String path = dataSource.get(i);
             retr.setDataSource(path);
             String rotation = retr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION);
             String width = retr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH);
             String height = retr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT);
             String duration = retr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
 
-            info.path=path;
+            info.path = path;
             try {
                 info.rotation = Integer.parseInt(rotation);
                 info.width = Integer.parseInt(width);
@@ -57,12 +57,13 @@ public class MediaPlayerWrapper implements MediaPlayer.OnCompletionListener, Med
                 info.duration = Integer.parseInt(duration);
             } catch (NumberFormatException e) {
                 e.printStackTrace();
-            }finally {
+            } finally {
                 mInfoList.add(info);
             }
         }
     }
-    public List<VideoInfo> getVideoInfo(){
+
+    public List<VideoInfo> getVideoInfo() {
         return mInfoList;
     }
 
@@ -93,22 +94,25 @@ public class MediaPlayerWrapper implements MediaPlayer.OnCompletionListener, Med
     }
 
     public void start() {
-        mCurMediaPlayer.setSurface(surface);
-        mCurMediaPlayer.start();
-        if (mCallback != null) {
-            mCallback.onVideoStart();
+        if (mCurMediaPlayer != null) {
+            mCurMediaPlayer.setSurface(surface);
+            mCurMediaPlayer.start();
+            if (mCallback != null) {
+                mCallback.onVideoStart();
+            }
         }
     }
 
     public void pause() {
-        if(mCurMediaPlayer != null) {
+        if (mCurMediaPlayer != null) {
             mCurMediaPlayer.pause();
             if (mCallback != null) {
                 mCallback.onVideoPause();
             }
         }
     }
-    public int getCurVideoDuration(){
+
+    public int getCurVideoDuration() {
         return mInfoList.get(curIndex).duration;
     }
 
@@ -152,8 +156,8 @@ public class MediaPlayerWrapper implements MediaPlayer.OnCompletionListener, Med
     public boolean isPlaying() {
         if (mCurMediaPlayer != null) {
             return mCurMediaPlayer.isPlaying();
-        }else{
-            return  false;
+        } else {
+            return false;
         }
     }
 
@@ -202,12 +206,13 @@ public class MediaPlayerWrapper implements MediaPlayer.OnCompletionListener, Med
     }
 
     public void setVolume(float volume) {
-        for(int i=0;i<mPlayerList.size();i++){
+        for (int i = 0; i < mPlayerList.size(); i++) {
             MediaPlayer mediaPlayer = mPlayerList.get(i);
-            mediaPlayer.setVolume(volume,volume);
+            mediaPlayer.setVolume(volume, volume);
         }
     }
-    public int[] getVideoWH(){
+
+    public int[] getVideoWH() {
         int[] ints = new int[2];
         int videoWidth = mCurMediaPlayer.getVideoWidth();
         int videoHeight = mCurMediaPlayer.getVideoHeight();
@@ -215,6 +220,7 @@ public class MediaPlayerWrapper implements MediaPlayer.OnCompletionListener, Med
         ints[1] = videoHeight;
         return ints;
     }
+
     public interface IMediaCallback {
         /**
          * callback when all the player prepared

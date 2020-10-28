@@ -12,15 +12,15 @@ import android.util.Log;
 import android.view.Surface;
 import android.view.WindowManager;
 
-import cn.tklvyou.huaiyuanmedia.base.MyApplication;
-import cn.tklvyou.huaiyuanmedia.ui.video_edit.record.interfaces.ICamera;
-import cn.tklvyou.huaiyuanmedia.ui.video_edit.record.ui.CameraView;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import cn.tklvyou.huaiyuanmedia.base.MyApplication;
+import cn.tklvyou.huaiyuanmedia.ui.video_edit.record.interfaces.ICamera;
+import cn.tklvyou.huaiyuanmedia.ui.video_edit.record.ui.CameraView;
 
 import static android.graphics.Bitmap.createBitmap;
 
@@ -91,7 +91,7 @@ public class CameraController implements ICamera {
             mPicSize = new Point(pic.height, pic.width);
             mPreSize = new Point(pre.height, pre.width);
 
-            cameraAngle = getCameraDisplayOrientation(mContext,cameraId);
+            cameraAngle = getCameraDisplayOrientation(mContext, cameraId);
         }
     }
 
@@ -156,6 +156,7 @@ public class CameraController implements ICamera {
      * 拍照
      */
     private int angle = 0; //todo: 通过传感器获取设备角度
+
     public void doTakePicture(CameraView.OnTakePictureListener callback) {
         if (mCamera != null) {
             switch (cameraAngle) {
@@ -202,40 +203,39 @@ public class CameraController implements ICamera {
      * @param point 触屏坐标 必须传入转换后的坐标
      */
     public void onFocus(Point point, Camera.AutoFocusCallback callback) {
-        Camera.Parameters parameters = mCamera.getParameters();
-        boolean supportFocus = true;
-        boolean supportMetering = true;
-        //不支持设置自定义聚焦，则使用自动聚焦，返回
-        if (parameters.getMaxNumFocusAreas() <= 0) {
-            supportFocus = false;
-        }
-        if (parameters.getMaxNumMeteringAreas() <= 0) {
-            supportMetering = false;
-        }
-        List<Camera.Area> areas = new ArrayList<Camera.Area>();
-        List<Camera.Area> areas1 = new ArrayList<Camera.Area>();
-        //再次进行转换
-        point.x = (int) (((float) point.x) / MyApplication.screenWidth * 2000 - 1000);
-        point.y = (int) (((float) point.y) / MyApplication.screenHeight * 2000 - 1000);
-
-        int left = point.x - 300;
-        int top = point.y - 300;
-        int right = point.x + 300;
-        int bottom = point.y + 300;
-        left = left < -1000 ? -1000 : left;
-        top = top < -1000 ? -1000 : top;
-        right = right > 1000 ? 1000 : right;
-        bottom = bottom > 1000 ? 1000 : bottom;
-        areas.add(new Camera.Area(new Rect(left, top, right, bottom), 100));
-        areas1.add(new Camera.Area(new Rect(left, top, right, bottom), 100));
-        if (supportFocus) {
-            parameters.setFocusAreas(areas);
-        }
-        if (supportMetering) {
-            parameters.setMeteringAreas(areas1);
-        }
-
         try {
+            Camera.Parameters parameters = mCamera.getParameters();
+            boolean supportFocus = true;
+            boolean supportMetering = true;
+            //不支持设置自定义聚焦，则使用自动聚焦，返回
+            if (parameters.getMaxNumFocusAreas() <= 0) {
+                supportFocus = false;
+            }
+            if (parameters.getMaxNumMeteringAreas() <= 0) {
+                supportMetering = false;
+            }
+            List<Camera.Area> areas = new ArrayList<Camera.Area>();
+            List<Camera.Area> areas1 = new ArrayList<Camera.Area>();
+            //再次进行转换
+            point.x = (int) (((float) point.x) / MyApplication.screenWidth * 2000 - 1000);
+            point.y = (int) (((float) point.y) / MyApplication.screenHeight * 2000 - 1000);
+
+            int left = point.x - 300;
+            int top = point.y - 300;
+            int right = point.x + 300;
+            int bottom = point.y + 300;
+            left = left < -1000 ? -1000 : left;
+            top = top < -1000 ? -1000 : top;
+            right = right > 1000 ? 1000 : right;
+            bottom = bottom > 1000 ? 1000 : bottom;
+            areas.add(new Camera.Area(new Rect(left, top, right, bottom), 100));
+            areas1.add(new Camera.Area(new Rect(left, top, right, bottom), 100));
+            if (supportFocus) {
+                parameters.setFocusAreas(areas);
+            }
+            if (supportMetering) {
+                parameters.setMeteringAreas(areas1);
+            }
             mCamera.setParameters(parameters);// 部分手机 会出Exception（红米）
             mCamera.autoFocus(callback);
         } catch (Exception e) {
@@ -295,7 +295,6 @@ public class CameraController implements ICamera {
             }
         }
     };
-
 
 
     private int getCameraDisplayOrientation(Context context, int cameraId) {

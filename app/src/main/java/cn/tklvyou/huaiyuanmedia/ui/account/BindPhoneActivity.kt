@@ -6,16 +6,13 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.EditText
 import cn.tklvyou.huaiyuanmedia.R
-import cn.tklvyou.huaiyuanmedia.base.MyApplication
 import cn.tklvyou.huaiyuanmedia.base.activity.BaseActivity
-import cn.tklvyou.huaiyuanmedia.base.activity.BaseTitleActivity
 import cn.tklvyou.huaiyuanmedia.common.CommonConstant.TIME_INTERVAL
 import cn.tklvyou.huaiyuanmedia.common.CommonConstant.TIME_ONE_SECOND
 import cn.tklvyou.huaiyuanmedia.ui.main.MainActivity
 import cn.tklvyou.huaiyuanmedia.utils.CommonUtil
 import cn.tklvyou.huaiyuanmedia.widget.TimeCount
 import com.blankj.utilcode.util.ToastUtils
-import com.wuhenzhizao.titlebar.widget.CommonTitleBar
 import kotlinx.android.synthetic.main.activity_phone_edit.*
 
 class BindPhoneActivity : BaseActivity<BindPhonePresenter>(), BindPhoneContract.View, View.OnClickListener {
@@ -81,7 +78,7 @@ class BindPhoneActivity : BaseActivity<BindPhonePresenter>(), BindPhoneContract.
         if (enable) {
             tvSendVCode.setTextColor(CommonUtil.getColor(R.color.colorPrimary))
         } else {
-            tvSendVCode.setTextColor(CommonUtil.getColor(R.color.grayAAAAAA))
+            tvSendVCode.setTextColor(CommonUtil.getColor(R.color.colorWhite))
         }
     }
 
