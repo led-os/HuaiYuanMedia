@@ -3,6 +3,7 @@ package cn.tklvyou.huaiyuanmedia.ui.camera.history_updates;
 
 import android.annotation.SuppressLint;
 
+import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
 
 import cn.tklvyou.huaiyuanmedia.api.RetrofitHelper;
@@ -107,6 +108,50 @@ public class HistoryUpdatesPresenter extends BasePresenter<HistoryUpdatesContrac
                     if (result.getCode() == 1) {
                         mView.updateLikeStatus(false, position);
                     } else {
+                        ToastUtils.showShort(result.getMsg());
+                    }
+                }, throwable -> throwable.printStackTrace());
+    }
+
+    @Override
+    public void addConcern(int id, int type, int position) {
+        RetrofitHelper.getInstance().getServer()
+                .addConcern(id,type)
+                .compose(RxSchedulers.applySchedulers())
+                .compose(mView.bindToLife())
+                .subscribe(result -> {
+                    if (result.getCode() == 1) {
+                        ToastUtils.showShort("关注成功");
+                        mView.addConcernSuccess(position);
+                    } else {
+                        ToastUtils.showShort(result.getMsg());
+                    }
+                }, throwable -> throwable.printStackTrace());
+    }
+
+    @Override
+    public void cancelConcern(int id, int type, int position) {
+        RetrofitHelper.getInstance().getServer()
+                .cancelConcern(id,type)
+                .compose(RxSchedulers.applySchedulers())
+                .compose(mView.bindToLife())
+                .subscribe(result -> {
+                    if (result.getCode() == 1) {
+                        ToastUtils.showShort("取消成功");
+                        mView.cancelConcernSuccess(position);
+                    } else {
+                        ToastUtils.showShort(result.getMsg());
+                    }
+                }, throwable -> throwable.printStackTrace());
+    }
+
+    @Override
+    public void getScoreByShare(int id) {
+        RetrofitHelper.getInstance().getServer()
+                .getScoreByShare(id)
+                .compose(RxSchedulers.applySchedulers())
+                .subscribe(result -> {
+                    if (!StringUtils.isEmpty(result.getMsg())) {
                         ToastUtils.showShort(result.getMsg());
                     }
                 }, throwable -> throwable.printStackTrace());

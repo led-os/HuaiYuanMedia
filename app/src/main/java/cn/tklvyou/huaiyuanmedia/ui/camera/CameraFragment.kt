@@ -19,11 +19,11 @@ import cn.tklvyou.huaiyuanmedia.model.NewsBean
 import cn.tklvyou.huaiyuanmedia.ui.account.LoginActivity
 import cn.tklvyou.huaiyuanmedia.ui.adapter.CameraHotListAdapter
 import cn.tklvyou.huaiyuanmedia.ui.adapter.ChannelPagerAdapter
+import cn.tklvyou.huaiyuanmedia.ui.camera.history_updates.HistoryUpdatesFragment
+import cn.tklvyou.huaiyuanmedia.ui.camera.point.PointActivity
+import cn.tklvyou.huaiyuanmedia.ui.camera.today_hot.TodayHotActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.publish_news.PublishNewsActivity
-import cn.tklvyou.huaiyuanmedia.ui.camera.point.PointActivity
-import cn.tklvyou.huaiyuanmedia.ui.camera.history_updates.HistoryUpdatesFragment
-import cn.tklvyou.huaiyuanmedia.ui.camera.today_hot.TodayHotActivity
 import cn.tklvyou.huaiyuanmedia.ui.video_edit.CameraActivity
 import cn.tklvyou.huaiyuanmedia.ui.video_edit.VideoOptionActivity
 import cn.tklvyou.huaiyuanmedia.utils.RecycleViewDivider
@@ -156,8 +156,8 @@ class CameraFragment : BaseRecyclerFragment<CameraPresenter, NewsBean, BaseViewH
 
         mTabNameList.add("最新动态")
         mTabNameList.add("好友动态")
-        mFragments.add(getFragmentByType(true))
-        mFragments.add(getFragmentByType(false))
+        mFragments.add(getFragmentByType(true,0))
+        mFragments.add(getFragmentByType(false,1))
         initMagicIndicator()
         mChannelPagerAdapter = ChannelPagerAdapter(mFragments, childFragmentManager)
         mViewPager.adapter = mChannelPagerAdapter
@@ -179,7 +179,7 @@ class CameraFragment : BaseRecyclerFragment<CameraPresenter, NewsBean, BaseViewH
             startActivity(Intent(context, TodayHotActivity::class.java))
         }
 
-
+        mRecyclerView.visibility = View.GONE
 
         mPresenter.getLifeHotList(1)
     }
@@ -404,10 +404,11 @@ class CameraFragment : BaseRecyclerFragment<CameraPresenter, NewsBean, BaseViewH
     }
 
 
-    private fun getFragmentByType(isMine: Boolean): RxFragment {
+    private fun getFragmentByType(isMine: Boolean,index: Int): RxFragment {
         val newsFragment = HistoryUpdatesFragment()
         val bundle = Bundle()
         bundle.putBoolean("isMine", isMine)
+        bundle.putInt("fragmentIndex",index)
         newsFragment.arguments = bundle
         return newsFragment
     }

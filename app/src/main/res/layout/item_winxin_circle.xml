@@ -4,30 +4,82 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/white"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:padding="@dimen/dp_13">
-
-    <ImageView
-        android:id="@+id/headIv"
-        android:layout_width="@dimen/dp_42"
-        android:layout_height="@dimen/dp_42"
-        android:layout_marginRight="@dimen/dp_10"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/default_avatar" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/headIv"
+            android:layout_width="@dimen/dp_43"
+            android:layout_height="@dimen/dp_43"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/default_avatar" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/nameTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="-"
+                android:textColor="@color/default_black_text_color"
+                android:textSize="@dimen/sp_16" />
+
+            <TextView
+                android:id="@+id/timeTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginTop="@dimen/dp_5"
+                android:text="-"
+                android:textColor="@color/default_gray_text_color_gray"
+                android:textSize="@dimen/sp_12" />
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/nameTv"
+            android:id="@+id/tvAttention"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:text="-"
-            android:textColor="@color/default_black_text_color"
-            android:textSize="@dimen/sp_16" />
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/dp_10"
+            android:background="@drawable/bg_radius_13_color_primary_accent"
+            android:paddingStart="@dimen/dp_12"
+            android:paddingTop="@dimen/dp_4"
+            android:paddingEnd="@dimen/dp_12"
+            android:paddingBottom="@dimen/dp_4"
+            android:text="关注"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_12" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_52"
+        android:orientation="vertical">
+
+        <!--   <TextView
+               android:id="@+id/nameTv"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:singleLine="true"
+               android:text="-"
+               android:textColor="@color/default_black_text_color"
+               android:textSize="@dimen/sp_16" />-->
 
         <cn.tklvyou.huaiyuanmedia.widget.ExpandTextView
             android:id="@+id/contentTv"
@@ -77,14 +129,14 @@
             android:layout_height="@dimen/dp_30"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/timeTv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:text="-"
-                android:textColor="@color/default_gray_text_color"
-                android:textSize="@dimen/sp_13" />
+            <!--    <TextView
+                    android:id="@+id/timeTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="-"
+                    android:textColor="@color/default_gray_text_color"
+                    android:textSize="@dimen/sp_13" />-->
 
             <TextView
                 android:id="@+id/deleteBtn"
@@ -115,12 +167,23 @@
                 android:textSize="@dimen/sp_13" />
 
             <TextView
+                android:id="@+id/tvShareNum"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/dp_33"
+                android:drawableLeft="@mipmap/ic_share_gray"
+                android:drawablePadding="@dimen/dp_8"
+                android:gravity="center"
+                android:textColor="#ff999999"
+                android:textSize="@dimen/sp_13" />
+
+            <TextView
                 android:id="@+id/tvCommentNum"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/dp_33"
                 android:drawableLeft="@mipmap/icon_msg"
                 android:drawablePadding="@dimen/dp_8"
-                android:layout_marginStart="@dimen/dp_25"
                 android:gravity="center"
                 android:text="0"
                 android:textColor="#ff999999"
@@ -130,8 +193,8 @@
                 android:id="@+id/sparkButton"
                 android:layout_width="@dimen/dp_20"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp_33"
                 android:enabled="false"
-                android:layout_marginLeft="@dimen/dp_25"
                 app:sparkbutton_activeImage="@mipmap/icon_mini_good"
                 app:sparkbutton_iconSize="@dimen/dp_12"
                 app:sparkbutton_inActiveImage="@mipmap/icon_good"

@@ -87,7 +87,11 @@ public class MediaObject implements Serializable{
             MediaPart part = mediaObject.getCurrentPart();
             if (part != null ) {
                 MediaMetadataRetriever mediaMetadata = new MediaMetadataRetriever();
-                mediaMetadata.setDataSource(context, Uri.parse(part.getMediaPath()));
+                try {
+                    mediaMetadata.setDataSource(context, Uri.parse(part.getMediaPath()));
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                 String s = mediaMetadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
                 int mVideoDuration = 0;
                 try {

@@ -6,9 +6,11 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.StringUtils;
@@ -37,10 +39,11 @@ public class WxCircleAdapter extends BaseQuickAdapter<NewsBean, BaseViewHolder> 
     private boolean showAnimal = false;
     private int refreshPosition = -1;
     private boolean enableDelete = false;
+    private int fragmentIndex = 0;
 
-
-    public WxCircleAdapter(int layoutResId, @Nullable List<NewsBean> data) {
+    public WxCircleAdapter(int layoutResId, @Nullable List<NewsBean> data, int fragmentIndex) {
         super(layoutResId, data);
+        this.fragmentIndex = fragmentIndex;
     }
 
     public void notifyItemChangedAnimal(int position) {
@@ -62,13 +65,24 @@ public class WxCircleAdapter extends BaseQuickAdapter<NewsBean, BaseViewHolder> 
         }
         helper.addOnClickListener(R.id.deleteBtn, R.id.sparkButton, R.id.tvGoodNum);
         helper.addOnClickListener(R.id.contentTv);
-        helper.addOnClickListener(R.id.contentText,R.id.textPlus);
+        helper.addOnClickListener(R.id.tvAttention, R.id.tvShareNum);
+        helper.addOnClickListener(R.id.contentText, R.id.textPlus);
         helper.setText(R.id.nameTv, item.getNickname());
         helper.setText(R.id.timeTv, item.getBegintime());
-
+        helper.setGone(R.id.tvAttention, fragmentIndex == 0);
         helper.setText(R.id.tvCommentNum, "" + item.getComment_num());
         helper.setText(R.id.tvGoodNum, "" + item.getLike_num());
         helper.setText(R.id.tvReadNum, "" + item.getVisit_num());
+        TextView tvAttention = helper.getView(R.id.tvAttention);
+        if (item.getAttention_status() == 1) {
+            tvAttention.setText("已关注");
+            tvAttention.setBackground(ContextCompat.getDrawable(mContext, R.drawable.bg_radius_13_color_gray_999999));
+            tvAttention.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+        } else {
+            tvAttention.setText("关注");
+            tvAttention.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+            tvAttention.setBackground(ContextCompat.getDrawable(mContext, R.drawable.bg_radius_13_color_primary_accent));
+        }
         SparkButton sparkButton = helper.getView(R.id.sparkButton);
         if (item.getLike_status() == 1) {
             sparkButton.setChecked(true);
@@ -131,10 +145,10 @@ public class WxCircleAdapter extends BaseQuickAdapter<NewsBean, BaseViewHolder> 
             MultiImageView multiImageView = helper.getView(R.id.multiImagView);
             multiImageView.setVisibility(View.GONE);
             FrameLayout llVideo = helper.getView(R.id.llVideo);
-            if(StringUtils.isEmpty(item.getVideo())){
+            if (StringUtils.isEmpty(item.getVideo())) {
                 //说明是纯文本
                 llVideo.setVisibility(View.GONE);
-            }else {
+            } else {
                 //上传的是视频
                 llVideo.setVisibility(View.VISIBLE);
 
@@ -154,7 +168,6 @@ public class WxCircleAdapter extends BaseQuickAdapter<NewsBean, BaseViewHolder> 
                         .placeholder(R.color.bg_no_photo)
                         .into(ivVideo);
             }
-
 
 
         }

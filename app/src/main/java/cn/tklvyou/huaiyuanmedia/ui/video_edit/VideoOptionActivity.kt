@@ -8,6 +8,7 @@ import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import cn.tklvyou.huaiyuanmedia.R
@@ -22,9 +23,11 @@ import cn.tklvyou.huaiyuanmedia.ui.video_edit.localEdit.MediaPlayerWrapper
 import cn.tklvyou.huaiyuanmedia.ui.video_edit.localEdit.VideoInfo
 import cn.tklvyou.huaiyuanmedia.ui.video_edit.selCover.SelCoverTimeActivity
 import cn.tklvyou.huaiyuanmedia.utils.YFileUtils
+import cn.tklvyou.huaiyuanmedia.widget.rich_web_list.web.Utils
 import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.luck.picture.lib.entity.LocalMedia
+import com.luck.picture.lib.tools.SdkVersionUtils
 import kotlinx.android.synthetic.main.activity_video_option.*
 import kotlinx.android.synthetic.main.pop_video_loading.*
 import java.util.*
@@ -35,7 +38,17 @@ class VideoOptionActivity : BaseActivity<NullPresenter>(), MediaPlayerWrapper.IM
     companion object {
         fun launch(activity: Activity, outputPath: String, page: String) {
             val intent = Intent(activity, VideoOptionActivity::class.java)
-            intent.putExtra(StaticFinalValues.VIDEOFILEPATH, outputPath)
+            if (SdkVersionUtils.checkedAndroid_Q()) {
+                val uri: Uri? = Uri.parse(outputPath)
+                val result = Utils.getRealPathFromUriAboveApi19(activity, uri)
+                if(!TextUtils.isEmpty(result)){
+                    intent.putExtra(StaticFinalValues.VIDEOFILEPATH, result)
+                }else{
+                    intent.putExtra(StaticFinalValues.VIDEOFILEPATH, outputPath)
+                }
+            } else {
+                intent.putExtra(StaticFinalValues.VIDEOFILEPATH, outputPath)
+            }
             intent.putExtra("page", page)
             activity.startActivity(intent)
         }
@@ -52,7 +65,7 @@ class VideoOptionActivity : BaseActivity<NullPresenter>(), MediaPlayerWrapper.IM
 
     private val TAG = "TAG"
 
-    private lateinit var file_path: String
+    private var file_path: String? = ""
 
     private var page = ""
 
@@ -88,14 +101,20 @@ class VideoOptionActivity : BaseActivity<NullPresenter>(), MediaPlayerWrapper.IM
             finish()
         }
 
-        val srcList = ArrayList<String>()
-        srcList.add(file_path)
+        val srcList = ArrayList<String?>()
+        if (!TextUtils.isEmpty(file_path)) {
+            srcList.add(file_path)
+        }
         mLocalVideoView.setVideoPath(srcList)
         mLocalVideoView.setIMediaCallback(this)
 
         initSetParam()
 
         mBtnCover.setOnClickListener {
+            if (TextUtils.isEmpty(file_path)) {
+                ToastUtils.showShort("未获取到文件路径")
+                return@setOnClickListener
+            }
             val intent2 = Intent(this@VideoOptionActivity, SelCoverTimeActivity::class.java)
             intent2.putExtra(StaticFinalValues.VIDEOFILEPATH, file_path)
             startActivityForResult(intent2, COMR_FROM_SEL_COVER_TIME_ACTIVITY)
@@ -187,7 +206,7 @@ class VideoOptionActivity : BaseActivity<NullPresenter>(), MediaPlayerWrapper.IM
 
             StaticFinalValues.COMR_FROM_VIDEO_EDIT_TIME_ACTIVITY -> {
                 file_path = data.getStringExtra(StaticFinalValues.VIDEOFILEPATH)
-                val srcList = ArrayList<String>()
+                val srcList = ArrayList<String?>()
                 srcList.add(file_path)
                 mLocalVideoView.setVideoPath(srcList)
                 mLocalVideoView.start()

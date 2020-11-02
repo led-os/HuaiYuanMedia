@@ -144,29 +144,34 @@ public class VideoEncoderCore {
      * Releases encoder resources.
      */
     public void release() {
-        if (VERBOSE) Log.d(TAG, "releasing encoder objects");
-        if (mVideoEncoder != null) {
-            mVideoEncoder.stop();
-            mVideoEncoder.release();
-            mVideoEncoder = null;
+        try {
+            if (VERBOSE) Log.d(TAG, "releasing encoder objects");
+            if (mVideoEncoder != null) {
+                mVideoEncoder.stop();
+                mVideoEncoder.release();
+                mVideoEncoder = null;
+            }
+            if (mAudioEnc != null) {
+                mAudioEnc.stop();
+                mAudioEnc.release();
+                mAudioEnc = null;
+            }
+            if (mRecorder != null) {
+                mRecorder.stop();
+                mRecorder.release();
+                mRecorder = null;
+            }
+            if (mMuxer != null) {
+                // TODO: stop() throws an exception if you haven't fed it any data.  Keep track
+                //       of frames submitted, and don't call stop() if we haven't written anything.
+                mMuxer.stop();
+                mMuxer.release();
+                mMuxer = null;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        if (mAudioEnc != null) {
-            mAudioEnc.stop();
-            mAudioEnc.release();
-            mAudioEnc = null;
-        }
-        if (mRecorder != null) {
-            mRecorder.stop();
-            mRecorder.release();
-            mRecorder = null;
-        }
-        if (mMuxer != null) {
-            // TODO: stop() throws an exception if you haven't fed it any data.  Keep track
-            //       of frames submitted, and don't call stop() if we haven't written anything.
-            mMuxer.stop();
-            mMuxer.release();
-            mMuxer = null;
-        }
+
     }
 
     /**

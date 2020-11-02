@@ -10,8 +10,6 @@ import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 
-
-import java.io.IOException;
 import java.util.List;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -28,18 +26,21 @@ public class VideoPreviewView extends GLSurfaceView implements GLSurfaceView.Ren
     private MediaPlayerWrapper mMediaPlayer;
     private VideoDrawer mDrawer;
 
-    /**视频播放状态的回调*/
+    /**
+     * 视频播放状态的回调
+     */
     private MediaPlayerWrapper.IMediaCallback callback;
 
     public VideoPreviewView(Context context) {
-        super(context,null);
+        super(context, null);
     }
 
     public VideoPreviewView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
-    public void setRotate(int angle){
+
+    public void setRotate(int angle) {
         mDrawer.setRotation(angle);
     }
 
@@ -49,19 +50,24 @@ public class VideoPreviewView extends GLSurfaceView implements GLSurfaceView.Ren
         setRenderMode(RENDERMODE_WHEN_DIRTY);
         setPreserveEGLContextOnPause(false);
         setCameraDistance(100);
-        mDrawer = new VideoDrawer(context,getResources());
+        mDrawer = new VideoDrawer(context, getResources());
 
         //初始化Drawer和VideoPlayer
         mMediaPlayer = new MediaPlayerWrapper();
         mMediaPlayer.setOnCompletionListener(this);
     }
 
-    /**设置视频的播放地址*/
-    public void setVideoPath(List<String> paths){
-        mMediaPlayer.setDataSource(paths);
+    /**
+     * 设置视频的播放地址
+     */
+    public void setVideoPath(List<String> paths) {
+        if (paths != null && !paths.isEmpty()) {
+            mMediaPlayer.setDataSource(paths);
+        }
+
     }
 
-    public void setFilter(int i){
+    public void setFilter(int i) {
         mDrawer.setFilter(i);
     }
 
@@ -74,7 +80,7 @@ public class VideoPreviewView extends GLSurfaceView implements GLSurfaceView.Ren
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        mDrawer.onSurfaceCreated(gl,config);
+        mDrawer.onSurfaceCreated(gl, config);
         SurfaceTexture surfaceTexture = mDrawer.getSurfaceTexture();
         surfaceTexture.setOnFrameAvailableListener(new SurfaceTexture.OnFrameAvailableListener() {
             @Override
@@ -86,7 +92,7 @@ public class VideoPreviewView extends GLSurfaceView implements GLSurfaceView.Ren
         mMediaPlayer.setSurface(surface);
         try {
             mMediaPlayer.prepare();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         mMediaPlayer.start();
@@ -94,7 +100,7 @@ public class VideoPreviewView extends GLSurfaceView implements GLSurfaceView.Ren
 
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
-        mDrawer.onSurfaceChanged(gl,width,height);
+        mDrawer.onSurfaceChanged(gl, width, height);
     }
 
 
@@ -102,15 +108,17 @@ public class VideoPreviewView extends GLSurfaceView implements GLSurfaceView.Ren
     public void onDrawFrame(GL10 gl) {
         mDrawer.onDrawFrame(gl);
     }
-    public void onDestroy(){
+
+    public void onDestroy() {
         if (mMediaPlayer != null) {
-            if(mMediaPlayer.isPlaying()){
+            if (mMediaPlayer.isPlaying()) {
                 mMediaPlayer.stop();
             }
             mMediaPlayer.release();
         }
     }
-    public void onTouch(final MotionEvent event){
+
+    public void onTouch(final MotionEvent event) {
         queueEvent(new Runnable() {
             @Override
             public void run() {
@@ -118,34 +126,35 @@ public class VideoPreviewView extends GLSurfaceView implements GLSurfaceView.Ren
             }
         });
     }
-    public void setOnFilterChangeListener(SlideGpuFilterGroup.OnFilterChangeListener listener){
+
+    public void setOnFilterChangeListener(SlideGpuFilterGroup.OnFilterChangeListener listener) {
         mDrawer.setOnFilterChangeListener(listener);
     }
 
     @Override
     public void onVideoPrepare() {
-        if (callback!= null){
+        if (callback != null) {
             callback.onVideoPrepare();
         }
     }
 
     @Override
     public void onVideoStart() {
-        if(callback!=null){
+        if (callback != null) {
             callback.onVideoStart();
         }
     }
 
     @Override
     public void onVideoPause() {
-        if (callback != null){
+        if (callback != null) {
             callback.onVideoPause();
         }
     }
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        if (callback != null){
+        if (callback != null) {
             callback.onCompletion(mp);
         }
     }
@@ -158,53 +167,58 @@ public class VideoPreviewView extends GLSurfaceView implements GLSurfaceView.Ren
                 mDrawer.onVideoChanged(info);
             }
         });
-        if(callback!=null){
+        if (callback != null) {
             callback.onVideoChanged(info);
         }
     }
+
     /**
      * isPlaying now
-     * */
-    public boolean isPlaying(){
+     */
+    public boolean isPlaying() {
         return mMediaPlayer.isPlaying();
     }
+
     /**
      * pause play
-     * */
-    public void pause(){
+     */
+    public void pause() {
         if (mMediaPlayer != null) {
             mMediaPlayer.pause();
         }
     }
+
     /**
      * start play video
-     * */
-    public void start(){
+     */
+    public void start() {
         mMediaPlayer.start();
     }
+
     /**
      * 跳转到指定的时间点，只能跳到关键帧
-     * */
-    public void seekTo(int time){
+     */
+    public void seekTo(int time) {
         requestRender();
         mMediaPlayer.seekTo(time);
     }
+
     /**
      * 获取当前视频的长度
-     * */
-    public int getVideoDuration(){
+     */
+    public int getVideoDuration() {
         return mMediaPlayer.getCurVideoDuration();
     }
 
     /**
      * 切换美颜状态
-     * */
-    public void switchBeauty(){
+     */
+    public void switchBeauty() {
         mDrawer.switchBeauty();
     }
 
 
-    public void setIMediaCallback(MediaPlayerWrapper.IMediaCallback callback){
-        this.callback=callback;
+    public void setIMediaCallback(MediaPlayerWrapper.IMediaCallback callback) {
+        this.callback = callback;
     }
 }

@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Point
-import android.hardware.Camera
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler

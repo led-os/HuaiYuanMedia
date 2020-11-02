@@ -5,7 +5,6 @@ import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.view.Surface;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +16,7 @@ import java.util.List;
 public class MediaPlayerWrapper implements MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener, MediaPlayer.OnPreparedListener {
     private MediaPlayer mCurMediaPlayer;    //current player
     private List<MediaPlayer> mPlayerList;  //player list
-    private List<String> mSrcList;          //video src list
+    private List<String> mSrcList = new ArrayList<>();          //video src list
     private List<VideoInfo> mInfoList;      //video info list
     private Surface surface;
     private IMediaCallback mCallback;
@@ -43,7 +42,11 @@ public class MediaPlayerWrapper implements MediaPlayer.OnCompletionListener, Med
         for (int i = 0; i < dataSource.size(); i++) {
             VideoInfo info = new VideoInfo();
             String path = dataSource.get(i);
-            retr.setDataSource(path);
+            try {
+                retr.setDataSource(path);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
             String rotation = retr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION);
             String width = retr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH);
             String height = retr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT);
@@ -71,7 +74,7 @@ public class MediaPlayerWrapper implements MediaPlayer.OnCompletionListener, Med
         this.surface = surface;
     }
 
-    public void prepare() throws IOException {
+    public void prepare() throws Exception {
         for (int i = 0; i < mSrcList.size(); i++) {
             MediaPlayer player = new MediaPlayer();
             player.setAudioStreamType(AudioManager.STREAM_MUSIC);
