@@ -102,6 +102,9 @@
         <activity android:name=".ui.video_edit.VideoOptionActivity" />
         <activity android:name=".ui.video_edit.localEdit.LocalVideoActivity" />
         <activity android:name=".ui.camera.today_hot.TodayHotActivity" />
+        <activity android:name=".ui.home.life_detail.LifeDetailActivity"
+            android:windowSoftInputMode="adjustPan"
+            />
         <activity
             android:name=".ui.camera.TakePhotoActivity"
             android:screenOrientation="portrait" />

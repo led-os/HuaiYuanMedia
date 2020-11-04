@@ -60,6 +60,8 @@
             android:paddingEnd="@dimen/dp_12"
             android:paddingBottom="@dimen/dp_4"
             android:text="关注"
+            android:gravity="center"
+            android:minWidth="@dimen/dp_60"
             android:textColor="@color/white"
             android:textSize="@dimen/sp_12" />
 

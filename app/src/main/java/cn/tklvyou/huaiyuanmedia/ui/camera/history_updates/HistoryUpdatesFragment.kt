@@ -17,6 +17,7 @@ import cn.tklvyou.huaiyuanmedia.model.BasePageModel
 import cn.tklvyou.huaiyuanmedia.model.NewsBean
 import cn.tklvyou.huaiyuanmedia.ui.adapter.WxCircleAdapter
 import cn.tklvyou.huaiyuanmedia.ui.camera.message.ArticleMessageActivity
+import cn.tklvyou.huaiyuanmedia.ui.home.life_detail.LifeDetailActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
 import cn.tklvyou.huaiyuanmedia.utils.InterfaceUtils
 import cn.tklvyou.huaiyuanmedia.utils.RecycleViewDivider
@@ -294,7 +295,7 @@ class HistoryUpdatesFragment : BaseHttpRecyclerFragment<HistoryUpdatesPresenter,
     }
 
     private fun startNewsDetailActivity(context: Context, type: String, id: Int, position: Int) {
-        val intent = Intent(context, NewsDetailActivity::class.java)
+        val intent = Intent(context, LifeDetailActivity::class.java)
         intent.putExtra(NewsDetailActivity.INTENT_ID, id)
         intent.putExtra(NewsDetailActivity.INTENT_TYPE, type)
         intent.putExtra(NewsDetailActivity.POSITION, position)
