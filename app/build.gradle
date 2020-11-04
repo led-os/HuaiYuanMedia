@@ -167,4 +167,8 @@ dependencies {
     implementation project(':dkplayer-videocache')
 
     implementation 'liji.library.dev:citypickerview:5.2.2'
+
+    // 使用了Androidx
+    implementation 'com.github.donkingliang:ConsecutiveScroller:4.3.1'
+
 }

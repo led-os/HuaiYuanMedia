@@ -28,7 +28,6 @@ import cn.tklvyou.huaiyuanmedia.ui.audio.ServiceWebviewActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.AudioController
 import cn.tklvyou.huaiyuanmedia.ui.home.BannerDetailsActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.ImagePagerActivity
-import cn.tklvyou.huaiyuanmedia.ui.home.comment.CommentListActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.AndroidInterface
 import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
 import cn.tklvyou.huaiyuanmedia.ui.main.MainActivity
@@ -939,7 +938,7 @@ class LifeDetailActivity : BaseActivity<LifeDetailPresenter>(), LifeDetailContra
 
 
         tvCommentNum.text = "评论  ${item.comment_num}"
-        tvCommentNum.setOnClickListener {
+       /* tvCommentNum.setOnClickListener {
             if (SPUtils.getInstance().getString("token", "").isEmpty()) {
                 ToastUtils.showShort("请登录后操作")
                 startActivity(Intent(this, LoginActivity::class.java))
@@ -949,7 +948,7 @@ class LifeDetailActivity : BaseActivity<LifeDetailPresenter>(), LifeDetailContra
             val intent = Intent(this, CommentListActivity::class.java)
             intent.putExtra("id", id)
             startActivity(intent)
-        }
+        }*/
 
 
         tvGoodNum.text = "赞  ${item.like_num}"
