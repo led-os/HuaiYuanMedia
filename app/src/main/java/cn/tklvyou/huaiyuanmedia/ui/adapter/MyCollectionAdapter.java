@@ -789,7 +789,7 @@ public class MyCollectionAdapter extends BaseMultiItemQuickAdapter<NewsMultipleI
 
                     helper.addOnClickListener(R.id.sparkButton, R.id.tvGoodNum);
 
-                    helper.setVisible(R.id.deleteBtn, false);
+                    helper.setGone(R.id.deleteBtn, false);
                     helper.setText(R.id.nameTv, bean.getNickname());
                     helper.setText(R.id.timeTv, bean.getBegintime());
 

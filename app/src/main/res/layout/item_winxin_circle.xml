@@ -55,13 +55,13 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="@dimen/dp_10"
             android:background="@drawable/bg_radius_13_color_primary_accent"
+            android:gravity="center"
+            android:minWidth="@dimen/dp_60"
             android:paddingStart="@dimen/dp_12"
             android:paddingTop="@dimen/dp_4"
             android:paddingEnd="@dimen/dp_12"
             android:paddingBottom="@dimen/dp_4"
             android:text="关注"
-            android:gravity="center"
-            android:minWidth="@dimen/dp_60"
             android:textColor="@color/white"
             android:textSize="@dimen/sp_12" />
 
@@ -71,7 +71,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_52"
         android:orientation="vertical">
 
         <!--   <TextView
@@ -142,79 +141,117 @@
 
             <TextView
                 android:id="@+id/deleteBtn"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
                 android:background="@drawable/im_selector_social_dig_name_bg"
-                android:paddingLeft="13dp"
-                android:paddingRight="13dp"
+                android:gravity="center|start"
                 android:text="删除"
                 android:textColor="@color/colorAccent"
                 android:textSize="@dimen/sp_13"
                 android:visibility="gone" />
 
-            <View
-                android:layout_width="0dip"
-                android:layout_height="1dip"
-                android:layout_weight="1" />
-
-            <TextView
-                android:id="@+id/tvReadNum"
-                android:layout_width="wrap_content"
+            <!--  <View
+                  android:layout_width="0dip"
+                  android:layout_height="1dip"
+                  android:layout_weight="1" />-->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="0.7"
                 android:layout_height="match_parent"
-                android:drawableLeft="@mipmap/icon_eye"
-                android:drawablePadding="@dimen/dp_8"
-                android:gravity="center"
-                android:text="0"
-                android:textColor="#ff999999"
-                android:textSize="@dimen/sp_13" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tvShareNum"
-                android:layout_width="wrap_content"
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="@dimen/dp_10"
+                    android:src="@mipmap/ic_share_gray" />
+
+                <TextView
+                    android:id="@+id/tvShareNum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:maxLines="1"
+                    android:textColor="#ff999999"
+                    android:textSize="@dimen/sp_11" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/dp_33"
-                android:drawableLeft="@mipmap/ic_share_gray"
-                android:drawablePadding="@dimen/dp_8"
-                android:gravity="center"
-                android:textColor="#ff999999"
-                android:textSize="@dimen/sp_13" />
+                android:layout_weight="1"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tvCommentNum"
-                android:layout_width="wrap_content"
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="@dimen/dp_10"
+                    android:src="@mipmap/icon_eye" />
+
+                <TextView
+                    android:id="@+id/tvReadNum"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:text="0"
+                    android:textColor="#ff999999"
+                    android:textSize="@dimen/sp_13" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/dp_33"
-                android:drawableLeft="@mipmap/icon_msg"
-                android:drawablePadding="@dimen/dp_8"
-                android:gravity="center"
-                android:text="0"
-                android:textColor="#ff999999"
-                android:textSize="@dimen/sp_13" />
+                android:layout_weight="0.9"
+                android:orientation="horizontal">
 
-            <com.varunest.sparkbutton.SparkButton
-                android:id="@+id/sparkButton"
-                android:layout_width="@dimen/dp_20"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/dp_33"
-                android:enabled="false"
-                app:sparkbutton_activeImage="@mipmap/icon_mini_good"
-                app:sparkbutton_iconSize="@dimen/dp_12"
-                app:sparkbutton_inActiveImage="@mipmap/icon_good"
-                app:sparkbutton_pressOnTouch="false"
-                app:sparkbutton_primaryColor="@color/colorAccent"
-                app:sparkbutton_secondaryColor="@color/grayAccent" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="@dimen/dp_10"
+                    android:src="@mipmap/icon_msg" />
 
-            <TextView
-                android:id="@+id/tvGoodNum"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="0"
-                android:textColor="#ff999999"
-                android:textSize="@dimen/sp_13" />
+                <TextView
+                    android:id="@+id/tvCommentNum"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/dp_5"
+                    android:text="0"
+                    android:textColor="#ff999999"
+                    android:textSize="@dimen/sp_13" />
+            </LinearLayout>
 
-        </LinearLayout>
 
+    <com.varunest.sparkbutton.SparkButton
+        android:id="@+id/sparkButton"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:enabled="false"
+        app:sparkbutton_activeImage="@mipmap/icon_mini_good"
+        app:sparkbutton_iconSize="@dimen/dp_12"
+        app:sparkbutton_inActiveImage="@mipmap/icon_good"
+        app:sparkbutton_pressOnTouch="false"
+        app:sparkbutton_primaryColor="@color/colorAccent"
+        app:sparkbutton_secondaryColor="@color/grayAccent" />
+
+    <TextView
+        android:id="@+id/tvGoodNum"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center|end"
+        android:text="0"
+        android:textColor="#ff999999"
+        android:textSize="@dimen/sp_13" />
+</LinearLayout>
     </LinearLayout>
 
 </LinearLayout>
