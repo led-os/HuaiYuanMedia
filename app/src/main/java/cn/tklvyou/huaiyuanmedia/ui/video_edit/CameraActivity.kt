@@ -136,17 +136,21 @@ class CameraActivity : BaseActivity<NullPresenter>(), View.OnTouchListener, View
         }
         when (view.id) {
 
-            R.id.mMatchingBack -> onBackPressed()
+            R.id.mMatchingBack ->{
+                onBackPressed()
+            }
 
             R.id.mVideoRecordFinishIv -> {
                 onStopRecording()
+                showLoading()
                 mMyHandler.postDelayed({
                     if (mMediaObject != null) {
                         videoFileName = mMediaObject!!.mergeVideo()
                     }
+                    showSuccess("")
                     VideoOptionActivity.launch(this@CameraActivity, videoFileName, page)
                     finish()
-                }, 500)
+                }, 1500)
             }
 
             R.id.mMeetCamera -> {
@@ -365,7 +369,7 @@ class CameraActivity : BaseActivity<NullPresenter>(), View.OnTouchListener, View
     private fun onStopRecording() {
         isRecording = false
         mRecordCameraView.stopRecord {
-            mMyHandler.sendEmptyMessageDelayed(DELAY_DETAL, 100)
+            mMyHandler.sendEmptyMessageDelayed(DELAY_DETAL, 150)
             LogUtils.e(System.currentTimeMillis())
         }
         mVideoRecordProgressView.stop()

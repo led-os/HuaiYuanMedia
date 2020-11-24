@@ -28,7 +28,6 @@ import cn.tklvyou.huaiyuanmedia.model.NewsBean;
 import cn.tklvyou.huaiyuanmedia.ui.home.ImagePagerActivity;
 import cn.tklvyou.huaiyuanmedia.ui.video_player.VodActivity;
 import cn.tklvyou.huaiyuanmedia.utils.UrlUtils;
-import cn.tklvyou.huaiyuanmedia.widget.ExpandTextView;
 import cn.tklvyou.huaiyuanmedia.widget.MultiImageView;
 
 /**
@@ -65,7 +64,7 @@ public class WxCircleAdapter extends BaseQuickAdapter<NewsBean, BaseViewHolder> 
         }
         helper.addOnClickListener(R.id.deleteBtn, R.id.sparkButton, R.id.tvGoodNum);
         helper.addOnClickListener(R.id.contentTv);
-        helper.addOnClickListener(R.id.tvAttention, R.id.tvShareNum);
+        helper.addOnClickListener(R.id.tvAttention, R.id.tvShareNum, R.id.ivShareNum);
         helper.addOnClickListener(R.id.contentText, R.id.textPlus);
         helper.setText(R.id.nameTv, item.getNickname());
         helper.setText(R.id.timeTv, item.getBegintime());
@@ -104,17 +103,20 @@ public class WxCircleAdapter extends BaseQuickAdapter<NewsBean, BaseViewHolder> 
             GlideManager.loadRoundImg(R.mipmap.default_avatar, helper.getView(R.id.headIv), 5f);
         }
 
-        ExpandTextView expandTextView = helper.getView(R.id.contentTv);
-
+//        ExpandTextView expandTextView = helper.getView(R.id.contentTv);
+        TextView expandTextView = helper.getView(R.id.contentTv);
+//        if (!TextUtils.isEmpty(item.getName())) {
+//            expandTextView.setExpand(item.isExpand());
+//            expandTextView.setExpandStatusListener(new ExpandTextView.ExpandStatusListener() {
+//                @Override
+//                public void statusChange(boolean isExpand) {
+//                    item.setExpand(isExpand);
+//                }
+//            });
+//
+//            expandTextView.setText(UrlUtils.formatUrlString(item.getName()));
+//        }
         if (!TextUtils.isEmpty(item.getName())) {
-            expandTextView.setExpand(item.isExpand());
-            expandTextView.setExpandStatusListener(new ExpandTextView.ExpandStatusListener() {
-                @Override
-                public void statusChange(boolean isExpand) {
-                    item.setExpand(isExpand);
-                }
-            });
-
             expandTextView.setText(UrlUtils.formatUrlString(item.getName()));
         }
         expandTextView.setVisibility(TextUtils.isEmpty(item.getName()) ? View.GONE : View.VISIBLE);

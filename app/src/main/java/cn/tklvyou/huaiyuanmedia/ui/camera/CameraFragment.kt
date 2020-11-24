@@ -271,7 +271,7 @@ class CameraFragment : BaseRecyclerFragment<CameraPresenter, NewsBean, BaseViewH
         }
     }
 
-    public fun flushHeaderView(message: String) {
+    public fun flushHeaderView(message: String?) {
         if (mFragments.size == 2) {
             (mFragments[0] as HistoryUpdatesFragment).flushHeaderView(message)
             (mFragments[1] as HistoryUpdatesFragment).flushHeaderView(message)

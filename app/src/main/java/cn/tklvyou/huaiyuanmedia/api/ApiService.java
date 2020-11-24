@@ -32,6 +32,8 @@ import cn.tklvyou.huaiyuanmedia.model.VoteOptionModel;
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
@@ -334,9 +336,9 @@ public interface ApiService {
     /**
      * 发表评论
      */
+    @FormUrlEncoded
     @POST("api/comment/add")
-    Observable<BaseResult<Object>> addComment(@Query("article_id") int article_id, @Query("detail") String detail);
-
+    Observable<BaseResult<Object>> addComment(@Field("article_id") int article_id, @Field("detail") String detail);
 
     /**
      * 发布V视
@@ -357,9 +359,10 @@ public interface ApiService {
     /**
      * 发布生活圈
      */
+    @FormUrlEncoded
     @POST("api/life/add")
-    Observable<BaseResult<Object>> publishLifeMsg(@Query("name") String name, @Query("images") String images,
-                                                  @Query("video") String video, @Query("image") String image, @Query("time") String time
+    Observable<BaseResult<Object>> publishLifeMsg(@Field("name") String name, @Field("images") String images,
+                                                  @Field("video") String video, @Field("image") String image, @Field("time") String time
     );
 
 

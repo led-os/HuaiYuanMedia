@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -53,9 +54,9 @@ class HistoryUpdatesFragment : BaseHttpRecyclerFragment<HistoryUpdatesPresenter,
     private var fragmentIndex = 0
     private var wxapi: IWXAPI? = null
     private var mTencent: Tencent? = null
-     var id : Int ?= -1
+    var id: Int? = -1
 
-    private var shareTitle : String ?= ""
+    private var shareTitle: String? = ""
     override fun initPresenter(): HistoryUpdatesPresenter {
         return HistoryUpdatesPresenter()
     }
@@ -111,9 +112,9 @@ class HistoryUpdatesFragment : BaseHttpRecyclerFragment<HistoryUpdatesPresenter,
     }
 
     private var message: String? = null
-    public fun flushHeaderView(message: String = "") {
+    public fun flushHeaderView(message: String?) {
         if (adapter != null) {
-            if (message.isEmpty()) {
+            if (message == null) {
                 adapter.removeHeaderView(headerView)
             } else {
                 val tvTip = headerView.findViewById<TextView>(R.id.tvTip)
@@ -145,7 +146,7 @@ class HistoryUpdatesFragment : BaseHttpRecyclerFragment<HistoryUpdatesPresenter,
         setList(object : AdapterCallBack<WxCircleAdapter> {
 
             override fun createAdapter(): WxCircleAdapter {
-                val adapter = WxCircleAdapter(R.layout.item_winxin_circle, list,fragmentIndex)
+                val adapter = WxCircleAdapter(R.layout.item_winxin_circle, list, fragmentIndex)
                 if (!message.isNullOrEmpty()) {
                     val tvTip = headerView.findViewById<TextView>(R.id.tvTip)
                     tvTip.text = message
@@ -205,12 +206,12 @@ class HistoryUpdatesFragment : BaseHttpRecyclerFragment<HistoryUpdatesPresenter,
             R.id.tvAttention -> {
                 val bean = (adapter as WxCircleAdapter).data[position] as NewsBean
                 if (bean.attention_status == 1) {
-                    mPresenter.cancelConcern(bean.user_id, 2,position)
+                    mPresenter.cancelConcern(bean.user_id, 2, position)
                 } else {
-                    mPresenter.addConcern(bean.user_id,2, position)
+                    mPresenter.addConcern(bean.user_id, 2, position)
                 }
             }
-            R.id.tvShareNum->{
+            R.id.ivShareNum, R.id.tvShareNum -> {
                 doShare(position)
             }
 
@@ -310,11 +311,11 @@ class HistoryUpdatesFragment : BaseHttpRecyclerFragment<HistoryUpdatesPresenter,
         startNewsDetailActivity(context!!, type, id, position)
     }
 
-    private fun doShare(position: Int){
-        if(position >= adapter.data.size){
+    private fun doShare(position: Int) {
+        if (position >= adapter.data.size) {
             return
         }
-      val  newsBean = adapter.data[position]
+        val newsBean = adapter.data[position]
         shareTitle = newsBean.name
         id = newsBean.id
         val sharePopupWindow = SharePopupWindow(context)
@@ -356,7 +357,7 @@ class HistoryUpdatesFragment : BaseHttpRecyclerFragment<HistoryUpdatesPresenter,
         val webpage = WXWebpageObject()
         webpage.webpageUrl = Contacts.SHARE_BASE_URL + id + "?date=" + System.currentTimeMillis()
         val msg = WXMediaMessage(webpage)
-        msg.title = shareTitle
+        msg.title = handleLimitText(shareTitle)
         msg.description = "榴乡怀远"
         val bmp = BitmapFactory.decodeResource(resources, R.mipmap.img_logo)
         val thumbBmp = Bitmap.createScaledBitmap(bmp, 100, 100, true)
@@ -411,7 +412,8 @@ class HistoryUpdatesFragment : BaseHttpRecyclerFragment<HistoryUpdatesPresenter,
         val webpage = WXWebpageObject()
         webpage.webpageUrl = Contacts.SHARE_BASE_URL + id + "?date=" + System.currentTimeMillis()
         val msg = WXMediaMessage(webpage)
-        msg.title = shareTitle
+        msg.title = handleLimitText(shareTitle)
+//        msg.title = shareTitle
         msg.description = "榴乡怀远"
         val bmp = BitmapFactory.decodeResource(resources, R.mipmap.img_logo)
         val thumbBmp = Bitmap.createScaledBitmap(bmp, 100, 100, true)
@@ -437,7 +439,7 @@ class HistoryUpdatesFragment : BaseHttpRecyclerFragment<HistoryUpdatesPresenter,
 
         val params = Bundle()
         params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT)
-        params.putString(QQShare.SHARE_TO_QQ_TITLE, shareTitle)
+        params.putString(QQShare.SHARE_TO_QQ_TITLE, handleLimitText(shareTitle))
 //        params.putString(QQShare.SHARE_TO_QQ_SUMMARY, "摘要") //可选，最长40个字
         params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, Contacts.SHARE_BASE_URL + id) //必填 	这条分享消息被好友点击后的跳转URL。
         params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "榴乡怀远")
@@ -482,7 +484,7 @@ class HistoryUpdatesFragment : BaseHttpRecyclerFragment<HistoryUpdatesPresenter,
 
             val mediaObject = WebpageObject()
             mediaObject.identify = Utility.generateGUID()
-            mediaObject.title = shareTitle
+            mediaObject.title = handleLimitText(shareTitle)
             mediaObject.description = "榴乡怀远"
             val bitmap = BitmapFactory.decodeResource(resources, R.mipmap.default_avatar)
             mediaObject.setThumbImage(YBitmapUtils.changeColor(bitmap))
@@ -492,5 +494,15 @@ class HistoryUpdatesFragment : BaseHttpRecyclerFragment<HistoryUpdatesPresenter,
 
             shareHandler!!.shareMessage(weiboMessage, false)
         }
+    }
+
+    private fun handleLimitText(title: String?): String {
+        if (TextUtils.isEmpty(title)) {
+            return "榴乡怀远"
+        }
+        if (title!!.length > 50) {
+            return title.substring(0, 50)
+        }
+        return title
     }
 }

@@ -37,7 +37,7 @@ public class SectionNewsMultipleItem<T> extends SectionMultiEntity<T> implements
         switch (model) {
             case "推荐":
             case "爆料":
-            case "矩阵":
+//            case "矩阵":
             case "专题":
                 itemType = getNewsItemType((NewsBean) dataBean);
                 break;

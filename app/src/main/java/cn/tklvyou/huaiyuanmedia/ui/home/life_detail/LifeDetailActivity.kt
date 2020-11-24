@@ -938,17 +938,17 @@ class LifeDetailActivity : BaseActivity<LifeDetailPresenter>(), LifeDetailContra
 
 
         tvCommentNum.text = "评论  ${item.comment_num}"
-       /* tvCommentNum.setOnClickListener {
-            if (SPUtils.getInstance().getString("token", "").isEmpty()) {
-                ToastUtils.showShort("请登录后操作")
-                startActivity(Intent(this, LoginActivity::class.java))
-                return@setOnClickListener
-            }
+        /* tvCommentNum.setOnClickListener {
+             if (SPUtils.getInstance().getString("token", "").isEmpty()) {
+                 ToastUtils.showShort("请登录后操作")
+                 startActivity(Intent(this, LoginActivity::class.java))
+                 return@setOnClickListener
+             }
 
-            val intent = Intent(this, CommentListActivity::class.java)
-            intent.putExtra("id", id)
-            startActivity(intent)
-        }*/
+             val intent = Intent(this, CommentListActivity::class.java)
+             intent.putExtra("id", id)
+             startActivity(intent)
+         }*/
 
 
         tvGoodNum.text = "赞  ${item.like_num}"
@@ -1228,7 +1228,7 @@ class LifeDetailActivity : BaseActivity<LifeDetailPresenter>(), LifeDetailContra
 
         val params = Bundle()
         params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT)
-        params.putString(QQShare.SHARE_TO_QQ_TITLE, shareTitle)
+        params.putString(QQShare.SHARE_TO_QQ_TITLE, handleLimitText(shareTitle))
 //        params.putString(QQShare.SHARE_TO_QQ_SUMMARY, "摘要") //可选，最长40个字
         params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, Contacts.SHARE_BASE_URL + id) //必填 	这条分享消息被好友点击后的跳转URL。
         params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "榴乡怀远")
@@ -1264,7 +1264,7 @@ class LifeDetailActivity : BaseActivity<LifeDetailPresenter>(), LifeDetailContra
         val webpage = WXWebpageObject()
         webpage.webpageUrl = Contacts.SHARE_BASE_URL + id + "?date=" + System.currentTimeMillis()
         val msg = WXMediaMessage(webpage)
-        msg.title = shareTitle
+        msg.title = handleLimitText(shareTitle)
         msg.description = "榴乡怀远"
         val bmp = BitmapFactory.decodeResource(resources, R.mipmap.img_logo)
         val thumbBmp = Bitmap.createScaledBitmap(bmp, 100, 100, true)
@@ -1304,7 +1304,7 @@ class LifeDetailActivity : BaseActivity<LifeDetailPresenter>(), LifeDetailContra
         val webpage = WXWebpageObject()
         webpage.webpageUrl = Contacts.SHARE_BASE_URL + id + "?date=" + System.currentTimeMillis()
         val msg = WXMediaMessage(webpage)
-        msg.title = shareTitle
+        msg.title = handleLimitText(shareTitle)
         msg.description = "榴乡怀远"
         val bmp = BitmapFactory.decodeResource(resources, R.mipmap.img_logo)
         val thumbBmp = Bitmap.createScaledBitmap(bmp, 100, 100, true)
@@ -1342,7 +1342,7 @@ class LifeDetailActivity : BaseActivity<LifeDetailPresenter>(), LifeDetailContra
 
             val mediaObject = WebpageObject()
             mediaObject.identify = Utility.generateGUID()
-            mediaObject.title = shareTitle
+            mediaObject.title = handleLimitText(shareTitle)
             mediaObject.description = "榴乡怀远"
             val bitmap = BitmapFactory.decodeResource(resources, R.mipmap.default_avatar)
             mediaObject.setThumbImage(YBitmapUtils.changeColor(bitmap))
@@ -1440,5 +1440,24 @@ class LifeDetailActivity : BaseActivity<LifeDetailPresenter>(), LifeDetailContra
             ，
           })*/
         initCommentRecyclerView(ArrayList())
+       /* rootConScrollerLayout.setOnVerticalScrollChangeListener(object : ConsecutiveScrollerLayout.OnScrollChangeListener {
+            override fun onScrollChange(v: View?, scrollY: Int, oldScrollY: Int, scrollState: Int) {
+                if (rootConScrollerLayout.isScrollBottom) {
+                    LogUtils.i("滑动到了最底部")
+                    mPresenter.getCommentList(id, currentPage++)
+                }
+            }
+
+        })*/
+    }
+
+    private fun handleLimitText(title: String?): String {
+        if (TextUtils.isEmpty(title)) {
+            return "榴乡怀远"
+        }
+        if (title!!.length > 50) {
+            return title.substring(0, 50)
+        }
+        return title
     }
 }

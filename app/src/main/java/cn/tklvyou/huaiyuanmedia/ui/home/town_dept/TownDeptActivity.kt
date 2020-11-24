@@ -16,8 +16,7 @@ import cn.tklvyou.huaiyuanmedia.ui.adapter.SectionMultipleItemAdapter
 import cn.tklvyou.huaiyuanmedia.ui.audio.ServiceWebviewActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.BannerDetailsActivity
 import cn.tklvyou.huaiyuanmedia.ui.home.ChannelConstant
-import cn.tklvyou.huaiyuanmedia.ui.home.ChannelConstant.CHANNEL_TYPE_TOWN_SECOND
-import cn.tklvyou.huaiyuanmedia.ui.home.ChannelConstant.EXTRA_HOME_CHANNEL
+import cn.tklvyou.huaiyuanmedia.ui.home.ChannelConstant.*
 import cn.tklvyou.huaiyuanmedia.ui.home.juzheng_details.ListContract
 import cn.tklvyou.huaiyuanmedia.ui.home.juzheng_details.ListPresenter
 import cn.tklvyou.huaiyuanmedia.ui.home.news_detail.NewsDetailActivity
@@ -82,14 +81,16 @@ class TownDeptActivity : BaseHttpRecyclerActivity<ListPresenter, SectionNewsMult
     override fun setBanner(bannerModelList: MutableList<BannerModel>?) {
         if (bannerModelList != null) {
             this.bannerModelList = bannerModelList
-            mPresenter.getNewList(param, townModel.module_second, 1)
+
+            getNewsByParam(1)
+
         } else {
             onLoadFailed(1, null)
         }
     }
 
     override fun getListAsync(page: Int) {
-        mPresenter.getNewList(param, townModel.module_second, page)
+        getNewsByParam(page)
     }
 
     override fun setNewList(p: Int, model: BasePageModel<NewsBean>?) {
@@ -293,5 +294,12 @@ class TownDeptActivity : BaseHttpRecyclerActivity<ListPresenter, SectionNewsMult
         startActivity(intent)
     }
 
+    private fun getNewsByParam(page: Int) {
+        if (CHANNEL_TYPE_TOWN == param) {
+            mPresenter.getNewList("乡镇部门", townModel.module_second, page)
+        } else {
+            mPresenter.getNewList(param, townModel.module_second, page)
+        }
+    }
 
 }

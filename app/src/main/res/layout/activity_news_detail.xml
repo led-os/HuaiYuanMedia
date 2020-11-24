@@ -506,6 +506,7 @@
             android:layout_height="@dimen/dp_35"
             android:layout_marginLeft="@dimen/dp_13"
             android:layout_weight="1"
+            android:maxLength="220"
             android:background="@drawable/shape_gray_radius_5_bg"
             android:hint="发布评论..."
             android:paddingLeft="@dimen/dp_10"

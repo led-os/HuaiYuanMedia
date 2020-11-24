@@ -141,6 +141,11 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
         }
 
         when (param) {
+            CHANNEL_TYPE_TOWN -> {
+                recyclerView.layoutManager = GridLayoutManager(recyclerView.context, 2)
+                recyclerView.addItemDecoration(GridDividerItemDecoration(30, ContextCompat.getColor(recyclerView.context, R.color.common_bg), false))
+            }
+
             "推荐", "视讯", "爆料", "矩阵", "专题" -> {
                 recyclerView.addItemDecoration(RecycleViewDivider(context, LinearLayout.VERTICAL, 1, resources.getColor(R.color.common_bg)))
             }
@@ -152,10 +157,6 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
             "悦读" -> {
                 recyclerView.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
                 recyclerView.addItemDecoration(GridDividerItemDecoration(30, resources.getColor(R.color.common_bg), true))
-            }
-            CHANNEL_TYPE_TOWN -> {
-                recyclerView.layoutManager = GridLayoutManager(recyclerView.context, 2)
-                recyclerView.addItemDecoration(GridDividerItemDecoration(30, ContextCompat.getColor(recyclerView.context, R.color.common_bg), false))
             }
 
             "悦听", "评选" -> {
@@ -223,7 +224,9 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                     mPresenter.getBanner(param)
                 }
             }
-
+            CHANNEL_TYPE_TOWN -> {
+                mPresenter.getTownDept()
+            }
             "矩阵", "专题" -> {
                 if (::juzhengHeaderList.isInitialized) {
                     refreshLayout.autoRefresh()
@@ -232,9 +235,7 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                     mPresenter.getJuZhengHeader(param)
                 }
             }
-            CHANNEL_TYPE_TOWN -> {
-                mPresenter.getTownDept()
-            }
+
 
             else -> {
                 refreshLayout.autoRefresh()
@@ -359,14 +360,14 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                 "推荐" -> {
                     mPresenter.getNewList(param, null, 1, showLoading)
                 }
-
-                "矩阵", "专题" -> {
-                    mPresenter.getJuZhengHeader(param)
-                }
                 //乡镇部门
                 CHANNEL_TYPE_TOWN -> {
                     mPresenter.getTownDept()
                 }
+                "矩阵", "专题" -> {
+                    mPresenter.getJuZhengHeader(param)
+                }
+
 
 //                "专题" -> {
 //                    mPresenter.getVerticalHeader(param)
@@ -442,6 +443,14 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
             override fun createAdapter(): SectionMultipleItemAdapter {
                 val adapter = SectionMultipleItemAdapter(list)
                 when (param) {
+
+                    CHANNEL_TYPE_TOWN -> {
+                        //乡镇部门banner
+                        val bannerView = View.inflate(context, R.layout.item_normal_banner, null)
+                        initBannerView(bannerView, bannerModelList)
+                        adapter.addHeaderView(bannerView)
+                    }
+
                     "矩阵" -> {
                         val bannerView = View.inflate(context, R.layout.item_normal_banner, null)
                         initBannerView(bannerView, bannerModelList)
@@ -463,12 +472,7 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                         adapter.addHeaderView(view)
                     }
 
-                    CHANNEL_TYPE_TOWN -> {
-                        //乡镇部门banner
-                        val bannerView = View.inflate(context, R.layout.item_normal_banner, null)
-                        initBannerView(bannerView, bannerModelList)
-                        adapter.addHeaderView(bannerView)
-                    }
+
 
                     "悦听" -> {
                         audioController = AudioController(context)
@@ -502,7 +506,10 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                     "视讯", "爆料", "生活圈", "悦读", "直播", "推荐" -> {
                         adapter.setNewData(list)
                     }
-
+                    CHANNEL_TYPE_TOWN -> {
+                        adapter.setNewData(list)
+                        adapter.loadMoreEnd()
+                    }
                     "矩阵" -> {
                         adapter.setNewData(list)
                         adapter.loadMoreEnd()
@@ -512,10 +519,7 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                         adapter.setNewData(list)
                         adapter.loadMoreEnd()
                     }
-                    CHANNEL_TYPE_TOWN -> {
-                        adapter.setNewData(list)
-                        adapter.loadMoreEnd()
-                    }
+
                     "悦听" -> {
                         audioController!!.onPause()
                         adapter.setNewData(list)
@@ -768,14 +772,14 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
             "视讯", "爆料", "生活圈", "悦读", "悦听", "直播", "推荐" -> {
                 mPresenter.getNewList(param, null, page, false)
             }
-
+            CHANNEL_TYPE_TOWN -> {
+                mPresenter.getBanner(param)
+            }
             "矩阵", "专题" -> {
                 mPresenter.getHaveSecondModuleNews(page, param, false)
             }
 
-            CHANNEL_TYPE_TOWN -> {
-                mPresenter.getBanner(param)
-            }
+
             else -> {
                 mPresenter.getNewList(param, null, page, false)
             }

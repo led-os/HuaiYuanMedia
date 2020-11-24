@@ -9,7 +9,7 @@ package cn.tklvyou.huaiyuanmedia.ui.home;
  */
 public class ChannelConstant {
     public static final String  CHANNEL_TYPE_SHI_XUN = "视讯";
-    public static final String  CHANNEL_TYPE_TOWN = "乡镇部门";
+    public static final String  CHANNEL_TYPE_TOWN = "矩阵";
     public static final String  CHANNEL_TYPE_TOWN_SECOND = "乡镇部门二级";
     public static final String EXTRA_TOWN_DATA = "TownDataModel";
     public static final String EXTRA_HOME_CHANNEL = "param";

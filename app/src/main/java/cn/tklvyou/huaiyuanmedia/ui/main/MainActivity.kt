@@ -155,15 +155,15 @@ class MainActivity : BaseBottomTabActivity<MainPresenter>(), MainContract.View, 
 
         }
 
-        if (life_info != null) {
+        if (life_info != null && life_info.interaction != null && life_info.count > 0) {
             initBadgeView(life_info.count, life_info.interaction)
         } else {
-            initBadgeView(0, "")
+            initBadgeView(0, null)
         }
 
     }
 
-    private fun initBadgeView(number: Int, message: String) {
+    private fun initBadgeView(number: Int, message: String?) {
         val badgeDrawable = bottomNavigationView.getOrCreateBadge(R.id.navigation_camera)
         badgeDrawable.backgroundColor = Color.RED
         badgeDrawable.badgeTextColor = Color.WHITE

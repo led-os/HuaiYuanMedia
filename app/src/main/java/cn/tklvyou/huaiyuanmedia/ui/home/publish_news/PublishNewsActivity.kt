@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
 import android.media.MediaMetadataRetriever
 import android.os.Bundle
-import android.text.InputFilter
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import cn.tklvyou.huaiyuanmedia.R
@@ -66,7 +65,7 @@ class PublishNewsActivity : BaseActivity<PublishNewsPresenter>(), PublishNewsCon
             maxLength = 70
         }
 
-        etContent.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(maxLength))
+//        etContent.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(maxLength))
 
         if (!isVideo) {
             picRecyclerView.visibility = View.VISIBLE
@@ -221,11 +220,13 @@ class PublishNewsActivity : BaseActivity<PublishNewsPresenter>(), PublishNewsCon
     override fun publishSuccess() {
         btnSubmit.isEnabled = true
         showSuccess("")
+        clearUploadData()
         finish()
     }
 
     override fun publishError() {
         btnSubmit.isEnabled = true
+        clearUploadData()
     }
 
 
@@ -267,5 +268,9 @@ class PublishNewsActivity : BaseActivity<PublishNewsPresenter>(), PublishNewsCon
         }
     }
 
+    private fun clearUploadData(){
+        imagesBuilder.clear()
+        imageFiles.clear()
+    }
 
 }
