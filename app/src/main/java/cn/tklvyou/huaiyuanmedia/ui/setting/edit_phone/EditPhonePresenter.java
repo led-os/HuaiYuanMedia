@@ -8,8 +8,10 @@ import com.blankj.utilcode.util.ToastUtils;
 import cn.tklvyou.huaiyuanmedia.api.RetrofitHelper;
 import cn.tklvyou.huaiyuanmedia.api.RxSchedulers;
 import cn.tklvyou.huaiyuanmedia.base.BasePresenter;
+import cn.tklvyou.huaiyuanmedia.utils.AESUtils;
 
 import static cn.tklvyou.huaiyuanmedia.common.RequestConstant.CODE_REQUEST_SUCCESS;
+import static cn.tklvyou.huaiyuanmedia.utils.AESUtils.AES_KEY;
 
 /**
  * @author :JenkinsZhou
@@ -23,6 +25,7 @@ public class EditPhonePresenter extends BasePresenter<EditPhoneContract.EditView
      public static final String TAG = "EditPhonePresenter";
     @Override
     public void getCaptcha(String mobile, String event) {
+        mobile = AESUtils.encrypt(AES_KEY,mobile);
         RetrofitHelper.getInstance().getServer()
                 .sendSms(mobile, event)
                 .compose(RxSchedulers.applySchedulers())

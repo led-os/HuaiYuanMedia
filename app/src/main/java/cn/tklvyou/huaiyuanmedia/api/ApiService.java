@@ -164,7 +164,8 @@ public interface ApiService {
      * 发送验证码
      */
     @POST("api/sms/send")
-    Observable<BaseResult<Object>> sendSms(@Query("mobile") String mobile, @Query("event") String event);
+    @FormUrlEncoded
+    Observable<BaseResult<Object>> sendSms(@Field("mobile") String mobile, @Field("event") String event);
 
     /**
      * 首页频道
