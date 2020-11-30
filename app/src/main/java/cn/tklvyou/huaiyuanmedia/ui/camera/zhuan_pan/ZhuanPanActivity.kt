@@ -131,7 +131,6 @@ class ZhuanPanActivity : BaseActivity<ZhuanPanPresenter>(), ZhuanPanContract.Vie
                 tvNum.text = "剩余转盘次数：$num"
                 when (rewardType) {
                     1 -> {
-                        LogUtils.iTag("中奖记录","------>"+scoreStr)
                         if (0 == score) {
 //                            ToastUtils.showShort("抱歉 您未中奖")
                         } else {

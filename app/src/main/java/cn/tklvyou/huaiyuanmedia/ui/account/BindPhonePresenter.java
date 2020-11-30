@@ -27,7 +27,6 @@ public class BindPhonePresenter extends BasePresenter<BindPhoneContract.View> im
 
     @Override
     public void getCaptcha(String mobile, String event) {
-        mobile = AESUtils.encrypt(AES_KEY,mobile);
         RetrofitHelper.getInstance().getServer()
                 .sendSms(mobile, event)
                 .compose(RxSchedulers.applySchedulers())

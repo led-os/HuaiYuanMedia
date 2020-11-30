@@ -10,6 +10,7 @@ import cn.tklvyou.huaiyuanmedia.base.activity.BaseActivity
 import cn.tklvyou.huaiyuanmedia.common.CommonConstant.TIME_INTERVAL
 import cn.tklvyou.huaiyuanmedia.common.CommonConstant.TIME_ONE_SECOND
 import cn.tklvyou.huaiyuanmedia.ui.main.MainActivity
+import cn.tklvyou.huaiyuanmedia.utils.AESUtils
 import cn.tklvyou.huaiyuanmedia.utils.CommonUtil
 import cn.tklvyou.huaiyuanmedia.widget.TimeCount
 import com.blankj.utilcode.util.ToastUtils
@@ -115,7 +116,7 @@ class BindPhoneActivity : BaseActivity<BindPhonePresenter>(), BindPhoneContract.
             ToastUtils.showShort("请输入正确的手机号")
             return
         }
-        mPresenter.getCaptcha(phone, "bindmobile")
+        mPresenter.getCaptcha( AESUtils.encrypt(AESUtils.AES_KEY, phone), "bindmobile")
     }
 
     private fun getTextValue(editText: EditText): String {
