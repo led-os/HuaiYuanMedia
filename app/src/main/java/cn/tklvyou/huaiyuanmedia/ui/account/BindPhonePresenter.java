@@ -43,6 +43,7 @@ public class BindPhonePresenter extends BasePresenter<BindPhoneContract.View> im
 
     @Override
     public void bindMobile(int third_id, String mobile, String captcha) {
+        mobile = AESUtils.encrypt(AES_KEY,mobile);
         RetrofitHelper.getInstance().getServer()
                 .bindMobile(third_id, mobile, captcha)
                 .compose(RxSchedulers.applySchedulers())
