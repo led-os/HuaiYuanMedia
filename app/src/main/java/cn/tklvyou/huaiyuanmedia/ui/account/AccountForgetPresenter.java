@@ -1,5 +1,6 @@
 package cn.tklvyou.huaiyuanmedia.ui.account;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 
 import cn.tklvyou.huaiyuanmedia.api.RetrofitHelper;
@@ -19,6 +20,7 @@ public class AccountForgetPresenter extends BasePresenter<AccountContract.Forget
     @Override
     public void getCaptcha(String mobile, String event) {
         mobile = AESUtils.encrypt(AES_KEY,mobile);
+        LogUtils.d("加密后的数据:"+mobile);
         RetrofitHelper.getInstance().getServer()
                 .sendSms(mobile, event)
                 .compose(RxSchedulers.applySchedulers())
