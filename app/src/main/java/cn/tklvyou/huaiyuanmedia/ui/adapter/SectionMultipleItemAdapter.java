@@ -45,7 +45,6 @@ public class SectionMultipleItemAdapter extends BaseSectionMultiItemQuickAdapter
     public SectionMultipleItemAdapter(List data) {
         super(R.layout.item_section_head_view, data);
         addItemType(SectionNewsMultipleItem.VIDEO_IN_TITLE, R.layout.item_news_zhi_bo_layout);
-//        addItemType(SectionNewsMultipleItem.VIDEO_OUT_TITLE, R.layout.item_news_shi_xun);
         addItemType(SectionNewsMultipleItem.VIDEO_OUT_TITLE, R.layout.item_news_shi_xun_new);
         addItemType(SectionNewsMultipleItem.NEWS_NO_IMAGE, R.layout.item_news_no_image_view);
         addItemType(SectionNewsMultipleItem.NEWS_LEFT_ONE_IMAGE, R.layout.item_news_left_one_image_view);

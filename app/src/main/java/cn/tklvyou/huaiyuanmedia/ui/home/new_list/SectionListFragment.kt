@@ -423,7 +423,7 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                         intent.putExtra("title", bannerModelList[position].name)
                     }
                     intent.putExtra("content", bannerModelList[position].content)
-                    intent.putExtra("banner_id",bannerModelList[position].id)
+                    intent.putExtra("banner_id", bannerModelList[position].id)
                     startActivity(intent)
                 }
 
@@ -471,7 +471,6 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                         adapter.addHeaderView(bannerView)
                         adapter.addHeaderView(view)
                     }
-
 
 
                     "悦听" -> {
@@ -968,14 +967,14 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
                             startPlay(position)
                         }
                         else -> {
-                            if (CHANNEL_TYPE_SHI_XUN == bean.original_module) {
+                          /*  if (CHANNEL_TYPE_SHI_XUN == bean.original_module) {
                                 startPlay(position)
-                            } else {
+                            } else {*/
                                 //打开新的Activity
                                 val intent = Intent(context, VodActivity::class.java)
                                 intent.putExtra("videoPath", bean.video)
                                 startActivity(intent)
-                            }
+//                            }
 
                         }
                     }
@@ -1155,8 +1154,8 @@ class SectionListFragment : BaseHttpRecyclerFragment<NewListPresenter, SectionNe
             return
         }
         val bean = adapter.data[position].dataBean as NewsBean
-        mVideoView!!.setUrl(bean.video)
-        mTitleView!!.setTitle(bean.name)
+        mVideoView?.setUrl(bean.video)
+        mTitleView?.setTitle(bean.name)
         mPlayerContainer = adapter?.getViewByPosition(position, R.id.player_container) as FrameLayout
         mIvVideoBg = adapter?.getViewByPosition(position, R.id.ivVideoBg) as ImageView
         ivStartPlayer = adapter?.getViewByPosition(position, R.id.ivStartPlayer) as ImageView
